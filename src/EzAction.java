@@ -2,7 +2,6 @@ import java.util.*;
 
 /**
  * the EzAction Object is only used to store the information of action, which have been done.
- * and affected EzTask Objects. 
  * targets is the list of tasks before doing the action
  * results is the list of task after the action
  * 
@@ -19,12 +18,18 @@ import java.util.*;
 
 public class EzAction {
 	enum TypeOfAction{
-		ADD, UPDATE, DELETE, DONE
+		ADD, UPDATE, DELETE, DONE, UNDO, REDO, SHOW, HELP
 	}
 	
 	private TypeOfAction action;
 	private ArrayList<EzTask> targets;
 	private ArrayList<EzTask> results;
+	
+	/**
+	 *  These attributes are necessary for ADD, UPDATE, DELETE and DONE.
+	 *  There will be more attributes for other Actions.
+	 */
+	
 	
 	/**
 	 * @return the action
