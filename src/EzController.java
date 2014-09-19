@@ -1,20 +1,78 @@
+import java.util.ArrayList;
 
 /**
- * @author Khanh
- *
+ * 
  *
  * @author Yu Shuen
+ * @author Khanh (skeleton file)
  */
 public class EzController {
+	
+	private static final int MAX_SIZE = 20;
+	private static EzStorage storage = new EzStorage();
+	private static ArrayList<EzAction> history = new ArrayList<EzAction>();
+	private static int pos = -1;
+	
 	public static String execute(String userCommand){
 		EzAction userAction = EzParser.extractInfo(userCommand);
+		determineUserAction(userAction);
+		return "";
+	}
+
+	public static void determineUserAction(EzAction userAction) {
 		switch(userAction.getAction()) {
 		case ADD:
+			EzTask task = userAction.getResults().get(0);
+			addHistory(userAction);
+			storage.addTask(task);
+			break;
+			
+		case UPDATE:
+			storage.updateTask(userAction.getResults());
+			addHistory(userAction);
+			break;
+			
+		case DELETE:
+			ArrayList<EzTask> toBeDeleted = userAction.getTargets();
+			storage.deleteTask(toBeDeleted);
+			addHistory(userAction);
+			break;
+			
+		case DONE:
+			storage.updateTask(userAction.getResults());
+			addHistory(userAction);
+			break;
+			
+		case UNDO:
+			if(pos <= -1) {
+				return;
+			}
+			else {
+				switch(history.get(pos).getAction()) {
+				case ADD:
+					storage.deleteTask(history.get(pos--).getResults());
+					break;
+				
+				}
+			}
+			break;
+		case REDO:
+			break;
+		case SHOW:
+			break;
+		case HELP:
 			break;
 		default:
 			break;
 		}
-		return "";
+	}
+
+	private static void addHistory(EzAction userAction) {
+		if(history.size() == MAX_SIZE) {
+			history.remove(0);
+		}
+		history.add(userAction);
+		pos = history.size()-1;
 	}
 	
 	public void refresh(){

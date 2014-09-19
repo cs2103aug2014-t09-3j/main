@@ -30,6 +30,10 @@ public class EzStorage {
 		return null;
 	}
 	
+	public ArrayList<EzTask> updateTask(ArrayList<EzTask> oriTask) {
+		return null;
+	}
+	
 	public boolean undo(){
 		return false;
 	}
