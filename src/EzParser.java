@@ -7,7 +7,7 @@
  *
  */
 public class EzParser {
-	public EzAction extractInfo(String userCommand){
+	public static EzAction extractInfo(String userCommand){
 		return null;
 	}
 }
