@@ -70,6 +70,10 @@ public class EzStorage {
 	 * @param listOfTasks
 	 * @return
 	 */
+	public ArrayList<EzTask> updateTask(ArrayList<EzTask> oriTask) {
+		return null;
+	}
+	
 	public ArrayList<EzTask> markDone(ArrayList<EzTask> listOfTasks){ 
 		return null;
 	}
