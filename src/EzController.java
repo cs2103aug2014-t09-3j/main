@@ -1,19 +1,19 @@
-/**
- * 
- */
 
 /**
  * @author Khanh
-<<<<<<< HEAD
  *
- *	//asfasdfasd
-=======
+ *
  * @author Yu Shuen
->>>>>>> origin/master
  */
 public class EzController {
 	public static String execute(String userCommand){
-		
+		EzAction userAction = EzParser.extractInfo(userCommand);
+		switch(userAction.getAction()) {
+		case ADD:
+			break;
+		default:
+			break;
+		}
 		return "";
 	}
 	

@@ -16,10 +16,8 @@ import java.util.*;
  *
  */
 
+
 public class EzAction {
-	enum TypeOfAction{
-		ADD, UPDATE, DELETE, DONE, UNDO, REDO, SHOW, HELP
-	}
 	
 	private TypeOfAction action;
 	private ArrayList<EzTask> targets;
