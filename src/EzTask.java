@@ -15,7 +15,7 @@ public class EzTask {
 	private Date endTime;
 	private String venue;
 	private int priority;
-	
+	private boolean done;
 	
 	/**
 	 * initialize by other EzTask Object
@@ -28,6 +28,7 @@ public class EzTask {
 		this.endTime = new Date(target.getEndTime().getTime());
 		this.venue = new String(target.getVenue());
 		this.priority = target.getPriority();
+		this.done = target.isDone();
 	}
 	
 	/**
@@ -176,5 +177,19 @@ public class EzTask {
 	 */
 	public void setPriority(int priority) {
 		this.priority = priority;
+	}
+
+	/**
+	 * @return the done
+	 */
+	public boolean isDone() {
+		return done;
+	}
+
+	/**
+	 * @param done the done to set
+	 */
+	public void setDone(boolean done) {
+		this.done = done;
 	}
 }
