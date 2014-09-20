@@ -22,15 +22,37 @@ public class EzTask {
 	 * @param target
 	 */
 	public EzTask(EzTask target){
-		this.id = target.getId();
-		this.title = new String(target.getTitle());
-		this.startTime = new Date(target.getStartTime().getTime());
-		this.endTime = new Date(target.getEndTime().getTime());
-		this.venue = new String(target.getVenue());
-		this.priority = target.getPriority();
-		this.done = target.isDone();
+		setId(target.getId());
+		setTitle(target.getTitle());
+		setStartTime(target.getStartTime());
+		setEndTime(target.getEndTime());
+		setVenue(target.getVenue());
+		setPriority(target.getPriority());
+		setDone(target.isDone());
 	}
 	
+	public EzTask() {
+	}
+	
+	public EzTask(String title) {
+		setTitle(title);
+	}
+	
+	public EzTask(String title, String venue) {
+		this(title);
+		setVenue(venue);
+	}
+	
+	public EzTask(String title, int priority) {
+		this(title);
+		setPriority(priority);
+	}
+	
+	public EzTask(String title, String venue, int priority) {
+		this(title,venue);
+		setPriority(priority);
+	}
+
 	/**
 	 * @return the id
 	 */
@@ -54,7 +76,7 @@ public class EzTask {
 	 * @param title the title to set
 	 */
 	public void setTitle(String title) {
-		this.title = title;
+		this.title = new String(title);
 	}
 	
 	/**
@@ -93,7 +115,7 @@ public class EzTask {
 	 * @param startTime the startTime to set
 	 */
 	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
+		this.startTime = new Date(startTime.getTime());
 	}
 	
 	/**
@@ -128,7 +150,7 @@ public class EzTask {
 	 * @param endTime the endTime to set
 	 */
 	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
+		this.endTime = new Date(endTime.getTime());
 	}
 	
 	/**
@@ -163,7 +185,7 @@ public class EzTask {
 	 * @param venue the venue to set
 	 */
 	public void setVenue(String venue) {
-		this.venue = venue;
+		this.venue = new String(venue);
 	}
 	
 	/**
