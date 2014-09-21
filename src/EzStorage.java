@@ -13,11 +13,20 @@ public class EzStorage {
 	
 	
 	/**
-	 * this function adds the task to the list and provides an unique ID for the task then return it.
+	 * this function just simply adds the task to the list then return it.
 	 * @param task
 	 * @return task with new id
 	 */
 	public EzTask addTask(EzTask task){
+		return null;
+	}
+	
+	/**
+	 * this function adds the task to the list and provides an unique ID for the task then return it.
+	 * @param task
+	 * @return task with new id
+	 */
+	public EzTask addTaskWithNewId(EzTask task){
 		return null;
 	}
 	
