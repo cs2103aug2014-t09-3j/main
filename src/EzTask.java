@@ -11,8 +11,8 @@ import java.util.*;
 public class EzTask {
 	private int id;
 	private String title;
-	private Date startTime;
-	private Date endTime;
+	private GregorianCalendar startTime;
+	private GregorianCalendar endTime;
 	private String venue;
 	private int priority;
 	private boolean done;
@@ -80,42 +80,16 @@ public class EzTask {
 	}
 	
 	/**
-	 * get the Date from 3 inputs
-	 * @param year
-	 * @param month
-	 * @param day
-	 * @return Date
-	 */
-	private Date getTime(int year, int month, int day){
-		Calendar cal = new GregorianCalendar(year,month,day);
-		return cal.getTime();
-	}
-	
-	/**
-	 * get the Date from 5 inputs
-	 * @param year
-	 * @param month
-	 * @param day
-	 * @param hour
-	 * @param minute
-	 * @return Date
-	 */
-	private Date getTime(int year, int month, int day,int hour,int minute){
-		Calendar cal = new GregorianCalendar(year,month,day,hour,minute);
-		return cal.getTime();
-	}
-	
-	/**
 	 * @return the startTime
 	 */
-	public Date getStartTime() {
+	public GregorianCalendar getStartTime() {
 		return startTime;
 	}
 	/**
 	 * @param startTime the startTime to set
 	 */
-	public void setStartTime(Date startTime) {
-		this.startTime = new Date(startTime.getTime());
+	public void setStartTime(GregorianCalendar startTime) {
+		this.startTime = (GregorianCalendar) startTime.clone();
 	}
 	
 	/**
@@ -125,7 +99,7 @@ public class EzTask {
 	 * @param day
 	 */
 	public void setStartTime(int year, int month, int day) {
-		this.startTime = getTime(year,month,day);
+		this.startTime = new GregorianCalendar(year,month,day);
 	}
 	
 	/**
@@ -137,20 +111,20 @@ public class EzTask {
 	 * @param minute
 	 */
 	public void setStartTime(int year, int month, int day,int hour,int minute) {
-		this.startTime = getTime(year,month,day,hour,minute);
+		this.startTime = new GregorianCalendar(year,month,day,hour,minute);
 	}
 	
 	/**
 	 * @return the endTime
 	 */
-	public Date getEndTime() {
+	public GregorianCalendar getEndTime() {
 		return endTime;
 	}
 	/**
 	 * @param endTime the endTime to set
 	 */
-	public void setEndTime(Date endTime) {
-		this.endTime = new Date(endTime.getTime());
+	public void setEndTime(GregorianCalendar endTime) {
+		this.endTime = (GregorianCalendar) endTime.clone();
 	}
 	
 	/**
@@ -160,7 +134,7 @@ public class EzTask {
 	 * @param day
 	 */
 	public void setEndTime(int year, int month, int day) {
-		this.endTime = getTime(year,month,day);
+		this.endTime = new GregorianCalendar(year,month,day);
 	}
 	
 	/**
@@ -172,7 +146,14 @@ public class EzTask {
 	 * @param minute
 	 */
 	public void setEndTime(int year, int month, int day,int hour,int minute) {
-		this.endTime = getTime(year,month,day,hour,minute);
+		this.endTime = new GregorianCalendar(year,month,day,hour,minute);
+	}
+	
+	/**
+	 * this function is used for the task that has Deadline only
+	 */
+	public void setEndTimeAsStartTime(){
+		this.endTime = this.startTime;
 	}
 	
 	/**
