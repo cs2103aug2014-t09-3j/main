@@ -73,12 +73,43 @@ public class EzController {
 				}
 			}
 			break;
+			
 		case REDO:
+			if(pos >= history.size()-1) {
+				return;
+			}
+			else {
+				switch(history.get(++pos).getAction()) {
+				case ADD:
+					EzTask reTask = history.get(pos).getResults().get(0);
+					storage.addTask(reTask);
+					break;
+					
+				case DELETE:
+					ArrayList<EzTask> delete = history.get(pos).getTargets();
+					storage.deleteTask(delete);
+					break;
+					
+				case UPDATE:
+					storage.updateTask(history.get(pos).getResults());
+					break;
+					
+				case DONE:
+					storage.updateTask(history.get(pos).getResults());
+					break;
+					
+				default:
+					return;
+				}
+			}
 			break;
+			
 		case SHOW:
 			break;
+			
 		case HELP:
 			break;
+			
 		default:
 			break;
 		}
