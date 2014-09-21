@@ -24,7 +24,7 @@ public class EzController {
 		case ADD:
 			EzTask task = userAction.getResults().get(0);
 			addHistory(userAction);
-			storage.addTask(task);
+			storage.addTaskWithNewId(task);
 			break;
 			
 		case UPDATE:
