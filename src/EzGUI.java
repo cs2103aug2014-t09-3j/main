@@ -262,7 +262,7 @@ public class EzGUI extends JFrame {
 	/**
 	 * @param btnAll
 	 */
-	private void initButton(JButton button) {
+	private void initButton(final JButton button) {
 		button.setFont(new Font(BUTTON_FONT, Font.BOLD, 16));
 		button.setBackground(UNSELECTED_BUTTON_BG_COLOR);
 		button.setBorderPainted(false);

@@ -45,23 +45,79 @@ public class EzController {
 			
 		case UNDO:
 			if(pos <= -1) {
+				break;
+			}
+			else {
+				undoTask();
+			}
+			break;
+			
+		case REDO:
+			if(pos >= history.size()) {
 				return;
 			}
 			else {
-				switch(history.get(pos).getAction()) {
-				case ADD:
-					storage.deleteTask(history.get(pos--).getResults());
-					break;
-				
-				}
+				redoTask();
 			}
 			break;
-		case REDO:
-			break;
+			
 		case SHOW:
 			break;
+			
 		case HELP:
 			break;
+			
+		default:
+			break;
+		}
+	}
+
+	private static void redoTask() {
+		switch(history.get(pos).getAction()) {
+		case ADD:
+			EzTask reTask = history.get(pos++).getResults().get(0);
+			storage.addTask(reTask);
+			break;
+			
+		case DELETE:
+			ArrayList<EzTask> delete = history.get(pos++).getTargets();
+			storage.deleteTask(delete);
+			break;
+			
+		case UPDATE:
+			storage.updateTask(history.get(pos++).getResults());
+			break;
+			
+		case DONE:
+			storage.updateTask(history.get(pos++).getResults());
+			break;
+			
+		default:
+			break;
+		}
+	}
+
+	private static void undoTask() {
+		switch(history.get(pos).getAction()) {
+		case ADD:
+			storage.deleteTask(history.get(pos--).getResults());
+			break;
+		
+		case DELETE:
+			ArrayList<EzTask> deletedData = history.get(pos--).getTargets();
+			for(int i = 0; i < deletedData.size(); i++) {
+				storage.addTask(deletedData.get(i));
+			}
+			break;
+		
+		case UPDATE:
+			storage.updateTask(history.get(pos--).getTargets());
+			break;
+		
+		case DONE:
+			storage.updateTask(history.get(pos--).getTargets());
+			break;
+			
 		default:
 			break;
 		}
