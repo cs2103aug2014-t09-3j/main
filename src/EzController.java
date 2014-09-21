@@ -53,6 +53,23 @@ public class EzController {
 					storage.deleteTask(history.get(pos--).getResults());
 					break;
 				
+				case DELETE:
+					ArrayList<EzTask> deletedData = history.get(pos--).getTargets();
+					for(int i = 0; i < deletedData.size(); i++) {
+						storage.addTask(deletedData.get(i));
+					}
+					break;
+				
+				case UPDATE:
+					storage.updateTask(history.get(pos--).getTargets());
+					break;
+				
+				case DONE:
+					storage.updateTask(history.get(pos--).getTargets());
+					break;
+					
+				default:
+					return;
 				}
 			}
 			break;
