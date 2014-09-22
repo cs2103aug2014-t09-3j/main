@@ -138,7 +138,7 @@ public class EzController {
 	private static void checkPos() {
 		int sizeOfHistory = history.size();
 		if(pos < sizeOfHistory-1) {
-			for(int i = ++pos; i < sizeOfHistory; i++) {
+			for(int i = --sizeOfHistory; i > pos; i--) {
 				history.remove(i);
 			}
 		}
