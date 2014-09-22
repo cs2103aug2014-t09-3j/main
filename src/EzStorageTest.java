@@ -18,46 +18,37 @@ public class EzStorageTest {
 	public void test() {
 		EzStorage storage = new EzStorage();
 		
-		EzTask task0 = new EzTask("go shopping","at Clementi",3);
-		task0.setStartTime(2014, 9, 25);
-		task0.setEndTime(2014, 9, 25);
-		storage.addTask(task0);
+		checkId(storage.addTaskWithNewId(new EzTask("go shopping","at Clementi",3)), 0);
 		/**
 		 * now the list is:
 		 * 0. "go shopping" "at Clementi" 3
 		 */
-		checkId(task0,0);
 		
-		
-		EzTask task1 = new EzTask("do homework",2);
-		storage.addTask(task1);
+		checkId(storage.addTask(new EzTask("do homework",2)), 1);
 		/**
 		 * now the list is:
 		 * 0. "go shopping" "at Clementi" 3
 		 * 1. "do homework" 2
 		 */
-		checkId(task1,1);
 		
-		
-		EzTask task2 = new EzTask("do EE2021 Tut",5);
-		storage.addTask(task2);
+		checkId(storage.addTask(new EzTask("do EE2021 Tut",5)),2);
 		/**
 		 * now the list is:
 		 * 0. "go shopping" "at Clementi" 3
 		 * 1. "do homework" 2
 		 * 2. "do EE2021 Tut" 5
 		 */
-		checkId(task2,2);
 		
-		checkSize(storage,3);
+		assertEquals("check size: ", 3, storage.getSize());
 		
 		ArrayList<EzTask> list = new ArrayList<EzTask>();
+		
 		EzTask tmp = new EzTask(storage.findTask(1));
-		checkTitle(tmp,"do homework");
+		assertEquals("check title: ", "do homework", tmp.getTitle());
 		
 		tmp.setTitle("do CS2103T");
 		list.add(tmp);
-		checkNumberTasksAffected(storage, list,1);
+		assertEquals("check the number of tasks affected: ", 1, storage.updateTask(list));
 		/**
 		 * now the list is:
 		 * 0. "go shopping" "at Clementi" 3
@@ -65,7 +56,25 @@ public class EzStorageTest {
 		 * 2. "do EE2021 Tut" 5
 		 */
 		
-		checkTitle(storage.findTask(1),"do CS2103T");
+		assertEquals("check title: ", "do CS2103T", storage.findTask(1).getTitle());
+		
+		list.clear();
+		tmp = new EzTask(storage.findTask(1));
+		list.add(tmp);
+		assertEquals("check the number of tasks affected: ", 1, storage.deleteTask(list));
+		/**
+		 * now the list is:
+		 * 0. "go shopping" "at Clementi" 3
+		 * 2. "do EE2021 Tut" 5
+		 */
+		
+		checkId(storage.addTask(new EzTask("do CS2101 Tut",7)),3);
+		/**
+		 * now the list is:
+		 * 0. "go shopping" "at Clementi" 3
+		 * 2. "do EE2021 Tut" 5
+		 * 3. "do CS2101 Tut" 7
+		 */
 		
 		ArrayList<String> listWords = new ArrayList<String>();
 		listWords.add("do");
@@ -73,19 +82,9 @@ public class EzStorageTest {
 		listWords.add("go");
 		checkSearchByKeywords(storage, listWords,3);
 		
-		list.clear();
-		list.add(storage.findTask(1));
-		storage.deleteTask(list);
-		checkSize(storage,2);
 		assertEquals("check not found:",null,storage.findTask(1));
 	}
 
-	/**
-	 * @param tmp
-	 */
-	private void checkTitle(EzTask tmp, String expectedTitle) {
-		assertEquals("check title: ", expectedTitle, tmp.getTitle());
-	}
 
 	/**
 	 * @param task0
@@ -94,14 +93,6 @@ public class EzStorageTest {
 		assertEquals("check id:", expectedId, task0.getId());
 	}
 
-	/**
-	 * @param storage
-	 * @param list
-	 */
-	private void checkNumberTasksAffected(EzStorage storage,
-			ArrayList<EzTask> list, int expectedNumber) {
-		assertEquals("check the number of tasks affected: ", expectedNumber, storage.updateTask(list));
-	}
 
 	/**
 	 * @param storage
@@ -112,11 +103,5 @@ public class EzStorageTest {
 		assertEquals("check search by keyword: ", expectedNumber, storage.getTasksByKeywords(listWords));
 	}
 
-	/**
-	 * @param storage
-	 */
-	private void checkSize(EzStorage storage,int expectedSize) {
-		assertEquals("check size:", expectedSize, storage.getSize());
-	}
 
 }
