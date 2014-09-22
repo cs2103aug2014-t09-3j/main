@@ -7,10 +7,16 @@ import java.util.Date;
 
 /**
  * @author Khanh
+ * @author Tun Leng
  *
  */
 public class EzStorage {
 	
+	//ArrayList of tasks entered by user.
+	ArrayList<EzTask> listOfTasks = new ArrayList<EzTask>();
+	
+	//numTasks represents the number of tasks entered by the user.
+	int numTasks = listOfTasks.size();
 	
 	/**
 	 * this function just simply adds the task to the list then return it.
@@ -18,7 +24,9 @@ public class EzStorage {
 	 * @return task with new id
 	 */
 	public EzTask addTask(EzTask task){
-		return null;
+		
+		listOfTasks.add(task);
+		return task;
 	}
 	
 	/**
@@ -27,7 +35,10 @@ public class EzStorage {
 	 * @return task with new id
 	 */
 	public EzTask addTaskWithNewId(EzTask task){
-		return null;
+		
+		listOfTasks.add(task);
+		EzTask.setId(numTasks);
+		
 	}
 	
 	/**
