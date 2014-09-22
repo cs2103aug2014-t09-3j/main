@@ -23,23 +23,27 @@ public class EzController {
 		switch(userAction.getAction()) {
 		case ADD:
 			EzTask task = userAction.getResults().get(0);
+			checkPos();
 			addHistory(userAction);
 			storage.addTaskWithNewId(task);
 			break;
 			
 		case UPDATE:
 			storage.updateTask(userAction.getResults());
+			checkPos();
 			addHistory(userAction);
 			break;
 			
 		case DELETE:
 			ArrayList<EzTask> toBeDeleted = userAction.getTargets();
+			checkPos();
 			storage.deleteTask(toBeDeleted);
 			addHistory(userAction);
 			break;
 			
 		case DONE:
 			storage.updateTask(userAction.getResults());
+			checkPos();
 			addHistory(userAction);
 			break;
 			
@@ -129,6 +133,15 @@ public class EzController {
 		}
 		history.add(userAction);
 		pos = history.size()-1;
+	}
+	
+	private static void checkPos() {
+		int sizeOfHistory = history.size();
+		if(pos < sizeOfHistory-1) {
+			for(int i = ++pos; i < sizeOfHistory; i++) {
+				history.remove(i);
+			}
+		}
 	}
 	
 	public void refresh(){
