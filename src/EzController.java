@@ -14,7 +14,7 @@ public class EzController {
 	private static int pos = -1;
 	
 	public static String execute(String userCommand){
-		EzAction userAction = EzParser.extractInfo(userCommand);
+		EzAction userAction = EzParser.extractInfo(userCommand, storage);
 		determineUserAction(userAction);
 		return "";
 	}
