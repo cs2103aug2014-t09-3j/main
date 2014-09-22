@@ -13,7 +13,7 @@ import java.util.*;
 
 /**
  * @author Khanh
- *
+ * 
  */
 
 
@@ -28,42 +28,28 @@ public class EzAction {
 	 *  There will be more attributes for other Actions.
 	 */
 	
-	
-	/**
-	 * @return the action
-	 */
+
 	public TypeOfAction getAction() {
 		return action;
 	}
-	/**
-	 * @param action the action to set
-	 */
+
 	public void setAction(TypeOfAction action) {
 		this.action = action;
 	}
-	/**
-	 * @return the targets
-	 */
 	
 	public ArrayList<EzTask> getTargets() {
 		return targets;
 	}
-	/**
-	 * @param targets the targets to set
-	 */
+	
 	public void setTargets(ArrayList<EzTask> targets) {
 		this.targets = targets;
 	}
 	
-	/**
-	 * @return the results
-	 */
+
 	public ArrayList<EzTask> getResults() {
 		return results;
 	}
-	/**
-	 * @param results the results to set
-	 */
+
 	public void setResults(ArrayList<EzTask> results) {
 		this.results = results;
 	}
