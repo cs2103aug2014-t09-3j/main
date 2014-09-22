@@ -13,10 +13,10 @@ import java.util.Date;
 public class EzStorage {
 	
 	//ArrayList of tasks entered by user.
-	ArrayList<EzTask> listOfTasks = new ArrayList<EzTask>();
+	private ArrayList<EzTask> listOfTasks = new ArrayList<EzTask>();
 	
 	//numTasks represents the number of tasks entered by the user.
-	int numTasks = listOfTasks.size();
+	private int numTasks = listOfTasks.size();
 	
 	/**
 	 * this function just simply adds the task to the list then return it.
