@@ -21,7 +21,7 @@ public class EzStorage {
 	/**
 	 * this function just simply adds the task to the list then return it.
 	 * @param task
-	 * @return task with new id
+	 * @return task 
 	 */
 	public EzTask addTask(EzTask task){
 		
@@ -37,7 +37,8 @@ public class EzStorage {
 	public EzTask addTaskWithNewId(EzTask task){
 		
 		listOfTasks.add(task);
-		EzTask.setId(numTasks);
+		task.setId(getSize());
+		return task;
 		
 	}
 	
@@ -48,6 +49,7 @@ public class EzStorage {
 	 */
 	public int updateTask(ArrayList<EzTask> listOfTasks) {
 		int count = 0;
+		
 		
 		return count;
 	}
@@ -68,7 +70,8 @@ public class EzStorage {
 	 * @return
 	 */
 	public int getSize(){
-		return 0;
+		
+		return listOfTasks.size();
 	}
 	
 	/**
