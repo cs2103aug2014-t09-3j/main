@@ -183,33 +183,26 @@ public class EzGUI extends JFrame {
 		JButton btnToday = new JButton("Today");
 		initButton(btnToday);
 		
-		goToNextDay();
 		JButton btnTomorrow = new JButton("Tomorrow");
 		initButton(btnTomorrow);
 		
-		goToNextDay();
-		JButton btnDay2 = new JButton(getDate());
-		initButton(btnDay2);
+		JButton btnThisWeek = new JButton("This Week");
+		initButton(btnThisWeek);
 		
-		goToNextDay();
-		JButton btnDay3 = new JButton(getDate());
-		initButton(btnDay3);
+		JButton btnNextWeek = new JButton("Next Week");
+		initButton(btnNextWeek);
 		
-		goToNextDay();
-		JButton btnDay4 = new JButton(getDate());
-		initButton(btnDay4);
+		JButton btnThisMonth = new JButton("This Month");
+		initButton(btnThisMonth);
 		
-		goToNextDay();
-		JButton btnDay5 = new JButton(getDate());
-		initButton(btnDay5);
+		JButton btnNextMonth = new JButton("Next Month");
+		initButton(btnNextMonth);
 		
-		goToNextDay();
-		JButton btnDay6 = new JButton(getDate());
-		initButton(btnDay6);
+		JButton btnNoDate = new JButton("No Date");
+		initButton(btnNoDate);
 		
-		goToNextDay();
-		JButton btnDay7 = new JButton(getDate());
-		initButton(btnDay7);
+		JButton btnHelp = new JButton("Help");
+		initButton(btnHelp);
 		
 		GroupLayout gl_buttonPanel = new GroupLayout(buttonPanel);
 		gl_buttonPanel.setHorizontalGroup(
@@ -221,12 +214,12 @@ public class EzGUI extends JFrame {
 						.addComponent(btnUndone		, GroupLayout.DEFAULT_SIZE, BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnToday		, GroupLayout.DEFAULT_SIZE, BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnTomorrow	, GroupLayout.DEFAULT_SIZE, BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnDay2		, GroupLayout.DEFAULT_SIZE, BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnDay3		, GroupLayout.DEFAULT_SIZE, BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnDay4		, GroupLayout.DEFAULT_SIZE, BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnDay5		, GroupLayout.DEFAULT_SIZE, BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnDay6		, GroupLayout.DEFAULT_SIZE, BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnDay7		, GroupLayout.DEFAULT_SIZE, BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(btnThisWeek	, GroupLayout.DEFAULT_SIZE, BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnNextWeek	, GroupLayout.DEFAULT_SIZE, BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnThisMonth	, GroupLayout.DEFAULT_SIZE, BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnNextMonth	, GroupLayout.DEFAULT_SIZE, BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnNoDate		, GroupLayout.DEFAULT_SIZE, BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnHelp		, GroupLayout.DEFAULT_SIZE, BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE)))
 		);
 		
 		gl_buttonPanel.setVerticalGroup(
@@ -243,17 +236,17 @@ public class EzGUI extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnTomorrow	, GroupLayout.PREFERRED_SIZE, BUTTON_HEIGHT, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnDay2		, GroupLayout.PREFERRED_SIZE, BUTTON_HEIGHT, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnThisWeek	, GroupLayout.PREFERRED_SIZE, BUTTON_HEIGHT, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnDay3		, GroupLayout.PREFERRED_SIZE, BUTTON_HEIGHT, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnNextWeek	, GroupLayout.PREFERRED_SIZE, BUTTON_HEIGHT, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnDay4		, GroupLayout.PREFERRED_SIZE, BUTTON_HEIGHT, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnThisMonth	, GroupLayout.PREFERRED_SIZE, BUTTON_HEIGHT, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnDay5		, GroupLayout.PREFERRED_SIZE, BUTTON_HEIGHT, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnNextMonth	, GroupLayout.PREFERRED_SIZE, BUTTON_HEIGHT, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnDay6		, GroupLayout.PREFERRED_SIZE, BUTTON_HEIGHT, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnNoDate		, GroupLayout.PREFERRED_SIZE, BUTTON_HEIGHT, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnDay7		, GroupLayout.PREFERRED_SIZE, BUTTON_HEIGHT, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnHelp		, GroupLayout.PREFERRED_SIZE, BUTTON_HEIGHT, GroupLayout.PREFERRED_SIZE)
 					.addGap(0))
 		);
 		buttonPanel.setLayout(gl_buttonPanel);
@@ -302,7 +295,7 @@ public class EzGUI extends JFrame {
 		task.setEndTimeAsStartTime();
 		task.setDone(true);
 		
-		EzTask task2 = new EzTask("watch dancing on the moon","cathay cinema",3);
+		EzTask task2 = new EzTask("watch dancing on the mooooooooooooon","cathay cinema",3);
 		task2.setId(2);
 		task2.setDone(false);
 		task2.setStartTime(2014, 4, 28, 21, 00);
