@@ -12,6 +12,11 @@ import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.JButton;
 import javax.swing.BoxLayout;
 import javax.swing.JEditorPane;
@@ -36,6 +41,8 @@ import javax.swing.ScrollPaneConstants;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 
 public class EzGUI extends JFrame {
@@ -106,6 +113,8 @@ public class EzGUI extends JFrame {
 	private static final String BUTTON_FONT = TITLE_FONT_FONT;
 	private static final Color SELECTED_BUTTON_BG_COLOR = WHITE_SMOKE_COLOR;
 	private static final Color UNSELECTED_BUTTON_BG_COLOR = IRON_COLOR;
+	private static final String COMMAND_FIELD_FONT = "Arial";
+	private static final int COMMAND_FIELD_SIZE = 17;
 	
 	private static final Color BACKGROUND_COLOR = CHATEAU_GREEN_COLOR;
 	private static final int APP_HEIGHT = 640;
@@ -115,23 +124,27 @@ public class EzGUI extends JFrame {
 	
 	private static final String[] CALENDAR_MONTH = {"Jan","Feb","March","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
 	
-	
+	private static final String[] KEYWORDS = {"add","on","at","from","to","today","tomorrow"}; 
 	
 	private JPanel contentPane;
 	private Calendar cal;
 	private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	private JEditorPane showArea;
 	private JButton selectedButton = null;
-	private JEditorPane commandField;
+	private JTextPane commandField;
+	private SimpleAttributeSet[] commandAttributeSet = new SimpleAttributeSet[3];
+	private int count = 0;
 	/**
 	 * Create the frame.
 	 */
 	public EzGUI() {
+		setTitle("EzTask");
 		initiateCalendar();
 		createMainPanel();
 		createButtonPanel();
-		createCommandPanel();
 		createShowPanel();
+		createCommandPanel();
+		
 	}
 
 	/**
@@ -156,6 +169,7 @@ public class EzGUI extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(START_LOCATION_X, START_LOCATION_Y, APP_WIDTH, APP_HEIGHT);
 		contentPane = new JPanel();
+		contentPane.setFocusable(false);
 		contentPane.setBackground(BACKGROUND_COLOR);
 		contentPane.setBorder(new EmptyBorder(10,10,10,10));
 		contentPane.setLayout(new BorderLayout(0, 10));
@@ -169,6 +183,7 @@ public class EzGUI extends JFrame {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setBackground(BACKGROUND_COLOR);
 		buttonPanel.setBorder(null);
+		buttonPanel.setFocusable(false);
 		contentPane.add(buttonPanel, BorderLayout.WEST);
 		
 		JButton btnAll = new JButton("All");
@@ -261,6 +276,7 @@ public class EzGUI extends JFrame {
 		button.setBorderPainted(false);
 		button.setForeground(BUTTON_TEXT_COLOR);
 		button.setFocusPainted(false);
+		button.setFocusable(false);
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -286,6 +302,14 @@ public class EzGUI extends JFrame {
 	 */
 	private void createShowPanel() {
 		showArea = new JEditorPane();
+		showArea.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.isControlDown() && (e.getKeyCode()==KeyEvent.VK_Z)){
+					showArea.setText("Ctrl+Z Pressed.");
+				}
+			}
+		});
 		showArea.setBackground(SHOW_AREA_BACKGROUND);
 		showArea.setEditable(false);
 		showArea.setContentType("text/html");
@@ -316,17 +340,23 @@ public class EzGUI extends JFrame {
 		task4.setId(5);
 		task4.setDone(false);
 		
-		ArrayList<String> list = new ArrayList<String>();
-		list.add(createHtmlEzTask(task,0));
-		list.add(createHtmlEzTask(task2,1));
-		list.add(createHtmlEzTask(task3,0));
-		list.add(createHtmlEzTask(task3_1,1));
-		list.add(createHtmlEzTask(task4,0));
+		ArrayList<EzTask> listOfTasks = new ArrayList<EzTask>();
+		listOfTasks.add(task);
+		listOfTasks.add(task2);
+		listOfTasks.add(task3);
+		listOfTasks.add(task3_1);
+		listOfTasks.add(task4);
+		listOfTasks.add(task);
+		listOfTasks.add(task2);
+		listOfTasks.add(task3);
+		listOfTasks.add(task3_1);
+		listOfTasks.add(task4);
 		
-		showArea.setText(createMainTable("All tasks",createHtmlTable(list.size(),1,list,"border=0 cellspacing=4 cellpadding=1")));
-		//showArea.setFocusable(false);
+		showContent("All tasks",listOfTasks);
+		showArea.setFocusable(false);
 		
 		JScrollPane showPanel = new JScrollPane(showArea);
+		showPanel.setFocusable(false);
 		showPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		showPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		//showPanel.setBorder(new LineBorder(BUTTON_TEXT_COLOR, 2, true));
@@ -335,11 +365,6 @@ public class EzGUI extends JFrame {
 		showPanel.setBorder(null);
 	}
 	
-	private String createMainTable(String title, String content){
-		return "<table border=0 cellspacing=0 cellpadding=0 width=\"100%\"><tr><td height=\"44px\">"+ createHtmlText("__",TITLE_FONT_FONT,2,SHOW_AREA_BACKGROUND) + createHtmlText(title,TITLE_FONT_FONT,8,MAIN_TITLE_FONT_COLOR) +"</td></tr>"
-				//+ "<tr height=\"0px\"></tr>"
-				+ "<tr><td>" + right(content) +"</td></tr></table>";
-	}
 	
 	private String createHtmlEzTask(EzTask task,int type){
 		if (task!=null){
@@ -513,8 +538,7 @@ public class EzGUI extends JFrame {
 				content + "</font>";
 	}
 	
-	private String createHtmlText(String content, String font, int size,
-			String hexColor) {
+	private String createHtmlText(String content, String font, int size, String hexColor) {
 		return "<font face=\"" + font +
 				"\" size=\"" + size +
 				"\" color=\"#" + hexColor + "\">" + 
@@ -540,9 +564,10 @@ public class EzGUI extends JFrame {
 		JPanel commandPanel = new JPanel();
 		commandPanel.setBackground(BACKGROUND_COLOR);
 		commandPanel.setBorder(null);
+		commandPanel.setFocusable(false);
 		contentPane.add(commandPanel, BorderLayout.SOUTH);
 		commandPanel.setLayout(new BoxLayout(commandPanel, BoxLayout.X_AXIS));
-		
+
 		createCommandLabel(commandPanel);
 		createCommandInputField(commandPanel);
 	}
@@ -556,33 +581,141 @@ public class EzGUI extends JFrame {
 		//commandFieldpanel.setBorder(new LineBorder(BUTTON_TEXT_COLOR, 2));
 		commandFieldpanel.setLayout(new BoxLayout(commandFieldpanel, BoxLayout.X_AXIS));
 		
-		commandField = new JEditorPane();
+		commandField = new JTextPane();
+		commandField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				//commandField.grabFocus();
+			}
+		});
 		commandFieldpanel.add(commandField);
 		commandField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				if (arg0.getKeyCode()==KeyEvent.VK_ENTER){
-					showArea.setText(removeHTML(commandField.getText()));
+				if (arg0.getKeyChar()==KeyEvent.VK_ENTER){
+					//commandField.setContentType("text/plain");
+					showArea.setText(commandField.getText());
 					commandField.setText("");
 					arg0.consume();
-					
 				}
-				try{
-					//if (commandField.getText().length()>1) commandField.setCaretPosition(1);
-				} catch (Exception e){
-					
+				if (arg0.isControlDown()){
+					if (arg0.getKeyChar()==KeyEvent.VK_Z){
+						showArea.setText("Ctrl+Z Pressed.");
+						commandField.setText("");
+						arg0.consume();
+					}
 				}
+			}
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				int caretPos = commandField.getCaretPosition();
 				
+				switch (e.getKeyChar()){
+				case KeyEvent.VK_ENTER:
+					e.consume();
+					break;
+				case KeyEvent.VK_BACK_SPACE:
+					//commandField.setCaretPosition(Math.max(0, caretPos-2));
+					//commandField.setCaretColor(ENERGY_COLOR);
+					break;
+				default:
+					String typedText = "" + e.getKeyChar();
+					String contentInputField = commandField.getText().substring(0, caretPos) + typedText + commandField.getText().substring(caretPos, commandField.getText().length());
+					StyledDocument doc = commandField.getStyledDocument();
+					try {
+						doc.remove(0, doc.getLength());
+					} catch (BadLocationException e2) {
+						e2.printStackTrace();
+					}
+					
+					for(int i=0;i<contentInputField.length();i++){
+						String word = "";
+						if (contentInputField.charAt(i)==' '){
+							word = " ";
+							while ((i+1<contentInputField.length()) && (contentInputField.charAt(i+1)==' ')){
+								i++;
+								word = word + ' ';
+							}
+							try {
+								doc.insertString(doc.getLength(), word, commandAttributeSet[0]);
+							} catch (BadLocationException e1) {
+								e1.printStackTrace();
+							}
+						} else if (contentInputField.charAt(i)=='\"'){
+							word = "\"";
+							while ((i+1<contentInputField.length()) && (contentInputField.charAt(i+1)!='\"')){
+								i++;
+								word = word + contentInputField.charAt(i);
+							}
+							if (i+1<contentInputField.length()){
+								i++;
+								word = word + contentInputField.charAt(i);
+							}
+							try {
+								doc.insertString(doc.getLength(), word, commandAttributeSet[2]);
+							} catch (BadLocationException e1) {
+								e1.printStackTrace();
+							}
+						} else {
+							word = "" + contentInputField.charAt(i);
+							while ((i+1<contentInputField.length()) && (contentInputField.charAt(i+1)!=' ')){
+								i++;
+								word = word + contentInputField.charAt(i);
+							}
+							if (isKeyword(word)){
+								try {
+									doc.insertString(doc.getLength(), word, commandAttributeSet[1]);
+								} catch (BadLocationException e1) {
+									e1.printStackTrace();
+								}
+							} else {
+								try {
+									doc.insertString(doc.getLength(), word, commandAttributeSet[0]);
+								} catch (BadLocationException e1) {
+									e1.printStackTrace();
+								}
+							}
+						}
+					}
+					
+					commandField.setCaretPosition(caretPos+1);
+					//showArea.setText(contentInputField);
+					e.consume();
+					break;	
+				}
 			}
 		});
-		commandField.setContentType("text/html");
-		commandField.setFont(new Font(BUTTON_FONT, Font.PLAIN, 17));
+		loadCommandAttributeSet();
+		//commandField.setContentType("text/html");
+		//commandField.setFont(new Font(BUTTON_FONT, Font.PLAIN, 17));
 		commandField.setBackground(SHOW_AREA_BACKGROUND);
-		commandField.setText("<i>aaaaaaa</i>aaaaa");
 		commandField.setPreferredSize(new Dimension(0,0));
+		commandField.grabFocus();
 	}
 
-	private String removeHTML(String text) {
+	private void loadCommandAttributeSet() {
+		commandAttributeSet[0] = new SimpleAttributeSet();
+		StyleConstants.setFontFamily(commandAttributeSet[0], COMMAND_FIELD_FONT);
+        StyleConstants.setFontSize(commandAttributeSet[0], COMMAND_FIELD_SIZE);
+
+        commandAttributeSet[1] = new SimpleAttributeSet(commandAttributeSet[0]);
+        StyleConstants.setForeground(commandAttributeSet[1], MARINER_COLOR);
+        
+        commandAttributeSet[2] = new SimpleAttributeSet(commandAttributeSet[0]);
+        StyleConstants.setForeground(commandAttributeSet[2], IRON_GRAY_COLOR);   
+	}
+	
+	private boolean isKeyword(String word) {
+		for(int i=0;i<KEYWORDS.length;i++){
+			if (KEYWORDS[i].equalsIgnoreCase(word)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/*private String removeHtml(String text) {
 		String result="";
 		for(int i=0;i<text.length();i++){
 			switch(text.charAt(i)){
@@ -595,7 +728,7 @@ public class EzGUI extends JFrame {
 					i++;
 					symbolName = symbolName + text.charAt(i);
 				}
-				if (symbolName.equals("quot;")){
+				/*if (symbolName.equals("quot;")){
 					result = result + "\"";
 				} else if (symbolName.equals("amp;")){
 					result = result + "&";
@@ -603,17 +736,29 @@ public class EzGUI extends JFrame {
 					result = result + "<";
 				} else if (symbolName.equals("gt;")){
 					result = result + ">";
-				}	
+				} else if (symbolName.equals("nbsp;")){
+					result = result + " ";
+				}
+				if (symbolName.equals("#160;")){
+					result = result + "&nbsp;";
+				} 
 				break;
 			case '\n':
+				break;
+			case 13:
 				break;
 			default:
 				result = result + text.charAt(i);
 				break;
 			}
 		}
-		return result.trim();
-	}
+		//return result;
+		if (result.length()>16){
+			return result.substring(14, result.length()-2);
+		} else {
+			return "";
+		}
+	}*/
 
 	/**
 	 * @param commandPanel
@@ -624,6 +769,7 @@ public class EzGUI extends JFrame {
 		fl_commandLabelPanel.setVgap(0);
 		fl_commandLabelPanel.setHgap(0);
 		commandLabelPanel.setBackground(BACKGROUND_COLOR);
+		commandLabelPanel.setFocusable(false);
 		commandPanel.add(commandLabelPanel);
 		
 		JTextPane commandLabel = new JTextPane();
@@ -632,6 +778,7 @@ public class EzGUI extends JFrame {
 		commandLabel.setFont(new Font(BUTTON_FONT, Font.BOLD, 17));
 		commandLabel.setBackground(BACKGROUND_COLOR);
 		commandLabel.setText("  Enter Command: ");
+		commandLabel.setFocusable(false);
 		commandLabelPanel.add(commandLabel);
 	}
 	
@@ -649,8 +796,17 @@ public class EzGUI extends JFrame {
 		
 	}
 	
-	public static void showContent(String content){
+	public void showContent(String header, ArrayList<EzTask> listOfTasks){
+		ArrayList<String> list = new ArrayList<String>();
+		for(int i=0;i<listOfTasks.size();i++){
+			list.add(createHtmlEzTask(listOfTasks.get(i),i%2));
+		}
+		String content = createHtmlTable(list.size(),1,list,"border=0 cellspacing=4 cellpadding=1");
 		
+		showArea.setText(
+				"<table border=0 cellspacing=0 cellpadding=0 width=\"100%\"><tr><td height=\"44px\">"+ createHtmlText("__",TITLE_FONT_FONT,2,SHOW_AREA_BACKGROUND) + createHtmlText(header,TITLE_FONT_FONT,8,MAIN_TITLE_FONT_COLOR) +"</td></tr>"
+				//+ "<tr height=\"0px\"></tr>"
+				+ "<tr><td>" + right(content) +"</td></tr></table>");
 	}
 }
 
