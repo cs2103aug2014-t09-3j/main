@@ -598,11 +598,19 @@ public class EzGUI extends JFrame {
 					commandField.setText("");
 					arg0.consume();
 				}
+				if (arg0.getKeyChar()==KeyEvent.VK_BACK_SPACE){
+					arg0.consume();
+				}
+				if (arg0.getKeyChar()==KeyEvent.VK_DELETE){
+					arg0.consume();
+				}
 				if (arg0.isControlDown()){
-					if (arg0.getKeyChar()==KeyEvent.VK_Z){
-						showArea.setText("Ctrl+Z Pressed.");
-						commandField.setText("");
+					switch (arg0.getKeyChar()){
+					case 22:
 						arg0.consume();
+						break;
+					default:
+						break;
 					}
 				}
 			}
@@ -610,81 +618,140 @@ public class EzGUI extends JFrame {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				int caretPos = commandField.getCaretPosition();
-				
-				switch (e.getKeyChar()){
-				case KeyEvent.VK_ENTER:
-					e.consume();
-					break;
-				case KeyEvent.VK_BACK_SPACE:
-					//commandField.setCaretPosition(Math.max(0, caretPos-2));
-					//commandField.setCaretColor(ENERGY_COLOR);
-					break;
-				default:
-					String typedText = "" + e.getKeyChar();
-					String contentInputField = commandField.getText().substring(0, caretPos) + typedText + commandField.getText().substring(caretPos, commandField.getText().length());
-					StyledDocument doc = commandField.getStyledDocument();
-					try {
-						doc.remove(0, doc.getLength());
-					} catch (BadLocationException e2) {
-						e2.printStackTrace();
-					}
-					
-					for(int i=0;i<contentInputField.length();i++){
-						String word = "";
-						if (contentInputField.charAt(i)==' '){
-							word = " ";
-							while ((i+1<contentInputField.length()) && (contentInputField.charAt(i+1)==' ')){
-								i++;
-								word = word + ' ';
-							}
-							try {
-								doc.insertString(doc.getLength(), word, commandAttributeSet[0]);
-							} catch (BadLocationException e1) {
-								e1.printStackTrace();
-							}
-						} else if (contentInputField.charAt(i)=='\"'){
-							word = "\"";
-							while ((i+1<contentInputField.length()) && (contentInputField.charAt(i+1)!='\"')){
-								i++;
-								word = word + contentInputField.charAt(i);
-							}
-							if (i+1<contentInputField.length()){
-								i++;
-								word = word + contentInputField.charAt(i);
-							}
-							try {
-								doc.insertString(doc.getLength(), word, commandAttributeSet[2]);
-							} catch (BadLocationException e1) {
-								e1.printStackTrace();
+				String contentInputField;
+				if (!e.isControlDown()){
+					switch (e.getKeyChar()){
+					case KeyEvent.VK_ENTER:
+						e.consume();
+						break;
+					case KeyEvent.VK_DELETE:
+						int endPos = commandField.getSelectionEnd();
+						if (commandField.getSelectionStart() == commandField.getSelectionEnd()){
+							if (commandField.getSelectionEnd()<commandField.getText().length()){
+								//showArea.setText(String.valueOf(commandField.getSelectionStart()) + " " + String.valueOf(commandField.getSelectionEnd()));
+								contentInputField = commandField.getText().substring(0, commandField.getSelectionEnd())+
+										commandField.getText().substring(commandField.getSelectionEnd()+1,commandField.getText().length());
+								addColorForCommandField(contentInputField, commandField.getStyledDocument());
+								
+								commandField.setCaretPosition(endPos);
+								
 							}
 						} else {
-							word = "" + contentInputField.charAt(i);
-							while ((i+1<contentInputField.length()) && (contentInputField.charAt(i+1)!=' ')){
-								i++;
-								word = word + contentInputField.charAt(i);
+							endPos = commandField.getSelectionStart();
+							contentInputField = commandField.getText().substring(0, commandField.getSelectionStart())+
+									commandField.getText().substring(commandField.getSelectionEnd(),commandField.getText().length());
+							addColorForCommandField(contentInputField, commandField.getStyledDocument());
+							commandField.setCaretPosition(endPos);
+						}
+						e.consume();
+						break;
+					case KeyEvent.VK_BACK_SPACE:
+						int startPos = commandField.getSelectionStart();
+						if (commandField.getSelectionStart() == commandField.getSelectionEnd()){
+							if (commandField.getSelectionStart()>0){
+								//showArea.setText(String.valueOf(commandField.getSelectionStart()) + " " + String.valueOf(commandField.getSelectionEnd()));
+								
+								if ((commandField.getText().charAt(commandField.getSelectionStart()-1) == '\"') 
+									&& (commandField.getSelectionStart()<commandField.getText().length()) 
+									&& (commandField.getText().charAt(commandField.getSelectionStart()) == '\"')){
+									contentInputField = commandField.getText().substring(0, commandField.getSelectionStart()-1)+
+											commandField.getText().substring(commandField.getSelectionStart()+1,commandField.getText().length());
+								} else {
+									contentInputField = commandField.getText().substring(0, commandField.getSelectionStart()-1)+
+											commandField.getText().substring(commandField.getSelectionStart(),commandField.getText().length());
+								}
+								addColorForCommandField(contentInputField, commandField.getStyledDocument());
+								
+								commandField.setCaretPosition(startPos-1);
+								
 							}
-							if (isKeyword(word)){
-								try {
-									doc.insertString(doc.getLength(), word, commandAttributeSet[1]);
-								} catch (BadLocationException e1) {
-									e1.printStackTrace();
+						} else {
+							contentInputField = commandField.getText().substring(0, commandField.getSelectionStart())+
+									commandField.getText().substring(commandField.getSelectionEnd(),commandField.getText().length());
+							addColorForCommandField(contentInputField, commandField.getStyledDocument());
+							commandField.setCaretPosition(startPos);
+						}
+						e.consume();
+						break;
+					case KeyEvent.VK_SPACE:
+						contentInputField = commandField.getText();
+						String result = "";
+						String lastWord = "";
+						
+						for(int i=0;i<caretPos;i++){
+							//String word = "";
+							if (contentInputField.charAt(i)==' '){
+								result = result + " ";
+								while ((i+1<caretPos) && (contentInputField.charAt(i+1)==' ')){
+									i++;
+									result = result + " ";
 								}
+							} else if (contentInputField.charAt(i)=='\"'){
+								lastWord = "\"";
+								while ((i+1<caretPos) && (contentInputField.charAt(i+1)!='\"')){
+									i++;
+									lastWord = lastWord + contentInputField.charAt(i);
+								}
+								if (i+1<caretPos){
+									i++;
+									lastWord = lastWord + contentInputField.charAt(i);
+								}
+								result = result + lastWord;
 							} else {
-								try {
-									doc.insertString(doc.getLength(), word, commandAttributeSet[0]);
-								} catch (BadLocationException e1) {
-									e1.printStackTrace();
+								lastWord = "" + contentInputField.charAt(i);
+								while ((i+1<caretPos) && (contentInputField.charAt(i+1)!=' ')){
+									i++;
+									lastWord = lastWord + contentInputField.charAt(i);
 								}
+								result = result + lastWord;
 							}
 						}
+						if (lastWord.equalsIgnoreCase("add") || lastWord.equalsIgnoreCase("at")){
+							result = result + " \"\"" + contentInputField.substring(caretPos, contentInputField.length());	
+							addColorForCommandField(result, commandField.getStyledDocument());
+							commandField.setCaretPosition(caretPos+2);
+						} else {
+							result = result + " " + contentInputField.substring(caretPos, contentInputField.length());	
+							addColorForCommandField(result, commandField.getStyledDocument());
+							commandField.setCaretPosition(caretPos+1);
+						}
+						
+						e.consume();
+						break;
+					default:
+						String typedText = "" + e.getKeyChar();
+						contentInputField = commandField.getText().substring(0, caretPos) + typedText + commandField.getText().substring(caretPos, commandField.getText().length());
+						
+						addColorForCommandField(contentInputField, commandField.getStyledDocument());
+						
+						commandField.setCaretPosition(caretPos+1);
+						//showArea.setText(contentInputField);
+						e.consume();
+						break;	
 					}
+				} else {
+					showArea.setText("Ctrl+Z Pressed." + String.valueOf((int)e.getKeyChar()));
+					switch (e.getKeyChar()){
+					case 26:	// CTRL + Z
+						showArea.setText("Ctrl+Z Pressed.");
+						commandField.setText("");
+						e.consume();
+						break;
+					case 22:	// CTRL + V
+						commandField.paste();
+						caretPos = commandField.getCaretPosition();
+						addColorForCommandField(commandField.getText(), commandField.getStyledDocument());
+						commandField.setCaretPosition(caretPos);
+						e.consume();
+						break;
 					
-					commandField.setCaretPosition(caretPos+1);
-					//showArea.setText(contentInputField);
-					e.consume();
-					break;	
+					default:
+						break;
+					}
 				}
 			}
+
+			
 		});
 		loadCommandAttributeSet();
 		//commandField.setContentType("text/html");
@@ -693,7 +760,69 @@ public class EzGUI extends JFrame {
 		commandField.setPreferredSize(new Dimension(0,0));
 		commandField.grabFocus();
 	}
-
+	
+	/**
+	 * @param contentInputField
+	 * @param doc
+	 */
+	private void addColorForCommandField(String contentInputField,
+			StyledDocument doc) {
+		try {
+			doc.remove(0, doc.getLength());
+		} catch (BadLocationException e2) {
+			e2.printStackTrace();
+		}
+		for(int i=0;i<contentInputField.length();i++){
+			String word = "";
+			if (contentInputField.charAt(i)==' '){
+				word = " ";
+				while ((i+1<contentInputField.length()) && (contentInputField.charAt(i+1)==' ')){
+					i++;
+					word = word + ' ';
+				}
+				try {
+					doc.insertString(doc.getLength(), word, commandAttributeSet[0]);
+				} catch (BadLocationException e1) {
+					e1.printStackTrace();
+				}
+			} else if (contentInputField.charAt(i)=='\"'){
+				word = "\"";
+				while ((i+1<contentInputField.length()) && (contentInputField.charAt(i+1)!='\"')){
+					i++;
+					word = word + contentInputField.charAt(i);
+				}
+				if (i+1<contentInputField.length()){
+					i++;
+					word = word + contentInputField.charAt(i);
+				}
+				try {
+					doc.insertString(doc.getLength(), word, commandAttributeSet[2]);
+				} catch (BadLocationException e1) {
+					e1.printStackTrace();
+				}
+			} else {
+				word = "" + contentInputField.charAt(i);
+				while ((i+1<contentInputField.length()) && (contentInputField.charAt(i+1)!=' ')){
+					i++;
+					word = word + contentInputField.charAt(i);
+				}
+				if (isKeyword(word)){
+					try {
+						doc.insertString(doc.getLength(), word, commandAttributeSet[1]);
+					} catch (BadLocationException e1) {
+						e1.printStackTrace();
+					}
+				} else {
+					try {
+						doc.insertString(doc.getLength(), word, commandAttributeSet[0]);
+					} catch (BadLocationException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+	
 	private void loadCommandAttributeSet() {
 		commandAttributeSet[0] = new SimpleAttributeSet();
 		StyleConstants.setFontFamily(commandAttributeSet[0], COMMAND_FIELD_FONT);
