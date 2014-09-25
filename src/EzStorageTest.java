@@ -79,6 +79,8 @@ public class EzStorageTest {
 		ArrayList<String> listWords = new ArrayList<String>();
 		listWords.add("do");
 		checkSearchByKeywords(storage, listWords,2);
+		listWords.add("Tut");
+		checkSearchByKeywords(storage, listWords,2);
 		listWords.add("go");
 		checkSearchByKeywords(storage, listWords,3);
 		
