@@ -26,9 +26,9 @@ public class EzStorage {
 	public EzTask addTask(EzTask task){
 		
 		listOfAllTasks.add(task);
-		numTasks++;
+		
 		//System.out.println(numTasks);
-		task.setId(numTasks);
+		
 		return task;
 	}
 	
@@ -41,6 +41,7 @@ public class EzStorage {
 		
 		listOfAllTasks.add(task);
 		task.setId(numTasks);
+		numTasks++;
 		//System.out.println(numTasks);
 		return task;
 		
@@ -120,19 +121,55 @@ public class EzStorage {
 	
 	/**
 	 * this function return a list of tasks, which is sorted by priority then by date.
-	 * @return
+	 * @return ArrayList tasksByPriority
 	 */
 	public ArrayList<EzTask> getSortedTasksByPriority(){
-		return null;
+		
+		ArrayList<EzTask> tasksByPriority = new ArrayList<EzTask>();
+		for(EzTask task : listOfAllTasks)
+			for(int priority = 0; priority < 6 ; priority++)
+			{
+				if(task.getPriority() == priority)
+					tasksByPriority.add(task);
+					
+			}
+		
+		return tasksByPriority;
+				
+		
 	}
 	
 	/**
 	 * this function return a list of tasks, which contain one or more words in the keywords.
 	 * @param listOfKeywords
-	 * @return
+	 * @return ArrayList tasksWithKeywords
 	 */
 	public ArrayList<EzTask> getTasksByKeywords(ArrayList<String> listOfKeywords){
-		return null;
+
+		ArrayList<EzTask> tasksWithKeywords = new ArrayList<EzTask>();
+		for(String keyword : listOfKeywords)
+			for(EzTask task : listOfAllTasks)
+				if(checkTitle(keyword, task))
+					tasksWithKeywords.add(task);
+
+		return tasksWithKeywords;
+
+
+	}
+
+	public boolean checkTitle(String keyword, EzTask task) {
+		
+		String titleToCheck = task.getTitle();
+		if(titleToCheck.contains(keyword))
+			return true;
+		
+		return false;
+		
+		
+	}
+	
+	private void clearList(ArrayList list){
+		list.clear();
 	}
 	
 	
