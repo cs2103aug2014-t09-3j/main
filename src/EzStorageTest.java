@@ -83,6 +83,19 @@ public class EzStorageTest {
 		checkSearchByKeywords(storage, listWords,3);
 		
 		assertEquals("check not found:",null,storage.findTask(1));
+		
+		tmp = new EzTask(storage.findTask(3));
+		assertEquals("check title: ", "do CS2101 Tut", tmp.getTitle());
+		
+		tmp.setTitle("do CS2103 Tut");
+		list.add(tmp);
+		assertEquals("check the number of tasks affected: ", 1, storage.updateTask(list));
+		/**
+		 * now the list is:
+		 * 0. "go shopping" "at Clementi" 3
+		 * 2. "do EE2021 Tut" 5
+		 * 3. "do CS2103 Tut" 7
+		 */
 	}
 
 
