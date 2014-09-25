@@ -13,10 +13,10 @@ import java.util.Date;
 public class EzStorage {
 	
 	//ArrayList of tasks entered by user.
-	private ArrayList<EzTask> listOfTasks = new ArrayList<EzTask>();
+	private ArrayList<EzTask> listOfAllTasks = new ArrayList<EzTask>();
 	
 	//numTasks represents the number of tasks entered by the user.
-	private int numTasks = listOfTasks.size();
+	int numTasks = 0;
 	
 	/**
 	 * this function just simply adds the task to the list then return it.
@@ -25,7 +25,10 @@ public class EzStorage {
 	 */
 	public EzTask addTask(EzTask task){
 		
-		listOfTasks.add(task);
+		listOfAllTasks.add(task);
+		numTasks++;
+		//System.out.println(numTasks);
+		task.setId(numTasks);
 		return task;
 	}
 	
@@ -36,19 +39,30 @@ public class EzStorage {
 	 */
 	public EzTask addTaskWithNewId(EzTask task){
 		
-		listOfTasks.add(task);
-		task.setId(getSize());
+		listOfAllTasks.add(task);
+		task.setId(numTasks);
+		//System.out.println(numTasks);
 		return task;
 		
 	}
 	
 	/**
 	 * this function replaces the tasks with certain ID in the original list, with the new tasks carrying the same ID in the new list.
-	 * @param listOfTasks
+	 * @param listOfTasksUpdated
 	 * @return the number of tasks found and replaced.
 	 */
-	public int updateTask(ArrayList<EzTask> listOfTasks) {
+	public int updateTask(ArrayList<EzTask> listOfTasksUpdated) {
 		int count = 0;
+		int index = 0;
+		for(EzTask taskToBeUpdated : listOfTasksUpdated)
+			for(EzTask task: listOfAllTasks)
+				if(taskToBeUpdated.getId() == task.getId() )
+				{
+					index = task.getId();
+					listOfAllTasks.remove(index);
+					listOfAllTasks.add(index, taskToBeUpdated);
+					count++;
+				}
 		
 		
 		return count;
@@ -59,9 +73,17 @@ public class EzStorage {
 	 * @param listOfTasks
 	 * @return the number of tasks found and removed.
 	 */
-	public int deleteTask(ArrayList<EzTask> listOfTasks){
+	public int deleteTask(ArrayList<EzTask> listOfTasksDeleted){
 		int count = 0;
-		
+		int index = 0;
+		for(EzTask taskToBeDeleted: listOfTasksDeleted)
+			for(EzTask task: listOfAllTasks)
+				if(taskToBeDeleted.getId() == task.getId())
+				{
+					index = task.getId();
+					listOfAllTasks.remove(index);
+					count++;
+			}
 		return count;
 	}
 	
@@ -71,7 +93,7 @@ public class EzStorage {
 	 */
 	public int getSize(){
 		
-		return listOfTasks.size();
+		return listOfAllTasks.size();
 	}
 	
 	/**
@@ -80,7 +102,11 @@ public class EzStorage {
 	 * @return EzTask or null
 	 */
 	public EzTask findTask(int id){
-		return null;
+		for(EzTask task : listOfAllTasks)
+			if(id == task.getId())
+				return task;
+		
+			return null;
 	}
 	
 	/**
