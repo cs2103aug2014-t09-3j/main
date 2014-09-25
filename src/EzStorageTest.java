@@ -96,6 +96,16 @@ public class EzStorageTest {
 		 * 2. "do EE2021 Tut" 5
 		 * 3. "do CS2103 Tut" 7
 		 */
+		
+		list.clear();
+		tmp = new EzTask(storage.findTask(2));
+		list.add(tmp);
+		assertEquals("check the number of tasks affected: ", 1, storage.deleteTask(list));
+		/**
+		 * now the list is:
+		 * 0. "go shopping" "at Clementi" 3
+		 * 3. "do CS2103 Tut" 7
+		 */
 	}
 
 
