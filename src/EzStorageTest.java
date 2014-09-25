@@ -24,14 +24,14 @@ public class EzStorageTest {
 		 * 0. "go shopping" "at Clementi" 3
 		 */
 		
-		checkId(storage.addTask(new EzTask("do homework",2)), 1);
+		checkId(storage.addTaskWithNewId(new EzTask("do homework",2)), 1);
 		/**
 		 * now the list is:
 		 * 0. "go shopping" "at Clementi" 3
 		 * 1. "do homework" 2
 		 */
 		
-		checkId(storage.addTask(new EzTask("do EE2021 Tut",5)),2);
+		checkId(storage.addTaskWithNewId(new EzTask("do EE2021 Tut",5)),2);
 		/**
 		 * now the list is:
 		 * 0. "go shopping" "at Clementi" 3
@@ -68,7 +68,7 @@ public class EzStorageTest {
 		 * 2. "do EE2021 Tut" 5
 		 */
 		
-		checkId(storage.addTask(new EzTask("do CS2101 Tut",7)),3);
+		checkId(storage.addTaskWithNewId(new EzTask("do CS2101 Tut",7)),3);
 		/**
 		 * now the list is:
 		 * 0. "go shopping" "at Clementi" 3
