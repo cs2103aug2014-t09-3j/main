@@ -39,18 +39,26 @@ public class EzParser {
 		{
 		case ADD:
 			break;
-		
-			
+			//check if wrong input like *adfdfs*
+			//invalid the command if there is keywords not supposed to be there
+		    //need a method to analyze the date int[] readDate(String date) dd/mm/yy, dd/mm/yyyy, dd.mm.yy,dd.mm.yyyy
+			//int[] readTime(String time) only accept 10h, 10:00, 10am
 		case UPDATE:
-			
+			//set target as the task to be updated
+			//set results as the updated task
+			//target not found, set as null
 			break;
 			
 		case DELETE:
-			
+			//set target as the task to be deleted
+			//target not found, set as null
+			//set results as null
 			break;
 			
 		case DONE:
+			//target not found, set as null
 			
+			//same as update
 			break;
 			
 		case UNDO:
@@ -64,9 +72,11 @@ public class EzParser {
 			break;
 			
 		case SHOW:
+			//set results and target as all tasks()
 			break;
 			
 		case HELP:
+			//set results and target as null
 			break;
 		
 		default:
