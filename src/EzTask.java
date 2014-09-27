@@ -13,7 +13,6 @@ public class EzTask {
 	private String title;
 	private GregorianCalendar startTime;
 	private GregorianCalendar endTime;
-	private GregorianCalendar time;
 	private String venue;
 	private int priority;
 	private boolean done;
@@ -25,8 +24,7 @@ public class EzTask {
 		setEndTime(newTask.getEndTime());
 		setVenue(newTask.getVenue());
 		setPriority(newTask.getPriority());
-		setDone(newTask.isDone());
-		setTime(newTask.getTime());
+		setDone(newTask.isDone());	
 	}
 	
     public EzTask() {
@@ -49,16 +47,6 @@ public class EzTask {
     public EzTask(String title, String venue, int priority) {
         this(title,venue);
         setPriority(priority);
-    }
-
-    public GregorianCalendar getTime()
-    {
-    	return time;
-    }
-    
-    public void setTime(GregorianCalendar time)
-    {
-    	this.time=(GregorianCalendar)time.clone();
     }
 
 	public int getId() {

@@ -90,16 +90,17 @@ public class EzParser {
 		{
 		case ADD:
 			String title=new String();
-			if(content.indexOf("\'")<0||content.indexOf("\"", 1)<0//if cannot find "***" means no title in the command
+			if((content.indexOf("\'")<0)||(content.indexOf("\"", 1)<0)//if cannot find "***" means no title in the command
 			||!content.startsWith("\""))//if the string does not start with ",means invalid command type.
 				newAction.setAction(TypeOfAction.INVALID);
 			title=content.substring(content.indexOf("\"")+1, content.indexOf("\"",1));
 			content=content.substring(content.indexOf("\"",1)+1).trim();
+			
 			String location=new String();
 			location=null;
 			String time=new String();
 			time=null;
-			if(content.indexOf("\"")>=0&&content.indexOf("\"", content.indexOf("\""))==content.lastIndexOf("\""))//there is another "***",it must be the location
+			if((content.indexOf("\"")>=0)&&(content.indexOf("\"", content.indexOf("\""))==content.lastIndexOf("\"")))//there is another "***",it must be the location
 				{
 				location=content.substring(content.indexOf("\"")+1,content.indexOf("\"",content.indexOf("\"")));
 				String before=new String();
@@ -111,17 +112,58 @@ public class EzParser {
 				{
 					before=before.substring(0, before.length());
 				}
-				content=before+after;
+				content=before+after;//command without "location"
 				}
+			if(content.indexOf("\"")>=0)
+			{
+				newAction.setAction(TypeOfAction.INVALID);
+			}//if there is more ",the command is invalid.
+			
+			if(checkMultipleAction(content)==true)
+			{
+				newAction.setAction(TypeOfAction.INVALID);
+			}//see if there is other keywords for action.
+			
+			int priority=0;
 			//take priority if have.
 			//after take out priority, there should be only time,date
+			if(content.indexOf("*")>=0)// see if there is any * indicating priority
+			{
+				if((content.lastIndexOf("*")-content.indexOf("*"))<=2)//maximum priority is 3
+				{
+					for(int i=content.indexOf("*");i<=content.lastIndexOf("*");i++)
+					{
+						if(content.charAt(i)!='*')
+							{
+							newAction.setAction(TypeOfAction.INVALID);
+							}	//check if wrong input like *adfdfs*
+					}
+					priority=content.lastIndexOf("*")-content.indexOf("*")+1;
+					
+				}
+				else 
+				{
+					newAction.setAction(TypeOfAction.INVALID);
+				}
+				content=content.replaceAll("*", "");//remove all "*"
+			}
+			
+			if(checkMultipleAction(content)==true)
+			{
+				newAction.setAction(TypeOfAction.INVALID);
+			}//see if there is other keywords for action.
+			
+			
+			
+			
 			//deal with keyword today,tomorrow
-			//deal with on date, at time, begin, end
+			//deal with on date, at time, from,to
+			
 
 			
 			
 			break;
-			//check if wrong input like *adfdfs*
+		
 			//invalid the command if there is keywords not supposed to be there
 		    //need a method to analyze the date int[] readDate(String date) dd/mm/yy, dd/mm/yyyy, dd.mm.yy,dd.mm.yyyy
 			//int[] readTime(String time) only accept 10h, 10:00, 10am
@@ -193,5 +235,57 @@ public static TypeOfAction getAction(String userCommand)
 	return TypeOfAction.INVALID;
 }
 
+public static String getFirstWord(String input)
+{
+	String firstword=input.substring(0, input.indexOf(" "));
+	
+	return firstword;
+}
+public static String removeFirstWord(String input)
+{
+	String output=input.substring(input.indexOf(" "));
+	output=output.trim();
+	return output;
+}
+public static int[] readDate(String date)
+{
+	return null;
+}
+
+public static int[] readTime(String time)
+{
+	return null;
+}
+
+
+public static boolean checkMultipleAction(String command)
+{
+	ArrayList<String> listOfAction=new ArrayList<String>();
+	
+	listOfAction.add("add");
+	listOfAction.add("upate");
+	listOfAction.add("delete");
+	listOfAction.add("undo");
+	listOfAction.add("redo");
+	listOfAction.add("show");
+	listOfAction.add("help");
+	listOfAction.add("invalid");
+	
+	String word=getFirstWord(command);
+	while(command.isEmpty()!=true)
+	{
+	for(int i=0;i<listOfAction.size();i++)
+	{
+	if(word.equalsIgnoreCase(listOfAction.get(i)))
+	{
+		return true;
+	}
+	}
+	command=removeFirstWord(command);
+	}
+	
+	return false;
+	
+}
 
 }
