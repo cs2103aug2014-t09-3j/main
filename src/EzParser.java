@@ -35,9 +35,41 @@ public class EzParser {
 	public static EzAction extractInfo(String userCommand,EzStorage storage){
 		EzAction newAction=new EzAction();
 		newAction.setAction(getAction(userCommand));
+		String content=userCommand.substring(userCommand.indexOf(" ")+1).trim();
 		switch(newAction.getAction())
 		{
 		case ADD:
+			String title=new String();
+			if(content.indexOf("\'")<0||content.indexOf("\"", 1)<0//if cannot find "***" means no title in the command
+			||!content.startsWith("\""))//if the string does not start with ",means invalid command type.
+				newAction.setAction(TypeOfAction.INVALID);
+			title=content.substring(content.indexOf("\"")+1, content.indexOf("\"",1));
+			content=content.substring(content.indexOf("\"",1)+1).trim();
+			String location=new String();
+			location=null;
+			String time=new String();
+			time=null;
+			if(content.indexOf("\"")>=0&&content.indexOf("\"", content.indexOf("\""))==content.lastIndexOf("\""))//there is another "***",it must be the location
+				{
+				location=content.substring(content.indexOf("\"")+1,content.indexOf("\"",content.indexOf("\"")));
+				String before=new String();
+				String after=new String();
+				before=content.substring(0,content.indexOf("\""));
+				after=content.substring(content.indexOf("\"",content.indexOf("\"")));
+				before=before.trim();
+				if(before.substring(before.length()-2).equalsIgnoreCase("at"))//remove the "at" before location if there is an "at"
+				{
+					before=before.substring(0, before.length());
+				}
+				content=before+after;
+				}
+			//take priority if have.
+			//after take out priority, there should be only time,date
+			//deal with keyword today,tomorrow
+			//deal with on date, at time, begin, end
+
+			
+			
 			break;
 		
 			
