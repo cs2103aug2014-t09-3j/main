@@ -593,8 +593,7 @@ public class EzGUI extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 				if (arg0.getKeyChar()==KeyEvent.VK_ENTER){
-					//commandField.setContentType("text/plain");
-					showArea.setText(commandField.getText());
+					EzController.execute(commandField.getText());
 					commandField.setText("");
 					arg0.consume();
 				}
@@ -925,7 +924,7 @@ public class EzGUI extends JFrame {
 		
 	}
 	
-	public void showContent(String header, ArrayList<EzTask> listOfTasks){
+	public static void showContent(String header, ArrayList<EzTask> listOfTasks){
 		ArrayList<String> list = new ArrayList<String>();
 		for(int i=0;i<listOfTasks.size();i++){
 			list.add(createHtmlEzTask(listOfTasks.get(i),i%2));
@@ -938,4 +937,3 @@ public class EzGUI extends JFrame {
 				+ "<tr><td>" + right(content) +"</td></tr></table>");
 	}
 }
-
