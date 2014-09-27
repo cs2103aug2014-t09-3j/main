@@ -129,7 +129,7 @@ public class EzGUI extends JFrame {
 	private JPanel contentPane;
 	private Calendar cal;
 	private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-	private JEditorPane showArea;
+	private static JEditorPane showArea;
 	private JButton selectedButton = null;
 	private JTextPane commandField;
 	private SimpleAttributeSet[] commandAttributeSet = new SimpleAttributeSet[3];
@@ -366,7 +366,7 @@ public class EzGUI extends JFrame {
 	}
 	
 	
-	private String createHtmlEzTask(EzTask task,int type){
+	private static String createHtmlEzTask(EzTask task,int type){
 		if (task!=null){
 			return 	"<table border=0 cellspacing=0 cellpadding=1 bgcolor=\"#" + convertColorToHex(TASK_BG_COLOR[type]) + "\" width=\"560px\"><tr>"
 					+ "<td width=\"53px\" bgcolor=\"#" + convertColorToHex(ID_BG_COLOR[type]) +"\">" + createHtmlIdAndPriorityOfEzTask(task) + "</td>"
@@ -381,7 +381,7 @@ public class EzGUI extends JFrame {
 		}
 	}
 	
-	private String createHtmlDoneOfEzTask(EzTask task) {
+	private static String createHtmlDoneOfEzTask(EzTask task) {
 		if (task.isDone()){
 			return createHtmlImg("image/done.png");
 		}
@@ -394,7 +394,7 @@ public class EzGUI extends JFrame {
 				+ "</td></tr></table>";
 	}*/
 
-	private String createHtmlDateOfEzTask(EzTask task) {
+	private static String createHtmlDateOfEzTask(EzTask task) {
 		GregorianCalendar date1 = task.getStartTime();
 		GregorianCalendar date2 = task.getEndTime();
 		ArrayList<String> list = new ArrayList<String>();
@@ -427,7 +427,7 @@ public class EzGUI extends JFrame {
 		return createHtmlTable(1,list.size(),list,"border=0 cellspacing=0 cellpadding=1");
 	}
 	
-	private String createHtmlTable(int row, int col, ArrayList<String> list, String tableAttribute){
+	private static String createHtmlTable(int row, int col, ArrayList<String> list, String tableAttribute){
 		String result = "<table "+tableAttribute+">";
 		for(int i=0;i<row;i++){
 			result = result + "<tr>";
@@ -443,7 +443,7 @@ public class EzGUI extends JFrame {
 		return result + "</table>";
 	}
 	
-	private String createHtmlTitleAndVenueOfEzTask(EzTask task) {
+	private static String createHtmlTitleAndVenueOfEzTask(EzTask task) {
 		String result = createHtmlText(task.getTitle(),TITLE_FONT_FONT,TITLE_FONT_SIZE, TITLE_FONT_COLOR); 
 		if (task.getVenue()!=null){
 			result = result + "<br>"+right(createHtmlText("@"+task.getVenue(),VENUE_FONT_FONT,VENUE_FONT_SIZE , VENUE_FONT_COLOR));
@@ -451,14 +451,14 @@ public class EzGUI extends JFrame {
 		return result;
 	}
 
-	private String createHtmlIdAndPriorityOfEzTask(EzTask task){
+	private static String createHtmlIdAndPriorityOfEzTask(EzTask task){
 		String htmlId = createHtmlText("#"+task.getId(), ID_FONT_FONT, ID_FONT_SIZE, ID_FONT_COLOR);
 		String htmlPriority = createHtmlStar(task.getPriority());
 		return "<table width=\"48px\"><tr><td>" + center(htmlId) + "</td></tr>"
 				+ "<tr><td>"+ center(htmlPriority) + "</td></tr></table>";
 	}
 	
-	private String createHtmlCalendar(GregorianCalendar date){
+	private static String createHtmlCalendar(GregorianCalendar date){
 		String monthHtmlText = createHtmlText(CALENDAR_MONTH[date.get(Calendar.MONTH)-1],"Arial Rounded MT Bold",2,new Color(255,255,255));
 		String dateHtmlText = createHtmlText(String.valueOf(date.get(Calendar.DATE)),"Arial",6,CALENDAR_DATE_FONT_COLOR);
 		
@@ -467,7 +467,7 @@ public class EzGUI extends JFrame {
 		+ "<tr><td height=\"27px\">" + center(dateHtmlText) + "</td></tr></table>";
 	}
 	
-	private String createHtmlClock(GregorianCalendar date){
+	private static String createHtmlClock(GregorianCalendar date){
 		String hour = String.valueOf(date.get(Calendar.HOUR_OF_DAY));
 		if (date.get(Calendar.HOUR_OF_DAY)<10) {
 			hour = "0" + hour;
@@ -483,11 +483,11 @@ public class EzGUI extends JFrame {
 		+ "<tr><td width=\"2px\"></td><td height=\"25px\">" + center(timeHtmlText) + "</td></tr></table>";
 	}
 	
-	private String createHtmlImg(String url){
+	private static String createHtmlImg(String url){
 		return "<img src=\"file:"+ url + "\">";
 	}
 	
-	private String createHtmlStar(int numStar){
+	private static String createHtmlStar(int numStar){
 		String result = "";
 		String chosenStar = "";
 		switch (numStar){
@@ -519,33 +519,33 @@ public class EzGUI extends JFrame {
 		return result;
 	}
 	
-	private String center(String content){
+	private static String center(String content){
 		return "<center>" + content + "</center>";
 	}
 	
-	private String right(String content){
+	private static String right(String content){
 		return "<div align=\"right\">" + content + "</div>";
 	}
 	
-	private String convertColorToHex(Color color){
+	private static String convertColorToHex(Color color){
 		return convertIntToHex(color.getRed(),2) + convertIntToHex(color.getGreen(),2) + convertIntToHex(color.getBlue(),2);
 	}
 	
-	private String createHtmlText(final String content, final String font, final int size, final Color color) {
+	private static String createHtmlText(final String content, final String font, final int size, final Color color) {
 		return "<font face=\"" + font +
 				"\" size=\"" + size +
 				"\" color=\"#" + convertColorToHex(color) + "\">" + 
 				content + "</font>";
 	}
 	
-	private String createHtmlText(String content, String font, int size, String hexColor) {
+	private static String createHtmlText(String content, String font, int size, String hexColor) {
 		return "<font face=\"" + font +
 				"\" size=\"" + size +
 				"\" color=\"#" + hexColor + "\">" + 
 				content + "</font>";
 	}
 	
-	private String convertIntToHex(int i, int length){
+	private static String convertIntToHex(int i, int length){
 		if (length == 0) return "";
 		if ((0<=i) && (i<=9)) {
 			return convertIntToHex(i/16,length-1) + (char)('0'+i);
