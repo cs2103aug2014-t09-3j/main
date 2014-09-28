@@ -83,11 +83,10 @@ public class EzParser {
 	public static EzAction extractInfo(String userCommand, EzStorage storage) {
 		EzAction newAction = new EzAction();
 		newAction.setAction(getAction(userCommand));
-		String content = userCommand.substring(userCommand.indexOf(" ") + 1)
-				.trim();
-		switch (newAction.getAction()) {
+		String content = removeFirstWord(userCommand);
+		switch (newAction.getAction()) {// content starts with no Action
 		case ADD:
-			ArrayList<EzTask> target = new ArrayList<EzTask>();
+			ArrayList<EzTask> targetAdd = new ArrayList<EzTask>();
 			EzTask task = new EzTask();
 			String title = new String();
 			if ((content.indexOf("\'") < 0) || (content.indexOf("\"", 1) < 0)// if
@@ -106,7 +105,7 @@ public class EzParser {
 				newAction.setAction(TypeOfAction.INVALID);
 			title = content.substring(content.indexOf("\"") + 1,
 					content.indexOf("\"", 1) + 1);
-			content = content.substring(content.indexOf("\"", 1) + 1).trim();
+			content = removeFirstWord(content);
 			task.setTitle(title);
 			String location = new String();
 			location = null;
@@ -391,17 +390,239 @@ public class EzParser {
 				}
 			}
 
-			target.add(task);
+			targetAdd.add(task);
 
-			newAction.setTargets(target);
+			newAction.setTargets(targetAdd);
 			newAction.setResults(null);
 
 			break;
 
 		case UPDATE:
-			// set target as the task to be updated
-			// set results as the updated task
-			// target not found, set as null
+			ArrayList<EzTask> targetUpdate = new ArrayList<EzTask>();
+			ArrayList<EzTask> resultUpdate = new ArrayList<EzTask>();
+			int[] dateUpdate = new int[5];
+			GregorianCalendar calendarUpdate = new GregorianCalendar();
+			String id = getFirstWord(content);
+			content = removeFirstWord(content);
+			int index = Integer.parseInt(id);
+			if (storage.findTask(index) == null) {
+				newAction.setTargets(null);
+				newAction.setResults(null);
+			} else {
+				EzTask taskUpdate = storage.findTask(index);
+
+				targetUpdate.add(taskUpdate);
+				newAction.setTargets(targetUpdate);
+
+				if (getFirstWord(content).equalsIgnoreCase("set")) {
+					content = removeFirstWord(content);
+					if (getFirstWord(content).equalsIgnoreCase("title")) {
+						content = removeFirstWord(content);
+						if ((content.indexOf("\"") >= 0)
+								&& (content.indexOf("\"",
+										content.indexOf("\"") + 1) == content
+										.lastIndexOf("\""))) {
+							content = content.substring(
+									content.indexOf("\"") + 1,
+									content.lastIndexOf("\""));
+							taskUpdate.setTitle(content);
+							resultUpdate.add(taskUpdate);
+							newAction.setResults(resultUpdate);
+						}
+						content = removeFirstWord(content);
+						if (!content.isEmpty()) {
+							newAction.setAction(TypeOfAction.INVALID);
+						}
+					} else if (getFirstWord(content).equalsIgnoreCase("date")) {
+						content = removeFirstWord(content);// content is now the
+															// date
+
+						dateUpdate[0] = readDate(content)[0];
+						dateUpdate[1] = readDate(content)[1];
+						dateUpdate[2] = readDate(content)[2];
+
+						if (readDate(content)[0] < 0) {
+							newAction.setAction(TypeOfAction.INVALID);
+						}
+
+						calendarUpdate = new GregorianCalendar(dateUpdate[2],
+								dateUpdate[1] - 1, dateUpdate[0]);
+						taskUpdate.setStartTime(calendarUpdate);
+						taskUpdate.setEndTimeAsStartTime();
+						resultUpdate.add(taskUpdate);
+						newAction.setResults(resultUpdate);
+
+						content = removeFirstWord(content);
+						if (!content.isEmpty()) {
+							newAction.setAction(TypeOfAction.INVALID);
+						}
+					} else if (getFirstWord(content).equalsIgnoreCase("time")) {
+						content = removeFirstWord(content);
+
+						dateUpdate[3] = readTime(content)[0];
+						dateUpdate[4] = readTime(content)[1];
+						if (readTime(content)[0] < 0) {
+							newAction.setAction(TypeOfAction.INVALID);
+						}
+						calendarUpdate.set(GregorianCalendar.HOUR,
+								dateUpdate[3]);
+						calendarUpdate.set(GregorianCalendar.MINUTE,
+								dateUpdate[4]);
+
+						taskUpdate.setStartTime(calendarUpdate);
+						taskUpdate.setEndTimeAsStartTime();
+						resultUpdate.add(taskUpdate);
+						newAction.setResults(resultUpdate);
+
+						content = removeFirstWord(content);
+						if (!content.isEmpty()) {
+							newAction.setAction(TypeOfAction.INVALID);
+						}
+					} else if (getFirstWord(content).equalsIgnoreCase("start")) {
+
+						content = removeFirstWord(content);
+						if (getFirstWord(content).equalsIgnoreCase("date")) {
+							content = removeFirstWord(content);
+
+							dateUpdate[0] = readDate(content)[0];
+							dateUpdate[1] = readDate(content)[1];
+							dateUpdate[2] = readDate(content)[2];
+
+							if (readDate(content)[0] < 0) {
+								newAction.setAction(TypeOfAction.INVALID);
+							}
+
+							calendarUpdate = new GregorianCalendar(
+									dateUpdate[2], dateUpdate[1] - 1,
+									dateUpdate[0]);
+							taskUpdate.setStartTime(calendarUpdate);
+							resultUpdate.add(taskUpdate);
+							newAction.setResults(resultUpdate);
+
+							content = removeFirstWord(content);
+						}
+						if (!content.isEmpty()) {
+							newAction.setAction(TypeOfAction.INVALID);
+						}
+
+					} else if (getFirstWord(content).equalsIgnoreCase("start")) {
+						content = removeFirstWord(content);
+						if (getFirstWord(content).equalsIgnoreCase("time")) {
+							content = removeFirstWord(content);
+							dateUpdate[3] = readTime(content)[0];
+							dateUpdate[4] = readTime(content)[1];
+							if (readTime(content)[0] < 0) {
+								newAction.setAction(TypeOfAction.INVALID);
+							}
+							calendarUpdate.set(GregorianCalendar.HOUR,
+									dateUpdate[3]);
+							calendarUpdate.set(GregorianCalendar.MINUTE,
+									dateUpdate[4]);
+
+							taskUpdate.setStartTime(calendarUpdate);
+							resultUpdate.add(taskUpdate);
+							newAction.setResults(resultUpdate);
+						}
+
+						content = removeFirstWord(content);
+
+						if (!content.isEmpty()) {
+							newAction.setAction(TypeOfAction.INVALID);
+						}
+					} else if (getFirstWord(content).equalsIgnoreCase("end")) {
+
+						content = removeFirstWord(content);
+						if (getFirstWord(content).equalsIgnoreCase("date")) {
+							content = removeFirstWord(content);
+
+							dateUpdate[0] = readDate(content)[0];
+							dateUpdate[1] = readDate(content)[1];
+							dateUpdate[2] = readDate(content)[2];
+
+							if (readDate(content)[0] < 0) {
+								newAction.setAction(TypeOfAction.INVALID);
+							}
+
+							calendarUpdate = new GregorianCalendar(
+									dateUpdate[2], dateUpdate[1] - 1,
+									dateUpdate[0]);
+							taskUpdate.setEndTime(calendarUpdate);
+							resultUpdate.add(taskUpdate);
+							newAction.setResults(resultUpdate);
+
+							content = removeFirstWord(content);
+						}
+						if (!content.isEmpty()) {
+							newAction.setAction(TypeOfAction.INVALID);
+						}
+
+					} else if (getFirstWord(content).equalsIgnoreCase("end")) {
+						content = removeFirstWord(content);
+						if (getFirstWord(content).equalsIgnoreCase("time")) {
+							content = removeFirstWord(content);
+							dateUpdate[3] = readTime(content)[0];
+							dateUpdate[4] = readTime(content)[1];
+							if (readTime(content)[0] < 0) {
+								newAction.setAction(TypeOfAction.INVALID);
+							}
+							calendarUpdate.set(GregorianCalendar.HOUR,
+									dateUpdate[3]);
+							calendarUpdate.set(GregorianCalendar.MINUTE,
+									dateUpdate[4]);
+
+							taskUpdate.setEndTime(calendarUpdate);
+							resultUpdate.add(taskUpdate);
+							newAction.setResults(resultUpdate);
+						}
+
+						content = removeFirstWord(content);
+
+						if (!content.isEmpty()) {
+							newAction.setAction(TypeOfAction.INVALID);
+						}
+					} else if (getFirstWord(content).equalsIgnoreCase("venue")) {
+						content = removeFirstWord(content);
+
+						if ((content.indexOf("\"") >= 0)
+								&& (content.indexOf("\"",
+										content.indexOf("\"") + 1) == content
+										.lastIndexOf("\""))) {
+							content = content.substring(
+									content.indexOf("\"") + 1,
+									content.lastIndexOf("\""));
+							taskUpdate.setVenue(content);
+							resultUpdate.add(taskUpdate);
+							newAction.setResults(resultUpdate);
+						}
+
+						content = removeFirstWord(content);
+						if (!content.isEmpty()) {
+							newAction.setAction(TypeOfAction.INVALID);
+						}
+					} else if (getFirstWord(content).equalsIgnoreCase(
+							"priority")) {
+						int priorityUpdate;
+						content = removeFirstWord(content);
+						if ((content.lastIndexOf("*") - content.indexOf("*")) <= 2) {
+							for (int i = content.indexOf("*"); i <= content
+									.lastIndexOf("*"); i++) {
+								if (content.charAt(i) != '*') {
+									newAction.setAction(TypeOfAction.INVALID);
+								} // check if wrong input like *adfdfs*
+							}
+							priorityUpdate = content.lastIndexOf("*")
+									- content.indexOf("*") + 1;
+							taskUpdate.setPriority(priorityUpdate);
+						} else {
+							newAction.setAction(TypeOfAction.INVALID);
+						}
+
+						resultUpdate.add(taskUpdate);
+						newAction.setResults(resultUpdate);
+					}
+				}
+			}
+
 			break;
 
 		case DELETE:
