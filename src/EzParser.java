@@ -89,7 +89,7 @@ public class EzParser {
 			ArrayList<EzTask> targetAdd = new ArrayList<EzTask>();
 			EzTask task = new EzTask();
 			String title = new String();
-			if ((content.indexOf("\'") < 0) || (content.indexOf("\"", 1) < 0)// if
+			if ((content.indexOf("\"") < 0) || (content.indexOf("\"", 1) < 0)// if
 																				// cannot
 																				// find
 																				// "***"
@@ -104,8 +104,8 @@ public class EzParser {
 													// command type.
 				newAction.setAction(TypeOfAction.INVALID);
 			title = content.substring(content.indexOf("\"") + 1,
-					content.indexOf("\"", 1) + 1);
-			content = removeFirstWord(content);
+					content.indexOf("\"", 1));
+			content = content.substring(content.lastIndexOf("\"")+1).trim();
 			task.setTitle(title);
 			String location = new String();
 			location = null;
@@ -392,8 +392,8 @@ public class EzParser {
 
 			targetAdd.add(task);
 
-			newAction.setTargets(targetAdd);
-			newAction.setResults(null);
+			newAction.setTargets(null);
+			newAction.setResults(targetAdd);
 
 			break;
 
@@ -626,6 +626,9 @@ public class EzParser {
 			break;
 
 		case DELETE:
+			 //DELETE [id1] [id2] [id3]
+				//	 DELETE FROM [startId] TO [endId]
+					// DELETE ALL
 			// set target as the task to be deleted
 			// target not found, set as null
 			// set results as null
