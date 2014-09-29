@@ -105,10 +105,11 @@ public class EzParser {
 				newAction.setAction(TypeOfAction.INVALID);
 			title = content.substring(content.indexOf("\"") + 1,
 					content.indexOf("\"", 1));
-			content = content.substring(content.lastIndexOf("\"")+1).trim();
+			content = content.substring(content.indexOf("\"", content.indexOf("\"")+1)+1).trim();
 			task.setTitle(title);
 			String location = new String();
 			location = null;
+			
 
 			if ((content.indexOf("\"") >= 0)
 					&& (content.indexOf("\"", content.indexOf("\"") + 1) == content
@@ -117,27 +118,29 @@ public class EzParser {
 			{
 				location = content.substring(content.indexOf("\"") + 1,
 						content.indexOf("\"", content.indexOf("\"") + 1));
+				
 				String before = new String();
 				String after = new String();
 				before = content.substring(0, content.indexOf("\""));
 				after = content.substring(content.indexOf("\"",
-						content.indexOf("\"") + 1) + 1);
+						content.indexOf("\"") + 1) + 1).trim();
 				before = before.trim();
 				if (before.substring(before.length() - 2)
 						.equalsIgnoreCase("at"))// remove the "at" before
 												// location if there is an "at"
 				{
-					before = before.substring(0, before.length());
+					before = before.substring(0, before.length()-2);
 				}
 				content = before + after;// command without "location"
 			}
 			task.setVenue(location);
+		
 			if (content.indexOf("\"") >= 0) {
-				newAction.setAction(TypeOfAction.INVALID);
+			//	newAction.setAction(TypeOfAction.INVALID);
 			}// if there is more ",the command is invalid.
 
 			if (checkMultipleAction(content) == true) {
-				newAction.setAction(TypeOfAction.INVALID);
+			//	newAction.setAction(TypeOfAction.INVALID);
 			}// see if there is other keywords for action.
 
 			int priority = 0;
@@ -154,21 +157,21 @@ public class EzParser {
 					for (int i = content.indexOf("*"); i <= content
 							.lastIndexOf("*"); i++) {
 						if (content.charAt(i) != '*') {
-							newAction.setAction(TypeOfAction.INVALID);
+						//	newAction.setAction(TypeOfAction.INVALID);
 						} // check if wrong input like *adfdfs*
 					}
 					priority = content.lastIndexOf("*") - content.indexOf("*")
 							+ 1;
 
 				} else {
-					newAction.setAction(TypeOfAction.INVALID);
+				//	newAction.setAction(TypeOfAction.INVALID);
 				}
-				content = content.replaceAll("*", "");// remove all "*"
+				content = content.replaceAll("\\*", "");// remove all "*"
 			}
 			task.setPriority(priority);
 
 			if (checkMultipleAction(content) == true) {
-				newAction.setAction(TypeOfAction.INVALID);
+			//	newAction.setAction(TypeOfAction.INVALID);
 			}// see if there is other keywords for action.
 
 			GregorianCalendar calendar = new GregorianCalendar();
@@ -196,7 +199,7 @@ public class EzParser {
 				dateArr[1] = readDate(date)[1];
 				dateArr[2] = readDate(date)[2];
 				if (readDate(date)[0] < 0) {
-					newAction.setAction(TypeOfAction.INVALID);
+				//	newAction.setAction(TypeOfAction.INVALID);
 				}
 				calendar = new GregorianCalendar(dateArr[2], dateArr[1] - 1,
 						dateArr[0]);
@@ -219,9 +222,7 @@ public class EzParser {
 												// need to do anything because
 												// date is set.
 				{
-				} else {
-					newAction.setAction(TypeOfAction.INVALID);
-				}
+				} 
 			}
 			if (getFirstWord(content).equalsIgnoreCase("at")) {
 				content = removeFirstWord(content);
@@ -270,6 +271,7 @@ public class EzParser {
 			if (getFirstWord(content).equalsIgnoreCase("from")) {
 				content = removeFirstWord(content);
 				String temp = content;
+				
 				int count1 = 0;
 				while (!temp.isEmpty()) {
 					if (!getFirstWord(temp).equalsIgnoreCase("to")) {
@@ -281,7 +283,6 @@ public class EzParser {
 					}
 				}
 				int count2 = 0;
-				System.out.println(temp);
 				while (!temp.isEmpty()) {
 					temp = removeFirstWord(temp);
 					count2++;
@@ -289,10 +290,11 @@ public class EzParser {
 				if (count1 == count2 && count1 <= 2 && count1 > 0) {
 					if (count1 == 1) {
 						String start = getFirstWord(content);
-						removeFirstWord(content);
-						removeFirstWord(content);
+						content=removeFirstWord(content);
+						content=removeFirstWord(content);
 						String end = getFirstWord(content);
-						removeFirstWord(content);
+						content=removeFirstWord(content);
+						System.out.println(content);
 
 						if (readDate(start)[0] >= 0 && readDate(end)[0] >= 0) {
 							dateArr[0] = readDate(start)[0];
@@ -692,8 +694,13 @@ public class EzParser {
 		if (input.indexOf(" ") >= 0) {
 			firstword = input.substring(0, input.indexOf(" "));
 			firstword = firstword.trim();
-		} else {
-			firstword = "";
+		} else 
+		if(input.isEmpty())
+		{
+			return "";
+		}
+		else{
+			firstword=input;
 		}
 		return firstword;
 	}
@@ -754,8 +761,9 @@ public class EzParser {
 	{
 		int[] results = new int[2];
 		time = time.trim();
-		if (time.substring(time.length() - 2).equalsIgnoreCase("am")
-				|| time.substring(time.length() - 2).equalsIgnoreCase("pm")) {
+	
+		if (time.length()>=2&&(time.substring(time.length() - 2).equalsIgnoreCase("am")
+				|| time.substring(time.length() - 2).equalsIgnoreCase("pm"))) {
 			if (time.substring(time.length() - 2).equalsIgnoreCase("pm")) {
 				results[0] = 12;
 			}
@@ -786,7 +794,12 @@ public class EzParser {
 					|| results[1] < 0) {
 				results[0] = -1;
 			}
-		} else
+		} 
+		else if(Integer.parseInt(time)>=0)
+		{
+			results[0]=results[0]+Integer.parseInt(time);
+		}
+		else
 			results[0] = -1;
 		return results;// int[] readTime(String time) only accept 10h, 10:00,
 						// 10am
