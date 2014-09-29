@@ -89,7 +89,7 @@ public class EzParser {
 			ArrayList<EzTask> targetAdd = new ArrayList<EzTask>();
 			EzTask task = new EzTask();
 			String title = new String();
-			if ((content.indexOf("\'") < 0) || (content.indexOf("\"", 1) < 0)// if
+			if ((content.indexOf("\"") < 0) || (content.indexOf("\"", 1) < 0)// if
 																				// cannot
 																				// find
 																				// "***"
