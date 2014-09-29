@@ -62,7 +62,11 @@ public class EzTask {
 	}
 	
 	public void setTitle(String title) {
-		this.title = new String(title);
+		if (title != null){
+			this.title = new String(title);
+		} else {
+			this.title = "";
+		}
 	}
 	
 	public GregorianCalendar getStartTime() {
@@ -70,7 +74,11 @@ public class EzTask {
 	}
 	
 	public void setStartTime(GregorianCalendar startTime) {
-		this.startTime = (GregorianCalendar) startTime.clone();
+		if (startTime != null){
+			this.startTime = (GregorianCalendar) startTime.clone();
+		} else {
+			this.startTime = null;
+		}
 	}
 	
 	
@@ -88,7 +96,11 @@ public class EzTask {
 	}
 	
 	public void setEndTime(GregorianCalendar endTime) {
-		this.endTime = (GregorianCalendar) endTime.clone();
+		if (endTime != null){
+			this.endTime = (GregorianCalendar) endTime.clone();
+		} else {
+			this.endTime = null;
+		}
 	}
 	
 	
@@ -110,7 +122,11 @@ public class EzTask {
 	}
 	
 	public void setVenue(String venue) {
-		this.venue = new String(venue);
+		if (venue!=null){
+			this.venue = new String(venue);
+		} else {
+			this.venue = null;
+		}
 	}
 	
 	public int getPriority() {
