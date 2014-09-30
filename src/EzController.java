@@ -20,7 +20,7 @@ public class EzController {
 		tempAction.setTargets(null);
 		ArrayList<EzTask> list = new ArrayList<EzTask>();
 		EzTask task = new EzTask("do homework","pgp",4);
-		task.setStartTime(2014, 9, 27);
+		task.setStartTime(2014, 9, 27,15,30);
 		task.setEndTimeAsStartTime();
 		list.add(task);
 		tempAction.setResults(list);*/
@@ -35,13 +35,14 @@ public class EzController {
 			checkPos();
 			addHistory(userAction);
 			storage.addTaskWithNewId(task);
-			EzGUI.showContent("TitleAA", storage.getSortedTasksByPriority());
+			EzGUI.showContent("TitleAdd", storage.getSortedTasksByPriority());
 			break;
 			
 		case UPDATE:
 			storage.updateTask(userAction.getResults());
 			checkPos();
 			addHistory(userAction);
+			EzGUI.showContent("TitleUpdate", storage.getSortedTasksByPriority());
 			break;
 			
 		case DELETE:
@@ -49,12 +50,14 @@ public class EzController {
 			checkPos();
 			storage.deleteTask(toBeDeleted);
 			addHistory(userAction);
+			EzGUI.showContent("TitleDelete", storage.getSortedTasksByPriority());
 			break;
 			
 		case DONE:
 			storage.updateTask(userAction.getResults());
 			checkPos();
 			addHistory(userAction);
+			EzGUI.showContent("TitleDone", storage.getSortedTasksByPriority());
 			break;
 			
 		case UNDO:
@@ -76,6 +79,7 @@ public class EzController {
 			break;
 			
 		case SHOW:
+			
 			break;
 			
 		case HELP:
