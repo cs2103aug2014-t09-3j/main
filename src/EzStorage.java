@@ -6,40 +6,31 @@ import java.util.Date;
  */
 
 /**
- * @author Khanh
+ * @author Khanh(Skeleton code)
  * @author Tun Leng
  *
  */
 public class EzStorage {
 	
 	//ArrayList of tasks entered by user.
-<<<<<<< Updated upstream
+
 	private ArrayList<EzTask> listOfAllTasks = new ArrayList<EzTask>();
 	
 	//numTasks represents the number of tasks entered by the user.
 	int numTasks = 0;
-=======
-	ArrayList<EzTask> listOfTask = new ArrayList<EzTask>();
-	
-	//numTasks represents the number of tasks entered by the user.
-	//int numTasks = listOfTasks.size();
->>>>>>> Stashed changes
-	
+
+
 	/**
 	 * this function just simply adds the task to the list then return it.
 	 * @param task
 	 * @return task 
 	 */
 	public EzTask addTask(EzTask task){
-		
-<<<<<<< Updated upstream
+
 		listOfAllTasks.add(task);
 		
 		//System.out.println(numTasks);
 		
-=======
-		listOfTask.add(task);
->>>>>>> Stashed changes
 		return task;
 	}
 	
@@ -50,15 +41,11 @@ public class EzStorage {
 	 */
 	public EzTask addTaskWithNewId(EzTask task){
 		
-<<<<<<< Updated upstream
+
 		listOfAllTasks.add(task);
 		task.setId(numTasks);
 		numTasks++;
-		//System.out.println(numTasks);
-=======
-		listOfTask.add(task);
-		task.setId(getSize()-1);
->>>>>>> Stashed changes
+		
 		return task;
 		
 	}
@@ -68,36 +55,25 @@ public class EzStorage {
 	 * @param listOfTasksUpdated
 	 * @return the number of tasks found and replaced.
 	 */
-<<<<<<< Updated upstream
+
 	public int updateTask(ArrayList<EzTask> listOfTasksUpdated) {
 		int count = 0;
-		int index = 0;
+		int index;
 		for(EzTask taskToBeUpdated : listOfTasksUpdated)
-			for(EzTask task: listOfAllTasks)
+			for(int i=0; i< listOfAllTasks.size(); i++)
+			{
+				EzTask task = listOfAllTasks.get(i);
 				if(taskToBeUpdated.getId() == task.getId() )
 				{
-					index = task.getId();
+			
+					index = listOfAllTasks.indexOf(task);
+					
 					listOfAllTasks.remove(index);
 					listOfAllTasks.add(index, taskToBeUpdated);
 					count++;
 				}
-		
-=======
-	public int updateTask(ArrayList<EzTask> listOfUpdatedTasks) {
-		int count = 0;
-	
-		for(int index=0; index < listOfUpdatedTasks.size(); index++ )
-			for(int index1=0; index1< listOfTask.size(); index1++)
-			{
-				if(listOfUpdatedTasks.get(index).getId() == listOfTask.get(index1).getId())
-				{	
-					listOfTask.remove(index1);
-					listOfTask.add(index1, listOfUpdatedTasks.get(index));
-					count++;
-				}
 			}
->>>>>>> Stashed changes
-		
+	
 		return count;
 	}
 	
@@ -106,34 +82,24 @@ public class EzStorage {
 	 * @param listOfTasks
 	 * @return the number of tasks found and removed.
 	 */
-<<<<<<< Updated upstream
+
 	public int deleteTask(ArrayList<EzTask> listOfTasksDeleted){
 		int count = 0;
 		int index = 0;
 		for(EzTask taskToBeDeleted: listOfTasksDeleted)
-			for(EzTask task: listOfAllTasks)
+			for(int i = 0; i < listOfAllTasks.size(); i++)
+			{
+				EzTask task = listOfAllTasks.get(i);
 				if(taskToBeDeleted.getId() == task.getId())
+
 				{
 					index = task.getId();
 					listOfAllTasks.remove(index);
 					count++;
+				}
 			}
-=======
-	public int deleteTask(ArrayList<EzTask> listOfDeletedTasks){
-		int count = 0;
-		
-		for(int index=0; index < listOfDeletedTasks.size(); index++)
-			for(int index1=0; index1 < listOfTask.size(); index1++)
-			{
-				if(listOfDeletedTasks.get(index).getId()== listOfTask.get(index1).getId())
-					listOfTask.remove(index1);
-					count++;
-			}
-	
-		
-		
->>>>>>> Stashed changes
-		return count;
+
+	return count;
 	}
 	
 	/**
@@ -141,12 +107,8 @@ public class EzStorage {
 	 * @return
 	 */
 	public int getSize(){
-		
-<<<<<<< Updated upstream
 		return listOfAllTasks.size();
-=======
-		return listOfTask.size();
->>>>>>> Stashed changes
+
 	}
 	
 	/**
@@ -155,19 +117,14 @@ public class EzStorage {
 	 * @return EzTask or null
 	 */
 	public EzTask findTask(int id){
-<<<<<<< Updated upstream
 		for(EzTask task : listOfAllTasks)
+		{
+			//System.out.println("findTask: " + task.getTitle());
+		
 			if(id == task.getId())
 				return task;
-		
+		}
 			return null;
-=======
-		for(int index=0; index < listOfTask.size(); index++)
-			if(id == listOfTask.get(index).getId())
-				return listOfTask.get(id);
-		
-		return null;
->>>>>>> Stashed changes
 	}
 	
 	/**
@@ -176,15 +133,8 @@ public class EzStorage {
 	 * @return ArrayList called tasksByDate or null
 	 */
 	public ArrayList<EzTask> getTasksByDate(Date date){
-		ArrayList<EzTask> tasksByDate = new ArrayList<EzTask>();
-		
-		for(int index=0; index < listOfTask.size()l index++)
-			if(date == listOfTask.get(index).getStartTime())
-				tasksByDate.add(listOfTask.get(index));
-		
-				
-			return tasksByDate;
-	}
+	
+		return null;}
 	
 	/**
 	 * this function return a list of tasks, which is sorted by priority then by date.
@@ -215,10 +165,20 @@ public class EzStorage {
 
 		ArrayList<EzTask> tasksWithKeywords = new ArrayList<EzTask>();
 		for(String keyword : listOfKeywords)
-			for(EzTask task : listOfAllTasks)
+			for(EzTask task: listOfAllTasks)
+			{
+				//System.out.println(" new Task:" + task.getTitle());
+				//System.out.println(listOfAllTasks.size());
+				
 				if(checkTitle(keyword, task))
+				{
+					
 					tasksWithKeywords.add(task);
+					//System.out.println(" taskwKeyword" + task.getTitle());
+				}
 
+			}
+		//System.out.println(tasksWithKeywords);
 		return tasksWithKeywords;
 
 
@@ -237,6 +197,11 @@ public class EzStorage {
 	
 	private void clearList(ArrayList list){
 		list.clear();
+	}
+
+	public void printList() {
+		for(EzTask task: listOfAllTasks)
+		System.out.println(task.getTitle());
 	}
 	
 	

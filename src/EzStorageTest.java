@@ -46,29 +46,34 @@ public class EzStorageTest {
 		EzTask tmp = new EzTask(storage.findTask(1));
 		assertEquals("check title: ", "do homework", tmp.getTitle());
 		
+		//printTaskList(storage);
 		tmp.setTitle("do CS2103T");
 		list.add(tmp);
+		//printTaskList(storage);
 		assertEquals("check the number of tasks affected: ", 1, storage.updateTask(list));
+		//printTaskList(storage);
 		/**
 		 * now the list is:
 		 * 0. "go shopping" "at Clementi" 3
 		 * 1. "do CS2103T" 2
 		 * 2. "do EE2021 Tut" 5
 		 */
-		
+
 		assertEquals("check title: ", "do CS2103T", storage.findTask(1).getTitle());
 		
 		list.clear();
 		tmp = new EzTask(storage.findTask(1));
 		list.add(tmp);
+		//printTaskList(storage);
 		assertEquals("check the number of tasks affected: ", 1, storage.deleteTask(list));
 		/**
 		 * now the list is:
 		 * 0. "go shopping" "at Clementi" 3
 		 * 2. "do EE2021 Tut" 5
 		 */
-		
+		//printTaskList(storage);
 		checkId(storage.addTaskWithNewId(new EzTask("do CS2101 Tut",7)),3);
+		//printTaskList(storage);
 		/**
 		 * now the list is:
 		 * 0. "go shopping" "at Clementi" 3
@@ -76,9 +81,12 @@ public class EzStorageTest {
 		 * 3. "do CS2101 Tut" 7
 		 */
 		
+		//printTaskList(storage);
 		ArrayList<String> listWords = new ArrayList<String>();
 		listWords.add("do");
+		//printTaskList(storage);
 		checkSearchByKeywords(storage, listWords,2);
+		listWords.clear();
 		listWords.add("Tut");
 		checkSearchByKeywords(storage, listWords,2);
 		listWords.add("go");
@@ -91,6 +99,7 @@ public class EzStorageTest {
 		
 		tmp.setTitle("do CS2103 Tut");
 		list.add(tmp);
+		//printTaskList(storage);
 		assertEquals("check the number of tasks affected: ", 1, storage.updateTask(list));
 		/**
 		 * now the list is:
@@ -125,8 +134,11 @@ public class EzStorageTest {
 	 */
 	private void checkSearchByKeywords(EzStorage storage,
 			ArrayList<String> listWords, int expectedNumber) {
-		assertEquals("check search by keyword: ", expectedNumber, storage.getTasksByKeywords(listWords));
+		assertEquals("check search by keyword: ", expectedNumber, storage.getTasksByKeywords(listWords).size());
 	}
 
+	private void printTaskList(EzStorage storage){
+		storage.printList();
+	}
 
 }
