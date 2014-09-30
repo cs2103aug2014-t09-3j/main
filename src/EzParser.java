@@ -179,10 +179,10 @@ public class EzParser {
 			content = content.toLowerCase();
 			// deal with keyword today,tomorrow
 			if (content.indexOf("today") >= 0) {
-				content.replace("today", "");
+				content = content.replace("today", "");
 			}
 			if (content.indexOf("tomorrow") >= 0) {
-				content.replace("tomorrow", "");
+				content = content.replace("tomorrow", "");
 				calendar.add(GregorianCalendar.DATE, 1);
 			}
 
