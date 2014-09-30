@@ -459,7 +459,7 @@ public class EzGUI extends JFrame {
 	}
 	
 	private static String createHtmlCalendar(GregorianCalendar date){
-		String monthHtmlText = createHtmlText(CALENDAR_MONTH[date.get(Calendar.MONTH)-1],"Arial Rounded MT Bold",2,new Color(255,255,255));
+		String monthHtmlText = createHtmlText(CALENDAR_MONTH[date.get(Calendar.MONTH)],"Arial Rounded MT Bold",2,new Color(255,255,255));
 		String dateHtmlText = createHtmlText(String.valueOf(date.get(Calendar.DATE)),"Arial",6,CALENDAR_DATE_FONT_COLOR);
 		
 		return "<table background=\"file:" + IMAGE_CALENDAR_PNG +"\" border=0 cellspacing=0 cellpadding=0 width=\"38px\">"

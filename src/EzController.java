@@ -14,8 +14,8 @@ public class EzController {
 	private static int pos = -1;
 	
 	public static String execute(String userCommand){
-		//EzAction userAction = EzParser.extractInfo(userCommand, storage);
-		EzAction tempAction = new EzAction();
+		EzAction userAction = EzParser.extractInfo(userCommand, storage);
+		/*EzAction tempAction = new EzAction();
 		tempAction.setAction(TypeOfAction.ADD);
 		tempAction.setTargets(null);
 		ArrayList<EzTask> list = new ArrayList<EzTask>();
@@ -23,8 +23,8 @@ public class EzController {
 		task.setStartTime(2014, 9, 27);
 		task.setEndTimeAsStartTime();
 		list.add(task);
-		tempAction.setResults(list);
-		determineUserAction(tempAction);
+		tempAction.setResults(list);*/
+		determineUserAction(userAction);
 		return "";
 	}
 

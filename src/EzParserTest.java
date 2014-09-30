@@ -77,6 +77,25 @@ public class EzParserTest {
 		assertEquals("check done of task: ", false, action.getResults().get(0).isDone());
 		
 		/**
+		 * Test Case 4.1
+		 */
+		action = EzParser.extractInfo("Add \"play badminton\" on 26/09/2014 3:14pm at \"pgp\" ***", null);
+		assertEquals("check add action: ", TypeOfAction.ADD, action.getAction());
+		assertTrue("check target = null: ", action.getTargets() == null);
+		assertTrue("check result != null: ", action.getResults() != null);
+		assertEquals("check size of result: ",1,action.getResults().size());
+		assertEquals("check title of task: ","play badminton",action.getResults().get(0).getTitle());
+		assertEquals("check venue of task: ", "pgp", action.getResults().get(0).getVenue());
+		assertTrue("check startTime = endTime: ", action.getResults().get(0).getStartTime() == action.getResults().get(0).getEndTime());
+		assertEquals("check date of task: ", 26, action.getResults().get(0).getEndTime().get(Calendar.DAY_OF_MONTH));
+		assertEquals("check month of task: ", 8, action.getResults().get(0).getEndTime().get(Calendar.MONTH));
+		assertEquals("check hour of task: ", 15, action.getResults().get(0).getEndTime().get(Calendar.HOUR_OF_DAY));
+	    assertEquals("check minute of task: ", 14, action.getResults().get(0).getEndTime().get(Calendar.MINUTE));
+		assertEquals("check priority of task: ", 3, action.getResults().get(0).getPriority());
+		assertEquals("check done of task: ", false, action.getResults().get(0).isDone());
+		
+		
+		/**
 		 * Test Case 5
 		 */
 		action = EzParser.extractInfo("Add \"play badminton\" at \"pgp\" on 26/09/2014 from 3pm to 6:25pm ***", null);
