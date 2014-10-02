@@ -669,7 +669,7 @@ public class EzParser {
 
 	public static TypeOfAction getAction(String userCommand) {
 
-		String action = userCommand.substring(0, userCommand.indexOf(" ")); // undo and redo does not have sany pace 
+		String action = getFirstWord(userCommand);  
 		if (action.equalsIgnoreCase("add"))
 			return TypeOfAction.ADD;
 		else if (action.equalsIgnoreCase("update"))
