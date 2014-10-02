@@ -122,14 +122,14 @@ public class EzParserTest {
 		 * Test Case 6
 		 */
 	//homework!not homewodk
-		action = EzParser.extractInfo("Add \"do homewodk\" on 26/09/2014 from 23h to 2:40am ***", null);
+		action = EzParser.extractInfo("Add \"do homework\" on 26/09/2014 from 23h to 2:40am ***", null);
 		assertEquals("check add action: ", TypeOfAction.ADD, action.getAction());
 		assertTrue("check target = null: ", action.getTargets() == null);
 		assertTrue("check result != null: ", action.getResults() != null);
 		assertEquals("check size of result: ",1,action.getResults().size());
 	//this time is do homework
 		//assertEquals("check title of task: ","play badminton",action.getResults().get(0).getTitle());
-		assertEquals("check title of task: ","do homewodk",action.getResults().get(0).getTitle());
+		assertEquals("check title of task: ","do homework",action.getResults().get(0).getTitle());
 		//there is no venue in this command
 	//	assertEquals("check venue of task: ", "pgp", action.getResults().get(0).getVenue());
 		assertTrue("check startTime != endTime: ", action.getResults().get(0).getStartTime() != action.getResults().get(0).getEndTime());
@@ -146,5 +146,84 @@ public class EzParserTest {
 		assertEquals("check done of task: ", false, action.getResults().get(0).isDone());
 	}
 
-
+	@Test
+	public void testUpdateCommand() {
+		EzStorage storage = new EzStorage();
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 1\" at \"venue1\" on 26/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 0
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 2\" at \"venue2\" on 26/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 1
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 3\" at \"venue3\" on 26/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 2
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 4\" at \"venue4\" on 26/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 3
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 5\" at \"venue5\" on 26/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 4
+		
+		// check change title
+		EzAction action = EzParser.extractInfo("update 0 set title \"new title 1\"",storage);
+		assertEquals("Check action is UPDATE: ", TypeOfAction.UPDATE, action.getAction());
+		assertEquals("Check size of target: ", 1, action.getTargets().size());
+		assertEquals("Check size of result: ", 1, action.getResults().size());
+		assertEquals("Check id of target: ", 0, action.getTargets().get(0).getId());
+		assertEquals("Check id of result: ", 0, action.getResults().get(0).getId());
+		assertEquals("Check title of target: ", "task 1", action.getTargets().get(0).getTitle());
+		assertEquals("Check title of result: ", "new title 1", action.getResults().get(0).getTitle());
+		storage.updateTask(action.getResults());
+		
+		// check change venue
+		action = EzParser.extractInfo("update 1 set Venue \"new venue 2\"",storage);
+		assertEquals("Check action is UPDATE: ", TypeOfAction.UPDATE, action.getAction());
+		assertEquals("Check size of target: ", 1, action.getTargets().size());
+		assertEquals("Check size of result: ", 1, action.getResults().size());
+		assertEquals("Check id of target: ", 1, action.getTargets().get(0).getId());
+		assertEquals("Check id of result: ", 1, action.getResults().get(0).getId());
+		assertEquals("Check venue of target: ", "venue2", action.getTargets().get(0).getVenue());
+		assertEquals("Check venue of result: ", "new venue 2", action.getResults().get(0).getVenue());
+		storage.updateTask(action.getResults());
+		
+		// check change date
+		action = EzParser.extractInfo("update 2 set Date 30/8/2015",storage);
+		assertEquals("Check action is UPDATE: ", TypeOfAction.UPDATE, action.getAction());
+		assertEquals("Check size of target: ", 1, action.getTargets().size());
+		assertEquals("Check size of result: ", 1, action.getResults().size());
+		assertEquals("Check id of target: ", 2, action.getTargets().get(0).getId());
+		assertEquals("Check id of result: ", 2, action.getResults().get(0).getId());
+		assertEquals("Check date of target: ", 26, action.getTargets().get(0).getStartTime().get(Calendar.DAY_OF_MONTH));
+		assertEquals("Check date of result: ", 30, action.getResults().get(0).getStartTime().get(Calendar.DAY_OF_MONTH));
+		assertEquals("Check date of target: ", 26, action.getTargets().get(0).getEndTime().get(Calendar.DAY_OF_MONTH));
+		assertEquals("Check date of result: ", 30, action.getResults().get(0).getEndTime().get(Calendar.DAY_OF_MONTH));
+		assertEquals("Check month of target: ", Calendar.JULY, action.getTargets().get(0).getStartTime().get(Calendar.MONTH));
+		assertEquals("Check month of result: ", Calendar.AUGUST, action.getResults().get(0).getStartTime().get(Calendar.MONTH));
+		assertEquals("Check month of target: ", Calendar.JULY, action.getTargets().get(0).getEndTime().get(Calendar.MONTH));
+		assertEquals("Check month of result: ", Calendar.AUGUST, action.getResults().get(0).getEndTime().get(Calendar.MONTH));
+		assertEquals("Check year of target: ", 2014, action.getTargets().get(0).getStartTime().get(Calendar.YEAR));
+		assertEquals("Check year of result: ", 2015, action.getResults().get(0).getStartTime().get(Calendar.YEAR));
+		assertEquals("Check year of target: ", 2014, action.getTargets().get(0).getEndTime().get(Calendar.YEAR));
+		assertEquals("Check year of result: ", 2015, action.getResults().get(0).getEndTime().get(Calendar.YEAR));
+		storage.updateTask(action.getResults());
+		
+		//check change priority
+		action = EzParser.extractInfo("update 3 set priority 3",storage);
+		assertEquals("Check action is UPDATE: ", TypeOfAction.UPDATE, action.getAction());
+		assertEquals("Check size of target: ", 1, action.getTargets().size());
+		assertEquals("Check size of result: ", 1, action.getResults().size());
+		assertEquals("Check id of target: ", 3, action.getTargets().get(0).getId());
+		assertEquals("Check id of result: ", 3, action.getResults().get(0).getId());
+		assertEquals("Check priority of target: ", 0, action.getTargets().get(0).getPriority());
+		assertEquals("Check priority of result: ", 3, action.getResults().get(0).getPriority());
+		storage.updateTask(action.getResults());
+		
+		// check change time
+		action = EzParser.extractInfo("update 4 set start time 12h15",storage);
+		assertEquals("Check action is UPDATE: ", TypeOfAction.UPDATE, action.getAction());
+		assertEquals("Check size of target: ", 1, action.getTargets().size());
+		assertEquals("Check size of result: ", 1, action.getResults().size());
+		assertEquals("Check id of target: ", 4, action.getTargets().get(0).getId());
+		assertEquals("Check id of result: ", 4, action.getResults().get(0).getId());
+		assertEquals("Check start hour of target: "		, 10, action.getTargets().get(0).getStartTime().get(Calendar.HOUR_OF_DAY));
+		assertEquals("Check start minute of target: "	, 0, action.getTargets().get(0).getStartTime().get(Calendar.MINUTE));
+		assertEquals("Check end hour of target: "		, 17, action.getTargets().get(0).getEndTime().get(Calendar.HOUR_OF_DAY));
+		assertEquals("Check end minute of target: "		, 0, action.getTargets().get(0).getEndTime().get(Calendar.MINUTE));
+		assertEquals("Check start hour of result: "		, 12, action.getResults().get(0).getStartTime().get(Calendar.HOUR_OF_DAY));
+		assertEquals("Check start minute of result: "	, 15, action.getResults().get(0).getStartTime().get(Calendar.MINUTE));
+		assertEquals("Check end hour of result: "		, 17, action.getResults().get(0).getEndTime().get(Calendar.HOUR_OF_DAY));
+		assertEquals("Check end minute of result: "		, 0, action.getResults().get(0).getEndTime().get(Calendar.MINUTE));
+		storage.updateTask(action.getResults());
+	}
 }
