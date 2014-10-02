@@ -109,7 +109,7 @@ public class EzStorageTest {
 		 */
 		
 		list.clear();
-		tmp = new EzTask(storage.findTask(2));
+		tmp = new EzTask(storage.findTask(3));
 		list.add(tmp);
 		assertEquals("check the number of tasks affected: ", 1, storage.deleteTask(list));
 		/**
