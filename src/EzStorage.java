@@ -93,7 +93,7 @@ public class EzStorage {
 				if(taskToBeDeleted.getId() == task.getId())
 
 				{
-					index = task.getId();
+					index = listOfAllTasks.indexOf(task);
 					listOfAllTasks.remove(index);
 					count++;
 				}
