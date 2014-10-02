@@ -115,7 +115,7 @@ public class EzStorageTest {
 		/**
 		 * now the list is:
 		 * 0. "go shopping" "at Clementi" 3
-		 * 3. "do CS2103 Tut" 7
+		 * 2. "do EE2021 Tut" 5
 		 */
 	}
 
