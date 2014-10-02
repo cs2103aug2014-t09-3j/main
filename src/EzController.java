@@ -72,7 +72,7 @@ public class EzController {
 			break;
 			
 		case REDO:
-			if(pos >= history.size()) {
+			if(pos >= history.size()-1) {
 				return;
 			}
 			else {
@@ -94,8 +94,7 @@ public class EzController {
 	}
 
 	private static void redoTask() {
-		pos++;
-		switch(history.get(pos).getAction()) {
+		switch(history.get(++pos).getAction()) {
 		case ADD:
 			EzTask reTask = history.get(pos).getResults().get(0);
 			storage.addTask(reTask);
