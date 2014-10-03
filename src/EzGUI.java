@@ -313,7 +313,8 @@ public class EzGUI extends JFrame {
 		showArea.setBackground(SHOW_AREA_BACKGROUND);
 		showArea.setEditable(false);
 		showArea.setContentType("text/html");
-		EzTask task = new EzTask("meet Mary",5);
+		
+		/*EzTask task = new EzTask("meet Mary",5);
 		task.setId(1);
 		task.setStartTime(2014, 4, 28, 21, 00);
 		task.setEndTimeAsStartTime();
@@ -352,7 +353,7 @@ public class EzGUI extends JFrame {
 		listOfTasks.add(task3_1);
 		listOfTasks.add(task4);
 		
-		showContent("All tasks",listOfTasks);
+		showContent("All tasks",listOfTasks);*/
 		showArea.setFocusable(false);
 		
 		JScrollPane showPanel = new JScrollPane(showArea);
@@ -608,6 +609,13 @@ public class EzGUI extends JFrame {
 					case 22:
 						arg0.consume();
 						break;
+					case 25:
+						arg0.consume();
+						break;
+					case 26:
+						arg0.consume();
+						break;
+						
 					default:
 						break;
 					}
@@ -729,13 +737,17 @@ public class EzGUI extends JFrame {
 						break;	
 					}
 				} else {
-					showArea.setText("Ctrl+Z Pressed." + String.valueOf((int)e.getKeyChar()));
+					//showArea.setText("Ctrl+Z Pressed." + String.valueOf((int)e.getKeyChar()));
 					switch (e.getKeyChar()){
 					case 26:	// CTRL + Z
-						showArea.setText("Ctrl+Z Pressed.");
-						commandField.setText("");
+						EzController.execute("undo");
 						e.consume();
 						break;
+					case 25:	// CTRL + Y
+						EzController.execute("redo");
+						e.consume();
+						break;
+					
 					case 22:	// CTRL + V
 						commandField.paste();
 						caretPos = commandField.getCaretPosition();
