@@ -18,15 +18,6 @@ public class EzController {
 	
 	public static String execute(String userCommand){
 		EzAction userAction = EzParser.extractInfo(userCommand, storage);
-		/*EzAction tempAction = new EzAction();
-		tempAction.setAction(TypeOfAction.ADD);
-		tempAction.setTargets(null);
-		ArrayList<EzTask> list = new ArrayList<EzTask>();
-		EzTask task = new EzTask("do homework","pgp",4);
-		task.setStartTime(2014, 9, 27,15,30);
-		task.setEndTimeAsStartTime();
-		list.add(task);
-		tempAction.setResults(list);*/
 		determineUserAction(userAction);
 		return "";
 	}
