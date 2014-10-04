@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 /**
  * 
  */
@@ -14,7 +16,6 @@ public class EzAppDelegate {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		EzGUI.initiateGUI();
-		EzController.loadFromFile();
 	}
 
 }

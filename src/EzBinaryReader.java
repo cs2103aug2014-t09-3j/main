@@ -35,6 +35,9 @@ public class EzBinaryReader extends FileInputStream {
 	
 	public String readString(int length) throws IOException{
 		String result = "";
+		if (length == 0) {
+			return null;
+		}
 		for(int i=0;i<length;i++){
 			try{
 				result = result + (char) read();

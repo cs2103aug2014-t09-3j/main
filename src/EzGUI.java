@@ -43,6 +43,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.io.IOException;
 
 
 public class EzGUI extends JFrame {
@@ -145,6 +146,12 @@ public class EzGUI extends JFrame {
 		createShowPanel();
 		createCommandPanel();
 		
+		try {
+			EzController.loadFromFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -313,7 +320,7 @@ public class EzGUI extends JFrame {
 		showArea.setBackground(SHOW_AREA_BACKGROUND);
 		showArea.setEditable(false);
 		showArea.setContentType("text/html");
-		
+		/*
 		EzTask task = new EzTask("meet Mary",5);
 		task.setId(1);
 		task.setStartTime(2014, 4, 28, 21, 00);
@@ -353,7 +360,7 @@ public class EzGUI extends JFrame {
 		listOfTasks.add(task3_1);
 		listOfTasks.add(task4);
 		
-		showContent("All tasks",listOfTasks);
+		showContent("All tasks",listOfTasks);*/
 		showArea.setFocusable(false);
 		
 		JScrollPane showPanel = new JScrollPane(showArea);
@@ -943,9 +950,10 @@ public class EzGUI extends JFrame {
 		}
 		String content = createHtmlTable(list.size(),1,list,"border=0 cellspacing=4 cellpadding=1");
 		
-		showArea.setText(
-				"<table border=0 cellspacing=0 cellpadding=0 width=\"100%\"><tr><td height=\"44px\">"+ createHtmlText("__",TITLE_FONT_FONT,2,SHOW_AREA_BACKGROUND) + createHtmlText(header,TITLE_FONT_FONT,8,MAIN_TITLE_FONT_COLOR) +"</td></tr>"
-				//+ "<tr height=\"0px\"></tr>"
-				+ "<tr><td>" + right(content) +"</td></tr></table>");
+		String text = "<table border=0 cellspacing=0 cellpadding=0 width=\"100%\"><tr><td height=\"44px\">";
+		text = text + createHtmlText("__",TITLE_FONT_FONT,2,SHOW_AREA_BACKGROUND);
+		text = text + createHtmlText(header,TITLE_FONT_FONT,8,MAIN_TITLE_FONT_COLOR);
+		text = text +"</td></tr>" + "<tr><td>" + right(content) +"</td></tr></table>";
+		showArea.setText(text);
 	}
 }

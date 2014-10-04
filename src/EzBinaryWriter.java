@@ -25,6 +25,7 @@ public class EzBinaryWriter extends FileOutputStream {
 			write(data%256);
 		} else {
 			write(data>>8,numBytes-1);
+			write(data%256);
 		}
 	}
 	

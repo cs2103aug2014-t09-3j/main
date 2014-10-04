@@ -288,49 +288,60 @@ public class EzController {
 				}
 			}
 		}
+		writer.close();
 	}
 	
 	public static void loadFromFile() throws IOException {
-		EzBinaryReader rd = new EzBinaryReader("external.ezt");
-		int numTask = rd.read(4);
-		for (int i=0;i<numTask;i++){
-			int typeOfTask = rd.read(1);
-			int numAttribute = rd.read(1);
-			EzTask temp = new EzTask();
-			for(int j = 0; j < numAttribute; j++) {
-				int typeAtt = rd.read(1);
-				switch(typeAtt) {
-				case 0:
-					temp.setId(rd.read(4));
-					break;
-				case 1:
-					int sizeOfTitle = rd.read(2);
-					temp.setTitle(rd.readString(sizeOfTitle));
-					break;
-				case 2:
-					int sizeOfVenue = rd.read(2);
-					temp.setVenue(rd.readString(sizeOfVenue));
-					break;
-				case 3:
-					temp.setStartTime(rd.read(2), rd.read(1), rd.read(1), rd.read(1), rd.read(1));
-					break;
-				case 4:
-					temp.setEndTime(rd.read(2), rd.read(1), rd.read(1), rd.read(1), rd.read(1));
-					break;
-				case 5:
-					temp.setPriority(rd.read(1));
-					break;
-				default:
-					temp.setDone(rd.read(1) == 1);
-					break;
+		try{
+			EzBinaryReader rd = new EzBinaryReader("external.ezt");
+			if (rd.available()>0){
+				int numTask = rd.read(4);
+				for (int i=0;i<numTask;i++){
+					int typeOfTask = rd.read(1);
+					int numAttribute = rd.read(1);
+					EzTask temp = new EzTask();
+					for(int j = 0; j < numAttribute; j++) {
+						int typeAtt = rd.read(1);
+						switch(typeAtt) {
+						case 0:
+							temp.setId(rd.read(4));
+							break;
+						case 1:
+							int sizeOfTitle = rd.read(2);
+							temp.setTitle(rd.readString(sizeOfTitle));
+							break;
+						case 2:
+							int sizeOfVenue = rd.read(2);
+							temp.setVenue(rd.readString(sizeOfVenue));
+							break;
+						case 3:
+							temp.setStartTime(rd.read(2), rd.read(1), rd.read(1), rd.read(1), rd.read(1));
+							break;
+						case 4:
+							temp.setEndTime(rd.read(2), rd.read(1), rd.read(1), rd.read(1), rd.read(1));
+							break;
+						case 5:
+							temp.setPriority(rd.read(1));
+							break;
+						default:
+							temp.setDone(rd.read(1) == 1);
+							break;
+						}
+						if (typeOfTask == 1) {
+							temp.setEndTimeAsStartTime();
+						}
+					}
+					storage.addTask(temp);
 				}
-				if (typeOfTask == 1) {
-					temp.setEndTimeAsStartTime();
-				}
+				EzGUI.showContent("Loaded from file", storage.getSortedTasksByPriority());
+				rd.close();
 			}
-			storage.addTask(temp);
+		} 
+		catch (IOException e)
+		{
+			EzBinaryWriter write = new EzBinaryWriter("external.ezt");
 		}
-		EzGUI.showContent("Loaded from file", storage.getSortedTasksByPriority());
+		
 	}
 	
 	public void refresh(){
