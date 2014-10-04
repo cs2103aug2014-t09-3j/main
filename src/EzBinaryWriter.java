@@ -24,15 +24,13 @@ public class EzBinaryWriter extends FileOutputStream {
 		if (numBytes==1){
 			write(data%256);
 		} else {
-			write(data/256,numBytes-1);
+			write(data>>8,numBytes-1);
 		}
 	}
 	
 	public void writeString(String data) throws IOException{
-		if (data.length()>0){
-			write(data.charAt(0));
-		} else {
-			writeString(data.substring(1));
+		for (int i=0;i<data.length();i++){
+			write(data.charAt(i));
 		}
 	}
 }
