@@ -29,8 +29,10 @@ public class EzBinaryWriter extends FileOutputStream {
 	}
 	
 	public void writeString(String data) throws IOException{
-		for (int i=0;i<data.length();i++){
-			write(data.charAt(i));
+		if (data!=null){
+			for (int i=0;i<data.length();i++){
+				write(data.charAt(i));
+			}
 		}
 	}
 }

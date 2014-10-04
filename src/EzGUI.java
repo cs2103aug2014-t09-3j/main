@@ -314,7 +314,7 @@ public class EzGUI extends JFrame {
 		showArea.setEditable(false);
 		showArea.setContentType("text/html");
 		
-		/*EzTask task = new EzTask("meet Mary",5);
+		EzTask task = new EzTask("meet Mary",5);
 		task.setId(1);
 		task.setStartTime(2014, 4, 28, 21, 00);
 		task.setEndTimeAsStartTime();
@@ -353,7 +353,7 @@ public class EzGUI extends JFrame {
 		listOfTasks.add(task3_1);
 		listOfTasks.add(task4);
 		
-		showContent("All tasks",listOfTasks);*/
+		showContent("All tasks",listOfTasks);
 		showArea.setFocusable(false);
 		
 		JScrollPane showPanel = new JScrollPane(showArea);
