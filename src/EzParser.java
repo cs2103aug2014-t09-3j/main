@@ -125,7 +125,9 @@ public class EzParser {
 				after = content.substring(content.indexOf("\"",
 						content.indexOf("\"") + 1) + 1).trim();
 				before = before.trim();
-				if (before.substring(before.length() - 2)
+				
+				if ((before.length()>=2)&&
+						before.substring(before.length() - 2)
 						.equalsIgnoreCase("at"))// remove the "at" before
 												// location if there is an "at"
 				{
