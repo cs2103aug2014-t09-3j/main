@@ -157,7 +157,7 @@ public class EzParserTest {
 		
 		// check change title
 		EzAction action = EzParser.extractInfo("update 0 set title \"new title 1\"",storage);
-		assertEquals("Check action is UPDATE: ", TypeOfAction.UPDATE, action.getAction());
+    	assertEquals("Check action is UPDATE: ", TypeOfAction.UPDATE, action.getAction());
 		assertEquals("Check size of target: ", 1, action.getTargets().size());
 		assertEquals("Check size of result: ", 1, action.getResults().size());
 		assertEquals("Check id of target: ", 0, action.getTargets().get(0).getId());
@@ -199,7 +199,7 @@ public class EzParserTest {
 		storage.updateTask(action.getResults());
 		
 		//check change priority
-		action = EzParser.extractInfo("update 3 set priority 3",storage);
+		action = EzParser.extractInfo("update 3 set priority ***",storage);
 		assertEquals("Check action is UPDATE: ", TypeOfAction.UPDATE, action.getAction());
 		assertEquals("Check size of target: ", 1, action.getTargets().size());
 		assertEquals("Check size of result: ", 1, action.getResults().size());

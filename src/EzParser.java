@@ -138,11 +138,11 @@ public class EzParser {
 			task.setVenue(location);
 		
 			if (content.indexOf("\"") >= 0) {
-			//	newAction.setAction(TypeOfAction.INVALID);
+			newAction.setAction(TypeOfAction.INVALID);
 			}// if there is more ",the command is invalid.
 
 			if (checkMultipleAction(content) == true) {
-			//	newAction.setAction(TypeOfAction.INVALID);
+				newAction.setAction(TypeOfAction.INVALID);
 			}// see if there is other keywords for action.
 
 			int priority = 0;
@@ -159,21 +159,21 @@ public class EzParser {
 					for (int i = content.indexOf("*"); i <= content
 							.lastIndexOf("*"); i++) {
 						if (content.charAt(i) != '*') {
-						//	newAction.setAction(TypeOfAction.INVALID);
+							newAction.setAction(TypeOfAction.INVALID);
 						} // check if wrong input like *adfdfs*
 					}
 					priority = content.lastIndexOf("*") - content.indexOf("*")
 							+ 1;
 
 				} else {
-				//	newAction.setAction(TypeOfAction.INVALID);
+					newAction.setAction(TypeOfAction.INVALID);
 				}
 				content = content.replaceAll("\\*", "");// remove all "*"
 			}
 			task.setPriority(priority);
 
 			if (checkMultipleAction(content) == true) {
-			//	newAction.setAction(TypeOfAction.INVALID);
+				newAction.setAction(TypeOfAction.INVALID);
 			}// see if there is other keywords for action.
 
 			GregorianCalendar calendar = new GregorianCalendar();
@@ -201,7 +201,7 @@ public class EzParser {
 				dateArr[1] = readDate(date)[1];
 				dateArr[2] = readDate(date)[2];
 				if (readDate(date)[0] < 0) {
-				//	newAction.setAction(TypeOfAction.INVALID);
+					newAction.setAction(TypeOfAction.INVALID);
 				}
 				calendar = new GregorianCalendar(dateArr[2], dateArr[1] - 1,
 						dateArr[0]);
@@ -412,15 +412,20 @@ public class EzParser {
 			if (storage.findTask(index) == null) {
 				newAction.setTargets(null);
 				newAction.setResults(null);
-			} else {
-				EzTask taskUpdate = storage.findTask(index);
+			} 
+			else {
+				EzTask taskTarget=storage.findTask(index);
+				EzTask taskUpdate = new EzTask(taskTarget);
+				
 
-				targetUpdate.add(taskUpdate);
+				targetUpdate.add(taskTarget);
 				newAction.setTargets(targetUpdate);
+				taskUpdate.setId(taskTarget.getId());
 
 				if (getFirstWord(content).equalsIgnoreCase("set")) {
 					content = removeFirstWord(content);
-					if (getFirstWord(content).equalsIgnoreCase("title")) {
+					if (getFirstWord(content).equalsIgnoreCase("title")) 
+					{
 						content = removeFirstWord(content);
 						if ((content.indexOf("\"") >= 0)
 								&& (content.indexOf("\"",
@@ -428,16 +433,14 @@ public class EzParser {
 										.lastIndexOf("\""))) {
 							content = content.substring(
 									content.indexOf("\"") + 1,
-									content.lastIndexOf("\""));
+									content.lastIndexOf("\""));				
 							taskUpdate.setTitle(content);
 							resultUpdate.add(taskUpdate);
 							newAction.setResults(resultUpdate);
 						}
-						content = removeFirstWord(content);
-						if (!content.isEmpty()) {
-							newAction.setAction(TypeOfAction.INVALID);
-						}
-					} else if (getFirstWord(content).equalsIgnoreCase("date")) {
+					
+					} 
+					else if (getFirstWord(content).equalsIgnoreCase("date")) {
 						content = removeFirstWord(content);// content is now the
 															// date
 
@@ -460,7 +463,8 @@ public class EzParser {
 						if (!content.isEmpty()) {
 							newAction.setAction(TypeOfAction.INVALID);
 						}
-					} else if (getFirstWord(content).equalsIgnoreCase("time")) {
+					} 
+					else if (getFirstWord(content).equalsIgnoreCase("time")) {
 						content = removeFirstWord(content);
 
 						dateUpdate[3] = readTime(content)[0];
@@ -483,11 +487,13 @@ public class EzParser {
 							newAction.setAction(TypeOfAction.INVALID);
 						}
 					} else if (getFirstWord(content).equalsIgnoreCase("start")) {
-
-						content = removeFirstWord(content);
-						if (getFirstWord(content).equalsIgnoreCase("date")) {
+					
+					    content=removeFirstWord(content);
+						System.out.println(content);
+						if (getFirstWord(content).equalsIgnoreCase("date")) 
+						{
 							content = removeFirstWord(content);
-
+					
 							dateUpdate[0] = readDate(content)[0];
 							dateUpdate[1] = readDate(content)[1];
 							dateUpdate[2] = readDate(content)[2];
@@ -505,18 +511,13 @@ public class EzParser {
 
 							content = removeFirstWord(content);
 						}
-						if (!content.isEmpty()) {
-							newAction.setAction(TypeOfAction.INVALID);
-						}
-
-					} else if (getFirstWord(content).equalsIgnoreCase("start")) {
-						content = removeFirstWord(content);
+						
 						if (getFirstWord(content).equalsIgnoreCase("time")) {
 							content = removeFirstWord(content);
 							dateUpdate[3] = readTime(content)[0];
 							dateUpdate[4] = readTime(content)[1];
 							if (readTime(content)[0] < 0) {
-								newAction.setAction(TypeOfAction.INVALID);
+							newAction.setAction(TypeOfAction.INVALID);
 							}
 							calendarUpdate.set(GregorianCalendar.HOUR,
 									dateUpdate[3]);
@@ -533,6 +534,7 @@ public class EzParser {
 						if (!content.isEmpty()) {
 							newAction.setAction(TypeOfAction.INVALID);
 						}
+
 					} else if (getFirstWord(content).equalsIgnoreCase("end")) {
 
 						content = removeFirstWord(content);
@@ -556,18 +558,12 @@ public class EzParser {
 
 							content = removeFirstWord(content);
 						}
-						if (!content.isEmpty()) {
-							newAction.setAction(TypeOfAction.INVALID);
-						}
-
-					} else if (getFirstWord(content).equalsIgnoreCase("end")) {
-						content = removeFirstWord(content);
 						if (getFirstWord(content).equalsIgnoreCase("time")) {
 							content = removeFirstWord(content);
 							dateUpdate[3] = readTime(content)[0];
 							dateUpdate[4] = readTime(content)[1];
 							if (readTime(content)[0] < 0) {
-								newAction.setAction(TypeOfAction.INVALID);
+							//	newAction.setAction(TypeOfAction.INVALID);
 							}
 							calendarUpdate.set(GregorianCalendar.HOUR,
 									dateUpdate[3]);
@@ -578,13 +574,14 @@ public class EzParser {
 							resultUpdate.add(taskUpdate);
 							newAction.setResults(resultUpdate);
 						}
-
 						content = removeFirstWord(content);
 
 						if (!content.isEmpty()) {
 							newAction.setAction(TypeOfAction.INVALID);
 						}
-					} else if (getFirstWord(content).equalsIgnoreCase("venue")) {
+						
+					}
+					else if (getFirstWord(content).equalsIgnoreCase("venue")) {
 						content = removeFirstWord(content);
 
 						if ((content.indexOf("\"") >= 0)
@@ -599,10 +596,6 @@ public class EzParser {
 							newAction.setResults(resultUpdate);
 						}
 
-						content = removeFirstWord(content);
-						if (!content.isEmpty()) {
-							newAction.setAction(TypeOfAction.INVALID);
-						}
 					} else if (getFirstWord(content).equalsIgnoreCase(
 							"priority")) {
 						int priorityUpdate;
@@ -611,14 +604,14 @@ public class EzParser {
 							for (int i = content.indexOf("*"); i <= content
 									.lastIndexOf("*"); i++) {
 								if (content.charAt(i) != '*') {
-									newAction.setAction(TypeOfAction.INVALID);
+							//		newAction.setAction(TypeOfAction.INVALID);
 								} // check if wrong input like *adfdfs*
 							}
 							priorityUpdate = content.lastIndexOf("*")
 									- content.indexOf("*") + 1;
 							taskUpdate.setPriority(priorityUpdate);
 						} else {
-							newAction.setAction(TypeOfAction.INVALID);
+						newAction.setAction(TypeOfAction.INVALID);
 						}
 
 						resultUpdate.add(taskUpdate);
@@ -626,6 +619,7 @@ public class EzParser {
 					}
 				}
 			}
+			
 
 			break;
 
