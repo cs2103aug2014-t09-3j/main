@@ -135,9 +135,12 @@ public class EzStorageTest {
 		 *7. "do EE2021 tut" 5
 		 */
 		
+		//printTaskList(storage);
 		task = new EzTask("do something again", 4);
 		task.setId(4);
 		checkId(storage.addTask(task), 4);
+		printTaskList(storage);
+		System.out.println(task.getId());
 		checkNumTask(storage, 8);
 		
 		task = new EzTask("do something again", 4);
@@ -160,10 +163,11 @@ public class EzStorageTest {
 		
 		EzStorage storage2 = new EzStorage();
 		
+		
 		task = new EzTask("do something", 4);
 		task.setId(6);
-		checkId(storage2.addTask(task), 4);
-		checkNumTask(storage2, 4);
+		checkId(storage2.addTask(task), 6);
+		checkNumTask(storage2, 7);
 		
 	}
 

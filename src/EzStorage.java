@@ -16,7 +16,7 @@ public class EzStorage {
 
 	private ArrayList<EzTask> listOfAllTasks = new ArrayList<EzTask>();
 	
-	//numTasks represents the number of tasks entered by the user.
+	//largestId represents the task Id with the greatest value in listOfAllTasks 
 	int largestId = 0;
 
 
@@ -31,10 +31,11 @@ public class EzStorage {
 				largestId = taskInList.getId();
 		
 		if(task.getId() > largestId)
-			largestId = task.getId();
+			largestId = task.getId() + 1;
 		
-		largestId++;
+		
 		listOfAllTasks.add(task);
+		
 		//System.out.println("sizeList" + listOfAllTasks.get(listOfAllTasks.size()-1).getId());
 		
 		return task;
@@ -152,6 +153,21 @@ public class EzStorage {
 	}
 	
 	/*
+	 * this function returns true if the the task falls on the date specified.
+	 * @param date, task
+	 * @return boolean
+	 */
+	private boolean checkByDate(Date date, EzTask task) {
+		if(task.getStartTime().before(date) && task.getEndTime().after(date) )
+			return true;
+
+		else if(task.getStartTime().equals(date) || task.getEndTime().equals(date))
+			return true;
+
+		return false;
+	}
+
+	/*
 	 * this function returns a sorted ArrayList by id
 	 * @return ArrayList of tasksById or null
 	 */
@@ -171,22 +187,6 @@ public class EzStorage {
 			return tasksById;
 					
 	}
-	
-	/*
-	 * this function returns true if the the task falls on the date specified.
-	 * @param date, task
-	 * @return boolean
-	 */
-	private boolean checkByDate(Date date, EzTask task) {
-		if(task.getStartTime().before(date) && task.getEndTime().after(date) )
-				return true;
-		
-		else if(task.getStartTime().equals(date) || task.getEndTime().equals(date))
-			return true;
-		
-		return false;
-	}
-
 	
 	/**
 	 * this function return a list of tasks, which is sorted by priority then by date.
