@@ -117,6 +117,21 @@ public class EzStorageTest {
 		 * 0. "go shopping" "at Clementi" 3
 		 * 2. "do EE2021 Tut" 5
 		 */
+		
+		
+		EzTask task = new EzTask("do something", 4);
+		task.setId(6);
+		checkId(storage.addTask(new EzTask(task)), 6);
+		checkNumTask(storage, 7);
+		checkId(storage.addTaskWithNewId(new EzTask("do EE2021 tut", 5)), 7);
+		
+		/**
+		 * now the list is:
+		 * 0. "go shopping" "at Clementi" 3
+		 *2. "do EE2021 Tut" 5
+		 *6. "do something" 4
+		 *7. "do EE2021 tut" 5
+		 */
 	}
 
 
