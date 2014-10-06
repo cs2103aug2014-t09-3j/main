@@ -624,7 +624,63 @@ public class EzParser {
 			break;
 
 		case DELETE:
-			 //DELETE [id1] [id2] [id3]
+			ArrayList<EzTask> targetDelete=new ArrayList<EzTask>();
+			newAction.setResults(null);
+			if(getFirstWord(content).equalsIgnoreCase("all"))//if the command is "delete all on a date"
+			{
+				content=removeFirstWord(content);
+				content=removeFirstWord(content);//now content is suppose to be the date
+				//find all tasks on the date and assign it to the arraylist.
+				
+			}
+			else if(getFirstWord(content).equalsIgnoreCase("from"))//"delete from .. to "
+			{
+				content=removeFirstWord(content);
+				int i,j;
+				i=Integer.parseInt(getFirstWord(content));
+				content=removeFirstWord(content);
+				if(getFirstWord(content).equalsIgnoreCase("to"))
+				{
+					content=removeFirstWord(content);
+				}
+				else
+				{
+					newAction.setAction(TypeOfAction.INVALID);
+				}
+				j=Integer.parseInt(content);
+				content=removeFirstWord(content);
+				if(!content.isEmpty()||i>j)
+				{
+					newAction.setAction(TypeOfAction.INVALID);
+				}
+				for(int k=i;k<=j;k++)
+				{
+					if(storage.findTask(k)!=null)
+					{
+					targetDelete.add(storage.findTask(k));
+					}
+				}
+				newAction.setTargets(targetDelete);
+			}
+			else if(Integer.parseInt(getFirstWord(content))>=0)//"delete id id id id "
+			{
+				while(!content.isEmpty())
+				{
+					if(storage.findTask(Integer.parseInt(getFirstWord(content)))!=null)
+					{
+					targetDelete.add(storage.findTask(Integer.parseInt(getFirstWord(content))));
+					}
+					content=removeFirstWord(content);
+				}
+				newAction.setTargets(targetDelete);
+			}else // set as invalid if the command fits none of the above
+			{
+				newAction.setAction(TypeOfAction.INVALID);
+			}
+			
+			
+			
+			//DELETE [id1] [id2] [id3]
 				//	 DELETE FROM [startId] TO [endId]
 					// DELETE ALL
 			// set target as the task to be deleted
@@ -663,7 +719,7 @@ public class EzParser {
 		return newAction;
 	}
 
-	public static TypeOfAction getAction(String userCommand) {
+	private static TypeOfAction getAction(String userCommand) {
 
 		String action = getFirstWord(userCommand);  
 		if (action.equalsIgnoreCase("add"))
@@ -684,7 +740,7 @@ public class EzParser {
 		return TypeOfAction.INVALID;
 	}
 
-	public static String getFirstWord(String input) {
+	private static String getFirstWord(String input) {
 		String firstword = new String();
 
 		if (input.indexOf(" ") >= 0) {
@@ -701,7 +757,7 @@ public class EzParser {
 		return firstword;
 	}
 
-	public static String removeFirstWord(String input) {
+	private static String removeFirstWord(String input) {
 		String output = new String();
 		if (input.indexOf(" ") >= 0) {
 			output = input.substring(input.indexOf(" "));
@@ -712,7 +768,7 @@ public class EzParser {
 		return output;
 	}
 
-	public static int[] readDate(String date)// return int[0] as -1 if the date
+	private static int[] readDate(String date)// return int[0] as -1 if the date
 												// is invalid
 	{
 		int[] results = new int[3];
@@ -752,7 +808,7 @@ public class EzParser {
 
 	}
 
-	public static int[] readTime(String time)// return int[0] as -1 if the time
+	private static int[] readTime(String time)// return int[0] as -1 if the time
 												// is invalid.
 	{
 		int[] results = new int[2];
@@ -801,7 +857,7 @@ public class EzParser {
 						// 10am
 	}
 
-	public static boolean checkMultipleAction(String command) {
+	private static boolean checkMultipleAction(String command) {
 		ArrayList<String> listOfAction = new ArrayList<String>();
 
 		listOfAction.add("add");
