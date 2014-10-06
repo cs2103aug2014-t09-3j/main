@@ -6,43 +6,19 @@
  * @author Khanh
  *
  */
-import java.awt.BorderLayout;
-import java.awt.Color;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
-import javax.swing.GroupLayout.ParallelGroup;
-import javax.swing.GroupLayout.SequentialGroup;
-import javax.swing.JButton;
-import javax.swing.BoxLayout;
-import javax.swing.JEditorPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-import javax.swing.ScrollPaneLayout;
+import javax.swing.text.*;
+import javax.swing.GroupLayout.*;
+import javax.swing.*;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
-//import javax.swing.border.LineBorder;
-import javax.swing.ScrollPaneConstants;
-
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.io.File;
 import java.io.IOException;
 
@@ -50,7 +26,6 @@ import java.io.IOException;
 public class EzGUI extends JFrame {
 	private static final Color MAIN_TITLE_FONT_COLOR = new Color(231,76,60);
 	private static final String MAIN_TITLE_FONT_FONT = "Arial";
-	
 	
 	private static final int BUTTON_HEIGHT = 40;
 	private static final int BUTTON_WIDTH = 156;
@@ -68,8 +43,8 @@ public class EzGUI extends JFrame {
 	private static final int START_LOCATION_Y = 50;
 	private static final int START_LOCATION_X = 50;
 	
-	
 	private static final String[] KEYWORDS = {"add","on","at","from","to","today","tomorrow"}; 
+	
 	private static final String[] LIST_OF_BUTTON_NAMES = {	"All", 
 															"Done", 
 															"Undone", 
