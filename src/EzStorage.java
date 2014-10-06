@@ -27,9 +27,11 @@ public class EzStorage {
 	 */
 	public EzTask addTask(EzTask task){
 
-		listOfAllTasks.add(task);
 		
-		//System.out.println(numTasks);
+		if(task.getId() > listOfAllTasks.get(listOfAllTasks.size()-1).getId() )
+			numTasks = task.getId() + 1;
+		listOfAllTasks.add(task);
+		System.out.println("sizeList" + listOfAllTasks.get(listOfAllTasks.size()-1).getId());
 		
 		return task;
 	}

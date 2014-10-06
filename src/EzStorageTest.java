@@ -31,6 +31,7 @@ public class EzStorageTest {
 		 * 1. "do homework" 2
 		 */
 		
+		
 		checkId(storage.addTaskWithNewId(new EzTask("do EE2021 Tut",5)),2);
 		/**
 		 * now the list is:
@@ -39,6 +40,7 @@ public class EzStorageTest {
 		 * 2. "do EE2021 Tut" 5
 		 */
 		
+		
 		assertEquals("check size: ", 3, storage.getSize());
 		
 		ArrayList<EzTask> list = new ArrayList<EzTask>();
@@ -46,12 +48,10 @@ public class EzStorageTest {
 		EzTask tmp = new EzTask(storage.findTask(1));
 		assertEquals("check title: ", "do homework", tmp.getTitle());
 		
-		//printTaskList(storage);
+		
 		tmp.setTitle("do CS2103T");
 		list.add(tmp);
-		//printTaskList(storage);
 		assertEquals("check the number of tasks affected: ", 1, storage.updateTask(list));
-		//printTaskList(storage);
 		/**
 		 * now the list is:
 		 * 0. "go shopping" "at Clementi" 3
@@ -64,16 +64,16 @@ public class EzStorageTest {
 		list.clear();
 		tmp = new EzTask(storage.findTask(1));
 		list.add(tmp);
-		//printTaskList(storage);
+		
 		assertEquals("check the number of tasks affected: ", 1, storage.deleteTask(list));
 		/**
 		 * now the list is:
 		 * 0. "go shopping" "at Clementi" 3
 		 * 2. "do EE2021 Tut" 5
 		 */
-		//printTaskList(storage);
+		
 		checkId(storage.addTaskWithNewId(new EzTask("do CS2101 Tut",7)),3);
-		//printTaskList(storage);
+		
 		/**
 		 * now the list is:
 		 * 0. "go shopping" "at Clementi" 3
@@ -81,10 +81,10 @@ public class EzStorageTest {
 		 * 3. "do CS2101 Tut" 7
 		 */
 		
-		//printTaskList(storage);
+	
 		ArrayList<String> listWords = new ArrayList<String>();
 		listWords.add("do");
-		//printTaskList(storage);
+	
 		checkSearchByKeywords(storage, listWords,2);
 		listWords.clear();
 		listWords.add("Tut");
@@ -99,7 +99,7 @@ public class EzStorageTest {
 		
 		tmp.setTitle("do CS2103 Tut");
 		list.add(tmp);
-		//printTaskList(storage);
+	
 		assertEquals("check the number of tasks affected: ", 1, storage.updateTask(list));
 		/**
 		 * now the list is:
@@ -137,8 +137,15 @@ public class EzStorageTest {
 		assertEquals("check search by keyword: ", expectedNumber, storage.getTasksByKeywords(listWords).size());
 	}
 
+	/** 
+	 * Prints the task list
+	 * @param storage
+	 */
 	private void printTaskList(EzStorage storage){
 		storage.printList();
 	}
 
+	private void checkNumTask(EzStorage storage, int expectedNumber){
+		assertEquals("checkNumTasks: " , expectedNumber, storage.numTasks);
+	}
 }
