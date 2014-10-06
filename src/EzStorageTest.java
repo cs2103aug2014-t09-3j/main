@@ -121,8 +121,10 @@ public class EzStorageTest {
 		
 		EzTask task = new EzTask("do something", 4);
 		task.setId(6);
+		
 		checkId(storage.addTask(new EzTask(task)), 6);
 		checkNumTask(storage, 7);
+		
 		checkId(storage.addTaskWithNewId(new EzTask("do EE2021 tut", 5)), 7);
 		
 		/**
@@ -132,6 +134,37 @@ public class EzStorageTest {
 		 *6. "do something" 4
 		 *7. "do EE2021 tut" 5
 		 */
+		
+		task = new EzTask("do something again", 4);
+		task.setId(4);
+		checkId(storage.addTask(task), 4);
+		checkNumTask(storage, 8);
+		
+		task = new EzTask("do something again", 4);
+		task.setId(5);
+		checkId(storage.addTask(task), 5);
+		checkNumTask(storage, 8);
+		
+		checkId(storage.addTaskWithNewId(new EzTask("do EE2021 tut", 5)), 8);
+		
+		/**
+		 * now the list is:
+		 * 0. "go shopping" "at Clementi" 3
+		 *2. "do EE2021 Tut" 5
+		 *6. "do something" 4
+		 *7. "do EE2021 tut" 5
+		 *4. "do something again" 4
+		 *5. "do something again" 4
+		 *8. "do EE2021 tut" 5
+		 */
+		
+		EzStorage storage2 = new EzStorage();
+		
+		task = new EzTask("do something", 4);
+		task.setId(6);
+		checkId(storage2.addTask(task), 4);
+		checkNumTask(storage2, 4);
+		
 	}
 
 
