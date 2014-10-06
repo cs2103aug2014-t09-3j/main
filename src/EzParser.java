@@ -296,7 +296,7 @@ public class EzParser {
 						content=removeFirstWord(content);
 						String end = getFirstWord(content);
 						content=removeFirstWord(content);
-						System.out.println(content);
+	
 
 						if (readDate(start)[0] >= 0 && readDate(end)[0] >= 0) {
 							dateArr[0] = readDate(start)[0];
@@ -489,7 +489,7 @@ public class EzParser {
 					} else if (getFirstWord(content).equalsIgnoreCase("start")) {
 					
 					    content=removeFirstWord(content);
-						System.out.println(content);
+
 						if (getFirstWord(content).equalsIgnoreCase("date")) 
 						{
 							content = removeFirstWord(content);
@@ -660,6 +660,10 @@ public class EzParser {
 					targetDelete.add(storage.findTask(k));
 					}
 				}
+				if(targetDelete.isEmpty())//if none of the tasks are found,set as null
+				{
+					newAction.setTargets(null);
+				}
 				newAction.setTargets(targetDelete);
 			}
 			else if(Integer.parseInt(getFirstWord(content))>=0)//"delete id id id id "
@@ -671,6 +675,10 @@ public class EzParser {
 					targetDelete.add(storage.findTask(Integer.parseInt(getFirstWord(content))));
 					}
 					content=removeFirstWord(content);
+				}
+				if(targetDelete.isEmpty())//if none of the tasks are found,set as null
+				{
+					newAction.setTargets(null);
 				}
 				newAction.setTargets(targetDelete);
 			}else // set as invalid if the command fits none of the above
@@ -689,6 +697,79 @@ public class EzParser {
 			break;
 
 		case DONE:
+			ArrayList<EzTask> targetsDone=new ArrayList<EzTask>();
+			ArrayList<EzTask> resultsDone=new ArrayList<EzTask>();
+			
+			if(getFirstWord(content).equalsIgnoreCase("all"))//if the command is "done all on a date"
+			{
+				content=removeFirstWord(content);
+				content=removeFirstWord(content);//now content is suppose to be the date
+				//find all tasks on the date and assign it to the arraylist.
+				
+			}
+			else if(getFirstWord(content).equalsIgnoreCase("from"))//"done from .. to "
+			{
+				content=removeFirstWord(content);
+				int i,j;
+				i=Integer.parseInt(getFirstWord(content));
+				content=removeFirstWord(content);
+				if(getFirstWord(content).equalsIgnoreCase("to"))
+				{
+					content=removeFirstWord(content);
+				}
+				else
+				{
+					newAction.setAction(TypeOfAction.INVALID);
+				}
+				j=Integer.parseInt(content);
+				content=removeFirstWord(content);
+				if(!content.isEmpty()||i>j)
+				{
+					newAction.setAction(TypeOfAction.INVALID);
+				}
+				for(int k=i;k<=j;k++)
+				{
+					if(storage.findTask(k)!=null)
+					{
+					EzTask temp=new EzTask(storage.findTask(k));
+					targetsDone.add(temp);
+					storage.findTask(k).setDone(true);
+					resultsDone.add(storage.findTask(k));
+					}
+				}
+				if(targetsDone.isEmpty())//if none of the tasks are found,set as null
+				{
+					newAction.setTargets(null);
+				}
+				newAction.setTargets(targetsDone);
+				newAction.setResults(resultsDone);
+			}
+			else if(Integer.parseInt(getFirstWord(content))>=0)//"done id id id id "
+			{
+				
+				while(!content.isEmpty())
+				{
+					if(storage.findTask(Integer.parseInt(getFirstWord(content)))!=null)
+					{
+						EzTask temp=new EzTask(storage.findTask(Integer.parseInt(getFirstWord(content))));
+						targetsDone.add(temp);
+						storage.findTask(Integer.parseInt(getFirstWord(content))).setDone(true);
+						resultsDone.add(storage.findTask(Integer.parseInt(getFirstWord(content))));
+					}
+					content=removeFirstWord(content);
+				}
+				if(targetsDone.isEmpty())//if none of the tasks are found,set as null
+				{
+					newAction.setTargets(null);
+				}
+				newAction.setTargets(targetsDone);
+				newAction.setResults(resultsDone);
+			}else // set as invalid if the command fits none of the above
+			{
+				newAction.setAction(TypeOfAction.INVALID);
+			}
+			
+			
 			// target not found, set as null
 
 			// same as update
@@ -736,6 +817,8 @@ public class EzParser {
 			return TypeOfAction.SHOW;
 		else if (action.equalsIgnoreCase("help"))
 			return TypeOfAction.HELP;
+		else if (action.equalsIgnoreCase("done"))
+			return TypeOfAction.DONE;
 
 		return TypeOfAction.INVALID;
 	}

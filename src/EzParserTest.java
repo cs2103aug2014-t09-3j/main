@@ -393,5 +393,7 @@ public class EzParserTest {
 		assertTrue("Check target is not null: ", action.getTargets() != null);
 		assertTrue("Check result is the same pointer as target: ", action.getTargets() == action.getResults());
 		assertEquals("Check size of the target: ", 3, action.getTargets().size());
+		
 	}
+	
 }
