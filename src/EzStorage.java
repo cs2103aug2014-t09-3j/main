@@ -33,7 +33,7 @@ public class EzStorage {
 		
 		largestId = highestId + 1;
 		listOfAllTasks.add(task);
-		System.out.println("sizeList" + listOfAllTasks.get(listOfAllTasks.size()-1).getId());
+		//System.out.println("sizeList" + listOfAllTasks.get(listOfAllTasks.size()-1).getId());
 		
 		return task;
 	}
@@ -142,7 +142,12 @@ public class EzStorage {
 		for(EzTask task : listOfAllTasks)
 		if(checkByDate(date,task))
 			tasksByDate.add(task);
-		return null;}
+		
+		if(tasksByDate.isEmpty())
+			return null;
+		
+		return tasksByDate;
+	}
 	
 	/*
 	 * this function returns a sorted ArrayList by id
@@ -183,7 +188,7 @@ public class EzStorage {
 	
 	/**
 	 * this function return a list of tasks, which is sorted by priority then by date.
-	 * @return ArrayList tasksByPriority
+	 * @return ArrayList tasksByPriority or null
 	 */
 	public ArrayList<EzTask> getSortedTasksByPriority(){
 		
@@ -195,6 +200,8 @@ public class EzStorage {
 					tasksByPriority.add(task);
 					
 			}
+		if(tasksByPriority.isEmpty())
+			return null;
 		
 		return tasksByPriority;
 				
