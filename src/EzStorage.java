@@ -17,7 +17,7 @@ public class EzStorage {
 	private ArrayList<EzTask> listOfAllTasks = new ArrayList<EzTask>();
 	
 	//numTasks represents the number of tasks entered by the user.
-	int numTasks = 0;
+	int largestId = 0;
 
 
 	/**
@@ -26,10 +26,12 @@ public class EzStorage {
 	 * @return task 
 	 */
 	public EzTask addTask(EzTask task){
-
+		int highestId = 0;
+		for(EzTask taskInList : listOfAllTasks)
+			if(taskInList.getId() > highestId)
+				highestId = task.getId();
 		
-		if(task.getId() > listOfAllTasks.get(listOfAllTasks.size()-1).getId() )
-			numTasks = task.getId() + 1;
+		largestId = highestId + 1;
 		listOfAllTasks.add(task);
 		System.out.println("sizeList" + listOfAllTasks.get(listOfAllTasks.size()-1).getId());
 		
@@ -45,8 +47,8 @@ public class EzStorage {
 		
 
 		listOfAllTasks.add(task);
-		task.setId(numTasks);
-		numTasks++;
+		task.setId(largestId);
+		largestId++;
 		
 		return task;
 		
@@ -136,7 +138,48 @@ public class EzStorage {
 	 */
 	public ArrayList<EzTask> getTasksByDate(Date date){
 	
+		ArrayList<EzTask> tasksByDate = new ArrayList<EzTask>();
+		for(EzTask task : listOfAllTasks)
+		if(checkByDate(date,task))
+			tasksByDate.add(task);
 		return null;}
+	
+	/*
+	 * this function returns a sorted ArrayList by id
+	 * @return ArrayList of tasksById or null
+	 */
+	public ArrayList<EzTask> getSortedTasksById(){
+		ArrayList <EzTask> tasksById = new ArrayList<EzTask>();
+		
+		for(EzTask task : listOfAllTasks)
+			for(int id = 0; id < largestId ; id++)
+				if(task.getId() == id)
+					tasksById.add(task);
+		
+		
+		if(tasksById.isEmpty())
+			return null;
+		
+		else
+			return tasksById;
+					
+	}
+	
+	/*
+	 * this function returns true if the the task falls on the date specified.
+	 * @param date, task
+	 * @return boolean
+	 */
+	private boolean checkByDate(Date date, EzTask task) {
+		if(task.getStartTime().before(date) && task.getEndTime().after(date) )
+				return true;
+		
+		else if(task.getStartTime().equals(date) || task.getEndTime().equals(date))
+			return true;
+		
+		return false;
+	}
+
 	
 	/**
 	 * this function return a list of tasks, which is sorted by priority then by date.
@@ -146,7 +189,7 @@ public class EzStorage {
 		
 		ArrayList<EzTask> tasksByPriority = new ArrayList<EzTask>();
 		for(EzTask task : listOfAllTasks)
-			for(int priority = 0; priority < 6 ; priority++)
+			for(int priority = 0; priority < EzConstants.MAXIMUM_PRIORITY ; priority++)
 			{
 				if(task.getPriority() == priority)
 					tasksByPriority.add(task);

@@ -39,7 +39,7 @@ public class EzStorageTest {
 		 * 1. "do homework" 2
 		 * 2. "do EE2021 Tut" 5
 		 */
-		
+	
 		
 		assertEquals("check size: ", 3, storage.getSize());
 		
@@ -161,6 +161,6 @@ public class EzStorageTest {
 	}
 
 	private void checkNumTask(EzStorage storage, int expectedNumber){
-		assertEquals("checkNumTasks: " , expectedNumber, storage.numTasks);
+		assertEquals("checkNumTasks: " , expectedNumber, storage.largestId);
 	}
 }
