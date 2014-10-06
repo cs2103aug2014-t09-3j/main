@@ -272,7 +272,7 @@ public class EzParserTest {
 		assertEquals("Check id of the target: ", 4, action.getTargets().get(3).getId());
 		
 		
-		action = EzParser.extractInfo("Delete all on 27/7/2014",storage);
+/*		action = EzParser.extractInfo("Delete all on 27/7/2014",storage);
 		assertEquals("Check type of action: ", TypeOfAction.DELETE, action.getAction());
 		assertTrue("Check target is not null: ", action.getTargets() != null);
 		assertTrue("Check result is null: ", action.getResults() == null);
@@ -280,7 +280,7 @@ public class EzParserTest {
 		assertEquals("Check id of the target: ", 1, action.getTargets().get(0).getId());
 		assertEquals("Check id of the target: ", 3, action.getTargets().get(1).getId());
 		assertEquals("Check id of the target: ", 4, action.getTargets().get(2).getId());
-		
+	*/	
 	}
 	
 	@Test
@@ -328,7 +328,7 @@ public class EzParserTest {
 		assertEquals("Check id of the target: ", 4, action.getTargets().get(3).getId());
 		
 		
-		action = EzParser.extractInfo("DONE all on 27/7/2014",storage);
+/*		action = EzParser.extractInfo("DONE all on 27/7/2014",storage);
 		assertEquals("Check type of action: ", TypeOfAction.DONE, action.getAction());
 		assertTrue("Check target is not null: ", action.getTargets() != null);
 		assertTrue("Check result is not null: ", action.getResults() != null);
@@ -336,7 +336,7 @@ public class EzParserTest {
 		assertEquals("Check id of the target: ", 1, action.getTargets().get(0).getId());
 		assertEquals("Check id of the target: ", 3, action.getTargets().get(1).getId());
 		assertEquals("Check id of the target: ", 4, action.getTargets().get(2).getId());
-		
+	*/	
 	}
 	
 	@Test
@@ -393,5 +393,7 @@ public class EzParserTest {
 		assertTrue("Check target is not null: ", action.getTargets() != null);
 		assertTrue("Check result is the same pointer as target: ", action.getTargets() == action.getResults());
 		assertEquals("Check size of the target: ", 3, action.getTargets().size());
+		
 	}
+	
 }
