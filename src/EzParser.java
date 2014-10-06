@@ -786,10 +786,83 @@ public class EzParser {
 			break;
 
 		case SHOW:
+			ArrayList<EzTask> targetsShow=new ArrayList<EzTask>();
+			if(getFirstWord(content).equalsIgnoreCase("all"))
+			{
+				content=removeFirstWord(content);
+				if(getFirstWord(content).isEmpty())
+				{
+					targetsShow=storage.getSortedTasksByPriority();
+				}
+				else if(getFirstWord(content).equalsIgnoreCase("on"))
+				{
+					
+				}
+				else if(getFirstWord(content).equalsIgnoreCase("have"))
+				{
+					
+				}
+				else
+				{
+					newAction.setAction(TypeOfAction.INVALID);
+				}
+				newAction.setResults(targetsShow);
+				newAction.setTargets(targetsShow);
+				
+			}
+			else if(getFirstWord(content).equalsIgnoreCase("done"))
+			{
+				content=removeFirstWord(content);
+				if(getFirstWord(content).isEmpty())
+				{
+					targetsShow=getDoneTasks(storage.getSortedTasksByPriority());
+				}
+				else if(getFirstWord(content).equalsIgnoreCase("on"))
+				{
+					
+				}
+				else
+				{
+					newAction.setAction(TypeOfAction.INVALID);
+				}
+				newAction.setResults(targetsShow);
+				newAction.setTargets(targetsShow);
+			}
+			else if(getFirstWord(content).equalsIgnoreCase("undone"))
+			{
+				content=removeFirstWord(content);
+				if(getFirstWord(content).isEmpty())
+				{
+					targetsShow=getUndoneTasks(storage.getSortedTasksByPriority());
+				}
+				else if(getFirstWord(content).equalsIgnoreCase("on"))
+				{
+					
+				}
+				else
+				{
+					newAction.setAction(TypeOfAction.INVALID);
+				}
+				newAction.setResults(targetsShow);
+				newAction.setTargets(targetsShow);
+			}
+			
+			newAction.setTargets(targetsShow);
+			newAction.setResults(targetsShow);
+			//show all
+			//show done
+			//show undone
+			//show all on date
+			//show done on date
+			//show undone on date
+			//show all have ""
+			
 			// set results and target as all tasks()
 			break;
 
 		case HELP:
+			newAction.setTargets(null);
+			newAction.setAction(null);
 			// set results and target as null
 			break;
 
@@ -964,6 +1037,32 @@ public class EzParser {
 
 		return false;
 
+	}
+	
+	private static ArrayList<EzTask> getDoneTasks(ArrayList<EzTask> input)
+	{
+		ArrayList<EzTask> results=new ArrayList<EzTask>();
+		for(int i=0;i<input.size();i++)
+		{
+			if(input.get(i).isDone())
+			{
+				results.add(input.get(i));
+			}
+		}
+		
+		return results;
+	}
+	private static ArrayList<EzTask> getUndoneTasks(ArrayList<EzTask> input)
+	{
+		ArrayList<EzTask> results=new ArrayList<EzTask>();
+		for(int i=0;i<input.size();i++)
+		{
+			if(!input.get(i).isDone())
+			{
+				results.add(input.get(i));
+			}
+		}
+		return results;
 	}
 
 }
