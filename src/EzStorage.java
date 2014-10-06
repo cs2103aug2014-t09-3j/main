@@ -26,12 +26,14 @@ public class EzStorage {
 	 * @return task 
 	 */
 	public EzTask addTask(EzTask task){
-		int highestId = 0;
 		for(EzTask taskInList : listOfAllTasks)
-			if(taskInList.getId() > highestId)
-				highestId = task.getId();
+			if(taskInList.getId() > largestId)
+				largestId = taskInList.getId();
 		
-		largestId = highestId + 1;
+		if(task.getId() > largestId)
+			largestId = task.getId();
+		
+		largestId++;
 		listOfAllTasks.add(task);
 		//System.out.println("sizeList" + listOfAllTasks.get(listOfAllTasks.size()-1).getId());
 		
