@@ -226,4 +226,172 @@ public class EzParserTest {
 		assertEquals("Check end minute of result: "		, 0, action.getResults().get(0).getEndTime().get(Calendar.MINUTE));
 		storage.updateTask(action.getResults());
 	}
+	
+	@Test
+	public void testDeleteCommand() {
+		EzStorage storage = new EzStorage();
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 1\" at \"venue1\" on 26/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 0
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 2\" at \"venue2\" on 27/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 1
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 3\" at \"venue3\" on 26/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 2
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 4\" at \"venue4\" on 27/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 3
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 5\" at \"venue5\" on 27/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 4
+		
+		EzAction action = EzParser.extractInfo("Delete 2",storage);
+		assertEquals("Check type of action: ", TypeOfAction.DELETE, action.getAction());
+		assertTrue("Check target is not null: ", action.getTargets() != null);
+		assertTrue("Check result is null: ", action.getTargets() == null);
+		assertEquals("Check size of the target: ", 1, action.getTargets().size());
+		assertEquals("Check id of the target: ", 2, action.getTargets().get(0).getId());
+		
+		action = EzParser.extractInfo("Delete 2 4 5",storage);	
+		assertEquals("Check type of action: ", TypeOfAction.DELETE, action.getAction());
+		assertTrue("Check target is not null: ", action.getTargets() != null);
+		assertTrue("Check result is null: ", action.getTargets() == null);
+		assertEquals("Check size of the target: ", 2, action.getTargets().size());	// there is no task with id 5 so only tasks with id 2 and 4 are returned
+		assertEquals("Check id of the target: ", 2, action.getTargets().get(0).getId());
+		assertEquals("Check id of the target: ", 4, action.getTargets().get(1).getId());
+		
+		action = EzParser.extractInfo("Delete from 1 to 4",storage);
+		assertEquals("Check type of action: ", TypeOfAction.DELETE, action.getAction());
+		assertTrue("Check target is not null: ", action.getTargets() != null);
+		assertTrue("Check result is null: ", action.getTargets() == null);
+		assertEquals("Check size of the target: ", 4, action.getTargets().size());
+		assertEquals("Check id of the target: ", 1, action.getTargets().get(0).getId());
+		assertEquals("Check id of the target: ", 2, action.getTargets().get(1).getId());
+		assertEquals("Check id of the target: ", 3, action.getTargets().get(2).getId());
+		assertEquals("Check id of the target: ", 4, action.getTargets().get(3).getId());
+		
+		action = EzParser.extractInfo("Delete from 1 to 10",storage);
+		assertEquals("Check type of action: ", TypeOfAction.DELETE, action.getAction());
+		assertTrue("Check target is not null: ", action.getTargets() != null);
+		assertTrue("Check result is null: ", action.getTargets() == null);
+		assertEquals("Check size of the target: ", 4, action.getTargets().size()); // only tasks with id 1,2,3 and 4 are returned
+		assertEquals("Check id of the target: ", 1, action.getTargets().get(0).getId());
+		assertEquals("Check id of the target: ", 2, action.getTargets().get(1).getId());
+		assertEquals("Check id of the target: ", 3, action.getTargets().get(2).getId());
+		assertEquals("Check id of the target: ", 4, action.getTargets().get(3).getId());
+		
+		
+		action = EzParser.extractInfo("Delete all on 27/7/2014",storage);
+		assertEquals("Check type of action: ", TypeOfAction.DELETE, action.getAction());
+		assertTrue("Check target is not null: ", action.getTargets() != null);
+		assertTrue("Check result is null: ", action.getTargets() == null);
+		assertEquals("Check size of the target: ", 3, action.getTargets().size());
+		assertEquals("Check id of the target: ", 1, action.getTargets().get(0).getId());
+		assertEquals("Check id of the target: ", 3, action.getTargets().get(1).getId());
+		assertEquals("Check id of the target: ", 4, action.getTargets().get(2).getId());
+		
+	}
+	
+	@Test
+	public void testDoneCommand() {
+		EzStorage storage = new EzStorage();
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 1\" at \"venue1\" on 26/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 0
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 2\" at \"venue2\" on 27/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 1
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 3\" at \"venue3\" on 26/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 2
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 4\" at \"venue4\" on 27/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 3
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 5\" at \"venue5\" on 27/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 4
+		
+		EzAction action = EzParser.extractInfo("DONE 2",storage);
+		assertEquals("Check type of action: ", TypeOfAction.DONE, action.getAction());
+		assertTrue("Check target is not null: ", action.getTargets() != null);
+		assertTrue("Check result is null: ", action.getTargets() == null);
+		assertEquals("Check size of the target: ", 1, action.getTargets().size());
+		assertEquals("Check id of the target: ", 2, action.getTargets().get(0).getId());
+		
+		action = EzParser.extractInfo("DONE 2 4 5",storage);	
+		assertEquals("Check type of action: ", TypeOfAction.DONE, action.getAction());
+		assertTrue("Check target is not null: ", action.getTargets() != null);
+		assertTrue("Check result is null: ", action.getTargets() == null);
+		assertEquals("Check size of the target: ", 2, action.getTargets().size());	// there is no task with id 5 so only tasks with id 2 and 4 are returned
+		assertEquals("Check id of the target: ", 2, action.getTargets().get(0).getId());
+		assertEquals("Check id of the target: ", 4, action.getTargets().get(1).getId());
+		
+		action = EzParser.extractInfo("DONE from 1 to 4",storage);
+		assertEquals("Check type of action: ", TypeOfAction.DONE, action.getAction());
+		assertTrue("Check target is not null: ", action.getTargets() != null);
+		assertTrue("Check result is null: ", action.getTargets() == null);
+		assertEquals("Check size of the target: ", 4, action.getTargets().size());
+		assertEquals("Check id of the target: ", 1, action.getTargets().get(0).getId());
+		assertEquals("Check id of the target: ", 2, action.getTargets().get(1).getId());
+		assertEquals("Check id of the target: ", 3, action.getTargets().get(2).getId());
+		assertEquals("Check id of the target: ", 4, action.getTargets().get(3).getId());
+		
+		action = EzParser.extractInfo("DONE from 1 to 10",storage);
+		assertEquals("Check type of action: ", TypeOfAction.DONE, action.getAction());
+		assertTrue("Check target is not null: ", action.getTargets() != null);
+		assertTrue("Check result is null: ", action.getTargets() == null);
+		assertEquals("Check size of the target: ", 4, action.getTargets().size()); // only tasks with id 1,2,3 and 4 are returned
+		assertEquals("Check id of the target: ", 1, action.getTargets().get(0).getId());
+		assertEquals("Check id of the target: ", 2, action.getTargets().get(1).getId());
+		assertEquals("Check id of the target: ", 3, action.getTargets().get(2).getId());
+		assertEquals("Check id of the target: ", 4, action.getTargets().get(3).getId());
+		
+		
+		action = EzParser.extractInfo("DONE all on 27/7/2014",storage);
+		assertEquals("Check type of action: ", TypeOfAction.DONE, action.getAction());
+		assertTrue("Check target is not null: ", action.getTargets() != null);
+		assertTrue("Check result is null: ", action.getTargets() == null);
+		assertEquals("Check size of the target: ", 3, action.getTargets().size());
+		assertEquals("Check id of the target: ", 1, action.getTargets().get(0).getId());
+		assertEquals("Check id of the target: ", 3, action.getTargets().get(1).getId());
+		assertEquals("Check id of the target: ", 4, action.getTargets().get(2).getId());
+		
+	}
+	
+	@Test
+	public void testShowCommand() {
+		EzStorage storage = new EzStorage();
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 0 ba\" at \"venue0\" on 26/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 0
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 1 aa\" at \"venue1\" on 27/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 1
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 2 ab\" at \"venue2\" on 26/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 2
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 3 aa\" at \"venue3\" on 27/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 3
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 4 ac\" at \"venue4\" on 27/7/2014 from 10am to 5pm", storage).getResults().get(0)); // id 4
+		
+		EzAction action = EzParser.extractInfo("DONE 2 4 5",storage); // only task 2 & 4 are marked as done
+		storage.updateTask(action.getResults());
+		
+		
+		action = EzParser.extractInfo("Show all",storage);	
+		assertEquals("Check type of action: ", TypeOfAction.SHOW, action.getAction());
+		assertTrue("Check target is not null: ", action.getTargets() != null);
+		assertTrue("Check result is the same pointer as target: ", action.getTargets() == action.getTargets());
+		assertEquals("Check size of the target: ", 5, action.getTargets().size());
+		
+		action = EzParser.extractInfo("Show done",storage);	
+		assertEquals("Check type of action: ", TypeOfAction.SHOW, action.getAction());
+		assertTrue("Check target is not null: ", action.getTargets() != null);
+		assertTrue("Check result is the same pointer as target: ", action.getTargets() == action.getTargets());
+		assertEquals("Check size of the target: ", 2, action.getTargets().size());
+		
+		action = EzParser.extractInfo("Show undone",storage);	
+		assertEquals("Check type of action: ", TypeOfAction.SHOW, action.getAction());
+		assertTrue("Check target is not null: ", action.getTargets() != null);
+		assertTrue("Check result is the same pointer as target: ", action.getTargets() == action.getTargets());
+		assertEquals("Check size of the target: ", 3, action.getTargets().size());
+		
+		action = EzParser.extractInfo("Show all on 27/7/2014",storage);	
+		assertEquals("Check type of action: ", TypeOfAction.SHOW, action.getAction());
+		assertTrue("Check target is not null: ", action.getTargets() != null);
+		assertTrue("Check result is the same pointer as target: ", action.getTargets() == action.getTargets());
+		assertEquals("Check size of the target: ", 3, action.getTargets().size());
+		
+		action = EzParser.extractInfo("Show done on 27/7/2014",storage);	
+		assertEquals("Check type of action: ", TypeOfAction.SHOW, action.getAction());
+		assertTrue("Check target is not null: ", action.getTargets() != null);
+		assertTrue("Check result is the same pointer as target: ", action.getTargets() == action.getTargets());
+		assertEquals("Check size of the target: ", 1, action.getTargets().size());
+		
+		action = EzParser.extractInfo("Show undone on 27/7/2014",storage);	
+		assertEquals("Check type of action: ", TypeOfAction.SHOW, action.getAction());
+		assertTrue("Check target is not null: ", action.getTargets() != null);
+		assertTrue("Check result is the same pointer as target: ", action.getTargets() == action.getTargets());
+		assertEquals("Check size of the target: ", 2, action.getTargets().size());
+		
+		action = EzParser.extractInfo("Show all have \"aa\" \"ba\"",storage);	
+		assertEquals("Check type of action: ", TypeOfAction.SHOW, action.getAction());
+		assertTrue("Check target is not null: ", action.getTargets() != null);
+		assertTrue("Check result is the same pointer as target: ", action.getTargets() == action.getTargets());
+		assertEquals("Check size of the target: ", 3, action.getTargets().size());
+	}
 }
