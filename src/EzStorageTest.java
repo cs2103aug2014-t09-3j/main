@@ -1,6 +1,8 @@
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import org.junit.Test;
 
@@ -13,25 +15,136 @@ import org.junit.Test;
  *
  */
 public class EzStorageTest {
-
+	@Test
+	public void testAddTask() {
+		EzStorage storage = new EzStorage();
+		EzTask task;
+		
+		checkId(storage.addTaskWithNewId(new EzTask("task 0")), 0);
+		checkId(storage.addTaskWithNewId(new EzTask("task 1")), 1);
+		checkId(storage.addTaskWithNewId(new EzTask("task 2")), 2);
+		
+		task = new EzTask("task 5");
+		task.setId(5);
+		checkId(storage.addTask(task), 5);
+		
+		task = new EzTask("task 4");
+		task.setId(4);
+		checkId(storage.addTask(task), 4);
+		
+		checkId(storage.addTaskWithNewId(new EzTask("task 6")), 6);
+	}
+	
+	@Test
+	public void testGetByDate() {
+		EzStorage storage = new EzStorage();
+		
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 0\" on 26/7/2014", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 1\" on 26/7/2014 5h30", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 2\" on 27/7/2014 from 5h30 to 22h", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 3\" on 26/7/2014 5h30", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 4\" on 27/7/2014 from 5h30 to 22h", storage).getResults().get(0));
+		
+		assertEquals("Check size of storage: ", 5, storage.getSize());
+		ArrayList<EzTask> list = storage.getTasksByDate((new GregorianCalendar(2014,Calendar.JULY,26,0,0)).getTime());
+		assertTrue("Check list is not null: ", list!=null);
+		assertEquals("Check size of list: ", 3, list.size());
+	}
+	
+	@Test
+	public void testSortedTasksByID() {
+		EzStorage storage = new EzStorage();
+		EzTask task = EzParser.extractInfo("add \"task 0\" on 26/7/2014", storage).getResults().get(0);
+		task.setId(6);
+		storage.addTask(task);
+		
+		task = EzParser.extractInfo("add \"task 1\" on 26/7/2014 5h30", storage).getResults().get(0);
+		task.setId(3);
+		storage.addTask(task);
+		
+		task = EzParser.extractInfo("add \"task 2\" on 27/7/2014 from 5h30 to 22h", storage).getResults().get(0);
+		task.setId(0);
+		storage.addTask(task);
+		
+		task = EzParser.extractInfo("add \"task 3\" on 26/7/2014 5h30", storage).getResults().get(0);
+		task.setId(2);
+		storage.addTask(task);
+		
+		task = EzParser.extractInfo("add \"task 4\" on 27/7/2014 from 5h30 to 22h", storage).getResults().get(0);
+		task.setId(1);
+		storage.addTask(task);
+		
+		assertEquals("Check size of storage: ", 5, storage.getSize());
+		ArrayList<EzTask> list = storage.getSortedTasksById();
+		assertTrue("Check list is not null: ", list!=null);
+		assertEquals("Check size of list: ", 5, list.size());
+		assertEquals("Check id: ", 0, list.get(0).getId());
+		assertEquals("Check id: ", 1, list.get(1).getId());
+		assertEquals("Check id: ", 2, list.get(2).getId());
+		assertEquals("Check id: ", 3, list.get(3).getId());
+		assertEquals("Check id: ", 6, list.get(4).getId());
+	}
+	
+	@Test
+	public void testSortedTasksByPriority() {
+		EzStorage storage = new EzStorage();
+		EzTask task = EzParser.extractInfo("add \"task 0\" on 26/7/2014 ***", storage).getResults().get(0);
+		task.setId(6);
+		storage.addTask(task);
+		
+		task = EzParser.extractInfo("add \"task 1\" on 26/7/2014 5h30 **", storage).getResults().get(0);
+		task.setId(3);
+		storage.addTask(task);
+		
+		task = EzParser.extractInfo("add \"task 2\" on 27/7/2014 from 5h30 to 22h *", storage).getResults().get(0);
+		task.setId(0);
+		storage.addTask(task);
+		
+		task = EzParser.extractInfo("add \"task 3\" on 26/7/2014 5h30 ***", storage).getResults().get(0);
+		task.setId(2);
+		storage.addTask(task);
+		
+		task = EzParser.extractInfo("add \"task 4\" on 27/7/2014 from 5h30 to 22h", storage).getResults().get(0);
+		task.setId(1);
+		storage.addTask(task);
+		
+		assertEquals("Check size of storage: ", 5, storage.getSize());
+		ArrayList<EzTask> list = storage.getSortedTasksByPriority();
+		assertTrue("Check list is not null: ", list!=null);
+		assertEquals("Check size of list: ", 5, list.size());
+		assertEquals("Check id: ", 0, list.get(0).getPriority());
+		assertEquals("Check id: ", 1, list.get(1).getPriority());
+		assertEquals("Check id: ", 2, list.get(2).getPriority());
+		assertEquals("Check id: ", 3, list.get(3).getPriority());
+		assertEquals("Check id: ", 4, list.get(4).getPriority());
+	}
+	
+	@Test
+	public void testGetByKeywords() {
+		EzStorage storage = new EzStorage();
+		
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 0 ab bc\" on 26/7/2014", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 1 ab ca\" on 26/7/2014 5h30", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 2 ee ab\" on 27/7/2014 from 5h30 to 22h", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 3 ac ee\" on 26/7/2014 5h30", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 4 bf aa\" on 27/7/2014 from 5h30 to 22h", storage).getResults().get(0));
+		
+		assertEquals("Check size of storage: ", 5, storage.getSize());
+		
+		ArrayList<String> listOfKeywords = new ArrayList<String>();
+		listOfKeywords.add("ab");
+		listOfKeywords.add("bc");
+		ArrayList<EzTask> list = storage.getTasksByKeywords(listOfKeywords);
+		assertTrue("Check list is not null: ", list!=null);
+		assertEquals("Check size of list: ", 3, list.size());
+	}
+	
 	@Test
 	public void test() {
 		EzStorage storage = new EzStorage();
 		
 		checkId(storage.addTaskWithNewId(new EzTask("go shopping","at Clementi",3)), 0);
-		/**
-		 * now the list is:
-		 * 0. "go shopping" "at Clementi" 3
-		 */
-		
 		checkId(storage.addTaskWithNewId(new EzTask("do homework",2)), 1);
-		/**
-		 * now the list is:
-		 * 0. "go shopping" "at Clementi" 3
-		 * 1. "do homework" 2
-		 */
-		
-		
 		checkId(storage.addTaskWithNewId(new EzTask("do EE2021 Tut",5)),2);
 		/**
 		 * now the list is:
@@ -40,14 +153,12 @@ public class EzStorageTest {
 		 * 2. "do EE2021 Tut" 5
 		 */
 	
-		
 		assertEquals("check size: ", 3, storage.getSize());
 		
 		ArrayList<EzTask> list = new ArrayList<EzTask>();
 		
 		EzTask tmp = new EzTask(storage.findTask(1));
 		assertEquals("check title: ", "do homework", tmp.getTitle());
-		
 		
 		tmp.setTitle("do CS2103T");
 		list.add(tmp);
