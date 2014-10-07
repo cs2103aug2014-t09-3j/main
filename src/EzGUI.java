@@ -43,7 +43,8 @@ public class EzGUI extends JFrame {
 	private static final int START_LOCATION_Y = 50;
 	private static final int START_LOCATION_X = 50;
 	
-	private static final String[] KEYWORDS = {"add","on","at","from","to","today","tomorrow"}; 
+	private static final String[] KEYWORDS = {"add","delete","update","show","done","undone","undo","redo","on","at","from","to","today","tomorrow"
+												,"set","title","date","time","start","end","venue","priority","all","have","help"}; 
 	
 	private static final String[] LIST_OF_BUTTON_NAMES = {	"All", 
 															"Done", 
@@ -58,12 +59,15 @@ public class EzGUI extends JFrame {
 															"Help"};
 	
 	private JPanel contentPane;
+	JScrollPane showPanel;
 	private Calendar cal;
 	private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	private static JEditorPane showArea;
 	private JButton selectedButton = null;
 	private JTextPane commandField;
 	private SimpleAttributeSet[] commandAttributeSet = new SimpleAttributeSet[3];
+	private ArrayList<String> commandHistory = new ArrayList<String>();
+	private int historyPos = 0;
 	/**
 	 * Create the frame.
 	 */
@@ -201,8 +205,9 @@ public class EzGUI extends JFrame {
 		showArea.setContentType("text/html");
 		showArea.setFocusable(false);
 		
-		JScrollPane showPanel = new JScrollPane(showArea);
+		showPanel = new JScrollPane(showArea);
 		showPanel.setFocusable(false);
+		//showPanel.setAutoscrolls(true);
 		showPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		showPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		//showPanel.setBorder(new LineBorder(BUTTON_TEXT_COLOR, 2, true));
@@ -246,6 +251,7 @@ public class EzGUI extends JFrame {
 		commandField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
+				
 				if (arg0.isControlDown()){
 					switch (arg0.getKeyChar()){
 					case 22: case 25: case 26:
@@ -255,16 +261,56 @@ public class EzGUI extends JFrame {
 					default:
 						break;
 					}
+					
+					switch (arg0.getKeyCode()){
+					case KeyEvent.VK_UP:
+						showPanel.getVerticalScrollBar().setValue(showPanel.getVerticalScrollBar().getValue()-20);;
+						//showArea.setText("Ctrl+Up Pressed." + String.valueOf((int)arg0.getKeyCode()));
+						break;
+					case KeyEvent.VK_DOWN:
+						showPanel.getVerticalScrollBar().setValue(showPanel.getVerticalScrollBar().getValue()+20);;
+						//showArea.setText("Ctrl+Down Pressed." + String.valueOf((int)arg0.getKeyCode()));
+						break;
+
+					}
 				} else {
-					if (arg0.getKeyChar()==KeyEvent.VK_ENTER){
+					switch (arg0.getKeyChar()){
+					case KeyEvent.VK_ENTER:
 						EzController.execute(commandField.getText());
+						commandHistory.add(commandField.getText());
+						historyPos = commandHistory.size(); 
 						commandField.setText("");
-					}
-					if ((arg0.getKeyChar()==KeyEvent.VK_BACK_SPACE) 
-							|| (arg0.getKeyChar()==KeyEvent.VK_DELETE)
-							|| (arg0.getKeyChar()==KeyEvent.VK_ENTER)){
 						arg0.consume();
+						break;
+					case KeyEvent.VK_BACK_SPACE:
+					case KeyEvent.VK_DELETE:
+						arg0.consume();
+						break;
+					default:
+						break;
 					}
+					switch (arg0.getKeyCode()){
+					case KeyEvent.VK_UP:
+						if (historyPos>0){
+							historyPos--;
+							addColorForCommandField(commandHistory.get(historyPos), commandField.getStyledDocument());
+						}
+						//showArea.setText("Up Pressed." + String.valueOf((int)arg0.getKeyCode()));
+						break;
+					case KeyEvent.VK_DOWN:
+						if (historyPos<commandHistory.size()){
+							historyPos++;
+							if (historyPos<commandHistory.size()){
+								addColorForCommandField(commandHistory.get(historyPos), commandField.getStyledDocument());
+							} else {
+								addColorForCommandField("", commandField.getStyledDocument());
+							}
+						}
+						//showArea.setText("Down Pressed." + String.valueOf((int)arg0.getKeyCode()));
+						break;
+
+					}
+					
 				}
 			}
 			
@@ -375,7 +421,6 @@ public class EzGUI extends JFrame {
 						break;	
 					}
 				} else {
-					//showArea.setText("Ctrl+Z Pressed." + String.valueOf((int)e.getKeyChar()));
 					switch (e.getKeyChar()){
 					case 26:	// CTRL + Z
 						EzController.execute("undo");
