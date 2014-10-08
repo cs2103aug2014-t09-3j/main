@@ -1,7 +1,7 @@
 import java.util.*;
 
 /**
- * COMMAND:
+ * COMMAND: 
  ADD "title"			: set the title of EzTask object
  AT "venue"		: set the venue of EzTask object
  AT time			: set the time 		of both startTime and endTime of EzTask object

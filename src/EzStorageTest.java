@@ -305,7 +305,7 @@ public class EzStorageTest {
 	 * Prints the task list
 	 * @param storage
 	 */
-	private void printTaskList(EzStorage storage){
+	public void printTaskList(EzStorage storage){
 		storage.printList();
 	}
 

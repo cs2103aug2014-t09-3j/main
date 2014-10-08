@@ -28,6 +28,7 @@ public class EzStorage {
 	 * @return task 
 	 */
 	public EzTask addTask(EzTask task){
+		
 		for(EzTask taskInList : listOfAllTasks)
 			if(taskInList.getId() > getLargestId())
 				setLargestId(taskInList.getId());
@@ -173,9 +174,9 @@ public class EzStorage {
     	if(startTime.before(cal1) && endTime.after(cal1) )
     		return true;
 
-    	else if(cal1.get(Calendar.YEAR) == startTime.get(Calendar.YEAR) &&
-    			cal1.get(Calendar.DAY_OF_YEAR) == startTime.get(Calendar.DAY_OF_YEAR) || cal1.get(Calendar.YEAR) == endTime.get(Calendar.YEAR) &&
-    			cal1.get(Calendar.DAY_OF_YEAR) == endTime.get(Calendar.DAY_OF_YEAR))
+    	else if(cal1.get(Calendar.YEAR) == startTime.get(Calendar.YEAR) && cal1.get(Calendar.MONTH) == startTime.get(Calendar.MONTH) &&
+    			cal1.get(Calendar.DAY_OF_MONTH) == startTime.get(Calendar.DAY_OF_MONTH)  || cal1.get(Calendar.YEAR) == endTime.get(Calendar.YEAR) &&
+    			cal1.get(Calendar.MONTH) == endTime.get(Calendar.MONTH) && cal1.get(Calendar.DAY_OF_MONTH) == endTime.get(Calendar.DAY_OF_MONTH))
     		return true;
 
 		return false;
@@ -289,10 +290,18 @@ public class EzStorage {
 		System.out.println(task.getTitle());
 	}
 
+	/**
+	 * Gets the largestId 
+	 * @return largestId
+	 */
 	public int getLargestId() {
 		return this.largestId;
 	}
 
+	/**
+	 * Assigns the largestId
+	 * @param largestId
+	 */
 	public void setLargestId(int largestId) {
 		this.largestId = largestId;
 	}
