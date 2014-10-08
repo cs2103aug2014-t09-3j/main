@@ -1,10 +1,11 @@
 /**
- * Task Object 
+ * Task Object  
  */
 
 /**
  * @author Khanh
  * modified by Cao Tianwen
+ * modified by Tun Leng
  */
 import java.util.*;
 
@@ -144,4 +145,32 @@ public class EzTask {
 	public void setDone(boolean done) {
 		this.done = done;
 	}
+	
+	
+	
+	public static Comparator<EzTask> TaskIdComparator = new Comparator<EzTask>() {
+
+		public int compare(EzTask task1, EzTask task2) {
+
+			int taskId1 = task1.getId();
+			int taskId2 = task2.getId();
+
+			//ascending order
+			return taskId1 - taskId2;
+
+		}
+
+
+	};
+	
+	public static Comparator<EzTask> TaskPriorityComparator = new Comparator<EzTask>() {
+
+		public int compare(EzTask task1, EzTask task2){
+
+			int taskPriority1 = task1.getPriority();
+			int taskPriority2 = task2.getPriority();
+
+			return taskPriority1 - taskPriority2;
+		}
+	};
 }

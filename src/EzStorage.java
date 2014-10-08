@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -143,9 +145,9 @@ public class EzStorage {
 	
 		ArrayList<EzTask> tasksByDate = new ArrayList<EzTask>();
 		for(EzTask task : listOfAllTasks)
-		if(checkByDate(date,task))
-			tasksByDate.add(task);
-		
+			if(checkByDate(date,task))
+				tasksByDate.add(task);
+
 		if(tasksByDate.isEmpty())
 			return null;
 		
@@ -158,11 +160,24 @@ public class EzStorage {
 	 * @return boolean
 	 */
 	private boolean checkByDate(Date date, EzTask task) {
-		if(task.getStartTime().before(date) && task.getEndTime().after(date) )
-			return true;
+		
+		Calendar cal1 = Calendar.getInstance();
+		Calendar startTime = Calendar.getInstance();
+		Calendar endTime = Calendar.getInstance();
+    	
+    	cal1.setTime(date);
+    	startTime.setTime(task.getStartTime().getTime());
+    	endTime.setTime(task.getEndTime().getTime());
 
-		else if(task.getStartTime().equals(date) || task.getEndTime().equals(date))
-			return true;
+    	
+
+    	if(task.getStartTime().before(cal1) && task.getEndTime().after(cal1) )
+    		return true;
+
+    	else if(cal1.get(Calendar.YEAR) == startTime.get(Calendar.YEAR) &&
+    			cal1.get(Calendar.DAY_OF_YEAR) == startTime.get(Calendar.DAY_OF_YEAR) || cal1.get(Calendar.YEAR) == endTime.get(Calendar.YEAR) &&
+    			cal1.get(Calendar.DAY_OF_YEAR) == endTime.get(Calendar.DAY_OF_YEAR))
+    		return true;
 
 		return false;
 	}
@@ -171,14 +186,13 @@ public class EzStorage {
 	 * this function returns a sorted ArrayList by id
 	 * @return ArrayList of tasksById or null
 	 */
+	@SuppressWarnings("unchecked")
 	public ArrayList<EzTask> getSortedTasksById(){
 		ArrayList <EzTask> tasksById = new ArrayList<EzTask>();
 		
-		for(EzTask task : listOfAllTasks)
-			for(int id = 0; id < largestId ; id++)
-				if(task.getId() == id)
-					tasksById.add(task);
+		tasksById = (ArrayList<EzTask>)listOfAllTasks.clone();
 		
+		Collections.sort(tasksById, EzTask.TaskIdComparator);
 		
 		if(tasksById.isEmpty())
 			return null;
@@ -188,23 +202,17 @@ public class EzStorage {
 					
 	}
 	
+	
 	/**
 	 * this function return a list of tasks, which is sorted by priority then by date.
 	 * @return ArrayList tasksByPriority or null
 	 */
+	@SuppressWarnings("unchecked")
 	public ArrayList<EzTask> getSortedTasksByPriority(){
 		
 		ArrayList<EzTask> tasksByPriority = new ArrayList<EzTask>();
-		for(EzTask task : listOfAllTasks)
-			for(int priority = 0; priority < EzConstants.MAXIMUM_PRIORITY ; priority++)
-			{
-				if(task.getPriority() == priority)
-					tasksByPriority.add(task);
-					
-			}
-		if(tasksByPriority.isEmpty())
-			return null;
-		
+		tasksByPriority = (ArrayList<EzTask>) listOfAllTasks.clone();
+		Collections.sort(tasksByPriority, EzTask.TaskPriorityComparator);
 		return tasksByPriority;
 				
 		
@@ -226,8 +234,8 @@ public class EzStorage {
 				
 				if(checkTitle(keyword, task))
 				{
-					
-					tasksWithKeywords.add(task);
+					if(!tasksWithKeywords.contains(task))
+						tasksWithKeywords.add(task);
 					//System.out.println(" taskwKeyword" + task.getTitle());
 				}
 
@@ -238,7 +246,7 @@ public class EzStorage {
 
 	}
 
-	public boolean checkTitle(String keyword, EzTask task) {
+	private boolean checkTitle(String keyword, EzTask task) {
 		
 		String titleToCheck = task.getTitle();
 		if(titleToCheck.contains(keyword))
