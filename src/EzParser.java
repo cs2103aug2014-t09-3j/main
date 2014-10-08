@@ -828,7 +828,7 @@ public class EzParser {
 				content=removeFirstWord(content);
 				if(getFirstWord(content).isEmpty())
 				{
-					targetsShow=storage.getSortedTasksByPriority();
+					targetsShow=storage.getSortedTasksById();
 				}
 				else if(getFirstWord(content).equalsIgnoreCase("on"))
 				{
@@ -884,7 +884,7 @@ public class EzParser {
 				content=removeFirstWord(content);
 				if(getFirstWord(content).isEmpty())
 				{
-					targetsShow=getDoneTasks(storage.getSortedTasksByPriority());
+					targetsShow=getDoneTasks(storage.getSortedTasksById());
 				}
 				else if(getFirstWord(content).equalsIgnoreCase("on"))
 				{
@@ -918,7 +918,7 @@ public class EzParser {
 				content=removeFirstWord(content);
 				if(getFirstWord(content).isEmpty())
 				{
-					targetsShow=getUndoneTasks(storage.getSortedTasksByPriority());
+					targetsShow=getUndoneTasks(storage.getSortedTasksById());
 				}
 				else if(getFirstWord(content).equalsIgnoreCase("on"))
 				{
