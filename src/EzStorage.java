@@ -113,7 +113,7 @@ public class EzStorage {
 	
 	/**
 	 * this method returns the number of tasks in the list.
-	 * @return listOfAllTasks.size()
+	 * @return size of task list
 	 */
 	public int getSize(){
 		return listOfAllTasks.size();
@@ -123,7 +123,7 @@ public class EzStorage {
 	/**
 	 * this method finds the task by ID and return it if found or else return null.
 	 * @param id
-	 * @return EzTask or null
+	 * @return EzTask 
 	 */
 	public EzTask findTask(int id){
 		for(EzTask task : listOfAllTasks)
@@ -159,6 +159,9 @@ public class EzStorage {
 	 * @return boolean
 	 */
 	private boolean checkByDate(Date date, EzTask task) {
+		
+		if(task.getEndTime() == null && task.getStartTime() == null)
+			return false;
 		
 		Calendar cal1 = Calendar.getInstance();
 		Calendar startTime = Calendar.getInstance();
