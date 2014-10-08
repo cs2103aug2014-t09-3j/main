@@ -148,8 +148,7 @@ public class EzStorage {
 			if(checkByDate(date,task))
 				tasksByDate.add(task);
 
-		if(tasksByDate.isEmpty())
-			return null;
+		
 		
 		return tasksByDate;
 	}
@@ -194,10 +193,7 @@ public class EzStorage {
 		
 		Collections.sort(tasksById, EzTask.TaskIdComparator);
 		
-		if(tasksById.isEmpty())
-			return null;
 		
-		else
 			return tasksById;
 					
 	}
