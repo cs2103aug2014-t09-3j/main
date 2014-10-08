@@ -630,7 +630,19 @@ public class EzParser {
 			{
 				content=removeFirstWord(content);
 				content=removeFirstWord(content);//now content is suppose to be the date
-				//find all tasks on the date and assign it to the arraylist.
+				if(readDate(content)[0]>=0)
+				{
+				int[] dateArr=new int[3];
+				dateArr[0]=readDate(content)[0];//find all tasks on the date and assign it to the arraylist.
+				dateArr[1]=readDate(content)[1];
+				dateArr[2]=readDate(content)[2];
+				Date date=new Date(dateArr[2],dateArr[1],dateArr[0]);
+				newAction.setTargets(storage.getTasksByDate(date));
+				}
+				else
+				{
+					newAction.setAction(TypeOfAction.INVALID);
+				}
 				
 			}
 			else if(getFirstWord(content).equalsIgnoreCase("from"))//"delete from .. to "
@@ -705,7 +717,25 @@ public class EzParser {
 				content=removeFirstWord(content);
 				content=removeFirstWord(content);//now content is suppose to be the date
 				//find all tasks on the date and assign it to the arraylist.
-				
+			  if(readDate(content)[0]>=0)
+			  {
+				int[] dateArr=new int[3];
+				dateArr[0]=readDate(content)[0];
+				dateArr[1]=readDate(content)[1];
+				dateArr[2]=readDate(content)[2];
+				Date date=new Date(dateArr[2],dateArr[1],dateArr[0]);
+				ArrayList<EzTask> temp=new ArrayList<EzTask> (storage.getTasksByDate(date));
+				newAction.setTargets(temp);
+				for(int i=0;i<storage.getTasksByDate(date).size();i++)
+				{
+					storage.getTasksByDate(date).get(i).setDone(true);
+				}
+				newAction.setResults(storage.getTasksByDate(date));
+				}
+			  else
+			  {
+			  	newAction.setAction(TypeOfAction.INVALID);
+			  }
 			}
 			else if(getFirstWord(content).equalsIgnoreCase("from"))//"done from .. to "
 			{
