@@ -35,7 +35,7 @@ public class EzController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			EzGUI.showContent("TitleAdd", storage.getSortedTasksByPriority());
+			EzGUI.showContent("TitleAdd", storage.getSortedTasksById());
 			break;
 			
 		case UPDATE:
@@ -48,7 +48,7 @@ public class EzController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			EzGUI.showContent("TitleUpdate", storage.getSortedTasksByPriority());
+			EzGUI.showContent("TitleUpdate", storage.getSortedTasksById());
 			break;
 			
 		case DELETE:
@@ -62,7 +62,7 @@ public class EzController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			EzGUI.showContent("TitleDelete", storage.getSortedTasksByPriority());
+			EzGUI.showContent("TitleDelete", storage.getSortedTasksById());
 			break;
 			
 		case DONE:
@@ -75,7 +75,7 @@ public class EzController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			EzGUI.showContent("TitleDone", storage.getSortedTasksByPriority());
+			EzGUI.showContent("TitleDone", storage.getSortedTasksById());
 			break;
 			
 		case UNDO:
@@ -90,7 +90,7 @@ public class EzController {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				EzGUI.showContent("UNDO", storage.getSortedTasksByPriority());
+				EzGUI.showContent("UNDO", storage.getSortedTasksById());
 				
 			}
 			break;
@@ -107,12 +107,13 @@ public class EzController {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				EzGUI.showContent("REDO", storage.getSortedTasksByPriority());
+				EzGUI.showContent("REDO", storage.getSortedTasksById());
 			}
 			break;
 			
 		case SHOW:
-			
+			ArrayList<EzTask> toBeShown = userAction.getTargets();
+			EzGUI.showContent("Display", toBeShown);
 			break;
 			
 		case HELP:
