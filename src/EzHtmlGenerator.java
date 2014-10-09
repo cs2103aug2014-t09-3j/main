@@ -64,28 +64,24 @@ public class EzHtmlGenerator {
 		GregorianCalendar date2 = task.getEndTime();
 		ArrayList<String> list = new ArrayList<String>();
 		
-		if (date1==date2) {
-			if (date1==null){
-				return "";
-			} else {
+		if ((date1==null) || (date2==null)){
+			return "";
+		}
+		else {
+			if (date1.equals(date2)){
 				list.add(createHtmlCalendar(date1));
 				if ((date1.get(Calendar.HOUR_OF_DAY)!=0) || (date1.get(Calendar.MINUTE)!=0)){
 					list.add(createHtmlClock(date1));
 				}
-			}
-		} else {
-			list.add(createHtmlCalendar(date1));
-			if (((date1.get(Calendar.HOUR_OF_DAY)!=0) || (date1.get(Calendar.MINUTE)!=0)) 
-					|| ((date2.get(Calendar.HOUR_OF_DAY)!=0) || (date2.get(Calendar.MINUTE)!=0))){
+			} else {
+				list.add(createHtmlCalendar(date1));
 				list.add(createHtmlClock(date1));
-			}
-			list.add(createHtmlImg("image/rightArrow.png"));
-			if ((date1.get(Calendar.YEAR) != date2.get(Calendar.YEAR))
-					|| (date1.get(Calendar.MONTH) != date2.get(Calendar.MONTH))
-					|| (date1.get(Calendar.DATE) != date2.get(Calendar.DATE))){
-				list.add(createHtmlCalendar(date2));
-			}
-			if ((date2.get(Calendar.HOUR_OF_DAY)!=0) || (date2.get(Calendar.MINUTE)!=0)){
+				list.add(createHtmlImg("image/rightArrow.png"));
+				if ((date1.get(Calendar.YEAR) != date2.get(Calendar.YEAR))
+						|| (date1.get(Calendar.MONTH) != date2.get(Calendar.MONTH))
+						|| (date1.get(Calendar.DATE) != date2.get(Calendar.DATE))){
+					list.add(createHtmlCalendar(date2));
+				}
 				list.add(createHtmlClock(date2));
 			}
 		}
