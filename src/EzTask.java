@@ -170,7 +170,7 @@ public class EzTask {
 			int taskPriority1 = task1.getPriority();
 			int taskPriority2 = task2.getPriority();
 
-			return taskPriority1 - taskPriority2;
+			return taskPriority2 - taskPriority1;
 		}
 	};
 }
