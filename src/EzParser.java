@@ -519,7 +519,7 @@ public class EzParser {
 							if (readTime(content)[0] < 0) {
 							newAction.setAction(TypeOfAction.INVALID);
 							}
-							System.out.println(dateUpdate[3]);
+						
 							calendarUpdate.set(GregorianCalendar.HOUR_OF_DAY,
 									dateUpdate[3]);
 							calendarUpdate.set(GregorianCalendar.MINUTE,
@@ -633,14 +633,13 @@ public class EzParser {
 				content=removeFirstWord(content);//now content is suppose to be the date
 				if(readDate(content)[0]>=0)
 				{
-					System.out.println(content);
+					
 				int[] dateArrDelete=new int[3];
 				dateArrDelete[0]=readDate(content)[0];//find all tasks on the date and assign it to the arraylist.
 				dateArrDelete[1]=readDate(content)[1];
 				dateArrDelete[2]=readDate(content)[2];
 				
-				Date dateDelete=new Date(dateArrDelete[2],dateArrDelete[1]-1,dateArrDelete[0]);
-				System.out.println(storage.getTasksByDate(dateDelete));
+				Date dateDelete=new Date(dateArrDelete[2]-1900,dateArrDelete[1]-1,dateArrDelete[0]);
 				
 				newAction.setTargets(storage.getTasksByDate(dateDelete));
 				}
@@ -728,9 +727,10 @@ public class EzParser {
 				dateArrDone[0]=readDate(content)[0];
 				dateArrDone[1]=readDate(content)[1];
 				dateArrDone[2]=readDate(content)[2];
-				Date dateDone=new Date(dateArrDone[2],dateArrDone[1],dateArrDone[0]);
-				System.out.println(storage.getTasksByDate(dateDone));
-				ArrayList<EzTask> temp=new ArrayList<EzTask> (storage.getTasksByDate(dateDone));
+				
+				Date dateDone=new Date(dateArrDone[2]-1900,dateArrDone[1]-1,dateArrDone[0]);
+			
+				ArrayList<EzTask> temp=new ArrayList<EzTask>(storage.getTasksByDate(dateDone));
 				newAction.setTargets(temp);
 				for(int i=0;i<storage.getTasksByDate(dateDone).size();i++)
 				{
@@ -832,11 +832,44 @@ public class EzParser {
 				}
 				else if(getFirstWord(content).equalsIgnoreCase("on"))
 				{
+					content=removeFirstWord(content);
+					System.out.println(content);
+					if(readDate(content)[0]>=0)
+					  {
+						int[] dateArrShow=new int[3];
+						dateArrShow[0]=readDate(content)[0];
+						dateArrShow[1]=readDate(content)[1];
+						dateArrShow[2]=readDate(content)[2];
+						
+						Date dateShow=new Date(dateArrShow[2]-1900,dateArrShow[1]-1,dateArrShow[0]);
+					    targetsShow=storage.getTasksByDate(dateShow);
+					  }
+					  else
+					  {
+					  	newAction.setAction(TypeOfAction.INVALID);
+					  }
 					
 				}
 				else if(getFirstWord(content).equalsIgnoreCase("have"))
 				{
+					content=removeFirstWord(content);
+					System.out.println(content);
+					ArrayList<String> keywords=new ArrayList<String>();
 					
+					while(!content.isEmpty())
+					{
+						if(getFirstWord(content).indexOf("\"")==0&&
+								getFirstWord(content).indexOf("\"",1)==getFirstWord(content).length()-1)
+						{
+							keywords.add(getFirstWord(content).substring(1, getFirstWord(content).length()-1));
+							content=removeFirstWord(content);
+						}
+						else
+						{
+							newAction.setAction(TypeOfAction.INVALID);
+						}
+					}
+					targetsShow=storage.getTasksByKeywords(keywords);
 				}
 				else
 				{
@@ -855,6 +888,22 @@ public class EzParser {
 				}
 				else if(getFirstWord(content).equalsIgnoreCase("on"))
 				{
+					content=removeFirstWord(content);
+					System.out.println(content);
+					if(readDate(content)[0]>=0)
+					  {
+						int[] dateArrShowDone=new int[3];
+						dateArrShowDone[0]=readDate(content)[0];
+						dateArrShowDone[1]=readDate(content)[1];
+						dateArrShowDone[2]=readDate(content)[2];
+						
+						Date dateShowDone=new Date(dateArrShowDone[2]-1900,dateArrShowDone[1]-1,dateArrShowDone[0]);
+					    targetsShow=getDoneTasks(storage.getTasksByDate(dateShowDone));
+					  }
+					  else
+					  {
+					  	newAction.setAction(TypeOfAction.INVALID);
+					  }
 					
 				}
 				else
@@ -873,6 +922,22 @@ public class EzParser {
 				}
 				else if(getFirstWord(content).equalsIgnoreCase("on"))
 				{
+					content=removeFirstWord(content);
+					System.out.println(content);
+					if(readDate(content)[0]>=0)
+					  {
+						int[] dateArrShowUndone=new int[3];
+						dateArrShowUndone[0]=readDate(content)[0];
+						dateArrShowUndone[1]=readDate(content)[1];
+						dateArrShowUndone[2]=readDate(content)[2];
+						
+						Date dateShowUndone=new Date(dateArrShowUndone[2]-1900,dateArrShowUndone[1]-1,dateArrShowUndone[0]);
+					    targetsShow=getUndoneTasks(storage.getTasksByDate(dateShowUndone));
+					  }
+					  else
+					  {
+					  	newAction.setAction(TypeOfAction.INVALID);
+					  }
 					
 				}
 				else

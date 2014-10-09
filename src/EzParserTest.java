@@ -374,25 +374,25 @@ public class EzParserTest {
 		assertEquals("Check type of action: ", TypeOfAction.SHOW, action.getAction());
 		assertTrue("Check target is not null: ", action.getTargets() != null);
 		assertTrue("Check result is the same pointer as target: ", action.getTargets() == action.getResults());
-	//	assertEquals("Check size of the target: ", 3, action.getTargets().size());
+		assertEquals("Check size of the target: ", 3, action.getTargets().size());
 		
 		action = EzParser.extractInfo("Show done on 27/7/2014",storage);	
 		assertEquals("Check type of action: ", TypeOfAction.SHOW, action.getAction());
 		assertTrue("Check target is not null: ", action.getTargets() != null);
 		assertTrue("Check result is the same pointer as target: ", action.getTargets() == action.getResults());
-	//	assertEquals("Check size of the target: ", 1, action.getTargets().size());
+		assertEquals("Check size of the target: ", 1, action.getTargets().size());
 		
 		action = EzParser.extractInfo("Show undone on 27/7/2014",storage);	
 		assertEquals("Check type of action: ", TypeOfAction.SHOW, action.getAction());
 		assertTrue("Check target is not null: ", action.getTargets() != null);
 		assertTrue("Check result is the same pointer as target: ", action.getTargets() == action.getResults());
-		//assertEquals("Check size of the target: ", 2, action.getTargets().size());
+		assertEquals("Check size of the target: ", 2, action.getTargets().size());
 		
 		action = EzParser.extractInfo("Show all have \"aa\" \"ba\"",storage);	
 		assertEquals("Check type of action: ", TypeOfAction.SHOW, action.getAction());
 		assertTrue("Check target is not null: ", action.getTargets() != null);
 		assertTrue("Check result is the same pointer as target: ", action.getTargets() == action.getResults());
-	//	assertEquals("Check size of the target: ", 3, action.getTargets().size());
+		assertEquals("Check size of the target: ", 3, action.getTargets().size());
 		
 	}
 	
