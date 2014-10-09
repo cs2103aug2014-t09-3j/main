@@ -151,7 +151,7 @@ public class EzParser {
 			if (content.indexOf("*") >= 0)// see if there is any * indicating
 											// priority
 			{
-				if ((content.lastIndexOf("*") - content.indexOf("*")) <= 2)// maximum
+				if ((content.lastIndexOf("*") - content.indexOf("*")) <= EzConstants.MAXIMUM_PRIORITY-1)// maximum
 																			// priority
 																			// is
 																			// 3
