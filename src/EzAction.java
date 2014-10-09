@@ -9,6 +9,7 @@ import java.util.*;
  * for UPDATE action, targets and results are the list of task before and after doing the action respectively.
  * for DELETE action, targets is the list of tasks that will be delete while results is NULL.
  * for DONE action, it is the same as UPDATE. 
+ * 
  */
 
 /**
@@ -22,6 +23,7 @@ public class EzAction {
 	private TypeOfAction action;
 	private ArrayList<EzTask> targets;
 	private ArrayList<EzTask> results;
+	private String feedback;
 	
 	/**
 	 *  These attributes are necessary for ADD, UPDATE, DELETE and DONE.
@@ -52,6 +54,14 @@ public class EzAction {
 
 	public void setResults(ArrayList<EzTask> results) {
 		this.results = results;
+	}
+
+	public String getFeedback() {
+		return feedback;
+	}
+
+	public void setFeedback(String feedback) {
+		this.feedback = feedback;
 	}
 	
 	
