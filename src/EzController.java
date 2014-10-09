@@ -325,7 +325,7 @@ public class EzController {
 					}
 					storage.addTask(temp);
 				}
-				EzGUI.showContent("Loaded from file", storage.getSortedTasksByPriority());
+				EzGUI.showContent("Loaded from file", storage.getSortedTasksById());
 				rd.close();
 			}
 		} 
