@@ -833,7 +833,7 @@ public class EzParser {
 				else if(getFirstWord(content).equalsIgnoreCase("on"))
 				{
 					content=removeFirstWord(content);
-					System.out.println(content);
+					
 					if(readDate(content)[0]>=0)
 					  {
 						int[] dateArrShow=new int[3];
@@ -853,7 +853,7 @@ public class EzParser {
 				else if(getFirstWord(content).equalsIgnoreCase("have"))
 				{
 					content=removeFirstWord(content);
-					System.out.println(content);
+					
 					ArrayList<String> keywords=new ArrayList<String>();
 					
 					while(!content.isEmpty())
@@ -889,7 +889,7 @@ public class EzParser {
 				else if(getFirstWord(content).equalsIgnoreCase("on"))
 				{
 					content=removeFirstWord(content);
-					System.out.println(content);
+					
 					if(readDate(content)[0]>=0)
 					  {
 						int[] dateArrShowDone=new int[3];
@@ -923,7 +923,7 @@ public class EzParser {
 				else if(getFirstWord(content).equalsIgnoreCase("on"))
 				{
 					content=removeFirstWord(content);
-					System.out.println(content);
+					
 					if(readDate(content)[0]>=0)
 					  {
 						int[] dateArrShowUndone=new int[3];
