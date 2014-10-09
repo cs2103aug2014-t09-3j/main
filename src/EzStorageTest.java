@@ -113,13 +113,11 @@ public class EzStorageTest {
 		assertTrue("Check list is not null: ", list!=null);
 		assertEquals("Check size of list: ", 5, list.size());
 	
-		assertEquals("Check id: ", 0, list.get(0).getPriority());
-		assertEquals("Check id: ", 1, list.get(1).getPriority());
+		assertEquals("Check id: ", 3, list.get(0).getPriority());
+		assertEquals("Check id: ", 3, list.get(1).getPriority());
 		assertEquals("Check id: ", 2, list.get(2).getPriority());
-		assertEquals("Check id: ", 3, list.get(3).getPriority());
-		//System.out.println(list.get(4).getTitle());
-		//it seems this priority should be 3? there's no four asterisks
-		assertEquals("Check id: ", 3, list.get(4).getPriority());
+		assertEquals("Check id: ", 1, list.get(3).getPriority());
+		assertEquals("Check id: ", 0, list.get(4).getPriority());
 	}
 	
 	@Test
