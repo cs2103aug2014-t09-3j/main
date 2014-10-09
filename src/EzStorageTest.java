@@ -310,6 +310,6 @@ public class EzStorageTest {
 	}
 
 	private void checkNumTask(EzStorage storage, int expectedNumber){
-		assertEquals("checkNumTasks: " , expectedNumber, storage.largestId);
+		assertEquals("checkNumTasks: " , expectedNumber, storage.getLargestId());
 	}
 }

@@ -19,21 +19,21 @@ public class EzStorage {
 	private ArrayList<EzTask> listOfAllTasks = new ArrayList<EzTask>();
 	
 	//largestId represents the task Id with the greatest value in listOfAllTasks 
-	int largestId = 0;
+	private int largestId = 0;
 
 
 	/**
-	 * this function just simply adds the task to the list then return it.
+	 * this method just simply adds the task to the list then return it.
 	 * @param task
 	 * @return task 
 	 */
 	public EzTask addTask(EzTask task){
 		for(EzTask taskInList : listOfAllTasks)
-			if(taskInList.getId() > largestId)
-				largestId = taskInList.getId();
+			if(taskInList.getId() > getLargestId())
+				setLargestId(taskInList.getId());
 		
-		if(task.getId() > largestId)
-			largestId = task.getId() + 1;
+		if(task.getId() > getLargestId())
+			setLargestId(task.getId() + 1);
 		
 		
 		listOfAllTasks.add(task);
@@ -44,23 +44,22 @@ public class EzStorage {
 	}
 	
 	/**
-	 * this function adds the task to the list and provides an unique ID for the task then return it.
+	 * this method adds the task to the list and provides an unique ID for the task then return it.
 	 * @param task
 	 * @return task with new id
 	 */
 	public EzTask addTaskWithNewId(EzTask task){
 		
-
 		listOfAllTasks.add(task);
-		task.setId(largestId);
-		largestId++;
+		task.setId(getLargestId());
+		setLargestId(getLargestId() + 1);
 		
 		return task;
 		
 	}
 	
 	/**
-	 * this function replaces the tasks with certain ID in the original list, with the new tasks carrying the same ID in the new list.
+	 * this method replaces the tasks with certain ID in the original list, with the new tasks carrying the same ID in the new list.
 	 * @param listOfTasksUpdated
 	 * @return the number of tasks found and replaced.
 	 */
@@ -87,7 +86,7 @@ public class EzStorage {
 	}
 	
 	/**
-	 * this function removes the task having the id as the id of the tasks from the listOfTasks
+	 * this method removes the task having the id as the id of the tasks from the listOfTasks
 	 * @param listOfTasks
 	 * @return the number of tasks found and removed.
 	 */
@@ -112,8 +111,8 @@ public class EzStorage {
 	}
 	
 	/**
-	 * this function returns the number of tasks in the list.
-	 * @return
+	 * this method returns the number of tasks in the list.
+	 * @return listOfAllTasks.size()
 	 */
 	public int getSize(){
 		return listOfAllTasks.size();
@@ -121,7 +120,7 @@ public class EzStorage {
 	}
 	
 	/**
-	 * this function finds the task by ID and return it if found or else return null.
+	 * this method finds the task by ID and return it if found or else return null.
 	 * @param id
 	 * @return EzTask or null
 	 */
@@ -137,7 +136,7 @@ public class EzStorage {
 	}
 	
 	/**
-	 * this function finds all the tasks on the date and return that list.
+	 * this method finds all the tasks on the date and return that list.
 	 * @param date
 	 * @return ArrayList called tasksByDate or null
 	 */
@@ -154,8 +153,8 @@ public class EzStorage {
 		return tasksByDate;
 	}
 	
-	/*
-	 * this function returns true if the the task falls on the date specified.
+	/**
+	 * this method returns true if the the task falls on the date specified.
 	 * @param date, task
 	 * @return boolean
 	 */
@@ -171,7 +170,7 @@ public class EzStorage {
 
     	
 
-    	if(task.getStartTime().before(cal1) && task.getEndTime().after(cal1) )
+    	if(startTime.before(cal1) && endTime.after(cal1) )
     		return true;
 
     	else if(cal1.get(Calendar.YEAR) == startTime.get(Calendar.YEAR) &&
@@ -182,8 +181,8 @@ public class EzStorage {
 		return false;
 	}
 
-	/*
-	 * this function returns a sorted ArrayList by id
+	/**
+	 * this method returns a sorted ArrayList by id
 	 * @return ArrayList of tasksById or null
 	 */
 	@SuppressWarnings("unchecked")
@@ -204,7 +203,7 @@ public class EzStorage {
 	
 	
 	/**
-	 * this function return a list of tasks, which is sorted by priority then by date.
+	 * this method return a list of tasks, which is sorted by priority then by date.
 	 * @return ArrayList tasksByPriority or null
 	 */
 	@SuppressWarnings("unchecked")
@@ -219,7 +218,7 @@ public class EzStorage {
 	}
 	
 	/**
-	 * this function return a list of tasks, which contain one or more words in the keywords.
+	 * this method return a list of tasks, which contain one or more words in the keywords.
 	 * @param listOfKeywords
 	 * @return ArrayList tasksWithKeywords
 	 */
@@ -246,6 +245,11 @@ public class EzStorage {
 
 	}
 
+	/**
+	 * This method checks whether the keyword is present in the task's title
+	 * @param String keyword, EzTask task
+	 * @return boolean
+	 */
 	private boolean checkTitle(String keyword, EzTask task) {
 		
 		String titleToCheck = task.getTitle();
@@ -257,13 +261,40 @@ public class EzStorage {
 		
 	}
 	
+	public ArrayList<String> getHelpCommand(){
+		//TODO
+	
+		return null;
+	}
+	
+	public ArrayList<String> getHelpCommand(String word){
+		//TODO
+		return null;
+	}
+	
+	/**
+	 * This method clears the ArrayList passed into it
+	 * @param ArrayList list
+	 * @return void
+	 */
 	private void clearList(ArrayList list){
 		list.clear();
 	}
 
+	/**
+	 * This method prints the title of each task in the ArrayList
+	 */
 	public void printList() {
 		for(EzTask task: listOfAllTasks)
 		System.out.println(task.getTitle());
+	}
+
+	public int getLargestId() {
+		return this.largestId;
+	}
+
+	public void setLargestId(int largestId) {
+		this.largestId = largestId;
 	}
 	
 	
