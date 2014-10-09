@@ -235,7 +235,7 @@ public class EzParser {
 				if (readTime(time)[0] < 0) {
 					newAction.setAction(TypeOfAction.INVALID);
 				}
-				calendar.set(GregorianCalendar.HOUR, dateArr[3]);
+				calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
 				calendar.set(GregorianCalendar.MINUTE, dateArr[4]);
 				task.setStartTime(calendar);
 				task.setEndTimeAsStartTime();
@@ -315,12 +315,12 @@ public class EzParser {
 								&& readTime(end)[0] >= 0) {
 							dateArr[3] = readTime(start)[0];
 							dateArr[4] = readTime(start)[1];
-							calendar.set(GregorianCalendar.HOUR, dateArr[3]);
+							calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
 							calendar.set(GregorianCalendar.MINUTE, dateArr[4]);
 							task.setStartTime(calendar);
 							dateArr[3] = readTime(end)[0];
 							dateArr[4] = readTime(end)[1];
-							calendar.set(GregorianCalendar.HOUR, dateArr[3]);
+							calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
 							calendar.set(GregorianCalendar.MINUTE, dateArr[4]);
 							task.setEndTime(calendar);
 						}
@@ -352,12 +352,12 @@ public class EzParser {
 
 							dateArr[3] = readTime(start2)[0];
 							dateArr[4] = readTime(start2)[1];
-							calendar.set(GregorianCalendar.HOUR, dateArr[3]);
+							calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
 							calendar.set(GregorianCalendar.MINUTE, dateArr[4]);
 							task.setStartTime(calendar);
 							dateArr[3] = readTime(end2)[0];
 							dateArr[4] = readTime(end2)[1];
-							calendar.set(GregorianCalendar.HOUR, dateArr[3]);
+							calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
 							calendar.set(GregorianCalendar.MINUTE, dateArr[4]);
 							task.setEndTime(calendar);
 						} else if ((readDate(start2)[0] >= 0 && readDate(end2)[0] >= 0)
@@ -377,12 +377,12 @@ public class EzParser {
 
 							dateArr[3] = readTime(start1)[0];
 							dateArr[4] = readTime(start1)[1];
-							calendar.set(GregorianCalendar.HOUR, dateArr[3]);
+							calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
 							calendar.set(GregorianCalendar.MINUTE, dateArr[4]);
 							task.setStartTime(calendar);
 							dateArr[3] = readTime(end1)[0];
 							dateArr[4] = readTime(end1)[1];
-							calendar.set(GregorianCalendar.HOUR, dateArr[3]);
+							calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
 							calendar.set(GregorianCalendar.MINUTE, dateArr[4]);
 							task.setEndTime(calendar);
 						} else {
@@ -472,7 +472,7 @@ public class EzParser {
 						if (readTime(content)[0] < 0) {
 							newAction.setAction(TypeOfAction.INVALID);
 						}
-						calendarUpdate.set(GregorianCalendar.HOUR,
+						calendarUpdate.set(GregorianCalendar.HOUR_OF_DAY,
 								dateUpdate[3]);
 						calendarUpdate.set(GregorianCalendar.MINUTE,
 								dateUpdate[4]);
@@ -519,7 +519,8 @@ public class EzParser {
 							if (readTime(content)[0] < 0) {
 							newAction.setAction(TypeOfAction.INVALID);
 							}
-							calendarUpdate.set(GregorianCalendar.HOUR,
+							System.out.println(dateUpdate[3]);
+							calendarUpdate.set(GregorianCalendar.HOUR_OF_DAY,
 									dateUpdate[3]);
 							calendarUpdate.set(GregorianCalendar.MINUTE,
 									dateUpdate[4]);
@@ -565,7 +566,7 @@ public class EzParser {
 							if (readTime(content)[0] < 0) {
 							//	newAction.setAction(TypeOfAction.INVALID);
 							}
-							calendarUpdate.set(GregorianCalendar.HOUR,
+							calendarUpdate.set(GregorianCalendar.HOUR_OF_DAY,
 									dateUpdate[3]);
 							calendarUpdate.set(GregorianCalendar.MINUTE,
 									dateUpdate[4]);
@@ -632,12 +633,16 @@ public class EzParser {
 				content=removeFirstWord(content);//now content is suppose to be the date
 				if(readDate(content)[0]>=0)
 				{
-				int[] dateArr=new int[3];
-				dateArr[0]=readDate(content)[0];//find all tasks on the date and assign it to the arraylist.
-				dateArr[1]=readDate(content)[1];
-				dateArr[2]=readDate(content)[2];
-				Date date=new Date(dateArr[2],dateArr[1],dateArr[0]);
-				newAction.setTargets(storage.getTasksByDate(date));
+					System.out.println(content);
+				int[] dateArrDelete=new int[3];
+				dateArrDelete[0]=readDate(content)[0];//find all tasks on the date and assign it to the arraylist.
+				dateArrDelete[1]=readDate(content)[1];
+				dateArrDelete[2]=readDate(content)[2];
+				
+				Date dateDelete=new Date(dateArrDelete[2],dateArrDelete[1]-1,dateArrDelete[0]);
+				System.out.println(storage.getTasksByDate(dateDelete));
+				
+				newAction.setTargets(storage.getTasksByDate(dateDelete));
 				}
 				else
 				{
@@ -719,18 +724,19 @@ public class EzParser {
 				//find all tasks on the date and assign it to the arraylist.
 			  if(readDate(content)[0]>=0)
 			  {
-				int[] dateArr=new int[3];
-				dateArr[0]=readDate(content)[0];
-				dateArr[1]=readDate(content)[1];
-				dateArr[2]=readDate(content)[2];
-				Date date=new Date(dateArr[2],dateArr[1],dateArr[0]);
-				ArrayList<EzTask> temp=new ArrayList<EzTask> (storage.getTasksByDate(date));
+				int[] dateArrDone=new int[3];
+				dateArrDone[0]=readDate(content)[0];
+				dateArrDone[1]=readDate(content)[1];
+				dateArrDone[2]=readDate(content)[2];
+				Date dateDone=new Date(dateArrDone[2],dateArrDone[1],dateArrDone[0]);
+				System.out.println(storage.getTasksByDate(dateDone));
+				ArrayList<EzTask> temp=new ArrayList<EzTask> (storage.getTasksByDate(dateDone));
 				newAction.setTargets(temp);
-				for(int i=0;i<storage.getTasksByDate(date).size();i++)
+				for(int i=0;i<storage.getTasksByDate(dateDone).size();i++)
 				{
-					storage.getTasksByDate(date).get(i).setDone(true);
+					storage.getTasksByDate(dateDone).get(i).setDone(true);
 				}
-				newAction.setResults(storage.getTasksByDate(date));
+				newAction.setResults(storage.getTasksByDate(dateDone));
 				}
 			  else
 			  {
