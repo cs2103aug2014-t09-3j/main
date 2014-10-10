@@ -30,6 +30,8 @@ public class EzSort {
 	
 	/**
 	 * return the target sorted by Priority
+	 * greatest priority comes first
+	 * 
 	 * @param target
 	 * @return
 	 */
