@@ -30,7 +30,7 @@ public class EzController {
 			addHistory(userAction);
 			storage.addTaskWithNewId(task);
 			try {
-				saveToFile();
+				EzDataManage.saveToFile(storage);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -43,7 +43,7 @@ public class EzController {
 			checkPos();
 			addHistory(userAction);
 			try {
-				saveToFile();
+				EzDataManage.saveToFile(storage);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -57,7 +57,7 @@ public class EzController {
 			storage.deleteTask(toBeDeleted);
 			addHistory(userAction);
 			try {
-				saveToFile();
+				EzDataManage.saveToFile(storage);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -70,7 +70,7 @@ public class EzController {
 			checkPos();
 			addHistory(userAction);
 			try {
-				saveToFile();
+				EzDataManage.saveToFile(storage);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -85,7 +85,7 @@ public class EzController {
 			else {
 				undoTask();
 				try {
-					saveToFile();
+					EzDataManage.saveToFile(storage);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -102,7 +102,7 @@ public class EzController {
 			else {
 				redoTask();
 				try {
-					saveToFile();
+					EzDataManage.saveToFile(storage);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -192,7 +192,7 @@ public class EzController {
 		}
 	}
 	
-	public static void saveToFile() throws IOException {
+	/*public static void saveToFile() throws IOException {
 		EzBinaryWriter writer = new EzBinaryWriter("external.ezt");
 		
 		ArrayList<EzTask> tempStorage = storage.getSortedTasksByPriority();
@@ -334,6 +334,10 @@ public class EzController {
 			EzBinaryWriter write = new EzBinaryWriter("external.ezt");
 		}
 		
+	}*/
+	
+	public static void loadFromFile() throws IOException {
+		EzDataManage.loadFromFile(storage);
 	}
 	
 	public void refresh(){
