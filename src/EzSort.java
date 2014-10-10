@@ -17,6 +17,8 @@ public class EzSort {
 	 */
 	public static ArrayList<EzTask> sortById(ArrayList<EzTask> target){
 		
+		
+		return target;
 	}
 	
 	/**
@@ -26,6 +28,7 @@ public class EzSort {
 	 */
 	public static ArrayList<EzTask> sortByDate(ArrayList<EzTask> target){
 		
+		return target;
 	}
 	
 	/**
@@ -37,6 +40,7 @@ public class EzSort {
 	 */
 	public static ArrayList<EzTask> sortByPriority(ArrayList<EzTask> target){
 		
+		return target;
 	}
 	
 	/**
@@ -46,6 +50,7 @@ public class EzSort {
 	 */
 	public static ArrayList<EzTask> sortByTitle(ArrayList<EzTask> target){
 		
+		return target;
 	}
 	
 	/**
@@ -55,6 +60,7 @@ public class EzSort {
 	 */
 	public static ArrayList<EzTask> sortByVenue(ArrayList<EzTask> target){
 		
+		return target;
 	}
 	
 	/**
@@ -66,6 +72,7 @@ public class EzSort {
 	 */
 	public static ArrayList<EzTask> sortByDone(ArrayList<EzTask> target){
 		
+		return target;
 	}
 	
 	
