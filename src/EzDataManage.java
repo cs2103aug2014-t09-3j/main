@@ -9,7 +9,8 @@ public class EzDataManage {
 	public static void saveToFile(EzStorage storage) throws IOException {
 		EzBinaryWriter writer = new EzBinaryWriter("external.ezt");
 		
-		ArrayList<EzTask> tempStorage = storage.getSortedTasksByPriority();
+		
+		ArrayList<EzTask> tempStorage = EzSort.sortByPriority(storage.getListOfAllTasks());
 		writer.write(tempStorage.size(), 4);
 		for(int i = 0; i < tempStorage.size(); i++) {
 			int typeOfTask;
@@ -139,7 +140,8 @@ public class EzDataManage {
 					}
 					storage.addTask(temp);
 				}
-				EzGUI.showContent("Loaded from file", storage.getSortedTasksById());
+				ArrayList<EzTask> loadedList = storage.getListOfAllTasks();
+				EzGUI.showContent("Loaded from file", EzSort.sortById(loadedList));
 				rd.close();
 			}
 		} 

@@ -38,7 +38,8 @@ public class EzController {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				EzGUI.showContent("TitleAdd", storage.getSortedTasksById());
+				ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+				EzGUI.showContent("TitleAdd", EzSort.sortById(updatedList));
 			}
 			break;
 			
@@ -53,7 +54,8 @@ public class EzController {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				EzGUI.showContent("TitleUpdate", storage.getSortedTasksById());
+				ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+				EzGUI.showContent("TitleUpdate", EzSort.sortById(updatedList));
 			}
 			break;
 			
@@ -77,14 +79,16 @@ public class EzController {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				EzGUI.showContent("Tasks Deleted", storage.getSortedTasksById());
+				ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+				EzGUI.showContent("Tasks Deleted", EzSort.sortById(updatedList));
 				confirmation = false;
 			}
 			break;
 		
 		case N:
 			if (confirmation){
-				EzGUI.showContent("All Tasks", storage.getSortedTasksById());
+				ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+				EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
 				confirmation = false;
 			}
 			break;
@@ -99,7 +103,8 @@ public class EzController {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				EzGUI.showContent("TitleDone", storage.getSortedTasksById());
+				ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+				EzGUI.showContent("TitleDone", EzSort.sortById(updatedList));
 			}
 			break;
 			
@@ -116,7 +121,8 @@ public class EzController {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					EzGUI.showContent("UNDO", storage.getSortedTasksById());
+					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+					EzGUI.showContent("UNDO", EzSort.sortById(updatedList));
 					
 				}
 			}
@@ -135,7 +141,8 @@ public class EzController {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					EzGUI.showContent("REDO", storage.getSortedTasksById());
+					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+					EzGUI.showContent("REDO", EzSort.sortById(updatedList));
 				}
 			}
 			break;
