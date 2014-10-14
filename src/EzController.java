@@ -39,7 +39,7 @@ public class EzController {
 					e.printStackTrace();
 				}
 				ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-				EzGUI.showContent("TitleAdd", EzSort.sortById(updatedList));
+				EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
 			}
 			break;
 			
@@ -55,7 +55,7 @@ public class EzController {
 					e.printStackTrace();
 				}
 				ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-				EzGUI.showContent("TitleUpdate", EzSort.sortById(updatedList));
+				EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
 			}
 			break;
 			
@@ -64,7 +64,12 @@ public class EzController {
 				deleteAction = userAction;
 				ArrayList<EzTask> toBeDeleted = userAction.getTargets();
 				confirmation = true;
-				EzGUI.showContent("Do you want to delete these tasks? (Y/N)", toBeDeleted);
+				if(toBeDeleted.size() == 1) {
+					EzGUI.showContent("Are you sure to delete this task? (Y/N)", toBeDeleted);
+				}
+				else if(toBeDeleted.size() > 1) {
+					EzGUI.showContent("Are you sure to delete these tasks? (Y/N)", toBeDeleted);
+				}
 			}
 			break;
 		
@@ -104,7 +109,7 @@ public class EzController {
 					e.printStackTrace();
 				}
 				ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-				EzGUI.showContent("TitleDone", EzSort.sortById(updatedList));
+				EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
 			}
 			break;
 			
@@ -122,7 +127,7 @@ public class EzController {
 						e.printStackTrace();
 					}
 					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-					EzGUI.showContent("UNDO", EzSort.sortById(updatedList));
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
 					
 				}
 			}
@@ -142,7 +147,7 @@ public class EzController {
 						e.printStackTrace();
 					}
 					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-					EzGUI.showContent("REDO", EzSort.sortById(updatedList));
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
 				}
 			}
 			break;
@@ -150,7 +155,7 @@ public class EzController {
 		case SHOW:
 			if (!confirmation){
 				ArrayList<EzTask> toBeShown = userAction.getTargets();
-				EzGUI.showContent("Display", toBeShown);
+				EzGUI.showContent("Result", toBeShown);
 			}
 			break;
 			
