@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * 
@@ -15,10 +17,18 @@ public class EzSort {
 	 * @param target
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static ArrayList<EzTask> sortById(ArrayList<EzTask> target){
 		
-		
-		return target;
+		ArrayList <EzTask> tasksById = new ArrayList<EzTask>();
+
+		tasksById = (ArrayList<EzTask>)target.clone();
+
+		Collections.sort(tasksById, EzTask.TaskIdComparator);
+
+
+		return tasksById;
+	
 	}
 	
 	/**
@@ -27,9 +37,11 @@ public class EzSort {
 	 * @return
 	 */
 	public static ArrayList<EzTask> sortByDate(ArrayList<EzTask> target){
-		
-		return target;
+		ArrayList<EzTask> tasksByDate = (ArrayList<EzTask>) target.clone();
+		Collections.sort(tasksByDate, EzTask.TaskDateComparator);
+		return tasksByDate;
 	}
+	
 	
 	/**
 	 * return the target sorted by Priority
@@ -38,9 +50,14 @@ public class EzSort {
 	 * @param target
 	 * @return
 	 */
+	
 	public static ArrayList<EzTask> sortByPriority(ArrayList<EzTask> target){
 		
-		return target;
+		ArrayList<EzTask> tasksByPriority = new ArrayList<EzTask>();
+		tasksByPriority = (ArrayList<EzTask>) target.clone();
+		Collections.sort(tasksByPriority, EzTask.TaskPriorityComparator);
+		return tasksByPriority;
+		
 	}
 	
 	/**
@@ -49,8 +66,11 @@ public class EzSort {
 	 * @return
 	 */
 	public static ArrayList<EzTask> sortByTitle(ArrayList<EzTask> target){
+		ArrayList<EzTask> tasksByTitle = new ArrayList<EzTask>();
+		tasksByTitle = (ArrayList<EzTask>) target.clone();
+		Collections.sort(tasksByTitle, EzTask.TaskTitleComparator);
 		
-		return target;
+		return tasksByTitle;
 	}
 	
 	/**
@@ -59,8 +79,10 @@ public class EzSort {
 	 * @return
 	 */
 	public static ArrayList<EzTask> sortByVenue(ArrayList<EzTask> target){
-		
-		return target;
+		ArrayList<EzTask> tasksByVenue = (ArrayList<EzTask>) target.clone();
+		Collections.sort(tasksByVenue, EzTask.TaskVenueComparator);
+		return tasksByVenue;
+	
 	}
 	
 	/**
@@ -71,9 +93,27 @@ public class EzSort {
 	 * @return
 	 */
 	public static ArrayList<EzTask> sortByDone(ArrayList<EzTask> target){
+		ArrayList<EzTask> tasksDone = new ArrayList<EzTask>();
+		ArrayList<EzTask> tasksNotDone = new ArrayList<EzTask>();
 		
-		return target;
+		for(EzTask task : target)
+			if(task.isDone())
+				tasksDone.add(task);
+		
+			else
+				tasksNotDone.add(task);
+				
+		sortById(tasksDone);
+		sortById(tasksNotDone);
+	
+		ArrayList<EzTask> taskByDone = (ArrayList<EzTask>) tasksNotDone.clone();
+		taskByDone.addAll(tasksDone);
+	
+		
+		return taskByDone;
 	}
+	
+	
 	
 	
 }

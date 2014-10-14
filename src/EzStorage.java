@@ -33,13 +33,13 @@ public class EzStorage {
 			if(taskInList.getId() > getLargestId())
 				setLargestId(taskInList.getId());
 		
-		if(task.getId() > getLargestId())
+		if(task.getId()+1 > getLargestId())
 			setLargestId(task.getId() + 1);
 		
 		
 		listOfAllTasks.add(task);
 		
-		//System.out.println("sizeList" + listOfAllTasks.get(listOfAllTasks.size()-1).getId());
+		
 		
 		return task;
 	}

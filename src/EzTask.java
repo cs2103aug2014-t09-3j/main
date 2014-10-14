@@ -173,4 +173,33 @@ public class EzTask {
 			return taskPriority2 - taskPriority1;
 		}
 	};
+	
+	public static Comparator<EzTask> TaskTitleComparator = new Comparator<EzTask>() {
+        public int compare(EzTask task1, EzTask task2) {
+        	
+        	String taskTitle1 = task1.getTitle().toUpperCase();
+        	String taskTitle2 = task2.getTitle().toUpperCase();
+        	
+            return taskTitle1.compareTo(taskTitle2);
+        }
+    };
+    
+    public static Comparator<EzTask> TaskDateComparator = new Comparator<EzTask>() {
+    	public int compare(EzTask task1, EzTask task2){
+    		return task1.getStartTime().getTime().compareTo(task2.getStartTime().getTime());
+    	}
+    };
+    
+    public static Comparator<EzTask> TaskVenueComparator = new Comparator<EzTask>() {
+    	public int compare(EzTask task1, EzTask task2){
+    		
+    		String taskVenue1 = task1.getVenue().toUpperCase();
+    		String taskVenue2 = task2.getVenue().toUpperCase();
+    		return taskVenue1.compareTo(taskVenue2);
+    		
+    	
+    	}
+    };
+    
+    
 }
