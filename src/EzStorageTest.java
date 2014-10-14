@@ -82,7 +82,7 @@ public class EzStorageTest {
 		storage.addTask(task);
 		
 		assertEquals("Check size of storage: ", 5, storage.getSize());
-		ArrayList<EzTask> list = storage.getSortedTasksById();
+		ArrayList<EzTask> list = EzSort.sortById(storage.getListOfAllTasks());
 		assertTrue("Check list is not null: ", list!=null);
 		assertEquals("Check size of list: ", 5, list.size());
 		assertEquals("Check id: ", 0, list.get(0).getId());
@@ -116,7 +116,7 @@ public class EzStorageTest {
 		storage.addTask(task);
 		
 		assertEquals("Check size of storage: ", 5, storage.getSize());
-		ArrayList<EzTask> list = storage.getSortedTasksByPriority();
+		ArrayList<EzTask> list = EzSort.sortByPriority(storage.getListOfAllTasks());
 		assertTrue("Check list is not null: ", list!=null);
 		assertEquals("Check size of list: ", 5, list.size());
 	

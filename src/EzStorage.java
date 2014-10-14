@@ -18,12 +18,11 @@ public class EzStorage {
 
 	private ArrayList<EzTask> listOfAllTasks = new ArrayList<EzTask>();
 	
-	//largestId represents the task Id with the greatest value in listOfAllTasks 
+	//largestId represents the largest taskId + 1  
 	private int largestId = 0;
 
-
 	/**
-	 * this method just simply adds the task to the list then return it.
+	 * this method just simply adds the task to the list and returns it.
 	 * @param task
 	 * @return task 
 	 */
@@ -188,34 +187,34 @@ public class EzStorage {
 	 * this method returns a sorted ArrayList by id
 	 * @return ArrayList of tasksById or null
 	 */
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	public ArrayList<EzTask> getSortedTasksById(){
 		ArrayList <EzTask> tasksById = new ArrayList<EzTask>();
 		
 		tasksById = (ArrayList<EzTask>)listOfAllTasks.clone();
 		
-		Collections.sort(tasksById, EzTask.TaskIdComparator);
+		Collections.sort(tasksById, EzSort.TaskIdComparator);
 		
 		
 			return tasksById;
 					
-	}
+	}*/
 	
 	
 	/**
 	 * this method return a list of tasks, which is sorted by priority then by date.
 	 * @return ArrayList tasksByPriority or null
 	 */
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	public ArrayList<EzTask> getSortedTasksByPriority(){
 		
 		ArrayList<EzTask> tasksByPriority = new ArrayList<EzTask>();
 		tasksByPriority = (ArrayList<EzTask>) listOfAllTasks.clone();
-		Collections.sort(tasksByPriority, EzTask.TaskPriorityComparator);
+		Collections.sort(tasksByPriority, EzSort.TaskPriorityComparator);
 		return tasksByPriority;
 				
 		
-	}
+	}*/
 	
 	/**
 	 * this method return a list of tasks, which contain one or more words in the keywords.
@@ -227,24 +226,15 @@ public class EzStorage {
 		ArrayList<EzTask> tasksWithKeywords = new ArrayList<EzTask>();
 		for(String keyword : listOfKeywords)
 			for(EzTask task: listOfAllTasks)
-			{
-				//System.out.println(" new Task:" + task.getTitle());
-				//System.out.println(listOfAllTasks.size());
-				
 				if(checkTitle(keyword, task))
-				{
 					if(!tasksWithKeywords.contains(task))
 						tasksWithKeywords.add(task);
-					//System.out.println(" taskwKeyword" + task.getTitle());
-				}
-
-			}
-		//System.out.println(tasksWithKeywords);
+				
 		return tasksWithKeywords;
 
 
 	}
-
+	
 	/**
 	 * This method checks whether the keyword is present in the task's title
 	 * @param String keyword, EzTask task
@@ -260,26 +250,97 @@ public class EzStorage {
 		
 		
 	}
-	
-	public ArrayList<String> getHelpCommand(){
-		//TODO
-	
-		return null;
-	}
-	
-	public ArrayList<String> getHelpCommand(String word){
-		//TODO
-		return null;
+
+	/**
+	 * this function returns the list of tasks that have been done in order of id.
+	 * 
+	 * @return doneTasks
+	 */
+	public ArrayList<EzTask> getDoneTasks(){
+		ArrayList<EzTask> doneTasks = new ArrayList<EzTask>();
+		for(EzTask task: listOfAllTasks)
+			if(task.isDone())
+				doneTasks.add(task);
+		
+		EzSort.sortById(doneTasks);
+		
+		return doneTasks;
 	}
 	
 	/**
-	 * This method clears the ArrayList passed into it
-	 * @param ArrayList list
-	 * @return void
+	 * this method returns the list of tasks that have not been done in order of id
+	 * @return undoneTasks
 	 */
-	private void clearList(ArrayList list){
-		list.clear();
+	public ArrayList<EzTask> getUndoneTasks() {
+		ArrayList<EzTask> undoneTasks  = new ArrayList<EzTask>();
+		for(EzTask task: listOfAllTasks)
+			if(!task.isDone())
+				undoneTasks.add(task);
+		
+		EzSort.sortById(undoneTasks);
+		return undoneTasks;
 	}
+	
+	public  ArrayList<EzTask> getComingTasks(){
+		ArrayList<EzTask> comingTasks = new ArrayList<EzTask>();
+		Calendar currentDate = Calendar.getInstance();
+		Calendar startTime = Calendar.getInstance();
+		for(EzTask task: listOfAllTasks)
+		{
+			startTime = task.getStartTime();
+			if(currentDate.before(startTime))
+				comingTasks.add(task);
+			else if(currentDate.get(Calendar.YEAR) == startTime.get(Calendar.YEAR) && currentDate.get(Calendar.MONTH) == startTime.get(Calendar.MONTH) &&
+    			currentDate.get(Calendar.DAY_OF_MONTH) == startTime.get(Calendar.DAY_OF_MONTH))
+				
+				comingTasks.add(task);
+		}
+			
+			EzSort.sortByDate(comingTasks);
+			
+			return comingTasks;
+	}
+	
+	public ArrayList<EzTask> getPastTasks() {
+		ArrayList<EzTask> pastTasks = new ArrayList<EzTask>();
+		Calendar currentDate = Calendar.getInstance();
+		Calendar startTime = Calendar.getInstance();
+		Calendar endTime = Calendar.getInstance();
+		for(EzTask task: listOfAllTasks)
+		{
+			startTime = task.getStartTime();
+			endTime = task.getEndTime();
+			if(currentDate.after(startTime) || currentDate.after(endTime))
+				pastTasks.add(task);
+		
+		}
+		
+		EzSort.sortByDate(pastTasks);
+		return pastTasks;
+			
+	}
+
+	/**
+	 * this method returns the list of tasks that have no date
+	 * @return noDateTasks
+	 */
+	public ArrayList<EzTask> getNoDateTasks(){
+		ArrayList<EzTask> noDateTasks = new ArrayList<EzTask>();
+		for(EzTask task: listOfAllTasks)
+			if(task.getStartTime() == null)
+				noDateTasks.add(task);
+		
+		EzSort.sortById(noDateTasks);
+		return noDateTasks;
+		
+	}
+
+	@SuppressWarnings("unchecked")
+	public ArrayList<EzTask> getListOfAllTasks(){
+		ArrayList<EzTask> list = (ArrayList<EzTask>) listOfAllTasks.clone();
+		return list;
+	}
+
 
 	/**
 	 * This method prints the title of each task in the ArrayList

@@ -24,7 +24,7 @@ public class EzSort {
 
 		tasksById = (ArrayList<EzTask>)target.clone();
 
-		Collections.sort(tasksById, EzTask.TaskIdComparator);
+		Collections.sort(tasksById, TaskIdComparator);
 
 
 		return tasksById;
@@ -36,9 +36,10 @@ public class EzSort {
 	 * @param target
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static ArrayList<EzTask> sortByDate(ArrayList<EzTask> target){
 		ArrayList<EzTask> tasksByDate = (ArrayList<EzTask>) target.clone();
-		Collections.sort(tasksByDate, EzTask.TaskDateComparator);
+		Collections.sort(tasksByDate, TaskDateComparator);
 		return tasksByDate;
 	}
 	
@@ -51,11 +52,12 @@ public class EzSort {
 	 * @return
 	 */
 	
+	@SuppressWarnings("unchecked")
 	public static ArrayList<EzTask> sortByPriority(ArrayList<EzTask> target){
 		
 		ArrayList<EzTask> tasksByPriority = new ArrayList<EzTask>();
 		tasksByPriority = (ArrayList<EzTask>) target.clone();
-		Collections.sort(tasksByPriority, EzTask.TaskPriorityComparator);
+		Collections.sort(tasksByPriority, TaskPriorityComparator);
 		return tasksByPriority;
 		
 	}
@@ -65,10 +67,11 @@ public class EzSort {
 	 * @param target
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static ArrayList<EzTask> sortByTitle(ArrayList<EzTask> target){
 		ArrayList<EzTask> tasksByTitle = new ArrayList<EzTask>();
 		tasksByTitle = (ArrayList<EzTask>) target.clone();
-		Collections.sort(tasksByTitle, EzTask.TaskTitleComparator);
+		Collections.sort(tasksByTitle, TaskTitleComparator);
 		
 		return tasksByTitle;
 	}
@@ -79,8 +82,9 @@ public class EzSort {
 	 * @return
 	 */
 	public static ArrayList<EzTask> sortByVenue(ArrayList<EzTask> target){
+		@SuppressWarnings("unchecked")
 		ArrayList<EzTask> tasksByVenue = (ArrayList<EzTask>) target.clone();
-		Collections.sort(tasksByVenue, EzTask.TaskVenueComparator);
+		Collections.sort(tasksByVenue,TaskVenueComparator);
 		return tasksByVenue;
 	
 	}
@@ -106,6 +110,7 @@ public class EzSort {
 		sortById(tasksDone);
 		sortById(tasksNotDone);
 	
+		@SuppressWarnings("unchecked")
 		ArrayList<EzTask> taskByDone = (ArrayList<EzTask>) tasksNotDone.clone();
 		taskByDone.addAll(tasksDone);
 	
@@ -113,7 +118,62 @@ public class EzSort {
 		return taskByDone;
 	}
 	
+
 	
+	public static Comparator<EzTask> TaskIdComparator = new Comparator<EzTask>() {
+
+		public int compare(EzTask task1, EzTask task2) {
+
+			int taskId1 = task1.getId();
+			int taskId2 = task2.getId();
+
+			//ascending order
+			return taskId1 - taskId2;
+
+		}
+
+
+	};
+	
+	public static Comparator<EzTask> TaskPriorityComparator = new Comparator<EzTask>() {
+
+		public int compare(EzTask task1, EzTask task2){
+
+			int taskPriority1 = task1.getPriority();
+			int taskPriority2 = task2.getPriority();
+
+			return taskPriority2 - taskPriority1;
+		}
+	};
+	
+	public static Comparator<EzTask> TaskTitleComparator = new Comparator<EzTask>() {
+        public int compare(EzTask task1, EzTask task2) {
+        	
+        	String taskTitle1 = task1.getTitle().toUpperCase();
+        	String taskTitle2 = task2.getTitle().toUpperCase();
+        	
+            return taskTitle1.compareTo(taskTitle2);
+        }
+    };
+    
+    public static Comparator<EzTask> TaskDateComparator = new Comparator<EzTask>() {
+    	public int compare(EzTask task1, EzTask task2){
+    		if (task1.getStartTime() == null || task2.getStartTime() == null)
+    	        return 0;
+    		return task1.getStartTime().getTime().compareTo(task2.getStartTime().getTime());
+    	}
+    };
+    
+    public static Comparator<EzTask> TaskVenueComparator = new Comparator<EzTask>() {
+    	public int compare(EzTask task1, EzTask task2){
+    		
+    		String taskVenue1 = task1.getVenue().toUpperCase();
+    		String taskVenue2 = task2.getVenue().toUpperCase();
+    		return taskVenue1.compareTo(taskVenue2);
+    		
+    	
+    	}
+    };
 	
 	
 }
