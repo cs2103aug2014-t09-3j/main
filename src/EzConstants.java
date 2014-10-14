@@ -45,5 +45,7 @@ public class EzConstants {
 	public static final Color WHITE_SMOKE_COLOR = new Color(239,239,239);
 	public static final Color IRON_COLOR = new Color(209,213,216);
 	
+	public static final Color SHOW_AREA_BACKGROUND = EzConstants.WHITE_SMOKE_COLOR;
+	
 	public static final int MAXIMUM_PRIORITY = 6;
 }

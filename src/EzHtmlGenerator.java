@@ -14,6 +14,9 @@ import java.util.GregorianCalendar;
 public class EzHtmlGenerator {
 	private static final int STAR_PER_LINE = 5;
 	
+	private static final Color MAIN_TITLE_FONT_COLOR = new Color(231,76,60);
+	private static final String MAIN_TITLE_FONT_FONT = "Arial";
+	
 	private static final String TITLE_FONT_FONT = "Arial";
 	private static final int TITLE_FONT_SIZE = 5;
 	private static final Color TITLE_FONT_COLOR = EzConstants.WHITE_SMOKE_COLOR;
@@ -40,7 +43,7 @@ public class EzHtmlGenerator {
 	public static String createHtmlEzTask(EzTask task,int type){
 		if (task!=null){
 			return 	"<table border=0 cellspacing=0 cellpadding=1 bgcolor=\"#" + convertColorToHex(TASK_BG_COLOR[type]) + "\" width=\"560px\"><tr>"
-					+ "<td width=\"53px\" bgcolor=\"#" + convertColorToHex(ID_BG_COLOR[type]) +"\">" + createHtmlIdAndPriorityOfEzTask(task) + "</td>"
+					+ "<td width=\"53px\" bgcolor=\"#" + convertColorToHex(ID_BG_COLOR[type]) +"\"  height=\"40px\">" + createHtmlIdAndPriorityOfEzTask(task) + "</td>"
 					+ "<td width=\"5px\"></td>"
 					+ "<td width=\"300px\">"  + createHtmlTitleAndVenueOfEzTask(task) + "</td>" 
 					+ "<td width=\"15px\"></td>"
@@ -102,6 +105,15 @@ public class EzHtmlGenerator {
 			result = result + "</tr>";
 		}
 		return result + "</table>";
+	}
+	
+	public static String createHtmlTableWithHeader(String header, String content, String tableAttribute){
+		String result = "<table "+tableAttribute+">"+
+					"<tr><td height=\"44px\">"
+					+ EzHtmlGenerator.createHtmlText("__",MAIN_TITLE_FONT_FONT,2,EzConstants.SHOW_AREA_BACKGROUND)
+					+ EzHtmlGenerator.createHtmlText(header,MAIN_TITLE_FONT_FONT, 8, MAIN_TITLE_FONT_COLOR)
+					+"</td></tr><tr><td>" + content + "</td></tr></table>";
+		return result;
 	}
 	
 	private static String createHtmlTitleAndVenueOfEzTask(EzTask task) {

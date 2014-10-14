@@ -193,7 +193,7 @@ public class EzParser {
 			int[] dateArr = new int[5];
 			String date = new String();
 			String time = new String();
-			if (getFirstWord(content).equalsIgnoreCase("on")) {
+			if (getFirstWord(content).equalsIgnoreCase("on")) {//on **/**/****
 				content = removeFirstWord(content);
 				date = getFirstWord(content);
 				content = removeFirstWord(content);
@@ -210,7 +210,7 @@ public class EzParser {
 
 				if (!getFirstWord(content).equalsIgnoreCase("from")
 						&& !content.isEmpty()) {
-					if (getFirstWord(content).equalsIgnoreCase("at"))
+					if (getFirstWord(content).equalsIgnoreCase("at"))//on **** at ****
 						content = removeFirstWord(content);
 					time = getFirstWord(content);
 					content = removeFirstWord(content);
@@ -226,7 +226,7 @@ public class EzParser {
 				{
 				} 
 			}
-			if (getFirstWord(content).equalsIgnoreCase("at")) {
+			if (getFirstWord(content).equalsIgnoreCase("at")) {//at **:**
 				content = removeFirstWord(content);
 				time = getFirstWord(content);
 				content = removeFirstWord(content);
@@ -242,7 +242,7 @@ public class EzParser {
 
 				if (!getFirstWord(content).equalsIgnoreCase("from")
 						&& !content.isEmpty()) {
-					if (getFirstWord(content).equalsIgnoreCase("on"))
+					if (getFirstWord(content).equalsIgnoreCase("on"))//at ** on ***
 						content = removeFirstWord(content);
 
 					date = getFirstWord(content);
@@ -270,7 +270,7 @@ public class EzParser {
 				}
 			}
 
-			if (getFirstWord(content).equalsIgnoreCase("from")) {
+			if (getFirstWord(content).equalsIgnoreCase("from")) {//from *** to ***
 				content = removeFirstWord(content);
 				String temp = content;
 				
@@ -290,7 +290,7 @@ public class EzParser {
 					count2++;
 				}
 				if (count1 == count2 && count1 <= 2 && count1 > 0) {
-					if (count1 == 1) {
+					if (count1 == 1) {//from *** to ***
 						String start = getFirstWord(content);
 						content=removeFirstWord(content);
 						content=removeFirstWord(content);
@@ -325,7 +325,7 @@ public class EzParser {
 							task.setEndTime(calendar);
 						}
 
-					} else {
+					} else {//from *** *** to *** ***
 						String start1 = getFirstWord(content);
 						content=removeFirstWord(content);
 						String start2 = getFirstWord(content);
@@ -966,6 +966,12 @@ public class EzParser {
 			newAction.setAction(null);
 			// set results and target as null
 			break;
+		case Y:
+			newAction.setTargets(null);
+			newAction.setResults(null);
+		case N:
+			newAction.setTargets(null);
+			newAction.setResults(null);
 
 		default:
 			break;
@@ -993,6 +999,11 @@ public class EzParser {
 			return TypeOfAction.HELP;
 		else if (action.equalsIgnoreCase("done"))
 			return TypeOfAction.DONE;
+		else if (action.equalsIgnoreCase("y"))
+			return TypeOfAction.Y;
+		else if (action.equalsIgnoreCase("n"))
+			return TypeOfAction.N;
+		
 
 		return TypeOfAction.INVALID;
 	}

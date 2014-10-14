@@ -1,3 +1,5 @@
+import java.awt.EventQueue;
+
 /**
  * 
  */
@@ -12,8 +14,19 @@ public class EzAppDelegate {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		EzGUI.initiateGUI();
+		initiateGUI();
 	}
-
+	
+	public static void initiateGUI(){
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					EzGUI frame = new EzGUI();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 }
