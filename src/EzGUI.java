@@ -24,12 +24,10 @@ import java.io.IOException;
 
 
 public class EzGUI extends JFrame {
-	private static final Color MAIN_TITLE_FONT_COLOR = new Color(231,76,60);
-	private static final String MAIN_TITLE_FONT_FONT = "Arial";
+	private static final String PROGRAM_TITLE = "EzTask";
 	
 	private static final int BUTTON_HEIGHT = 40;
 	private static final int BUTTON_WIDTH = 156;
-	private static final Color SHOW_AREA_BACKGROUND = EzConstants.WHITE_SMOKE_COLOR;
 	private static final Color BUTTON_TEXT_COLOR = EzConstants.PERSIAN_GREEN_COLOR;
 	private static final String BUTTON_FONT = "Arial";
 	private static final Color SELECTED_BUTTON_BG_COLOR = EzConstants.WHITE_SMOKE_COLOR;
@@ -44,25 +42,23 @@ public class EzGUI extends JFrame {
 	private static final int START_LOCATION_X = 50;
 	
 	private static final String[] KEYWORDS = {"add","delete","update","show","done","undone","undo","redo","on","at","from","to","today","tomorrow"
-												,"set","title","date","time","start","end","venue","priority","all","have","help"}; 
+												,"set","title","date","time","start","end","venue","priority","all","have","help","y","n"}; 
 	
 	private static final String[] LIST_OF_BUTTON_NAMES = {	"All", 
 															"Done", 
 															"Undone", 
 															"Today",
 															"Tomorrow",
-															"This Week",
-															"Next Week",
-															"This Month",
-															"Next Month",
+															"Coming",
+															"Past",
 															"No Date",
 															"Help"};
 	
-	private JPanel contentPane;
-	JScrollPane showPanel;
-	private Calendar cal;
+	private JPanel mainPanel;
+	private JScrollPane displayPanel;
+	private Calendar cal = Calendar.getInstance();
 	private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-	private static JEditorPane showArea;
+	private static JEditorPane displayArea;
 	private JButton selectedButton = null;
 	private JTextPane commandField;
 	private SimpleAttributeSet[] commandAttributeSet = new SimpleAttributeSet[3];
@@ -72,11 +68,10 @@ public class EzGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public EzGUI() {
-		setTitle("EzTask");
-		initiateCalendar();
+		setTitle(PROGRAM_TITLE);
 		createMainPanel();
 		createButtonPanel();
-		createShowPanel();
+		createDisplayPanel();
 		createCommandPanel();
 		registerFont();
 		try {
@@ -84,13 +79,6 @@ public class EzGUI extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * 
-	 */
-	private void initiateCalendar() {
-		cal = Calendar.getInstance();
 	}
 
 	/**
@@ -107,12 +95,12 @@ public class EzGUI extends JFrame {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(START_LOCATION_X, START_LOCATION_Y, APP_WIDTH, APP_HEIGHT);
-		contentPane = new JPanel();
-		contentPane.setFocusable(false);
-		contentPane.setBackground(BACKGROUND_COLOR);
-		contentPane.setBorder(new EmptyBorder(10,10,10,10));
-		contentPane.setLayout(new BorderLayout(0, 10));
-		setContentPane(contentPane);
+		mainPanel = new JPanel();
+		mainPanel.setFocusable(false);
+		mainPanel.setBackground(BACKGROUND_COLOR);
+		mainPanel.setBorder(new EmptyBorder(10,10,10,10));
+		mainPanel.setLayout(new BorderLayout(0, 10));
+		setContentPane(mainPanel);
 	}
 
 	/**
@@ -123,12 +111,11 @@ public class EzGUI extends JFrame {
 		buttonPanel.setBackground(BACKGROUND_COLOR);
 		buttonPanel.setBorder(null);
 		buttonPanel.setFocusable(false);
-		contentPane.add(buttonPanel, BorderLayout.WEST);
+		mainPanel.add(buttonPanel, BorderLayout.WEST);
 		
 		ArrayList<JButton> listOfButtons = new ArrayList<JButton>();
 		for(int i=0;i<LIST_OF_BUTTON_NAMES.length;i++){
-			JButton button = new JButton(LIST_OF_BUTTON_NAMES[i]);
-			initButton(button);
+			JButton button = initButton(LIST_OF_BUTTON_NAMES[i]);
 			listOfButtons.add(button);
 		}
 		
@@ -145,10 +132,10 @@ public class EzGUI extends JFrame {
 		);
 		
 		SequentialGroup sqGroup = gl_buttonPanel.createSequentialGroup();
-		sqGroup.addGap(10);
+		sqGroup.addGap(60);
 		for(int i=0;i<LIST_OF_BUTTON_NAMES.length;i++){
 			sqGroup.addComponent(listOfButtons.get(i), GroupLayout.PREFERRED_SIZE, BUTTON_HEIGHT, GroupLayout.PREFERRED_SIZE)
-				.addPreferredGap(ComponentPlacement.RELATED);
+				.addPreferredGap(ComponentPlacement.RELATED).addGap(7);
 		}
 		gl_buttonPanel.setVerticalGroup(
 			gl_buttonPanel.createParallelGroup(Alignment.LEADING)
@@ -160,7 +147,9 @@ public class EzGUI extends JFrame {
 	/**
 	 * @param btnAll
 	 */
-	private void initButton(final JButton button) {
+	private JButton initButton(String nameOfButton) {
+		JButton button = new JButton(nameOfButton);
+		button.setName(nameOfButton);
 		button.setFont(new Font(BUTTON_FONT, Font.BOLD, 16));
 		button.setBackground(UNSELECTED_BUTTON_BG_COLOR);
 		button.setBorderPainted(false);
@@ -173,11 +162,35 @@ public class EzGUI extends JFrame {
 				if (selectedButton!=null){
 					selectedButton.setBackground(UNSELECTED_BUTTON_BG_COLOR);
 				}
+				JButton button = (JButton) arg0.getSource();
 				button.setBackground(SELECTED_BUTTON_BG_COLOR);
 				selectedButton = button;
+				
+				if (button.getName().equalsIgnoreCase("All")){
+					// ADD your code here
+					
+				} else if (button.getName().equalsIgnoreCase("Done")){
+					
+				} else if (button.getName().equalsIgnoreCase("Undone")){
+					
+				} else if (button.getName().equalsIgnoreCase("Today")){
+					
+				} else if (button.getName().equalsIgnoreCase("Tomorrow")){
+					
+				} else if (button.getName().equalsIgnoreCase("Coming")){
+					
+				} else if (button.getName().equalsIgnoreCase("Past")){
+					
+				} else if (button.getName().equalsIgnoreCase("No Date")){
+					
+				} else if (button.getName().equalsIgnoreCase("Help")){
+					
+				} 
+				
 				commandField.requestFocus();
 			}
 		});
+		return button;
 	}
 
 	/**
@@ -190,30 +203,21 @@ public class EzGUI extends JFrame {
 	/**
 	 * create show panel
 	 */
-	private void createShowPanel() {
-		showArea = new JEditorPane();
-		showArea.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.isControlDown() && (e.getKeyCode()==KeyEvent.VK_Z)){
-					showArea.setText("Ctrl+Z Pressed.");
-				}
-			}
-		});
-		showArea.setBackground(SHOW_AREA_BACKGROUND);
-		showArea.setEditable(false);
-		showArea.setContentType("text/html");
-		showArea.setFocusable(false);
+	private void createDisplayPanel() {
+		displayArea = new JEditorPane();
+		displayArea.setBackground(EzConstants.SHOW_AREA_BACKGROUND);
+		displayArea.setEditable(false);
+		displayArea.setContentType("text/html");
+		displayArea.setFocusable(false);
 		
-		showPanel = new JScrollPane(showArea);
-		showPanel.setFocusable(false);
-		//showPanel.setAutoscrolls(true);
-		showPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		showPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		//showPanel.setBorder(new LineBorder(BUTTON_TEXT_COLOR, 2, true));
-		contentPane.add(showPanel, BorderLayout.CENTER);
-		showPanel.setLayout(new ScrollPaneLayout());
-		showPanel.setBorder(null);
+		displayPanel = new JScrollPane(displayArea);
+		displayPanel.setFocusable(false);
+		displayPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		displayPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		displayPanel.setLayout(new ScrollPaneLayout());
+		displayPanel.setBorder(null);
+		
+		mainPanel.add(displayPanel, BorderLayout.CENTER);
 	}
 	
 	/**
@@ -224,9 +228,9 @@ public class EzGUI extends JFrame {
 		commandPanel.setBackground(BACKGROUND_COLOR);
 		commandPanel.setBorder(null);
 		commandPanel.setFocusable(false);
-		contentPane.add(commandPanel, BorderLayout.SOUTH);
 		commandPanel.setLayout(new BoxLayout(commandPanel, BoxLayout.X_AXIS));
-
+		mainPanel.add(commandPanel, BorderLayout.SOUTH);
+		
 		createCommandLabel(commandPanel);
 		createCommandInputField(commandPanel);
 	}
@@ -236,17 +240,16 @@ public class EzGUI extends JFrame {
 	 */
 	private void createCommandInputField(JPanel commandPanel) {
 		JPanel commandFieldpanel = new JPanel();
-		commandPanel.add(commandFieldpanel);
-		//commandFieldpanel.setBorder(new LineBorder(BUTTON_TEXT_COLOR, 2));
 		commandFieldpanel.setLayout(new BoxLayout(commandFieldpanel, BoxLayout.X_AXIS));
+		commandPanel.add(commandFieldpanel);
 		
 		commandField = new JTextPane();
-		commandField.addFocusListener(new FocusAdapter() {
+		/*commandField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				//commandField.grabFocus();
 			}
-		});
+		})*/;
 		commandFieldpanel.add(commandField);
 		commandField.addKeyListener(new KeyAdapter() {
 			@Override
@@ -264,11 +267,11 @@ public class EzGUI extends JFrame {
 					
 					switch (arg0.getKeyCode()){
 					case KeyEvent.VK_UP:
-						showPanel.getVerticalScrollBar().setValue(showPanel.getVerticalScrollBar().getValue()-20);;
+						displayPanel.getVerticalScrollBar().setValue(displayPanel.getVerticalScrollBar().getValue()-20);;
 						//showArea.setText("Ctrl+Up Pressed." + String.valueOf((int)arg0.getKeyCode()));
 						break;
 					case KeyEvent.VK_DOWN:
-						showPanel.getVerticalScrollBar().setValue(showPanel.getVerticalScrollBar().getValue()+20);;
+						displayPanel.getVerticalScrollBar().setValue(displayPanel.getVerticalScrollBar().getValue()+20);;
 						//showArea.setText("Ctrl+Down Pressed." + String.valueOf((int)arg0.getKeyCode()));
 						break;
 
@@ -289,6 +292,7 @@ public class EzGUI extends JFrame {
 					default:
 						break;
 					}
+					
 					switch (arg0.getKeyCode()){
 					case KeyEvent.VK_UP:
 						if (historyPos>0){
@@ -450,7 +454,7 @@ public class EzGUI extends JFrame {
 		loadCommandAttributeSet();
 		//commandField.setContentType("text/html");
 		//commandField.setFont(new Font(BUTTON_FONT, Font.PLAIN, 17));
-		commandField.setBackground(SHOW_AREA_BACKGROUND);
+		commandField.setBackground(EzConstants.SHOW_AREA_BACKGROUND);
 		commandField.setPreferredSize(new Dimension(0,0));
 		commandField.grabFocus();
 	}
@@ -605,20 +609,6 @@ public class EzGUI extends JFrame {
 		commandLabelPanel.add(commandLabel);
 	}
 	
-	public static void initiateGUI(){
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					EzGUI frame = new EzGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		
-	}
-	
 	private static void registerFont(){
 		try {
 			Font font = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/Digital Dismay.otf")).deriveFont(16f);
@@ -641,11 +631,11 @@ public class EzGUI extends JFrame {
 			list.add(EzHtmlGenerator.createHtmlEzTask(listOfTasks.get(i),i%2));
 		}
 		String content = EzHtmlGenerator.createHtmlTable(list.size(),1,list,"border=0 cellspacing=4 cellpadding=1");
-		
-		String text = "<table border=0 cellspacing=0 cellpadding=0 width=\"100%\"><tr><td height=\"44px\">";
-		text = text + EzHtmlGenerator.createHtmlText("__",MAIN_TITLE_FONT_FONT,2,SHOW_AREA_BACKGROUND);
-		text = text + EzHtmlGenerator.createHtmlText(header,MAIN_TITLE_FONT_FONT, 8, MAIN_TITLE_FONT_COLOR);
-		text = text +"</td></tr><tr><td>" + EzHtmlGenerator.right(content) +"</td></tr></table>";
-		showArea.setText(text);
+		showContent(header, content);
+	}
+	
+	public static void showContent(String header, String content){
+		String text = EzHtmlGenerator.createHtmlTableWithHeader(header, content, "border=0 cellspacing=0 cellpadding=0 width=\"100%\"");
+		displayArea.setText(text);
 	}
 }

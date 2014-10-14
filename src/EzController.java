@@ -15,6 +15,8 @@ public class EzController {
 	private static EzStorage storage = new EzStorage();
 	private static ArrayList<EzAction> history = new ArrayList<EzAction>();
 	private static int pos = -1;
+	private static boolean confirmation = false;
+	private static EzAction deleteAction = null;
 	
 	public static String execute(String userCommand){
 		EzAction userAction = EzParser.extractInfo(userCommand, storage);
@@ -25,98 +27,129 @@ public class EzController {
 	public static void determineUserAction(EzAction userAction) {
 		switch(userAction.getAction()) {
 		case ADD:
-			EzTask task = userAction.getResults().get(0);
-			checkPos();
-			addHistory(userAction);
-			storage.addTaskWithNewId(task);
-			try {
-				EzDataManage.saveToFile(storage);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			EzGUI.showContent("TitleAdd", storage.getSortedTasksById());
-			break;
-			
-		case UPDATE:
-			storage.updateTask(userAction.getResults());
-			checkPos();
-			addHistory(userAction);
-			try {
-				EzDataManage.saveToFile(storage);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			EzGUI.showContent("TitleUpdate", storage.getSortedTasksById());
-			break;
-			
-		case DELETE:
-			ArrayList<EzTask> toBeDeleted = userAction.getTargets();
-			checkPos();
-			storage.deleteTask(toBeDeleted);
-			addHistory(userAction);
-			try {
-				EzDataManage.saveToFile(storage);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			EzGUI.showContent("TitleDelete", storage.getSortedTasksById());
-			break;
-			
-		case DONE:
-			storage.updateTask(userAction.getResults());
-			checkPos();
-			addHistory(userAction);
-			try {
-				EzDataManage.saveToFile(storage);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			EzGUI.showContent("TitleDone", storage.getSortedTasksById());
-			break;
-			
-		case UNDO:
-			if(pos <= -1) {
-				break;
-			}
-			else {
-				undoTask();
+			if (!confirmation){
+				EzTask task = userAction.getResults().get(0);
+				checkPos();
+				addHistory(userAction);
+				storage.addTaskWithNewId(task);
 				try {
 					EzDataManage.saveToFile(storage);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				EzGUI.showContent("UNDO", storage.getSortedTasksById());
-				
+				EzGUI.showContent("TitleAdd", storage.getSortedTasksById());
+			}
+			break;
+			
+		case UPDATE:
+			if (!confirmation){
+				storage.updateTask(userAction.getResults());
+				checkPos();
+				addHistory(userAction);
+				try {
+					EzDataManage.saveToFile(storage);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				EzGUI.showContent("TitleUpdate", storage.getSortedTasksById());
+			}
+			break;
+			
+		case DELETE:
+			if (!confirmation){
+				deleteAction = userAction;
+				ArrayList<EzTask> toBeDeleted = userAction.getTargets();
+				confirmation = true;
+				EzGUI.showContent("Do you want to delete these tasks? (Y/N)", toBeDeleted);
+			}
+			break;
+		
+		case Y:
+			if (confirmation){
+				checkPos();
+				storage.deleteTask(deleteAction.getTargets());
+				addHistory(deleteAction);
+				try {
+					EzDataManage.saveToFile(storage);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				EzGUI.showContent("Tasks Deleted", storage.getSortedTasksById());
+				confirmation = false;
+			}
+			break;
+		
+		case N:
+			if (confirmation){
+				EzGUI.showContent("All Tasks", storage.getSortedTasksById());
+				confirmation = false;
+			}
+			break;
+		case DONE:
+			if (!confirmation){
+				storage.updateTask(userAction.getResults());
+				checkPos();
+				addHistory(userAction);
+				try {
+					EzDataManage.saveToFile(storage);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				EzGUI.showContent("TitleDone", storage.getSortedTasksById());
+			}
+			break;
+			
+		case UNDO:
+			if (!confirmation){
+				if(pos <= -1) {
+					break;
+				}
+				else {
+					undoTask();
+					try {
+						EzDataManage.saveToFile(storage);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					EzGUI.showContent("UNDO", storage.getSortedTasksById());
+					
+				}
 			}
 			break;
 			
 		case REDO:
-			if(pos >= history.size()-1) {
-				return;
-			}
-			else {
-				redoTask();
-				try {
-					EzDataManage.saveToFile(storage);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			if (!confirmation){
+				if(pos >= history.size()-1) {
+					return;
 				}
-				EzGUI.showContent("REDO", storage.getSortedTasksById());
+				else {
+					redoTask();
+					try {
+						EzDataManage.saveToFile(storage);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					EzGUI.showContent("REDO", storage.getSortedTasksById());
+				}
 			}
 			break;
 			
 		case SHOW:
-			ArrayList<EzTask> toBeShown = userAction.getTargets();
-			EzGUI.showContent("Display", toBeShown);
+			if (!confirmation){
+				ArrayList<EzTask> toBeShown = userAction.getTargets();
+				EzGUI.showContent("Display", toBeShown);
+			}
 			break;
 			
 		case HELP:
+			if (!confirmation){
+			}
 			break;
 			
 		default:
