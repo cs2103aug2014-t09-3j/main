@@ -33,6 +33,13 @@ public class EzStorageTest {
 		checkId(storage.addTask(task), 4);
 		
 		checkId(storage.addTaskWithNewId(new EzTask("task 6")), 6);
+		
+		task = new EzTask("task 7");
+		task.setId(7);
+		checkId(storage.addTask(task), 7);
+		
+		checkId(storage.addTaskWithNewId(new EzTask("task 8")), 8);
+		
 	}
 	
 	@Test

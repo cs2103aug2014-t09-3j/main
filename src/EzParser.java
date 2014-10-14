@@ -327,14 +327,14 @@ public class EzParser {
 
 					} else {
 						String start1 = getFirstWord(content);
-						removeFirstWord(content);
+						content=removeFirstWord(content);
 						String start2 = getFirstWord(content);
-						removeFirstWord(content);
-						removeFirstWord(content);
+						content=removeFirstWord(content);
+						content=removeFirstWord(content);
 						String end1 = getFirstWord(content);
-						removeFirstWord(content);
+						content=removeFirstWord(content);
 						String end2 = getFirstWord(content);
-						removeFirstWord(content);
+						content=removeFirstWord(content);
 						if ((readDate(start1)[0] >= 0 && readDate(end1)[0] >= 0)
 								&& (readTime(start2)[0] >= 0 && readTime(end2)[0] >= 0)) {
 							dateArr[0] = readDate(start1)[0];
@@ -342,19 +342,19 @@ public class EzParser {
 							dateArr[2] = readDate(start1)[2];
 							calendar = new GregorianCalendar(dateArr[2],
 									dateArr[1] - 1, dateArr[0]);
-							task.setStartTime(calendar);
-							dateArr[0] = readDate(end1)[0];
-							dateArr[1] = readDate(end1)[1];
-							dateArr[2] = readDate(end1)[2];
-							calendar = new GregorianCalendar(dateArr[2],
-									dateArr[1] - 1, dateArr[0]);
-							task.setEndTime(calendar);
-
+							
 							dateArr[3] = readTime(start2)[0];
 							dateArr[4] = readTime(start2)[1];
 							calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
 							calendar.set(GregorianCalendar.MINUTE, dateArr[4]);
 							task.setStartTime(calendar);
+							
+							dateArr[0] = readDate(end1)[0];
+							dateArr[1] = readDate(end1)[1];
+							dateArr[2] = readDate(end1)[2];
+							calendar = new GregorianCalendar(dateArr[2],
+									dateArr[1] - 1, dateArr[0]);
+				
 							dateArr[3] = readTime(end2)[0];
 							dateArr[4] = readTime(end2)[1];
 							calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
