@@ -84,11 +84,11 @@ public class EzTask {
 	
 	
 	public void setStartTime(int year, int month, int day) {
-		this.startTime = new GregorianCalendar(year, month-1, day);
+		this.startTime = new GregorianCalendar(year, month, day);
 	}
 
 	public void setStartTime(int year, int month, int day,int hour,int minute) {
-		this.startTime = new GregorianCalendar(year,month-1,day,hour,minute);
+		this.startTime = new GregorianCalendar(year,month,day,hour,minute);
 	}
 	
 	
@@ -106,11 +106,11 @@ public class EzTask {
 	
 	
 	public void setEndTime(int year, int month, int day) {
-		this.endTime = new GregorianCalendar(year,month-1,day);
+		this.endTime = new GregorianCalendar(year,month,day);
 	}
 	
 	public void setEndTime(int year, int month, int day,int hour,int minute) {
-		this.endTime = new GregorianCalendar(year,month-1,day,hour,minute);
+		this.endTime = new GregorianCalendar(year,month,day,hour,minute);
 	}
 	
 	
