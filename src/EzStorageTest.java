@@ -2,6 +2,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.junit.Test;
@@ -15,6 +16,123 @@ import org.junit.Test;
  * 
  */
 public class EzStorageTest {
+	private EzTask createTask(String command){
+		EzTask task = EzParser.extractInfo(command, null).getResults().get(0);
+		return task;
+	}
+	
+	@Test
+	public void testGetDoneTask() {
+		EzStorage storage = new EzStorage();
+		storage.addTaskWithNewId(createTask("add \"task 0\" on " + getDateFromToday(0)));
+		storage.addTaskWithNewId(createTask("add \"task 1\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 2\""));
+		storage.addTaskWithNewId(createTask("add \"task 3\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 4\""));
+		storage.addTaskWithNewId(createTask("add \"task 5\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 6\" on " + getDateFromToday(2)));
+		storage.addTaskWithNewId(createTask("add \"task 7\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 8\""));
+		storage.addTaskWithNewId(createTask("add \"task 9\" on " + getDateFromToday(2)));
+		
+		storage.findTask(0).setDone(true);
+		storage.findTask(2).setDone(true);
+		storage.findTask(3).setDone(true);
+		storage.findTask(5).setDone(true);
+		storage.findTask(7).setDone(true);
+		storage.findTask(8).setDone(true);
+		
+		ArrayList<EzTask> list = storage.getDoneTasks();
+		assertEquals("check number of task: ", 6, list.size()); 
+	}
+	
+	@Test
+	public void testGetUndoneTask() {
+		EzStorage storage = new EzStorage();
+		storage.addTaskWithNewId(createTask("add \"task 0\" on " + getDateFromToday(0)));
+		storage.addTaskWithNewId(createTask("add \"task 1\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 2\""));
+		storage.addTaskWithNewId(createTask("add \"task 3\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 4\""));
+		storage.addTaskWithNewId(createTask("add \"task 5\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 6\" on " + getDateFromToday(2)));
+		storage.addTaskWithNewId(createTask("add \"task 7\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 8\""));
+		storage.addTaskWithNewId(createTask("add \"task 9\" on " + getDateFromToday(2)));
+		
+		storage.findTask(0).setDone(true);
+		storage.findTask(2).setDone(true);
+		storage.findTask(3).setDone(true);
+		storage.findTask(5).setDone(true);
+		storage.findTask(7).setDone(true);
+		storage.findTask(8).setDone(true);
+		
+		ArrayList<EzTask> list = storage.getUndoneTasks();
+		assertEquals("check number of task: ", 4, list.size()); 
+	}
+	
+	@Test
+	public void testGetNoDateTask() {
+		EzStorage storage = new EzStorage();
+		storage.addTaskWithNewId(createTask("add \"task 0\" on " + getDateFromToday(0)));
+		storage.addTaskWithNewId(createTask("add \"task 1\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 2\""));
+		storage.addTaskWithNewId(createTask("add \"task 3\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 4\""));
+		storage.addTaskWithNewId(createTask("add \"task 5\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 6\" on " + getDateFromToday(2)));
+		storage.addTaskWithNewId(createTask("add \"task 7\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 8\""));
+		storage.addTaskWithNewId(createTask("add \"task 9\" on " + getDateFromToday(2)));
+		
+		ArrayList<EzTask> list = storage.getNoDateTasks();
+		assertEquals("check number of task: ", 3, list.size()); 
+	}
+	
+	@Test
+	public void testGetComingTask() {
+		EzStorage storage = new EzStorage();
+		storage.addTaskWithNewId(createTask("add \"task 0\" on " + getDateFromToday(0)));
+		storage.addTaskWithNewId(createTask("add \"task 1\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 2\""));
+		storage.addTaskWithNewId(createTask("add \"task 3\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 4\""));
+		storage.addTaskWithNewId(createTask("add \"task 5\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 6\" on " + getDateFromToday(2)));
+		storage.addTaskWithNewId(createTask("add \"task 7\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 8\""));
+		storage.addTaskWithNewId(createTask("add \"task 9\" on " + getDateFromToday(2)));
+		
+		ArrayList<EzTask> list = storage.getComingTasks();
+		assertEquals("check number of task: ", 5, list.size()); 
+	}
+	
+	@Test
+	public void testGetPastTask() {
+		EzStorage storage = new EzStorage();
+		storage.addTaskWithNewId(createTask("add \"task 0\" on " + getDateFromToday(0)));
+		storage.addTaskWithNewId(createTask("add \"task 1\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 2\""));
+		storage.addTaskWithNewId(createTask("add \"task 3\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 4\""));
+		storage.addTaskWithNewId(createTask("add \"task 5\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 6\" on " + getDateFromToday(2)));
+		storage.addTaskWithNewId(createTask("add \"task 7\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 8\""));
+		storage.addTaskWithNewId(createTask("add \"task 9\" on " + getDateFromToday(2)));
+		
+		ArrayList<EzTask> list = storage.getPastTasks();
+		assertEquals("check number of task: ", 2, list.size()); 
+	}
+
+	private String getDateFromToday(int step){
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, step);
+		return "" + String.valueOf(cal.get(Calendar.DAY_OF_MONTH)) 
+				+ "/" + String.valueOf(cal.get(Calendar.MONTH)+1)
+				+ "/" + String.valueOf(cal.get(Calendar.YEAR));
+	}
+	
 	@Test
 	public void testAddTask() {
 		EzStorage storage = new EzStorage();
@@ -39,7 +157,6 @@ public class EzStorageTest {
 		checkId(storage.addTask(task), 7);
 		
 		checkId(storage.addTaskWithNewId(new EzTask("task 8")), 8);
-		
 	}
 	
 	@Test
@@ -51,80 +168,12 @@ public class EzStorageTest {
 		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 2\" on 27/7/2014 from 5h30 to 22h", storage).getResults().get(0));
 		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 3\" on 26/7/2014 5h30", storage).getResults().get(0));
 		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 4\" on 27/7/2014 from 5h30 to 22h", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 5\"", storage).getResults().get(0));
 		
-		assertEquals("Check size of storage: ", 5, storage.getSize());
+		assertEquals("Check size of storage: ", 6, storage.getSize());
 		ArrayList<EzTask> list = storage.getTasksByDate((new GregorianCalendar(2014,Calendar.JULY,26,0,0)).getTime());
 		assertTrue("Check list is not null: ", list!=null);
 		assertEquals("Check size of list: ", 3, list.size());
-	}
-	
-	@Test
-	public void testSortedTasksByID() {
-		EzStorage storage = new EzStorage();
-		EzTask task = EzParser.extractInfo("add \"task 0\" on 26/7/2014", storage).getResults().get(0);
-		task.setId(6);
-		storage.addTask(task);
-		
-		task = EzParser.extractInfo("add \"task 1\" on 26/7/2014 5h30", storage).getResults().get(0);
-		task.setId(3);
-		storage.addTask(task);
-		
-		task = EzParser.extractInfo("add \"task 2\" on 27/7/2014 from 5h30 to 22h", storage).getResults().get(0);
-		task.setId(0);
-		storage.addTask(task);
-		
-		task = EzParser.extractInfo("add \"task 3\" on 26/7/2014 5h30", storage).getResults().get(0);
-		task.setId(2);
-		storage.addTask(task);
-		
-		task = EzParser.extractInfo("add \"task 4\" on 27/7/2014 from 5h30 to 22h", storage).getResults().get(0);
-		task.setId(1);
-		storage.addTask(task);
-		
-		assertEquals("Check size of storage: ", 5, storage.getSize());
-		ArrayList<EzTask> list = EzSort.sortById(storage.getListOfAllTasks());
-		assertTrue("Check list is not null: ", list!=null);
-		assertEquals("Check size of list: ", 5, list.size());
-		assertEquals("Check id: ", 0, list.get(0).getId());
-		assertEquals("Check id: ", 1, list.get(1).getId());
-		assertEquals("Check id: ", 2, list.get(2).getId());
-		assertEquals("Check id: ", 3, list.get(3).getId());
-		assertEquals("Check id: ", 6, list.get(4).getId());
-	}
-	
-	@Test
-	public void testSortedTasksByPriority() {
-		EzStorage storage = new EzStorage();
-		EzTask task = EzParser.extractInfo("add \"task 0\" on 26/7/2014 ***", storage).getResults().get(0);
-		task.setId(6);
-		storage.addTask(task);
-		
-		task = EzParser.extractInfo("add \"task 1\" on 26/7/2014 5h30 **", storage).getResults().get(0);
-		task.setId(3);
-		storage.addTask(task);
-		
-		task = EzParser.extractInfo("add \"task 2\" on 27/7/2014 from 5h30 to 22h *", storage).getResults().get(0);
-		task.setId(0);
-		storage.addTask(task);
-		
-		task = EzParser.extractInfo("add \"task 3\" on 26/7/2014 5h30 ***", storage).getResults().get(0);
-		task.setId(2);
-		storage.addTask(task);
-		
-		task = EzParser.extractInfo("add \"task 4\" on 27/7/2014 from 5h30 to 22h", storage).getResults().get(0);
-		task.setId(1);
-		storage.addTask(task);
-		
-		assertEquals("Check size of storage: ", 5, storage.getSize());
-		ArrayList<EzTask> list = EzSort.sortByPriority(storage.getListOfAllTasks());
-		assertTrue("Check list is not null: ", list!=null);
-		assertEquals("Check size of list: ", 5, list.size());
-	
-		assertEquals("Check id: ", 3, list.get(0).getPriority());
-		assertEquals("Check id: ", 3, list.get(1).getPriority());
-		assertEquals("Check id: ", 2, list.get(2).getPriority());
-		assertEquals("Check id: ", 1, list.get(3).getPriority());
-		assertEquals("Check id: ", 0, list.get(4).getPriority());
 	}
 	
 	@Test

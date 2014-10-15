@@ -40,16 +40,42 @@ public class EzHtmlGenerator {
 	
 	private static final String[] CALENDAR_MONTH = {"Jan","Feb","March","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
 	
+	private static String td(String format, String content){
+		return "<td " + format + ">" + content + "</td>";
+	}
+	
+	private static String td(String content){
+		return td("",content);
+	}
+	
+	private static String tr(String format, String content){
+		return "<tr " + format + ">" + content + "</tr>";
+	}
+	
+	private static String tr(String content){
+		return tr("",content);
+	}
+	
+	private static String table(String format, String content){
+		return "<table " + format + ">" + content + "</table>";
+	}
+	
+	private static String table(String content){
+		return table("",content);
+	}
+	
 	public static String createHtmlEzTask(EzTask task,int type){
 		if (task!=null){
-			return 	"<table border=0 cellspacing=0 cellpadding=1 bgcolor=\"#" + convertColorToHex(TASK_BG_COLOR[type]) + "\" width=\"560px\"><tr>"
-					+ "<td width=\"53px\" bgcolor=\"#" + convertColorToHex(ID_BG_COLOR[type]) +"\"  height=\"40px\">" + createHtmlIdAndPriorityOfEzTask(task) + "</td>"
-					+ "<td width=\"5px\"></td>"
-					+ "<td width=\"300px\">"  + createHtmlTitleAndVenueOfEzTask(task) + "</td>" 
-					+ "<td width=\"15px\"></td>"
-					+ "<td align=\"left\" >"  + createHtmlDateOfEzTask(task) + "</td>"
-					+ "<td align=\"right\" width=\"40px\">"  + createHtmlDoneOfEzTask(task) + "</td>" 
-					+ "</tr></table>";
+			return 	table("border=0 cellspacing=0 cellpadding=1 bgcolor=\"#" + convertColorToHex(TASK_BG_COLOR[type]) + "\" width=\"560px\"",
+						tr(
+							td("width=\"53px\" bgcolor=\"#" + convertColorToHex(ID_BG_COLOR[type]) +"\"  height=\"40px\"",createHtmlIdAndPriorityOfEzTask(task)) +
+							td("width=\"5px\"", "") +
+							td("width=\"300px\"", createHtmlTitleAndVenueOfEzTask(task)) +
+							td("width=\"15px\"", "") +
+							td("align=\"left\"", createHtmlDateOfEzTask(task)) +
+							td("align=\"right\" width=\"40px\"", createHtmlDoneOfEzTask(task))
+						)
+					);
 		} else {
 			return "";
 		}
@@ -57,7 +83,7 @@ public class EzHtmlGenerator {
 	
 	private static String createHtmlDoneOfEzTask(EzTask task) {
 		if (task.isDone()){
-			return createHtmlImg("image/done.png");
+			return img("image/done.png");
 		}
 		return "";
 	}
@@ -79,7 +105,7 @@ public class EzHtmlGenerator {
 			} else {
 				list.add(createHtmlCalendar(date1));
 				list.add(createHtmlClock(date1));
-				list.add(createHtmlImg("image/rightArrow.png"));
+				list.add(img("image/rightArrow.png"));
 				if ((date1.get(Calendar.YEAR) != date2.get(Calendar.YEAR))
 						|| (date1.get(Calendar.MONTH) != date2.get(Calendar.MONTH))
 						|| (date1.get(Calendar.DATE) != date2.get(Calendar.DATE))){
@@ -92,27 +118,26 @@ public class EzHtmlGenerator {
 	}
 	
 	public static String createHtmlTable(int row, int col, ArrayList<String> list, String tableAttribute){
-		String result = "<table "+tableAttribute+">";
+		String result = "";
 		for(int i=0;i<row;i++){
-			result = result + "<tr>";
+			String tdList = "";
 			for(int j=0;j<col;j++){
-				result = result + "<td>";
 				if (i*col+j<list.size()) {
-					result = result + list.get(i*col+j);
+					tdList += td(list.get(i*col+j));
 				}
-				result = result + "</td>";
 			}
-			result = result + "</tr>";
+			result = result + tr(tdList);
 		}
-		return result + "</table>";
+		return table(tableAttribute,result);
 	}
 	
 	public static String createHtmlTableWithHeader(String header, String content, String tableAttribute){
-		String result = "<table "+tableAttribute+">"+
-					"<tr><td height=\"44px\">"
-					+ EzHtmlGenerator.createHtmlText("__",MAIN_TITLE_FONT_FONT,2,EzConstants.SHOW_AREA_BACKGROUND)
-					+ EzHtmlGenerator.createHtmlText(header,MAIN_TITLE_FONT_FONT, 8, MAIN_TITLE_FONT_COLOR)
-					+"</td></tr><tr><td>" + content + "</td></tr></table>";
+		header = EzHtmlGenerator.createHtmlText("__",MAIN_TITLE_FONT_FONT,2,EzConstants.SHOW_AREA_BACKGROUND)
+				+EzHtmlGenerator.createHtmlText(header,MAIN_TITLE_FONT_FONT, 8, MAIN_TITLE_FONT_COLOR);
+		String result = table(tableAttribute,
+							tr(td("height=\"44px\"", header)) +
+							tr(td(content))
+						);
 		return result;
 	}
 	
@@ -127,17 +152,21 @@ public class EzHtmlGenerator {
 	private static String createHtmlIdAndPriorityOfEzTask(EzTask task){
 		String htmlId = createHtmlText("#"+task.getId(), ID_FONT_FONT, ID_FONT_SIZE, ID_FONT_COLOR);
 		String htmlPriority = createHtmlStar(task.getPriority());
-		return "<table width=\"48px\"><tr><td>" + center(htmlId) + "</td></tr>"
-				+ "<tr><td>"+ center(htmlPriority) + "</td></tr></table>";
+		
+		return 	table("width=\"48px\"",
+					tr(td(center(htmlId))) +
+					tr(td(center(htmlPriority)))
+				);
 	}
 	
 	private static String createHtmlCalendar(GregorianCalendar date){
 		String monthHtmlText = createHtmlText(CALENDAR_MONTH[date.get(Calendar.MONTH)],"Arial Rounded MT Bold",2,new Color(255,255,255));
 		String dateHtmlText = createHtmlText(String.valueOf(date.get(Calendar.DATE)),"Arial",6,CALENDAR_DATE_FONT_COLOR);
 		
-		return "<table background=\"file:" + IMAGE_CALENDAR_PNG +"\" border=0 cellspacing=0 cellpadding=0 width=\"38px\">"
-		+ "<tr><td height=\"10px\">" + center(monthHtmlText) + "</td></tr>" 
-		+ "<tr><td height=\"27px\">" + center(dateHtmlText) + "</td></tr></table>";
+		return 	table("background=\"file:" + IMAGE_CALENDAR_PNG +"\" border=0 cellspacing=0 cellpadding=0 width=\"38px\"",
+					tr(td("height=\"10px\"",center(monthHtmlText))) +
+					tr(td("height=\"27px\"",center(dateHtmlText)))
+				);
 	}
 	
 	private static String createHtmlClock(GregorianCalendar date){
@@ -152,11 +181,13 @@ public class EzHtmlGenerator {
 		}
 		
 		String timeHtmlText = createHtmlText(hour+":"+minute,"Digital Dismay",5,"38e204");
-		return "<table background=\"file:" + IMAGE_CLOCK_PNG +"\" border=0 cellspacing=0 cellpadding=0 width=\"40px\">"
-		+ "<tr><td width=\"2px\"></td><td height=\"25px\">" + center(timeHtmlText) + "</td></tr></table>";
+		
+		return 	table("background=\"file:" + IMAGE_CLOCK_PNG +"\" border=0 cellspacing=0 cellpadding=0 width=\"40px\"",
+					tr(td("width=\"2px\"","") + td("height=\"25px\"",center(timeHtmlText)))
+				);
 	}
 	
-	private static String createHtmlImg(String url){
+	private static String img(String url){
 		return "<img src=\"file:"+ url + "\">";
 	}
 	
@@ -165,22 +196,22 @@ public class EzHtmlGenerator {
 		String chosenStar = "";
 		switch (numStar){
 		case 1:
-			chosenStar = createHtmlImg("image/star100.png");
+			chosenStar = img("image/star100.png");
 			break;
 		case 2:
-			chosenStar = createHtmlImg("image/star080.png");
+			chosenStar = img("image/star080.png");
 			break;
 		case 3:
-			chosenStar = createHtmlImg("image/star060.png");
+			chosenStar = img("image/star060.png");
 			break;
 		case 4:
-			chosenStar = createHtmlImg("image/star040.png");
+			chosenStar = img("image/star040.png");
 			break;
 		case 5:
-			chosenStar = createHtmlImg("image/star020.png");
+			chosenStar = img("image/star020.png");
 			break;
 		default:
-			chosenStar = createHtmlImg("image/star000.png");
+			chosenStar = img("image/star000.png");
 			break;
 		}
 		for(int i=0;i<numStar;i++) {

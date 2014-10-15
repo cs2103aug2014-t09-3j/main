@@ -18,9 +18,15 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-
+import java.util.Date;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 
 public class EzGUI extends JFrame {
@@ -38,7 +44,7 @@ public class EzGUI extends JFrame {
 	private static final Color BACKGROUND_COLOR = EzConstants.CHATEAU_GREEN_COLOR;
 	private static final int APP_HEIGHT = 640;
 	private static final int APP_WIDTH = 960;
-	private static final int START_LOCATION_Y = 50;
+	private static final int START_LOCATION_Y = 0;
 	private static final int START_LOCATION_X = 50;
 	
 	private static final String[] KEYWORDS = {"add","delete","update","show","done","undone","undo","redo","on","at","from","to","today","tomorrow"
@@ -46,7 +52,7 @@ public class EzGUI extends JFrame {
 	
 	private static final String[] LIST_OF_BUTTON_NAMES = {	"All", 
 															"Done", 
-															"Undone", 
+															"Not Done", 
 															"Today",
 															"Tomorrow",
 															"Coming",
@@ -55,24 +61,27 @@ public class EzGUI extends JFrame {
 															"Help"};
 	
 	private JPanel mainPanel;
-	private JScrollPane displayPanel;
-	private Calendar cal = Calendar.getInstance();
-	private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	private static JScrollPane displayPanel;
 	private static JEditorPane displayArea;
 	private JButton selectedButton = null;
 	private JTextPane commandField;
 	private SimpleAttributeSet[] commandAttributeSet = new SimpleAttributeSet[3];
 	private ArrayList<String> commandHistory = new ArrayList<String>();
 	private int historyPos = 0;
+	JDialog suggestPanel;
+	private JEditorPane editorPane;
+	private static ArrayList<JButton> listOfButtons;
 	/**
 	 * Create the frame.
 	 */
 	public EzGUI() {
+		
 		setTitle(PROGRAM_TITLE);
 		createMainPanel();
 		createButtonPanel();
 		createDisplayPanel();
 		createCommandPanel();
+		createSuggestPanel();
 		registerFont();
 		try {
 			EzController.loadFromFile();
@@ -81,11 +90,33 @@ public class EzGUI extends JFrame {
 		}
 	}
 
-	/**
-	 * 
-	 */
-	private String getDate() {
-		return dateFormat.format(cal.getTime());
+	private void createSuggestPanel() {
+		suggestPanel = new JDialog(this, "Suggest", false);
+
+		int x = this.getLocation().x + 167;
+		int y = this.getLocation().y + this.getHeight() - 10;
+		suggestPanel.setLocation(x, y);
+		suggestPanel.setMinimumSize(new Dimension(779,0));
+		editorPane = new JEditorPane();
+		
+		suggestPanel.getContentPane().add(editorPane, BorderLayout.NORTH);
+		
+		suggestPanel.setUndecorated(true);
+		suggestPanel.pack();
+		suggestPanel.setFocusableWindowState(false);
+		suggestPanel.setVisible(false);
+		
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentMoved(ComponentEvent arg0) {
+				JFrame frame = (JFrame) arg0.getSource();
+				
+				int x = frame.getLocation().x + 167;
+				int y = frame.getLocation().y + frame.getHeight() - 10;
+				suggestPanel.setLocation(x, y);
+			      
+			}
+		});
 	}
 
 	/**
@@ -113,7 +144,7 @@ public class EzGUI extends JFrame {
 		buttonPanel.setFocusable(false);
 		mainPanel.add(buttonPanel, BorderLayout.WEST);
 		
-		ArrayList<JButton> listOfButtons = new ArrayList<JButton>();
+		listOfButtons = new ArrayList<JButton>();
 		for(int i=0;i<LIST_OF_BUTTON_NAMES.length;i++){
 			JButton button = initButton(LIST_OF_BUTTON_NAMES[i]);
 			listOfButtons.add(button);
@@ -150,6 +181,7 @@ public class EzGUI extends JFrame {
 	private JButton initButton(String nameOfButton) {
 		JButton button = new JButton(nameOfButton);
 		button.setName(nameOfButton);
+		
 		button.setFont(new Font(BUTTON_FONT, Font.BOLD, 16));
 		button.setBackground(UNSELECTED_BUTTON_BG_COLOR);
 		button.setBorderPainted(false);
@@ -166,38 +198,46 @@ public class EzGUI extends JFrame {
 				button.setBackground(SELECTED_BUTTON_BG_COLOR);
 				selectedButton = button;
 				
+				EzStorage storage = EzController.getStorage();
+				
 				if (button.getName().equalsIgnoreCase("All")){
-					// ADD your code here
-					
+					showContent("All tasks",storage.getListOfAllTasks());
 				} else if (button.getName().equalsIgnoreCase("Done")){
-					
-				} else if (button.getName().equalsIgnoreCase("Undone")){
-					
+					showContent("Done tasks",storage.getDoneTasks());
+				} else if (button.getName().equalsIgnoreCase("Not done")){
+					showContent("Not Done tasks",storage.getUndoneTasks());
 				} else if (button.getName().equalsIgnoreCase("Today")){
-					
+					showContent("Today tasks",storage.getTasksByDate(getToday()));
 				} else if (button.getName().equalsIgnoreCase("Tomorrow")){
-					
+					showContent("Tomorrow tasks",storage.getTasksByDate(getTomorrow()));
 				} else if (button.getName().equalsIgnoreCase("Coming")){
-					
+					showContent("Coming tasks",storage.getComingTasks());
 				} else if (button.getName().equalsIgnoreCase("Past")){
-					
+					showContent("Past tasks",storage.getPastTasks());
 				} else if (button.getName().equalsIgnoreCase("No Date")){
-					
+					showContent("No Date tasks",storage.getNoDateTasks());
 				} else if (button.getName().equalsIgnoreCase("Help")){
-					
+					File file = new File("help.txt");
+					BufferedReader in;
+					String text = "";
+					try {
+						String line;
+						in = new BufferedReader(new InputStreamReader(file.toURL().openStream()));
+						while ((line = in.readLine()) != null) {
+							text += line;
+						}
+						in.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					 	
+					showContent("Help - All commands", text);
 				} 
 				
 				commandField.requestFocus();
 			}
 		});
 		return button;
-	}
-
-	/**
-	 * 
-	 */
-	private void goToNextDay() {
-		cal.roll(Calendar.DATE, true);
 	}
 
 	/**
@@ -267,11 +307,11 @@ public class EzGUI extends JFrame {
 					
 					switch (arg0.getKeyCode()){
 					case KeyEvent.VK_UP:
-						displayPanel.getVerticalScrollBar().setValue(displayPanel.getVerticalScrollBar().getValue()-20);;
+						displayPanel.getVerticalScrollBar().setValue(displayPanel.getVerticalScrollBar().getValue()-20);
 						//showArea.setText("Ctrl+Up Pressed." + String.valueOf((int)arg0.getKeyCode()));
 						break;
 					case KeyEvent.VK_DOWN:
-						displayPanel.getVerticalScrollBar().setValue(displayPanel.getVerticalScrollBar().getValue()+20);;
+						displayPanel.getVerticalScrollBar().setValue(displayPanel.getVerticalScrollBar().getValue()+20);
 						//showArea.setText("Ctrl+Down Pressed." + String.valueOf((int)arg0.getKeyCode()));
 						break;
 
@@ -637,5 +677,58 @@ public class EzGUI extends JFrame {
 	public static void showContent(String header, String content){
 		String text = EzHtmlGenerator.createHtmlTableWithHeader(header, content, "border=0 cellspacing=0 cellpadding=0 width=\"100%\"");
 		displayArea.setText(text);
+		displayArea.setCaretPosition(0);
+		refreshButton();
+		
+	}
+
+	private static Date getToday(){
+		Calendar cal = Calendar.getInstance();
+		return cal.getTime();
+	}
+	
+	private static Date getTomorrow(){
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, 1);
+		return cal.getTime();
+	}
+	
+	/**
+	 * 	"All", 
+		"Done", 
+		"Undone", 
+		"Today",
+		"Tomorrow",
+		"Coming",
+		"Past",
+		"No Date",
+		"Help"
+	 */
+	private static void refreshButton() {
+		EzStorage storage = EzController.getStorage();
+		for(int i=0;i < listOfButtons.size();i++){
+			JButton button = listOfButtons.get(i);
+			int numTask = 0;
+			if (button.getName().equalsIgnoreCase("All")){
+				numTask = storage.getListOfAllTasks().size();
+			} else if (button.getName().equalsIgnoreCase("Done")){
+				numTask = storage.getDoneTasks().size();
+			} else if (button.getName().equalsIgnoreCase("Not Done")){
+				numTask = storage.getUndoneTasks().size();
+			} else if (button.getName().equalsIgnoreCase("Today")){
+				numTask = storage.getTasksByDate(getToday()).size();
+			} else if (button.getName().equalsIgnoreCase("Tomorrow")){
+				numTask = storage.getTasksByDate(getTomorrow()).size();
+			} else if (button.getName().equalsIgnoreCase("Coming")){
+				numTask = storage.getComingTasks().size();
+			} else if (button.getName().equalsIgnoreCase("Past")){
+				numTask = storage.getPastTasks().size();
+			} else if (button.getName().equalsIgnoreCase("No Date")){
+				numTask = storage.getNoDateTasks().size();
+			}
+			if (!button.getName().equalsIgnoreCase("Help")){
+				button.setText(button.getName() + " (" + String.valueOf(numTask) + ")");
+			}
+		}
 	}
 }

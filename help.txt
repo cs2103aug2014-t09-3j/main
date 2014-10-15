@@ -1,0 +1,60 @@
+<p style="margin-left: 40px;">&nbsp;</p>
+
+<p style="margin-left: 40px;"><span style="font-size:11px;"><span style="font-family:verdana,geneva,sans-serif;"><span style="color:#008080;"><strong>ADD </strong></span>&quot;title&quot; &nbsp; &nbsp; &nbsp; &nbsp;: set the title of EzTask object<br />
+&nbsp;&nbsp; &nbsp;<strong><span style="color:#008080;">AT</span> </strong>&quot;venue&quot; &nbsp; &nbsp;: set the venue of EzTask object<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>AT</strong></span> time &nbsp; &nbsp; &nbsp; &nbsp; : set the time&nbsp;of both startTime and endTime of EzTask object<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>AT</strong></span> time&nbsp;date&nbsp;&nbsp; &nbsp;: set the date and time of both startTime and endTime of EzTask object<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>ON</strong></span> date&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;: set the date of both startTime and endTime of EzTask object<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>ON</strong></span> date time&nbsp;&nbsp; &nbsp;: set the date and time of both startTime and endTime of EzTask object<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>TODAY</strong></span>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;: if it appears after ON, FROM or TO, it represents the date of today<br />
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;if it stands alone, the same as ON TODAY<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>TOMORROW</strong></span>&nbsp;&nbsp; &nbsp;: if it appears after ON, FROM or TO, it represents the date of tomorrow<br />
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;if it stands alone, the same as ON TOMORROW<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>****</strong></span>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;: set the priority depending on the number of *<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>FROM</strong></span> date&nbsp;&nbsp; &nbsp;: set the date of startTime of EzTask object<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>FROM</strong></span> time&nbsp;&nbsp; &nbsp;: set the time of startTime of EzTask object<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>FROM</strong></span> date time&nbsp;&nbsp; &nbsp;: set the date &amp; time of startTime of EzTask object<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>FROM</strong></span> time date &nbsp;&nbsp; &nbsp;: set the date &amp; time of startTime of EzTask object<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>TO</strong></span> date&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;: set the date of endTime of EzTask object<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>TO</strong></span> time&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;: set the time of endTime of EzTask object<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>TO</strong></span> date time&nbsp;&nbsp; &nbsp;: set the date &amp; time of endTime of EzTask object<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>TO</strong></span> time date &nbsp;&nbsp; &nbsp;: set the date &amp; time of endTime of EzTask object<br />
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;</span></span></p>
+
+<p style="margin-left: 40px;"><span style="font-size:11px;"><span style="font-family:verdana,geneva,sans-serif;"><span style="color:#008080;"><strong>UPDATE </strong></span>id&nbsp;<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>SET TITLE </strong></span>&quot;newTitle&quot;<br />
+&nbsp;&nbsp; &nbsp;<strong><span style="color:#008080;">SET DATE</span> </strong>[newDate]<br />
+&nbsp;&nbsp; &nbsp;<strong><span style="color:#008080;">SET TIME </span></strong>[newTime]<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>SET START DATE </strong></span>[newDate]<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>SET START TIME </strong></span>[newTime]<br />
+&nbsp;&nbsp; &nbsp;<strong><span style="color:#008080;">SET END DATE </span></strong>[newDate]<br />
+&nbsp;&nbsp; &nbsp;<strong><span style="color:#008080;">SET END TIME </span></strong>[newTime]<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>SET VENUE </strong></span>&quot;newVenue&quot;<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>SET PRIORITY </strong></span>[newPriority]</span></span></p>
+
+<p style="margin-left: 40px;">&nbsp;</p>
+
+<p style="margin-left: 40px;"><span style="font-size:11px;"><span style="font-family:verdana,geneva,sans-serif;"><strong><span style="color:#008080;">UNDO</span></strong><br />
+<span style="color:#008080;"><strong>REDO</strong></span></span></span></p>
+
+<p style="margin-left: 40px;">&nbsp;</p>
+
+<p style="margin-left: 40px;"><span style="font-size:11px;"><span style="font-family:verdana,geneva,sans-serif;"><span style="color:#008080;"><strong>DONE </strong></span>[id1] [id2] [id3]...<br />
+<span style="color:#008080;"><strong>DONE FROM </strong></span>[startID] <span style="color:#008080;"><strong>TO </strong></span>[endID]<br />
+<span style="color:#008080;"><strong>DONE ALL</strong></span><br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>ON</strong></span> [date]</span></span></p>
+
+<p style="margin-left: 40px;">&nbsp;</p>
+
+<p style="margin-left: 40px;"><span style="font-size:11px;"><span style="font-family:verdana,geneva,sans-serif;"><span style="color:#008080;"><strong>DELETE </strong></span>[id1] [id2] [id3]<br />
+<span style="color:#008080;"><strong>DELETE FROM </strong></span>[startId] <span style="color:#008080;"><strong>TO</strong></span> [endId]<br />
+<span style="color:#008080;"><strong>DELETE ALL</strong></span><br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>ON</strong></span> [date]</span></span></p>
+
+<p style="margin-left: 40px;">&nbsp;</p>
+
+<p style="margin-left: 40px;"><span style="font-size:11px;"><span style="font-family:verdana,geneva,sans-serif;"><strong><span style="color:#008080;">SHOW ALL<br />
+SHOW DONE<br />
+SHOW UNDONE<br />
+&nbsp;&nbsp; &nbsp;ON </span></strong>[date]<br />
+&nbsp;&nbsp; &nbsp;<span style="color:#008080;"><strong>HAVE </strong></span>[keyword1] [keyword2]...</span></span></p>
