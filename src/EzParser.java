@@ -86,6 +86,7 @@ public class EzParser {
 		String content = removeFirstWord(userCommand);
 		switch (newAction.getAction()) {// content starts with no Action
 		case ADD:
+			newAction.setFeedback("Add successfully!");//feedback
 			ArrayList<EzTask> targetAdd = new ArrayList<EzTask>();
 			EzTask task = new EzTask();
 			String title = new String();
@@ -367,19 +368,18 @@ public class EzParser {
 							dateArr[2] = readDate(start2)[2];
 							calendar = new GregorianCalendar(dateArr[2],
 									dateArr[1] - 1, dateArr[0]);
-							task.setStartTime(calendar);
-							dateArr[0] = readDate(end2)[0];
-							dateArr[1] = readDate(end2)[1];
-							dateArr[2] = readDate(end2)[2];
-							calendar = new GregorianCalendar(dateArr[2],
-									dateArr[1] - 1, dateArr[0]);
-							task.setEndTime(calendar);
-
 							dateArr[3] = readTime(start1)[0];
 							dateArr[4] = readTime(start1)[1];
 							calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
 							calendar.set(GregorianCalendar.MINUTE, dateArr[4]);
 							task.setStartTime(calendar);
+							
+							dateArr[0] = readDate(end2)[0];
+							dateArr[1] = readDate(end2)[1];
+							dateArr[2] = readDate(end2)[2];
+							calendar = new GregorianCalendar(dateArr[2],
+									dateArr[1] - 1, dateArr[0]);
+							
 							dateArr[3] = readTime(end1)[0];
 							dateArr[4] = readTime(end1)[1];
 							calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
@@ -402,6 +402,7 @@ public class EzParser {
 			break;
 
 		case UPDATE:
+			newAction.setFeedback("Update successfully!");
 			ArrayList<EzTask> targetUpdate = new ArrayList<EzTask>();
 			ArrayList<EzTask> resultUpdate = new ArrayList<EzTask>();
 			int[] dateUpdate = new int[5];
@@ -713,6 +714,7 @@ public class EzParser {
 			break;
 
 		case DONE:
+			newAction.setFeedback("Set as done successfully!");
 			ArrayList<EzTask> targetsDone=new ArrayList<EzTask>();
 			ArrayList<EzTask> resultsDone=new ArrayList<EzTask>();
 			
@@ -812,11 +814,13 @@ public class EzParser {
 			break;
 
 		case UNDO:
+			newAction.setFeedback("Undo successfully!");
 			newAction.setResults(null);
 			newAction.setTargets(null);
 			break;
 
 		case REDO:
+			newAction.setFeedback("Redo successfully!");
 			newAction.setResults(null);
 			newAction.setTargets(null);
 			break;
@@ -828,7 +832,7 @@ public class EzParser {
 				content=removeFirstWord(content);
 				if(getFirstWord(content).isEmpty())
 				{
-					targetsShow=storage.getSortedTasksById();
+					targetsShow=storage.getListOfAllTasks();
 				}
 				else if(getFirstWord(content).equalsIgnoreCase("on"))
 				{
@@ -884,7 +888,7 @@ public class EzParser {
 				content=removeFirstWord(content);
 				if(getFirstWord(content).isEmpty())
 				{
-					targetsShow=getDoneTasks(storage.getSortedTasksById());
+					targetsShow=getDoneTasks(storage.getListOfAllTasks());
 				}
 				else if(getFirstWord(content).equalsIgnoreCase("on"))
 				{
@@ -918,7 +922,7 @@ public class EzParser {
 				content=removeFirstWord(content);
 				if(getFirstWord(content).isEmpty())
 				{
-					targetsShow=getUndoneTasks(storage.getSortedTasksById());
+					targetsShow=getUndoneTasks(storage.getListOfAllTasks());
 				}
 				else if(getFirstWord(content).equalsIgnoreCase("on"))
 				{
