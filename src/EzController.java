@@ -385,6 +385,10 @@ public class EzController {
 		EzDataManage.loadFromFile(storage);
 	}
 	
+	public static EzStorage getStorage() {
+		return storage;
+	}
+	
 	public void refresh(){
 		
 	}
