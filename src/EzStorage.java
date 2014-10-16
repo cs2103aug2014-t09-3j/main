@@ -295,7 +295,7 @@ public class EzStorage {
 		{
 			if(!startTime.equals(null))
 			{
-				startTime = task.getStartTime().getTime();
+				startTime = task.getStartTime();
 				if(currentDate.before(startTime))
 					comingTasks.add(task);
 				else if(currentDate.get(Calendar.YEAR) == startTime.get(Calendar.YEAR) && currentDate.get(Calendar.MONTH) == startTime.get(Calendar.MONTH) &&
