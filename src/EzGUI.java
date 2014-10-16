@@ -218,17 +218,17 @@ public class EzGUI extends JFrame {
 				} else if (button.getName().equalsIgnoreCase("Done")){
 					showContent("Done tasks", EzSort.sortById(storage.getDoneTasks()));
 				} else if (button.getName().equalsIgnoreCase("Not done")){
-					showContent("Not Done tasks", EzSort.sortById(storage.getUndoneTasks()));
+					showContent("Not Done tasks", EzSort.sortByDate(storage.getUndoneTasks()));
 				} else if (button.getName().equalsIgnoreCase("Today")){
-					showContent("Today tasks", EzSort.sortById(storage.getTasksByDate(getToday())));
+					showContent("Today tasks", EzSort.sortByPriority(storage.getTasksByDate(getToday())));
 				} else if (button.getName().equalsIgnoreCase("Tomorrow")){
-					showContent("Tomorrow tasks", EzSort.sortById(storage.getTasksByDate(getTomorrow())));
+					showContent("Tomorrow tasks", EzSort.sortByPriority(storage.getTasksByDate(getTomorrow())));
 				} else if (button.getName().equalsIgnoreCase("Coming")){
-					showContent("Coming tasks", EzSort.sortById(storage.getComingTasks()));
+					showContent("Coming tasks", EzSort.sortByDate(storage.getComingTasks()));
 				} else if (button.getName().equalsIgnoreCase("Past")){
-					showContent("Past tasks", EzSort.sortById(storage.getPastTasks()));
+					showContent("Past tasks", EzSort.sortByDate(storage.getPastTasks()));
 				} else if (button.getName().equalsIgnoreCase("No Date")){
-					showContent("No Date tasks", EzSort.sortById(storage.getNoDateTasks()));
+					showContent("No Date tasks", EzSort.sortByPriority(storage.getNoDateTasks()));
 				} else if (button.getName().equalsIgnoreCase("Help")){
 					String text = readHelpDocument();
 					showContent("Help - All commands", text);
