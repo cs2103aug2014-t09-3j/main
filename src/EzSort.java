@@ -158,8 +158,12 @@ public class EzSort {
     
     public static Comparator<EzTask> TaskDateComparator = new Comparator<EzTask>() {
     	public int compare(EzTask task1, EzTask task2){
-    		if (task1.getStartTime() == null || task2.getStartTime() == null)
+    		if (task1.getStartTime() == null && task2.getStartTime() == null)
     	        return 0;
+    		
+    		else if(task1.getStartTime() == null)
+    			return 1;
+    		
     		return task1.getStartTime().getTime().compareTo(task2.getStartTime().getTime());
     	}
     };

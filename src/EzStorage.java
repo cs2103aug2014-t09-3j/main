@@ -293,9 +293,10 @@ public class EzStorage {
 		Calendar startTime = Calendar.getInstance();
 		for(EzTask task: listOfAllTasks)
 		{
-			if(!startTime.equals(null))
+			startTime = task.getStartTime();
+			if(startTime != null)
 			{
-				startTime = task.getStartTime().getTime();
+				
 				if(currentDate.before(startTime))
 					comingTasks.add(task);
 				else if(currentDate.get(Calendar.YEAR) == startTime.get(Calendar.YEAR) && currentDate.get(Calendar.MONTH) == startTime.get(Calendar.MONTH) &&
@@ -316,12 +317,17 @@ public class EzStorage {
 		Calendar endTime = Calendar.getInstance();
 		for(EzTask task: listOfAllTasks)
 		{
-			startTime = task.getStartTime();
-			endTime = task.getEndTime();
-			if(currentDate.after(startTime) || currentDate.after(endTime))
-				if(!pastTasks.contains(task))
-					pastTasks.add(task);
-
+			if(task.getStartTime() != null && task.getEndTime() != null)
+			{
+				startTime = task.getStartTime();
+				endTime = task.getEndTime();
+				if(currentDate.get(Calendar.YEAR) != startTime.get(Calendar.YEAR) || currentDate.get(Calendar.MONTH) != startTime.get(Calendar.MONTH) ||
+						currentDate.get(Calendar.DAY_OF_MONTH) != startTime.get(Calendar.DAY_OF_MONTH) || currentDate.get(Calendar.YEAR) != endTime.get(Calendar.YEAR) || currentDate.get(Calendar.MONTH) != endTime.get(Calendar.MONTH) ||
+						currentDate.get(Calendar.DAY_OF_MONTH) != endTime.get(Calendar.DAY_OF_MONTH))
+					if(currentDate.after(startTime)  || currentDate.after(endTime))
+						if(!pastTasks.contains(task))
+							pastTasks.add(task);
+			}
 		}
 
 		EzSort.sortByDate(pastTasks);
