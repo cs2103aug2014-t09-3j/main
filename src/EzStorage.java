@@ -38,8 +38,14 @@ public class EzStorage {
 		
 		listOfAllTasks.add(task);
 		
+		int size = listOfAllTasks.size();
+		assert size >0;
+		int largestNum = 0;
+		for(EzTask task1 : listOfAllTasks)
+			if(task1.getId() > largestNum)
+				largestNum = task1.getId();
 		
-		
+		assert largestId == largestNum + 1;
 		return task;
 	}
 	
@@ -280,25 +286,27 @@ public class EzStorage {
 		EzSort.sortById(undoneTasks);
 		return undoneTasks;
 	}
-	
+
 	public  ArrayList<EzTask> getComingTasks(){
 		ArrayList<EzTask> comingTasks = new ArrayList<EzTask>();
 		Calendar currentDate = Calendar.getInstance();
 		Calendar startTime = Calendar.getInstance();
 		for(EzTask task: listOfAllTasks)
 		{
-			startTime = task.getStartTime();
-			if(currentDate.before(startTime))
-				comingTasks.add(task);
-			else if(currentDate.get(Calendar.YEAR) == startTime.get(Calendar.YEAR) && currentDate.get(Calendar.MONTH) == startTime.get(Calendar.MONTH) &&
-    			currentDate.get(Calendar.DAY_OF_MONTH) == startTime.get(Calendar.DAY_OF_MONTH))
-				
-				comingTasks.add(task);
-		}
-			
-			EzSort.sortByDate(comingTasks);
-			
-			return comingTasks;
+			if(!startTime.equals(null))
+			{
+				startTime = task.getStartTime().getTime();
+				if(currentDate.before(startTime))
+					comingTasks.add(task);
+				else if(currentDate.get(Calendar.YEAR) == startTime.get(Calendar.YEAR) && currentDate.get(Calendar.MONTH) == startTime.get(Calendar.MONTH) &&
+						currentDate.get(Calendar.DAY_OF_MONTH) == startTime.get(Calendar.DAY_OF_MONTH))
+
+					comingTasks.add(task);
+			}}
+
+		EzSort.sortByDate(comingTasks);
+
+		return comingTasks;
 	}
 	
 	public ArrayList<EzTask> getPastTasks() {
@@ -311,13 +319,14 @@ public class EzStorage {
 			startTime = task.getStartTime();
 			endTime = task.getEndTime();
 			if(currentDate.after(startTime) || currentDate.after(endTime))
-				pastTasks.add(task);
-		
+				if(!pastTasks.contains(task))
+					pastTasks.add(task);
+
 		}
-		
+
 		EzSort.sortByDate(pastTasks);
 		return pastTasks;
-			
+
 	}
 
 	/**
