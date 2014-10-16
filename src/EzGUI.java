@@ -224,7 +224,7 @@ public class EzGUI extends JFrame {
 				} else if (button.getName().equalsIgnoreCase("Tomorrow")){
 					showContent("Tomorrow tasks", EzSort.sortById(storage.getTasksByDate(getTomorrow())));
 				} else if (button.getName().equalsIgnoreCase("Coming")){
-					//showContent("Coming tasks", EzSort.sortById(storage.getComingTasks()));
+					showContent("Coming tasks", EzSort.sortById(storage.getComingTasks()));
 				} else if (button.getName().equalsIgnoreCase("Past")){
 					showContent("Past tasks", EzSort.sortById(storage.getPastTasks()));
 				} else if (button.getName().equalsIgnoreCase("No Date")){
@@ -737,7 +737,7 @@ public class EzGUI extends JFrame {
 			} else if (button.getName().equalsIgnoreCase("Tomorrow")){
 				numTask = storage.getTasksByDate(getTomorrow()).size();
 			} else if (button.getName().equalsIgnoreCase("Coming")){
-				numTask = 0;//storage.getComingTasks().size();
+				numTask = storage.getComingTasks().size();
 			} else if (button.getName().equalsIgnoreCase("Past")){
 				numTask = storage.getPastTasks().size();
 			} else if (button.getName().equalsIgnoreCase("No Date")){

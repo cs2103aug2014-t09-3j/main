@@ -21,7 +21,7 @@ public class EzController {
 	public static String execute(String userCommand){
 		EzAction userAction = EzParser.extractInfo(userCommand, storage);
 		determineUserAction(userAction);
-		return "";
+		return userAction.getFeedback();
 	}
 
 	public static void determineUserAction(EzAction userAction) {
