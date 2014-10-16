@@ -161,8 +161,11 @@ public class EzSort {
     		if (task1.getStartTime() == null && task2.getStartTime() == null)
     	        return 0;
     		
-    		else if(task1.getStartTime() == null)
+    		else if(task1.getStartTime() == null && task2.getStartTime() != null)
     			return 1;
+    		
+    		else if(task1.getStartTime() != null && task2.getStartTime() == null)
+    			return -1;
     		
     		return task1.getStartTime().getTime().compareTo(task2.getStartTime().getTime());
     	}
