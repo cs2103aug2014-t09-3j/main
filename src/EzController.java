@@ -64,6 +64,7 @@ public class EzController {
 				deleteAction = userAction;
 				ArrayList<EzTask> toBeDeleted = userAction.getTargets();
 				confirmation = true;
+				assert(toBeDeleted.size() >= 0);
 				if(toBeDeleted.size() == 1) {
 					EzGUI.showContent("Are you sure to delete this task? (Y/N)", toBeDeleted);
 				}
@@ -76,6 +77,7 @@ public class EzController {
 		case Y:
 			if (confirmation){
 				checkPos();
+				assert(deleteAction != null);
 				storage.deleteTask(deleteAction.getTargets());
 				addHistory(deleteAction);
 				try {
@@ -97,6 +99,7 @@ public class EzController {
 				confirmation = false;
 			}
 			break;
+			
 		case DONE:
 			if (!confirmation){
 				storage.updateTask(userAction.getResults());
@@ -116,7 +119,7 @@ public class EzController {
 		case UNDO:
 			if (!confirmation){
 				if(pos <= -1) {
-					break;
+					return;
 				}
 				else {
 					undoTask();
