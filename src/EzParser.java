@@ -88,6 +88,7 @@ public class EzParser {
 		case ADD:
 			newAction.setFeedback("Add successfully!");//feedback
 			ArrayList<EzTask> targetAdd = new ArrayList<EzTask>();
+			assert(newAction.getAction()!=null);
 			EzTask task = new EzTask();
 			String title = new String();
 			if ((content.indexOf("\"") < 0) || (content.indexOf("\"", 1) < 0)// if
@@ -104,6 +105,7 @@ public class EzParser {
 													// with ",means invalid
 													// command type.
 				newAction.setAction(TypeOfAction.INVALID);
+			    newAction.setFeedback("Invalid command.");
 			title = content.substring(content.indexOf("\"") + 1,
 					content.indexOf("\"", 1));
 			content = content.substring(content.indexOf("\"", content.indexOf("\"")+1)+1).trim();
@@ -140,10 +142,12 @@ public class EzParser {
 		
 			if (content.indexOf("\"") >= 0) {
 			newAction.setAction(TypeOfAction.INVALID);
+			newAction.setFeedback("Extra \" in the command.");
 			}// if there is more ",the command is invalid.
 
 			if (checkMultipleAction(content) == true) {
 				newAction.setAction(TypeOfAction.INVALID);
+				newAction.setFeedback("Multiple types of action.");
 			}// see if there is other keywords for action.
 
 			int priority = 0;
@@ -161,13 +165,16 @@ public class EzParser {
 							.lastIndexOf("*"); i++) {
 						if (content.charAt(i) != '*') {
 							newAction.setAction(TypeOfAction.INVALID);
+							newAction.setFeedback("Invalid priority.");
 						} // check if wrong input like *adfdfs*
 					}
 					priority = content.lastIndexOf("*") - content.indexOf("*")
 							+ 1;
 
-				} else {
+				} 
+				else {
 					newAction.setAction(TypeOfAction.INVALID);
+					newAction.setFeedback("Priority exceeds maximum limit");
 				}
 				content = content.replaceAll("\\*", "");// remove all "*"
 			}
@@ -175,6 +182,7 @@ public class EzParser {
 
 			if (checkMultipleAction(content) == true) {
 				newAction.setAction(TypeOfAction.INVALID);
+				newAction.setFeedback("Multiple types of action");
 			}// see if there is other keywords for action.
 
 			GregorianCalendar calendar = new GregorianCalendar();
@@ -203,6 +211,7 @@ public class EzParser {
 				dateArr[2] = readDate(date)[2];
 				if (readDate(date)[0] < 0) {
 					newAction.setAction(TypeOfAction.INVALID);
+					newAction.setFeedback("Invalid date.");
 				}
 				calendar = new GregorianCalendar(dateArr[2], dateArr[1] - 1,
 						dateArr[0]);
@@ -235,6 +244,7 @@ public class EzParser {
 				dateArr[4] = readTime(time)[1];
 				if (readTime(time)[0] < 0) {
 					newAction.setAction(TypeOfAction.INVALID);
+					newAction.setFeedback("Invalid time.");
 				}
 				calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
 				calendar.set(GregorianCalendar.MINUTE, dateArr[4]);
@@ -253,6 +263,7 @@ public class EzParser {
 					dateArr[2] = readDate(date)[2];
 					if (readDate(date)[0] < 0) {
 						newAction.setAction(TypeOfAction.INVALID);
+						newAction.setFeedback("Invalid date");
 					}
 					calendar = new GregorianCalendar(dateArr[2],
 							dateArr[1] - 1, dateArr[0], dateArr[3], dateArr[4]);
@@ -265,9 +276,11 @@ public class EzParser {
 				{
 				} else {
 					newAction.setAction(TypeOfAction.INVALID);
+					newAction.setFeedback("Invalid command. Cannot recongize keywords.");
 				}
 				if (!content.isEmpty()) {
 					newAction.setAction(TypeOfAction.INVALID);
+					newAction.setFeedback("Invalid command. Cannot recongize keywords.");
 				}
 			}
 
@@ -387,10 +400,12 @@ public class EzParser {
 							task.setEndTime(calendar);
 						} else {
 							newAction.setAction(TypeOfAction.INVALID);
+							newAction.setFeedback("Invalid command. Cannot recongize keywords.");
 						}
 					}
 				} else {
 					newAction.setAction(TypeOfAction.INVALID);
+					newAction.setFeedback("Invalid command. Cannot recongize keywords.");
 				}
 			}
 
@@ -451,6 +466,7 @@ public class EzParser {
 
 						if (readDate(content)[0] < 0) {
 							newAction.setAction(TypeOfAction.INVALID);
+							newAction.setFeedback("Invalid date.");
 						}
 
 						calendarUpdate = new GregorianCalendar(dateUpdate[2],
@@ -463,6 +479,7 @@ public class EzParser {
 						content = removeFirstWord(content);
 						if (!content.isEmpty()) {
 							newAction.setAction(TypeOfAction.INVALID);
+							newAction.setFeedback("Invalid command. Cannot recongize keywords.");
 						}
 					} 
 					else if (getFirstWord(content).equalsIgnoreCase("time")) {
@@ -472,6 +489,7 @@ public class EzParser {
 						dateUpdate[4] = readTime(content)[1];
 						if (readTime(content)[0] < 0) {
 							newAction.setAction(TypeOfAction.INVALID);
+							newAction.setFeedback("Invalid time.");
 						}
 						calendarUpdate.set(GregorianCalendar.HOUR_OF_DAY,
 								dateUpdate[3]);
@@ -486,6 +504,7 @@ public class EzParser {
 						content = removeFirstWord(content);
 						if (!content.isEmpty()) {
 							newAction.setAction(TypeOfAction.INVALID);
+							newAction.setFeedback("Invalid command. Cannot recongize keywords.");
 						}
 					} else if (getFirstWord(content).equalsIgnoreCase("start")) {
 					
@@ -501,6 +520,7 @@ public class EzParser {
 
 							if (readDate(content)[0] < 0) {
 								newAction.setAction(TypeOfAction.INVALID);
+								newAction.setFeedback("Invalid date");
 							}
 
 							calendarUpdate = new GregorianCalendar(
@@ -519,6 +539,7 @@ public class EzParser {
 							dateUpdate[4] = readTime(content)[1];
 							if (readTime(content)[0] < 0) {
 							newAction.setAction(TypeOfAction.INVALID);
+							newAction.setFeedback("Invalid time.");
 							}
 						
 							calendarUpdate.set(GregorianCalendar.HOUR_OF_DAY,
@@ -535,6 +556,7 @@ public class EzParser {
 
 						if (!content.isEmpty()) {
 							newAction.setAction(TypeOfAction.INVALID);
+							newAction.setFeedback("Invalid command. Cannot recongize keywords.");
 						}
 
 					} else if (getFirstWord(content).equalsIgnoreCase("end")) {
@@ -549,6 +571,7 @@ public class EzParser {
 
 							if (readDate(content)[0] < 0) {
 								newAction.setAction(TypeOfAction.INVALID);
+								newAction.setFeedback("Invalid date.");
 							}
 
 							calendarUpdate = new GregorianCalendar(
@@ -580,6 +603,7 @@ public class EzParser {
 
 						if (!content.isEmpty()) {
 							newAction.setAction(TypeOfAction.INVALID);
+							newAction.setFeedback("Invalid command. Cannot recongize keywords.");
 						}
 						
 					}
@@ -602,7 +626,7 @@ public class EzParser {
 							"priority")) {
 						int priorityUpdate;
 						content = removeFirstWord(content);
-						if ((content.lastIndexOf("*") - content.indexOf("*")) <= 2) {
+						if ((content.lastIndexOf("*") - content.indexOf("*")) <= EzConstants.MAXIMUM_PRIORITY) {
 							for (int i = content.indexOf("*"); i <= content
 									.lastIndexOf("*"); i++) {
 								if (content.charAt(i) != '*') {
@@ -614,6 +638,7 @@ public class EzParser {
 							taskUpdate.setPriority(priorityUpdate);
 						} else {
 						newAction.setAction(TypeOfAction.INVALID);
+						newAction.setFeedback("Priority exceeds maximum limit.");
 						}
 
 						resultUpdate.add(taskUpdate);
@@ -647,6 +672,7 @@ public class EzParser {
 				else
 				{
 					newAction.setAction(TypeOfAction.INVALID);
+					newAction.setFeedback("Invalid date.");
 				}
 				
 			}
@@ -663,12 +689,14 @@ public class EzParser {
 				else
 				{
 					newAction.setAction(TypeOfAction.INVALID);
+					newAction.setFeedback("Invalid command. Cannot recongize keywords.");
 				}
 				j=Integer.parseInt(content);
 				content=removeFirstWord(content);
 				if(!content.isEmpty()||i>j)
 				{
 					newAction.setAction(TypeOfAction.INVALID);
+					newAction.setFeedback("From a later time to an earlier time.");
 				}
 				for(int k=i;k<=j;k++)
 				{
@@ -701,6 +729,7 @@ public class EzParser {
 			}else // set as invalid if the command fits none of the above
 			{
 				newAction.setAction(TypeOfAction.INVALID);
+				newAction.setFeedback("Invalid command.");
 			}
 			
 			
@@ -743,6 +772,7 @@ public class EzParser {
 			  else
 			  {
 			  	newAction.setAction(TypeOfAction.INVALID);
+			  	newAction.setFeedback("Invalid date.");
 			  }
 			}
 			else if(getFirstWord(content).equalsIgnoreCase("from"))//"done from .. to "
@@ -758,12 +788,14 @@ public class EzParser {
 				else
 				{
 					newAction.setAction(TypeOfAction.INVALID);
+					newAction.setFeedback("Invalid command. Cannot recongize keywords.");
 				}
 				j=Integer.parseInt(content);
 				content=removeFirstWord(content);
 				if(!content.isEmpty()||i>j)
 				{
 					newAction.setAction(TypeOfAction.INVALID);
+					newAction.setFeedback("From a later time to an earlier time.");
 				}
 				for(int k=i;k<=j;k++)
 				{
@@ -805,6 +837,7 @@ public class EzParser {
 			}else // set as invalid if the command fits none of the above
 			{
 				newAction.setAction(TypeOfAction.INVALID);
+				newAction.setFeedback("Invalid command.");
 			}
 			
 			
@@ -851,6 +884,7 @@ public class EzParser {
 					  else
 					  {
 					  	newAction.setAction(TypeOfAction.INVALID);
+					  	newAction.setFeedback("Invalid date.");
 					  }
 					
 				}
@@ -871,6 +905,7 @@ public class EzParser {
 						else
 						{
 							newAction.setAction(TypeOfAction.INVALID);
+							newAction.setFeedback("Extra \"");
 						}
 					}
 					targetsShow=storage.getTasksByKeywords(keywords);
@@ -878,6 +913,7 @@ public class EzParser {
 				else
 				{
 					newAction.setAction(TypeOfAction.INVALID);
+					newAction.setFeedback("Invalid command. Cannot recongnize keywords.");
 				}
 				newAction.setResults(targetsShow);
 				newAction.setTargets(targetsShow);
@@ -907,12 +943,15 @@ public class EzParser {
 					  else
 					  {
 					  	newAction.setAction(TypeOfAction.INVALID);
+					  	newAction.setFeedback("Invalid date.");
 					  }
 					
 				}
 				else
 				{
 					newAction.setAction(TypeOfAction.INVALID);
+					newAction.setFeedback("Invalid command. Cannot recongnize keywords.");
+					
 				}
 				newAction.setResults(targetsShow);
 				newAction.setTargets(targetsShow);
@@ -941,12 +980,14 @@ public class EzParser {
 					  else
 					  {
 					  	newAction.setAction(TypeOfAction.INVALID);
+					  	newAction.setFeedback("Invalid date.");
 					  }
 					
 				}
 				else
 				{
 					newAction.setAction(TypeOfAction.INVALID);
+					newAction.setFeedback("Invalid command. Cannot recongnize keywords.");
 				}
 				newAction.setResults(targetsShow);
 				newAction.setTargets(targetsShow);
