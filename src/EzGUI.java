@@ -1,12 +1,11 @@
 /**
- * 
- */
-
-/**
  * @author Khanh
  *
  */
+
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicBorders;
 import javax.swing.text.*;
 import javax.swing.GroupLayout.*;
 import javax.swing.*;
@@ -14,24 +13,13 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
-
+import java.util.*;
+import java.util.logging.*;
+import java.io.*;
 
 public class EzGUI extends JFrame {
+	private static final String HELP_DOCUMENT_FILE_NAME = "help.txt";
+
 	private final static Logger LOGGER = Logger.getLogger(EzGUI.class.getName());
 	
 	private static final String PROGRAM_TITLE = "EzTask";
@@ -54,7 +42,7 @@ public class EzGUI extends JFrame {
 	private static final String[] KEYWORDS = {"add","delete","update","show","done","undone","undo","redo","on","at","from","to","today","tomorrow"
 												,"set","title","date","time","start","end","venue","priority","all","have","help","y","n"}; 
 	
-	private static final String[] DOUBLE_QUOTE_KEYWORDS = {"add","at","title","venue"}; 
+	private static final String[] DOUBLE_QUOTE_KEYWORDS = {"add","at","title","venue","have"}; 
 	
 	private static final String[] LIST_OF_BUTTON_NAMES = {	"All", 
 															"Done", 
@@ -75,18 +63,21 @@ public class EzGUI extends JFrame {
 	private ArrayList<String> commandHistory = new ArrayList<String>();
 	private int historyPos = 0;
 	JDialog suggestPanel;
-	private JEditorPane editorPane;
 	private static ArrayList<JButton> listOfButtons;
+	private JList<String> list_1;
+	private JScrollPane scrollPane;
+	private boolean selectionMode = false;
+	private int selectIndex = -1;
 	/**
 	 * Create the frame.
 	 */
+	
 	public EzGUI() {
 		setTitle(PROGRAM_TITLE);
 		createMainPanel();
 		createButtonPanel();
 		createDisplayPanel();
 		createCommandPanel();
-		createSuggestPanel();
 		registerFont();
 		try {
 			EzController.loadFromFile();
@@ -95,33 +86,60 @@ public class EzGUI extends JFrame {
 			LOGGER.log(Level.WARNING,"Data file not found");
 			e.printStackTrace();
 		}
+		createSuggestPanel();
+		
 	}
 
 	private void createSuggestPanel() {
 		suggestPanel = new JDialog(this, "Suggest", false);
 
-		int x = this.getLocation().x + 167;
+		int x = this.getLocation().x + 165;
 		int y = this.getLocation().y + this.getHeight() - 10;
 		suggestPanel.setLocation(x, y);
-		suggestPanel.setMinimumSize(new Dimension(779,0));
-		editorPane = new JEditorPane();
+		suggestPanel.setMinimumSize(new Dimension(784,0));
 		
-		suggestPanel.getContentPane().add(editorPane, BorderLayout.NORTH);
+		ArrayList<EzTask> listTask = EzController.getStorage().getListOfAllTasks();
+		//String[] listString = {"aaaaa","aaaaa","aaaaa"};
+		String[] listString = new String[listTask.size()];
+		
+		for(int i=0;i<listTask.size();i++){
+			listString[i] = listTask.get(i).toString();
+		}
+		
+		list_1 = new JList<String>(listString);
+		list_1.setBackground(EzConstants.WHITE_SMOKE_COLOR);
+		
+		
+		scrollPane = new JScrollPane(list_1);
+		scrollPane.setFocusable(false);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setLayout(new ScrollPaneLayout());
+		scrollPane.setBorder(BorderFactory.createLineBorder(EzConstants.CHATEAU_GREEN_COLOR,5));
+		scrollPane.setPreferredSize(new Dimension(784,85));
+		suggestPanel.getContentPane().add(scrollPane, BorderLayout.SOUTH);
+		
+		//suggestPanel.getContentPane().add(list_1, BorderLayout.NORTH);
+		
+		//list_1.setSelectedIndex(4);
 		
 		suggestPanel.setUndecorated(true);
 		suggestPanel.pack();
 		suggestPanel.setFocusableWindowState(false);
 		suggestPanel.setVisible(false);
+		selectionMode = false;
+		//suggestPanel.setVisible(true);
+		//selectionMode = true;
+		
 		
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentMoved(ComponentEvent arg0) {
 				JFrame frame = (JFrame) arg0.getSource();
 				
-				int x = frame.getLocation().x + 167;
+				int x = frame.getLocation().x + 165;
 				int y = frame.getLocation().y + frame.getHeight() - 10;
 				suggestPanel.setLocation(x, y);
-			      
 			}
 		});
 	}
@@ -238,13 +256,13 @@ public class EzGUI extends JFrame {
 			}
 
 			private String readHelpDocument() {
-				File file = new File("help.txt");
+				File file = new File(HELP_DOCUMENT_FILE_NAME);
 				assert(file!=null);
 				BufferedReader in;
 				String text = "";
 				try {
 					String line;
-					in = new BufferedReader(new InputStreamReader(file.toURL().openStream()));
+					in = new BufferedReader(new InputStreamReader(file.toURI().toURL().openStream()));
 					while ((line = in.readLine()) != null) {
 						text += line;
 					}
@@ -331,7 +349,11 @@ public class EzGUI extends JFrame {
 				} else {
 					switch (arg0.getKeyChar()){
 					case KeyEvent.VK_ENTER:
-						enterCommand();
+						if (!selectionMode) {
+							enterCommand();
+						} else {
+							enterSelection();
+						}
 						arg0.consume();
 						break;
 					case KeyEvent.VK_BACK_SPACE: case KeyEvent.VK_DELETE:
@@ -341,12 +363,79 @@ public class EzGUI extends JFrame {
 					
 					switch (arg0.getKeyCode()){
 					case KeyEvent.VK_UP:
-						goToPreviousCommand();
+						if (!selectionMode) {
+							goToPreviousCommand();
+						} else {
+							selectAbove();
+						}
+						arg0.consume();
 						break;
 					case KeyEvent.VK_DOWN:
-						goToNextCommand();
+						if (!selectionMode) {
+							goToNextCommand();
+						} else {
+							selectBelow();
+						}
+						arg0.consume();
 						break;
 					}
+				}
+			}
+
+			private void enterSelection() {
+				loadSuggestion(commandField.getText());
+				if ((0<=selectIndex) && (selectIndex<list_1.getModel().getSize())){
+					int caretPos = commandField.getSelectionStart();
+					int taskId = getFirstNumber(list_1.getModel().getElementAt(selectIndex));
+					if (taskId>-1){
+						deleteSelection();
+						typeNormal(String.valueOf(taskId)+" ", caretPos);
+					}
+				}
+				selectIndex = -1;
+				selectionMode = false;
+				suggestPanel.setVisible(false);
+			}
+
+			private int getFirstNumber(String text) {
+				int result = -1;
+				int i=0;
+				while ((text.charAt(i)<'0') || (text.charAt(i)>'9')){
+					i++;
+				}
+				if ((text.charAt(i)>='0') && (text.charAt(i)<='9')){
+					result = 0;
+					while ((text.charAt(i)>='0') && (text.charAt(i)<='9')){
+						result = result * 10 + (int)(text.charAt(i)-'0');
+						i++;
+					}
+				}
+				return result;
+			}
+
+			private void selectBelow() {
+				selectIndex++;
+				if (selectIndex >= list_1.getModel().getSize()) {
+					selectIndex = -1;
+				}
+				if ((0<=selectIndex) && (selectIndex<list_1.getModel().getSize())){
+					list_1.setSelectedIndex(selectIndex);
+					list_1.ensureIndexIsVisible(selectIndex);
+				} else {
+					list_1.clearSelection();
+				}
+			}
+
+			private void selectAbove() {
+				selectIndex--;
+				if (selectIndex<-1) {
+					selectIndex = list_1.getModel().getSize()-1;
+				}
+				if ((0<=selectIndex) && (selectIndex<list_1.getModel().getSize())){
+					list_1.setSelectedIndex(selectIndex);
+					list_1.ensureIndexIsVisible(selectIndex);
+				} else {
+					list_1.clearSelection();
 				}
 			}
 
@@ -404,7 +493,7 @@ public class EzGUI extends JFrame {
 						typeSpace(caretPos);
 						break;			
 					default:
-						typeNormal(e, caretPos);
+						typeNormal(""+e.getKeyChar(), caretPos);
 						break;	
 					}
 					e.consume();
@@ -444,13 +533,113 @@ public class EzGUI extends JFrame {
 				commandField.setCaretPosition(caretPos);
 			}
 
-			private void typeNormal(KeyEvent e, int caretPos) {
+			private void typeNormal(String typedText, int caretPos) {
 				String contentInputField;
-				String typedText = "" + e.getKeyChar();
 				contentInputField = commandField.getText().substring(0, caretPos) + typedText + commandField.getText().substring(caretPos, commandField.getText().length());
 				addColorForCommandField(contentInputField, commandField.getStyledDocument());
-				commandField.setCaretPosition(caretPos+1);
-				//showArea.setText(contentInputField);
+				commandField.setCaretPosition(caretPos+typedText.length());
+				
+				loadSuggestion(contentInputField);
+			}
+
+			private void loadSuggestion(String contentInputField) {
+				boolean activateSuggestion = false;
+				int startCaretPos = -1;
+				
+				ArrayList<String> notKeywordOrNumberList = new ArrayList<String>();
+				int length = contentInputField.length();
+				String word;
+				String lastKeyword = "";
+				boolean doneOrDeleteKeywordAvailable = false;
+				
+				for(int i=0;i<length;i++){
+					if (contentInputField.charAt(i)==' '){
+						while ((i+1<length) && (contentInputField.charAt(i+1)==' ')){
+							i++;
+						}
+					} else if (contentInputField.charAt(i)=='\"'){
+						word = "";
+						while ((i+1<length) && (contentInputField.charAt(i+1)!='\"')){
+							i++;
+							word = word + contentInputField.charAt(i);
+						}
+						
+						if (i+1<length){
+							i++;
+						}
+						notKeywordOrNumberList.add(word.trim());
+					} else {
+						word = "" + contentInputField.charAt(i);
+						while ((i+1<length) && (contentInputField.charAt(i+1)!=' ')){
+							i++;
+							word = word + contentInputField.charAt(i);
+						}
+						
+						if (isKeyword(word)){
+							lastKeyword = word;
+							if (word.equalsIgnoreCase("done") || word.equalsIgnoreCase("delete")){
+								doneOrDeleteKeywordAvailable = true;
+							}  
+						}
+						
+						if ((!isKeyword(word)) && (!isNumber(word))){
+							notKeywordOrNumberList.add(word);
+							if (startCaretPos==-1){
+								startCaretPos = i - word.length() + 1;
+							}
+						}
+					}
+				}
+				
+				if (lastKeyword.equalsIgnoreCase("done") || 
+						lastKeyword.equalsIgnoreCase("delete") ||
+						lastKeyword.equalsIgnoreCase("update") || 
+						(lastKeyword.equalsIgnoreCase("from") && doneOrDeleteKeywordAvailable) || 
+						(lastKeyword.equalsIgnoreCase("to") && doneOrDeleteKeywordAvailable)){
+					activateSuggestion = true;
+				}
+				
+				if (activateSuggestion){
+					list_1.removeAll();
+					
+					LOGGER.log(Level.INFO, String.format("List keywords: %d", notKeywordOrNumberList.size()));
+					
+					ArrayList<EzTask> listTask = EzSort.sortById(EzController.getStorage().getTasksByKeywords(notKeywordOrNumberList));
+					String[] listString = new String[listTask.size()];
+					
+					for(int i=0;i<listTask.size();i++){
+						listString[i] = listTask.get(i).toString();
+					}
+					
+					list_1.setListData(listString);
+					if (listString.length>0){
+						selectIndex = 0;
+						list_1.setSelectedIndex(0);
+					} else {
+						selectIndex = -1;
+					}
+					
+					selectionMode = true;
+					suggestPanel.setVisible(true);
+					
+					if (startCaretPos!=-1){
+						commandField.setSelectionStart(startCaretPos);
+						commandField.setSelectionEnd(commandField.getCaretPosition());
+					}
+				} else {
+					selectIndex = -1;
+					selectionMode = false;
+					suggestPanel.setVisible(false);
+				}
+			}
+
+			private boolean isNumber(String word) {
+				for(int i=0;i<word.length();i++){
+					if ((word.charAt(i)<'0') || (word.charAt(i)> '9')){
+						return false;
+					}
+				}
+				return true;
 			}
 
 			private void typeSpace(int caretPos) {
@@ -458,6 +647,8 @@ public class EzGUI extends JFrame {
 				contentInputField = commandField.getText();
 				String result = "";
 				String lastWord = "";
+				boolean haveKeywordAvailable = false;
+				boolean insideQuote = false;
 				
 				for(int i=0;i<caretPos;i++){
 					//String word = "";
@@ -468,15 +659,22 @@ public class EzGUI extends JFrame {
 							result = result + " ";
 						}
 					} else if (contentInputField.charAt(i)=='\"'){
+						insideQuote = true;
 						lastWord = "\"";
 						while ((i+1<caretPos) && (contentInputField.charAt(i+1)!='\"')){
 							i++;
 							lastWord = lastWord + contentInputField.charAt(i);
 						}
+						
 						if (i+1<caretPos){
 							i++;
 							lastWord = lastWord + contentInputField.charAt(i);
 						}
+						
+						if ((lastWord.charAt(lastWord.length()-1)=='\"') && (lastWord.length()>2)){
+							insideQuote = false;
+						}
+						
 						result = result + lastWord;
 					} else {
 						lastWord = "" + contentInputField.charAt(i);
@@ -484,10 +682,14 @@ public class EzGUI extends JFrame {
 							i++;
 							lastWord = lastWord + contentInputField.charAt(i);
 						}
+						if (lastWord.equalsIgnoreCase("have")){
+							haveKeywordAvailable = true;
+						}
 						result = result + lastWord;
 					}
 				}
-				if (isDoubleQuoteKeyword(lastWord)){
+				
+				if ((!insideQuote) && (isDoubleQuoteKeyword(lastWord) || haveKeywordAvailable)){
 					result = result + " \"\"" + contentInputField.substring(caretPos, contentInputField.length());	
 					addColorForCommandField(result, commandField.getStyledDocument());
 					commandField.setCaretPosition(caretPos+2);
@@ -496,6 +698,8 @@ public class EzGUI extends JFrame {
 					addColorForCommandField(result, commandField.getStyledDocument());
 					commandField.setCaretPosition(caretPos+1);
 				}
+				
+				loadSuggestion(contentInputField);
 			}
 			
 			private boolean isDoubleQuoteKeyword(String word){
@@ -521,12 +725,15 @@ public class EzGUI extends JFrame {
 						}
 						addColorForCommandField(contentInputField, commandField.getStyledDocument());
 						commandField.setCaretPosition(startPos-1);
+						loadSuggestion(contentInputField);
 					}
 				} else {
 					contentInputField = deleteString(commandField.getText(),commandField.getSelectionStart(),commandField.getSelectionEnd()); 
 					addColorForCommandField(contentInputField, commandField.getStyledDocument());
 					commandField.setCaretPosition(startPos);
+					loadSuggestion(contentInputField);
 				}
+				
 			}
 
 			private void deleteSelection() {
@@ -537,11 +744,13 @@ public class EzGUI extends JFrame {
 						contentInputField = deleteString(commandField.getText(),commandField.getSelectionStart(),commandField.getSelectionEnd()+1); 
 						addColorForCommandField(contentInputField, commandField.getStyledDocument());
 						commandField.setCaretPosition(endPos);
+						loadSuggestion(contentInputField);
 					}
 				} else {
 					contentInputField = deleteString(commandField.getText(),commandField.getSelectionStart(),commandField.getSelectionEnd()); 
 					addColorForCommandField(contentInputField, commandField.getStyledDocument());
 					commandField.setCaretPosition(endPos);
+					loadSuggestion(contentInputField);
 				}
 			}
 
@@ -687,7 +896,7 @@ public class EzGUI extends JFrame {
 		for(int i=0;i<listOfTasks.size();i++){
 			list.add(EzHtmlGenerator.createHtmlEzTask(listOfTasks.get(i),i%2));
 		}
-		String content = EzHtmlGenerator.createHtmlTable(list.size(),1,list,"border=0 cellspacing=4 cellpadding=1");
+		String content = EzHtmlGenerator.center(EzHtmlGenerator.createHtmlTable(list.size(),1,list,"border=0 cellspacing=4 cellpadding=1"));
 		showContent(header, content);
 	}
 	

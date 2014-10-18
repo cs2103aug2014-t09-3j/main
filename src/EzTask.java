@@ -146,9 +146,65 @@ public class EzTask {
 		this.done = done;
 	}
 	
-	
-    
+	public String toString(){
+		String idText = String.format("[#%d]", this.getId());
+		
+		String venueText = "";
+		if (this.getVenue()!=null) {
+			if (venueText.length()>30){
+				venueText = String.format("- @[%s]", this.getVenue().substring(0, 30)) + "...";
+			} else {
+				venueText = String.format("- @[%s]", this.getVenue());
+			}
+		}
+		
+		String titleText = "\"";
+		if (this.getTitle().length()>50){
+			titleText += this.getTitle().substring(0,50) + "...";
+		} else {
+			titleText += this.getTitle();
+		}
+		titleText += "\"";
+		
+		String dateText = "";
+		if (this.getStartTime()!=null){
+			dateText = "- [";
+			if (this.getStartTime()==this.getEndTime()){
+				GregorianCalendar time = this.getStartTime(); 
+				dateText += String.format("%d/%d/%d", time.get(Calendar.DAY_OF_MONTH), time.get(Calendar.MONTH)+1, time.get(Calendar.YEAR));
+				if ((time.get(Calendar.HOUR_OF_DAY)!=0) || (time.get(Calendar.MINUTE)!=0)){
+					dateText += " " + String.format("%02d:%02d",time.get(Calendar.HOUR_OF_DAY),time.get(Calendar.MINUTE));
+				}
+			} else {
+				GregorianCalendar startTime = this.getStartTime(); 
+				GregorianCalendar endTime = this.getEndTime(); 
+				
+				if ((startTime.get(Calendar.HOUR_OF_DAY)!=0) || (startTime.get(Calendar.MINUTE)!=0) || 
+						(endTime.get(Calendar.HOUR_OF_DAY)!=0) || (endTime.get(Calendar.MINUTE)!=0)){
+					dateText += String.format("%d/%d/%d %02d:%02d => %d/%d/%d %02d:%02d",
+							startTime.get(Calendar.DAY_OF_MONTH),
+							startTime.get(Calendar.MONTH)+1,
+							startTime.get(Calendar.YEAR),
+							startTime.get(Calendar.HOUR_OF_DAY),
+							startTime.get(Calendar.MINUTE),
+							endTime.get(Calendar.DAY_OF_MONTH),
+							endTime.get(Calendar.MONTH)+1,
+							endTime.get(Calendar.YEAR),
+							endTime.get(Calendar.HOUR_OF_DAY),
+							endTime.get(Calendar.MINUTE));
+				} else {
+					dateText += String.format("%d/%d/%d => %d/%d/%d",
+							startTime.get(Calendar.DAY_OF_MONTH),
+							startTime.get(Calendar.MONTH)+1,
+							startTime.get(Calendar.YEAR),
+							endTime.get(Calendar.DAY_OF_MONTH),
+							endTime.get(Calendar.MONTH)+1,
+							endTime.get(Calendar.YEAR));
+				}
+			}
+			dateText += "]";
+		}
+		return String.format("%s %s %s %s", idText, titleText, venueText, dateText); 
+	}
 
-    
-    
 }

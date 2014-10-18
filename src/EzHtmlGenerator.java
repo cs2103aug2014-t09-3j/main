@@ -223,7 +223,7 @@ public class EzHtmlGenerator {
 		return result;
 	}
 	
-	private static String center(String content){
+	public static String center(String content){
 		return "<center>" + content + "</center>";
 	}
 	
