@@ -211,11 +211,48 @@ public class EzGUI extends JFrame {
 	/**
 	 * @param btnAll
 	 */
+	class ButtonAction implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JButton button = (JButton) e.getSource();
+			pressButton(button);
+		}
+	}
+	
 	private JButton initButton(String nameOfButton) {
 		assert(nameOfButton!=null);
 		
 		JButton button = new JButton(nameOfButton);
 		button.setName(nameOfButton);
+		
+		if (nameOfButton.equalsIgnoreCase("help")){
+			button.setMnemonic(KeyEvent.VK_H);
+			button.addActionListener(new ButtonAction());
+		} else if (nameOfButton.equalsIgnoreCase("All")){
+			button.setMnemonic(KeyEvent.VK_A);
+			button.addActionListener(new ButtonAction());
+		} else if (nameOfButton.equalsIgnoreCase("Done")){
+			button.setMnemonic(KeyEvent.VK_D);
+			button.addActionListener(new ButtonAction());
+		} else if (nameOfButton.equalsIgnoreCase("Not Done")){
+			button.setMnemonic(KeyEvent.VK_N);
+			button.addActionListener(new ButtonAction());
+		} else if (nameOfButton.equalsIgnoreCase("Today")){
+			button.setMnemonic(KeyEvent.VK_T);
+			button.addActionListener(new ButtonAction());
+		} else if (nameOfButton.equalsIgnoreCase("Tomorrow")){
+			button.setMnemonic(KeyEvent.VK_M);
+			button.addActionListener(new ButtonAction());
+		} else if (nameOfButton.equalsIgnoreCase("Coming")){
+			button.setMnemonic(KeyEvent.VK_C);
+			button.addActionListener(new ButtonAction());
+		} else if (nameOfButton.equalsIgnoreCase("Past")){
+			button.setMnemonic(KeyEvent.VK_P);
+			button.addActionListener(new ButtonAction());
+		} else if (nameOfButton.equalsIgnoreCase("No Date")){
+			button.setMnemonic(KeyEvent.VK_E);
+			button.addActionListener(new ButtonAction());
+		}
 		
 		button.setFont(new Font(BUTTON_FONT, Font.BOLD, 16));
 		button.setBackground(UNSELECTED_BUTTON_BG_COLOR);
@@ -223,64 +260,27 @@ public class EzGUI extends JFrame {
 		button.setForeground(BUTTON_TEXT_COLOR);
 		button.setFocusPainted(false);
 		button.setFocusable(false);
-		button.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				if (selectedButton!=null){
-					selectedButton.setBackground(UNSELECTED_BUTTON_BG_COLOR);
-				}
-				JButton button = (JButton) arg0.getSource();
-				button.setBackground(SELECTED_BUTTON_BG_COLOR);
-				selectedButton = button;
-				
-				EzStorage storage = EzController.getStorage();
-				assert(storage!=null);
-				
-				if (button.getName().equalsIgnoreCase("All")){
-					showContent("All tasks", EzSort.sortById(storage.getListOfAllTasks()));
-				} else if (button.getName().equalsIgnoreCase("Done")){
-					showContent("Done tasks", EzSort.sortById(storage.getDoneTasks()));
-				} else if (button.getName().equalsIgnoreCase("Not done")){
-					showContent("Not Done tasks", EzSort.sortByDate(storage.getUndoneTasks()));
-				} else if (button.getName().equalsIgnoreCase("Today")){
-					showContent("Today tasks", EzSort.sortByPriority(storage.getTasksByDate(getToday())));
-				} else if (button.getName().equalsIgnoreCase("Tomorrow")){
-					showContent("Tomorrow tasks", EzSort.sortByPriority(storage.getTasksByDate(getTomorrow())));
-				} else if (button.getName().equalsIgnoreCase("Coming")){
-					showContent("Coming tasks", EzSort.sortByDate(storage.getComingTasks()));
-				} else if (button.getName().equalsIgnoreCase("Past")){
-					showContent("Past tasks", EzSort.sortByDate(storage.getPastTasks()));
-				} else if (button.getName().equalsIgnoreCase("No Date")){
-					showContent("No Date tasks", EzSort.sortByPriority(storage.getNoDateTasks()));
-				} else if (button.getName().equalsIgnoreCase("Help")){
-					String text = readHelpDocument();
-					showContent("Help - All commands", text);
-				} 
-				
-				commandField.requestFocus();
-			}
-
-			private String readHelpDocument() {
-				File file = new File(HELP_DOCUMENT_FILE_NAME);
-				assert(file!=null);
-				BufferedReader in;
-				String text = "";
-				try {
-					String line;
-					in = new BufferedReader(new InputStreamReader(file.toURI().toURL().openStream()));
-					while ((line = in.readLine()) != null) {
-						text += line;
-					}
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				return text;
-			}
-		});
 		return button;
 	}
-
+	
+	private String readHelpDocument() {
+		File file = new File(HELP_DOCUMENT_FILE_NAME);
+		assert(file!=null);
+		BufferedReader in;
+		String text = "";
+		try {
+			String line;
+			in = new BufferedReader(new InputStreamReader(file.toURI().toURL().openStream()));
+			while ((line = in.readLine()) != null) {
+				text += line;
+			}
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return text;
+	}
+	
 	/**
 	 * create show panel
 	 */
@@ -504,7 +504,6 @@ public class EzGUI extends JFrame {
 						arg0.consume();
 						break;
 					}
-					
 					switch (arg0.getKeyCode()){
 					case KeyEvent.VK_UP:
 						scrollUp();
@@ -512,8 +511,35 @@ public class EzGUI extends JFrame {
 					case KeyEvent.VK_DOWN:
 						scrollDown();
 						break;
+					case KeyEvent.VK_1:
+						pressButton(getButton("All"));
+						break;
+					case KeyEvent.VK_2:
+						pressButton(getButton("Done"));
+						break;
+					case KeyEvent.VK_3:
+						pressButton(getButton("Not done"));
+						break;
+					case KeyEvent.VK_4:
+						pressButton(getButton("Today"));
+						break;
+					case KeyEvent.VK_5:
+						pressButton(getButton("Tomorrow"));
+						break;
+					case KeyEvent.VK_6:
+						pressButton(getButton("Coming"));
+						break;
+					case KeyEvent.VK_7:
+						pressButton(getButton("Past"));
+						break;
+					case KeyEvent.VK_8:
+						pressButton(getButton("No date"));
+						break;
+					case KeyEvent.VK_9: case KeyEvent.VK_H:
+						pressButton(getButton("Help"));
+						break;
 					}
-				} else {
+				} else if (!arg0.isAltDown()){
 					switch (arg0.getKeyChar()){
 					case KeyEvent.VK_ENTER:
 						if (!selectionMode) {
@@ -545,13 +571,61 @@ public class EzGUI extends JFrame {
 						}
 						arg0.consume();
 						break;
+					case KeyEvent.VK_F2:
+						pressButton(getButton("help"));
+						break;
+					case KeyEvent.VK_TAB:
+						if (!arg0.isShiftDown()){
+							if (selectedButton==null) {
+								pressButton(getButton("All"));
+							} else if (selectedButton==getButton("all")){
+								pressButton(getButton("Done"));
+							} else if (selectedButton==getButton("Done")){
+								pressButton(getButton("Not done"));
+							} else if (selectedButton==getButton("Not Done")){
+								pressButton(getButton("Today"));
+							} else if (selectedButton==getButton("Today")){
+								pressButton(getButton("Tomorrow"));
+							} else if (selectedButton==getButton("Tomorrow")){
+								pressButton(getButton("Coming"));
+							} else if (selectedButton==getButton("Coming")){
+								pressButton(getButton("Past"));
+							} else if (selectedButton==getButton("Past")){
+								pressButton(getButton("No Date"));
+							} else if (selectedButton==getButton("No Date")){
+								pressButton(getButton("Help"));
+							} else if (selectedButton==getButton("Help")){
+								pressButton(getButton("All"));
+							}
+						} else {
+							if (selectedButton==null){
+								pressButton(getButton("Help"));
+							} else if (selectedButton==getButton("all")){
+								pressButton(getButton("Help"));
+							} else if (selectedButton==getButton("Done")){
+								pressButton(getButton("All"));
+							} else if (selectedButton==getButton("Not Done")){
+								pressButton(getButton("Done"));
+							} else if (selectedButton==getButton("Today")){
+								pressButton(getButton("Not Done"));
+							} else if (selectedButton==getButton("Tomorrow")){
+								pressButton(getButton("Today"));
+							} else if (selectedButton==getButton("Coming")){
+								pressButton(getButton("Tomorrow"));
+							} else if (selectedButton==getButton("Past")){
+								pressButton(getButton("Coming"));
+							} else if (selectedButton==getButton("No Date")){
+								pressButton(getButton("Past"));
+							} else if (selectedButton==getButton("Help")){
+								pressButton(getButton("No Date"));
+							}
+						}
+						arg0.consume();
+						break;
 					}
+					
 				}
 			}
-
-			
-
-			
 
 			private void selectBelow() {
 				int selectIndex = list_1.getSelectedIndex();
@@ -614,12 +688,10 @@ public class EzGUI extends JFrame {
 				}
 			}
 			
-			
-			
 			@Override
 			public void keyTyped(KeyEvent e) {
 				int caretPos = commandField.getCaretPosition();
-				if (!e.isControlDown()){
+				if ((!e.isControlDown()) && (!e.isAltDown())){
 					switch (e.getKeyChar()){
 					case KeyEvent.VK_ENTER:
 						break;
@@ -631,7 +703,10 @@ public class EzGUI extends JFrame {
 						break;
 					case KeyEvent.VK_SPACE:
 						typeSpace(caretPos);
-						break;			
+						break;
+					case KeyEvent.VK_TAB:
+						e.consume();
+						break;
 					default:
 						typeNormal(""+e.getKeyChar(), caretPos);
 						break;	
@@ -888,6 +963,56 @@ public class EzGUI extends JFrame {
 		commandLabelPanel.add(commandLabel);
 	}
 	
+	private void showHelp() {
+		String text = readHelpDocument();
+		showContent("Help - All commands", text);
+	}
+
+	private void paintFocusedButton(JButton button) {
+		if (selectedButton!=null){
+			selectedButton.setBackground(UNSELECTED_BUTTON_BG_COLOR);
+		}
+		button.setBackground(SELECTED_BUTTON_BG_COLOR);
+		selectedButton = button;
+	}
+
+	private JButton getButton(String name){
+		for(int i=0;i<listOfButtons.size();i++){
+			if (listOfButtons.get(i).getName().equalsIgnoreCase(name)){
+				return listOfButtons.get(i);
+			}
+		}
+		return null;
+	}
+	
+	private void pressButton(JButton button) {
+		paintFocusedButton(button);
+		EzStorage storage = EzController.getStorage();
+		assert(storage!=null);
+		
+		if (button.getName().equalsIgnoreCase("All")){
+			showContent("All tasks", EzSort.sortById(storage.getListOfAllTasks()));
+		} else if (button.getName().equalsIgnoreCase("Done")){
+			showContent("Done tasks", EzSort.sortById(storage.getDoneTasks()));
+		} else if (button.getName().equalsIgnoreCase("Not done")){
+			showContent("Not Done tasks", EzSort.sortByDate(storage.getUndoneTasks()));
+		} else if (button.getName().equalsIgnoreCase("Today")){
+			showContent("Today tasks", EzSort.sortByPriority(storage.getTasksByDate(getToday())));
+		} else if (button.getName().equalsIgnoreCase("Tomorrow")){
+			showContent("Tomorrow tasks", EzSort.sortByPriority(storage.getTasksByDate(getTomorrow())));
+		} else if (button.getName().equalsIgnoreCase("Coming")){
+			showContent("Coming tasks", EzSort.sortByDate(storage.getComingTasks()));
+		} else if (button.getName().equalsIgnoreCase("Past")){
+			showContent("Past tasks", EzSort.sortByDate(storage.getPastTasks()));
+		} else if (button.getName().equalsIgnoreCase("No Date")){
+			showContent("No Date tasks", EzSort.sortByPriority(storage.getNoDateTasks()));
+		} else if (button.getName().equalsIgnoreCase("Help")){
+			showHelp();
+		} 
+		
+		commandField.requestFocus();
+	}
+
 	private static void registerFont(){
 		try {
 			Font font = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/Digital Dismay.otf")).deriveFont(16f);
