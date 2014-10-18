@@ -16,6 +16,8 @@ import java.awt.event.*;
 import java.util.*;
 import java.util.logging.*;
 import java.io.*;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 public class EzGUI extends JFrame {
 	private static final String HELP_DOCUMENT_FILE_NAME = "help.txt";
@@ -67,7 +69,6 @@ public class EzGUI extends JFrame {
 	private JList<String> list_1;
 	private JScrollPane scrollPane;
 	private boolean selectionMode = false;
-	private int selectIndex = -1;
 	/**
 	 * Create the frame.
 	 */
@@ -383,6 +384,7 @@ public class EzGUI extends JFrame {
 			}
 
 			private void enterSelection() {
+				int selectIndex = list_1.getSelectedIndex();
 				loadSuggestion(commandField.getText());
 				if ((0<=selectIndex) && (selectIndex<list_1.getModel().getSize())){
 					int caretPos = commandField.getSelectionStart();
@@ -392,7 +394,7 @@ public class EzGUI extends JFrame {
 						typeNormal(String.valueOf(taskId)+" ", caretPos);
 					}
 				}
-				selectIndex = -1;
+				list_1.setSelectedIndex(-1);
 				selectionMode = false;
 				suggestPanel.setVisible(false);
 			}
@@ -414,6 +416,7 @@ public class EzGUI extends JFrame {
 			}
 
 			private void selectBelow() {
+				int selectIndex = list_1.getSelectedIndex();
 				selectIndex++;
 				if (selectIndex >= list_1.getModel().getSize()) {
 					selectIndex = -1;
@@ -427,6 +430,7 @@ public class EzGUI extends JFrame {
 			}
 
 			private void selectAbove() {
+				int selectIndex = list_1.getSelectedIndex();
 				selectIndex--;
 				if (selectIndex<-1) {
 					selectIndex = list_1.getModel().getSize()-1;
@@ -613,10 +617,9 @@ public class EzGUI extends JFrame {
 					
 					list_1.setListData(listString);
 					if (listString.length>0){
-						selectIndex = 0;
 						list_1.setSelectedIndex(0);
 					} else {
-						selectIndex = -1;
+						list_1.clearSelection();
 					}
 					
 					selectionMode = true;
@@ -627,7 +630,7 @@ public class EzGUI extends JFrame {
 						commandField.setSelectionEnd(commandField.getCaretPosition());
 					}
 				} else {
-					selectIndex = -1;
+					list_1.clearSelection();
 					selectionMode = false;
 					suggestPanel.setVisible(false);
 				}
