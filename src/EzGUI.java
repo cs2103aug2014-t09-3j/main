@@ -108,6 +108,15 @@ public class EzGUI extends JFrame {
 		}
 		
 		list_1 = new JList<String>(listString);
+		list_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				JList<String> list = (JList<String>)arg0.getSource();
+		        if (arg0.getClickCount() == 2) {
+		            enterSelection();
+		        }
+			}
+		});
 		list_1.setBackground(EzConstants.WHITE_SMOKE_COLOR);
 		
 		
@@ -313,6 +322,168 @@ public class EzGUI extends JFrame {
 		createCommandInputField(commandPanel);
 	}
 
+	private void enterSelection() {
+		int selectIndex = list_1.getSelectedIndex();
+		loadSuggestion(commandField.getText());
+		if ((0<=selectIndex) && (selectIndex<list_1.getModel().getSize())){
+			int caretPos = commandField.getSelectionStart();
+			int taskId = getFirstNumber(list_1.getModel().getElementAt(selectIndex));
+			if (taskId>-1){
+				deleteSelection();
+				typeNormal(String.valueOf(taskId)+" ", caretPos);
+			}
+		}
+		list_1.setSelectedIndex(-1);
+		selectionMode = false;
+		suggestPanel.setVisible(false);
+	}
+	
+	private void loadSuggestion(String contentInputField) {
+		boolean activateSuggestion = false;
+		int startCaretPos = -1;
+		
+		ArrayList<String> notKeywordOrNumberList = new ArrayList<String>();
+		int length = contentInputField.length();
+		String word;
+		String lastKeyword = "";
+		boolean doneOrDeleteKeywordAvailable = false;
+		
+		for(int i=0;i<length;i++){
+			if (contentInputField.charAt(i)==' '){
+				while ((i+1<length) && (contentInputField.charAt(i+1)==' ')){
+					i++;
+				}
+			} else if (contentInputField.charAt(i)=='\"'){
+				word = "";
+				while ((i+1<length) && (contentInputField.charAt(i+1)!='\"')){
+					i++;
+					word = word + contentInputField.charAt(i);
+				}
+				
+				if (i+1<length){
+					i++;
+				}
+				notKeywordOrNumberList.add(word.trim());
+			} else {
+				word = "" + contentInputField.charAt(i);
+				while ((i+1<length) && (contentInputField.charAt(i+1)!=' ')){
+					i++;
+					word = word + contentInputField.charAt(i);
+				}
+				
+				if (isKeyword(word)){
+					lastKeyword = word;
+					if (word.equalsIgnoreCase("done") || word.equalsIgnoreCase("delete")){
+						doneOrDeleteKeywordAvailable = true;
+					}  
+				}
+				
+				if ((!isKeyword(word)) && (!isNumber(word))){
+					notKeywordOrNumberList.add(word);
+					if (startCaretPos==-1){
+						startCaretPos = i - word.length() + 1;
+					}
+				}
+			}
+		}
+		
+		if (lastKeyword.equalsIgnoreCase("done") || 
+				lastKeyword.equalsIgnoreCase("delete") ||
+				lastKeyword.equalsIgnoreCase("update") || 
+				(lastKeyword.equalsIgnoreCase("from") && doneOrDeleteKeywordAvailable) || 
+				(lastKeyword.equalsIgnoreCase("to") && doneOrDeleteKeywordAvailable)){
+			activateSuggestion = true;
+		}
+		
+		if (activateSuggestion){
+			list_1.removeAll();
+			
+			LOGGER.log(Level.INFO, String.format("List keywords: %d", notKeywordOrNumberList.size()));
+			
+			ArrayList<EzTask> listTask = EzSort.sortById(EzController.getStorage().getTasksByKeywords(notKeywordOrNumberList));
+			String[] listString = new String[listTask.size()];
+			
+			for(int i=0;i<listTask.size();i++){
+				listString[i] = listTask.get(i).toString();
+			}
+			
+			list_1.setListData(listString);
+			if (listString.length>0){
+				list_1.setSelectedIndex(0);
+			} else {
+				list_1.clearSelection();
+			}
+			
+			selectionMode = true;
+			suggestPanel.setVisible(true);
+			
+			if (startCaretPos!=-1){
+				commandField.setSelectionStart(startCaretPos);
+				commandField.setSelectionEnd(commandField.getCaretPosition());
+			}
+		} else {
+			list_1.clearSelection();
+			selectionMode = false;
+			suggestPanel.setVisible(false);
+		}
+	}
+
+	private boolean isNumber(String word) {
+		for(int i=0;i<word.length();i++){
+			if ((word.charAt(i)<'0') || (word.charAt(i)> '9')){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private void typeNormal(String typedText, int caretPos) {
+		String contentInputField;
+		contentInputField = commandField.getText().substring(0, caretPos) + typedText + commandField.getText().substring(caretPos, commandField.getText().length());
+		addColorForCommandField(contentInputField, commandField.getStyledDocument());
+		commandField.setCaretPosition(caretPos+typedText.length());
+		
+		loadSuggestion(contentInputField);
+	}
+	
+	private int getFirstNumber(String text) {
+		int result = -1;
+		int i=0;
+		while ((text.charAt(i)<'0') || (text.charAt(i)>'9')){
+			i++;
+		}
+		if ((text.charAt(i)>='0') && (text.charAt(i)<='9')){
+			result = 0;
+			while ((text.charAt(i)>='0') && (text.charAt(i)<='9')){
+				result = result * 10 + (int)(text.charAt(i)-'0');
+				i++;
+			}
+		}
+		return result;
+	}
+	
+	private void deleteSelection() {
+		String contentInputField;
+		int endPos = commandField.getSelectionStart();
+		if (commandField.getSelectionStart() == commandField.getSelectionEnd()){
+			if (commandField.getSelectionStart()<commandField.getText().length()){
+				contentInputField = deleteString(commandField.getText(),commandField.getSelectionStart(),commandField.getSelectionEnd()+1); 
+				addColorForCommandField(contentInputField, commandField.getStyledDocument());
+				commandField.setCaretPosition(endPos);
+				loadSuggestion(contentInputField);
+			}
+		} else {
+			contentInputField = deleteString(commandField.getText(),commandField.getSelectionStart(),commandField.getSelectionEnd()); 
+			addColorForCommandField(contentInputField, commandField.getStyledDocument());
+			commandField.setCaretPosition(endPos);
+			loadSuggestion(contentInputField);
+		}
+	}
+	
+	private String deleteString(String text,int startPos, int endPos){
+		return text.substring(0, startPos) + text.substring(endPos);
+	}
+	
 	/**
 	 * @param commandPanel
 	 */
@@ -383,37 +554,9 @@ public class EzGUI extends JFrame {
 				}
 			}
 
-			private void enterSelection() {
-				int selectIndex = list_1.getSelectedIndex();
-				loadSuggestion(commandField.getText());
-				if ((0<=selectIndex) && (selectIndex<list_1.getModel().getSize())){
-					int caretPos = commandField.getSelectionStart();
-					int taskId = getFirstNumber(list_1.getModel().getElementAt(selectIndex));
-					if (taskId>-1){
-						deleteSelection();
-						typeNormal(String.valueOf(taskId)+" ", caretPos);
-					}
-				}
-				list_1.setSelectedIndex(-1);
-				selectionMode = false;
-				suggestPanel.setVisible(false);
-			}
+			
 
-			private int getFirstNumber(String text) {
-				int result = -1;
-				int i=0;
-				while ((text.charAt(i)<'0') || (text.charAt(i)>'9')){
-					i++;
-				}
-				if ((text.charAt(i)>='0') && (text.charAt(i)<='9')){
-					result = 0;
-					while ((text.charAt(i)>='0') && (text.charAt(i)<='9')){
-						result = result * 10 + (int)(text.charAt(i)-'0');
-						i++;
-					}
-				}
-				return result;
-			}
+			
 
 			private void selectBelow() {
 				int selectIndex = list_1.getSelectedIndex();
@@ -476,9 +619,7 @@ public class EzGUI extends JFrame {
 				}
 			}
 			
-			String deleteString(String text,int startPos, int endPos){
-				return text.substring(0, startPos) + text.substring(endPos);
-			}
+			
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -537,113 +678,9 @@ public class EzGUI extends JFrame {
 				commandField.setCaretPosition(caretPos);
 			}
 
-			private void typeNormal(String typedText, int caretPos) {
-				String contentInputField;
-				contentInputField = commandField.getText().substring(0, caretPos) + typedText + commandField.getText().substring(caretPos, commandField.getText().length());
-				addColorForCommandField(contentInputField, commandField.getStyledDocument());
-				commandField.setCaretPosition(caretPos+typedText.length());
-				
-				loadSuggestion(contentInputField);
-			}
+			
 
-			private void loadSuggestion(String contentInputField) {
-				boolean activateSuggestion = false;
-				int startCaretPos = -1;
-				
-				ArrayList<String> notKeywordOrNumberList = new ArrayList<String>();
-				int length = contentInputField.length();
-				String word;
-				String lastKeyword = "";
-				boolean doneOrDeleteKeywordAvailable = false;
-				
-				for(int i=0;i<length;i++){
-					if (contentInputField.charAt(i)==' '){
-						while ((i+1<length) && (contentInputField.charAt(i+1)==' ')){
-							i++;
-						}
-					} else if (contentInputField.charAt(i)=='\"'){
-						word = "";
-						while ((i+1<length) && (contentInputField.charAt(i+1)!='\"')){
-							i++;
-							word = word + contentInputField.charAt(i);
-						}
-						
-						if (i+1<length){
-							i++;
-						}
-						notKeywordOrNumberList.add(word.trim());
-					} else {
-						word = "" + contentInputField.charAt(i);
-						while ((i+1<length) && (contentInputField.charAt(i+1)!=' ')){
-							i++;
-							word = word + contentInputField.charAt(i);
-						}
-						
-						if (isKeyword(word)){
-							lastKeyword = word;
-							if (word.equalsIgnoreCase("done") || word.equalsIgnoreCase("delete")){
-								doneOrDeleteKeywordAvailable = true;
-							}  
-						}
-						
-						if ((!isKeyword(word)) && (!isNumber(word))){
-							notKeywordOrNumberList.add(word);
-							if (startCaretPos==-1){
-								startCaretPos = i - word.length() + 1;
-							}
-						}
-					}
-				}
-				
-				if (lastKeyword.equalsIgnoreCase("done") || 
-						lastKeyword.equalsIgnoreCase("delete") ||
-						lastKeyword.equalsIgnoreCase("update") || 
-						(lastKeyword.equalsIgnoreCase("from") && doneOrDeleteKeywordAvailable) || 
-						(lastKeyword.equalsIgnoreCase("to") && doneOrDeleteKeywordAvailable)){
-					activateSuggestion = true;
-				}
-				
-				if (activateSuggestion){
-					list_1.removeAll();
-					
-					LOGGER.log(Level.INFO, String.format("List keywords: %d", notKeywordOrNumberList.size()));
-					
-					ArrayList<EzTask> listTask = EzSort.sortById(EzController.getStorage().getTasksByKeywords(notKeywordOrNumberList));
-					String[] listString = new String[listTask.size()];
-					
-					for(int i=0;i<listTask.size();i++){
-						listString[i] = listTask.get(i).toString();
-					}
-					
-					list_1.setListData(listString);
-					if (listString.length>0){
-						list_1.setSelectedIndex(0);
-					} else {
-						list_1.clearSelection();
-					}
-					
-					selectionMode = true;
-					suggestPanel.setVisible(true);
-					
-					if (startCaretPos!=-1){
-						commandField.setSelectionStart(startCaretPos);
-						commandField.setSelectionEnd(commandField.getCaretPosition());
-					}
-				} else {
-					list_1.clearSelection();
-					selectionMode = false;
-					suggestPanel.setVisible(false);
-				}
-			}
-
-			private boolean isNumber(String word) {
-				for(int i=0;i<word.length();i++){
-					if ((word.charAt(i)<'0') || (word.charAt(i)> '9')){
-						return false;
-					}
-				}
-				return true;
-			}
+			
 
 			private void typeSpace(int caretPos) {
 				String contentInputField;
@@ -739,23 +776,7 @@ public class EzGUI extends JFrame {
 				
 			}
 
-			private void deleteSelection() {
-				String contentInputField;
-				int endPos = commandField.getSelectionStart();
-				if (commandField.getSelectionStart() == commandField.getSelectionEnd()){
-					if (commandField.getSelectionStart()<commandField.getText().length()){
-						contentInputField = deleteString(commandField.getText(),commandField.getSelectionStart(),commandField.getSelectionEnd()+1); 
-						addColorForCommandField(contentInputField, commandField.getStyledDocument());
-						commandField.setCaretPosition(endPos);
-						loadSuggestion(contentInputField);
-					}
-				} else {
-					contentInputField = deleteString(commandField.getText(),commandField.getSelectionStart(),commandField.getSelectionEnd()); 
-					addColorForCommandField(contentInputField, commandField.getStyledDocument());
-					commandField.setCaretPosition(endPos);
-					loadSuggestion(contentInputField);
-				}
-			}
+			
 
 			
 		});
