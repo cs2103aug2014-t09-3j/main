@@ -3,9 +3,7 @@
  *
  */
 
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.basic.BasicBorders;
 import javax.swing.text.*;
 import javax.swing.GroupLayout.*;
 import javax.swing.*;
@@ -16,8 +14,6 @@ import java.awt.event.*;
 import java.util.*;
 import java.util.logging.*;
 import java.io.*;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
 
 public class EzGUI extends JFrame {
 	private static final String HELP_DOCUMENT_FILE_NAME = "help.txt";
@@ -111,8 +107,7 @@ public class EzGUI extends JFrame {
 		list_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				JList<String> list = (JList<String>)arg0.getSource();
-		        if (arg0.getClickCount() == 2) {
+				if (arg0.getClickCount() == 2) {
 		            enterSelection();
 		        }
 			}
