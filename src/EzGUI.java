@@ -62,8 +62,8 @@ public class EzGUI extends JFrame {
 	private int historyPos = 0;
 	JDialog suggestPanel;
 	private static ArrayList<JButton> listOfButtons;
-	private JList<String> list_1;
-	private JScrollPane scrollPane;
+	private JList<String> suggestList;
+	private JScrollPane suggestScrollPanel;
 	private boolean selectionMode = false;
 	/**
 	 * Create the frame.
@@ -103,8 +103,8 @@ public class EzGUI extends JFrame {
 			listString[i] = listTask.get(i).toString();
 		}
 		
-		list_1 = new JList<String>(listString);
-		list_1.addMouseListener(new MouseAdapter() {
+		suggestList = new JList<String>(listString);
+		suggestList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if (arg0.getClickCount() == 2) {
@@ -112,17 +112,17 @@ public class EzGUI extends JFrame {
 		        }
 			}
 		});
-		list_1.setBackground(EzConstants.WHITE_SMOKE_COLOR);
+		suggestList.setBackground(EzConstants.WHITE_SMOKE_COLOR);
 		
 		
-		scrollPane = new JScrollPane(list_1);
-		scrollPane.setFocusable(false);
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setLayout(new ScrollPaneLayout());
-		scrollPane.setBorder(BorderFactory.createLineBorder(EzConstants.CHATEAU_GREEN_COLOR,5));
-		scrollPane.setPreferredSize(new Dimension(784,85));
-		suggestPanel.getContentPane().add(scrollPane, BorderLayout.SOUTH);
+		suggestScrollPanel = new JScrollPane(suggestList);
+		suggestScrollPanel.setFocusable(false);
+		suggestScrollPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		suggestScrollPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		suggestScrollPanel.setLayout(new ScrollPaneLayout());
+		suggestScrollPanel.setBorder(BorderFactory.createLineBorder(EzConstants.CHATEAU_GREEN_COLOR,5));
+		suggestScrollPanel.setPreferredSize(new Dimension(784,85));
+		suggestPanel.getContentPane().add(suggestScrollPanel, BorderLayout.SOUTH);
 		
 		//suggestPanel.getContentPane().add(list_1, BorderLayout.NORTH);
 		
@@ -318,17 +318,17 @@ public class EzGUI extends JFrame {
 	}
 
 	private void enterSelection() {
-		int selectIndex = list_1.getSelectedIndex();
+		int selectIndex = suggestList.getSelectedIndex();
 		loadSuggestion(commandField.getText());
-		if ((0<=selectIndex) && (selectIndex<list_1.getModel().getSize())){
+		if ((0<=selectIndex) && (selectIndex<suggestList.getModel().getSize())){
 			int caretPos = commandField.getSelectionStart();
-			int taskId = getFirstNumber(list_1.getModel().getElementAt(selectIndex));
+			int taskId = getFirstNumber(suggestList.getModel().getElementAt(selectIndex));
 			if (taskId>-1){
 				deleteSelection();
 				typeNormal(String.valueOf(taskId)+" ", caretPos);
 			}
 		}
-		list_1.setSelectedIndex(-1);
+		suggestList.setSelectedIndex(-1);
 		selectionMode = false;
 		suggestPanel.setVisible(false);
 	}
@@ -391,9 +391,9 @@ public class EzGUI extends JFrame {
 		}
 		
 		if (activateSuggestion){
-			list_1.removeAll();
+			suggestList.removeAll();
 			
-			LOGGER.log(Level.INFO, String.format("List keywords: %d", notKeywordOrNumberList.size()));
+			//LOGGER.log(Level.INFO, String.format("List keywords: %d", notKeywordOrNumberList.size()));
 			
 			ArrayList<EzTask> listTask = EzSort.sortById(EzController.getStorage().getTasksByKeywords(notKeywordOrNumberList));
 			String[] listString = new String[listTask.size()];
@@ -402,11 +402,11 @@ public class EzGUI extends JFrame {
 				listString[i] = listTask.get(i).toString();
 			}
 			
-			list_1.setListData(listString);
+			suggestList.setListData(listString);
 			if (listString.length>0){
-				list_1.setSelectedIndex(0);
+				suggestList.setSelectedIndex(0);
 			} else {
-				list_1.clearSelection();
+				suggestList.clearSelection();
 			}
 			
 			selectionMode = true;
@@ -417,7 +417,7 @@ public class EzGUI extends JFrame {
 				commandField.setSelectionEnd(commandField.getCaretPosition());
 			}
 		} else {
-			list_1.clearSelection();
+			suggestList.clearSelection();
 			selectionMode = false;
 			suggestPanel.setVisible(false);
 		}
@@ -628,30 +628,30 @@ public class EzGUI extends JFrame {
 			}
 
 			private void selectBelow() {
-				int selectIndex = list_1.getSelectedIndex();
+				int selectIndex = suggestList.getSelectedIndex();
 				selectIndex++;
-				if (selectIndex >= list_1.getModel().getSize()) {
+				if (selectIndex >= suggestList.getModel().getSize()) {
 					selectIndex = -1;
 				}
-				if ((0<=selectIndex) && (selectIndex<list_1.getModel().getSize())){
-					list_1.setSelectedIndex(selectIndex);
-					list_1.ensureIndexIsVisible(selectIndex);
+				if ((0<=selectIndex) && (selectIndex<suggestList.getModel().getSize())){
+					suggestList.setSelectedIndex(selectIndex);
+					suggestList.ensureIndexIsVisible(selectIndex);
 				} else {
-					list_1.clearSelection();
+					suggestList.clearSelection();
 				}
 			}
 
 			private void selectAbove() {
-				int selectIndex = list_1.getSelectedIndex();
+				int selectIndex = suggestList.getSelectedIndex();
 				selectIndex--;
 				if (selectIndex<-1) {
-					selectIndex = list_1.getModel().getSize()-1;
+					selectIndex = suggestList.getModel().getSize()-1;
 				}
-				if ((0<=selectIndex) && (selectIndex<list_1.getModel().getSize())){
-					list_1.setSelectedIndex(selectIndex);
-					list_1.ensureIndexIsVisible(selectIndex);
+				if ((0<=selectIndex) && (selectIndex<suggestList.getModel().getSize())){
+					suggestList.setSelectedIndex(selectIndex);
+					suggestList.ensureIndexIsVisible(selectIndex);
 				} else {
-					list_1.clearSelection();
+					suggestList.clearSelection();
 				}
 			}
 
