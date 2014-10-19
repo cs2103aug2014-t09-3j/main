@@ -86,6 +86,7 @@ public class EzTask {
 		if (this.startTime==null){
 			this.startTime = new GregorianCalendar(year, month, day);
 		} else {
+			this.startTime = (GregorianCalendar) this.startTime.clone();
 			this.startTime.set(Calendar.YEAR, year);
 			this.startTime.set(Calendar.MONTH, month);
 			this.startTime.set(Calendar.DAY_OF_MONTH, day);
@@ -95,6 +96,8 @@ public class EzTask {
 	public void setStartTime(int hour, int minute) {
 		if (this.startTime==null){
 			this.startTime = new GregorianCalendar();
+		} else {
+			this.startTime = (GregorianCalendar) this.startTime.clone();
 		}
 		this.startTime.set(Calendar.HOUR_OF_DAY, hour);
 		this.startTime.set(Calendar.MINUTE, minute);
@@ -122,6 +125,7 @@ public class EzTask {
 		if (this.endTime==null){
 			this.endTime = new GregorianCalendar(year, month, day);
 		} else {
+			this.endTime = (GregorianCalendar) this.endTime.clone();
 			this.endTime.set(Calendar.YEAR, year);
 			this.endTime.set(Calendar.MONTH, month);
 			this.endTime.set(Calendar.DAY_OF_MONTH, day);
@@ -131,6 +135,8 @@ public class EzTask {
 	public void setEndTime(int hour, int minute) {
 		if (this.endTime==null){
 			this.endTime = new GregorianCalendar();
+		} else {
+			this.endTime = (GregorianCalendar) this.endTime.clone();
 		}
 		this.endTime.set(Calendar.HOUR_OF_DAY, hour);
 		this.endTime.set(Calendar.MINUTE, minute);
