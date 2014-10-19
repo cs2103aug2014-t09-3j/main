@@ -710,7 +710,7 @@ public class EzParser {
 				else
 				{
 					newAction.setAction(TypeOfAction.INVALID);
-					newAction.setFeedback("Invalid date.");
+					newAction.setFeedback("Invalid command.");
 				}
 				
 			}
