@@ -328,8 +328,23 @@ public class EzParser {
 							calendar = new GregorianCalendar(dateArr[2],
 									dateArr[1] - 1, dateArr[0]);
 							task.setEndTime(calendar);
+							if(
+									(readDate(start)[2]>readDate(end)[2])
+									||((readDate(start)[2]==readDate(end)[2])&&(readDate(start)[1]>readDate(end)[1]))
+									||((readDate(start)[2]==readDate(end)[2])&&(readDate(start)[1]==readDate(end)[1])
+											&&(readDate(start)[0]>readDate(end)[0]))
+									)//from an later date to an earlier date
+							{
+								newAction.setAction(TypeOfAction.INVALID);
+								newAction.setFeedback("From a later date to an earlier date!");
+							}
 						} else if (readTime(start)[0] >= 0
 								&& readTime(end)[0] >= 0) {
+							if(
+									(readTime(start)[0]<readTime(end)[0])||
+									((readTime(start)[0]==readTime(end)[0])&&(readTime(start)[1]>readTime(end)[1]))
+											)
+							{
 							dateArr[3] = readTime(start)[0];
 							dateArr[4] = readTime(start)[1];
 							calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
@@ -340,6 +355,21 @@ public class EzParser {
 							calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
 							calendar.set(GregorianCalendar.MINUTE, dateArr[4]);
 							task.setEndTime(calendar);
+							}
+							else
+							{
+								dateArr[3] = readTime(start)[0];
+								dateArr[4] = readTime(start)[1];
+								calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
+								calendar.set(GregorianCalendar.MINUTE, dateArr[4]);
+								task.setStartTime(calendar);
+								dateArr[3] = readTime(end)[0];
+								dateArr[4] = readTime(end)[1];
+								calendar.set(GregorianCalendar.DAY_OF_MONTH,calendar.get(GregorianCalendar.DAY_OF_MONTH)+1);
+								calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
+								calendar.set(GregorianCalendar.MINUTE, dateArr[4]);
+								task.setEndTime(calendar);
+							}
 						}
 
 					} else {//from *** *** to *** ***
@@ -699,7 +729,7 @@ public class EzParser {
 				if(!content.isEmpty()||i>j)
 				{
 					newAction.setAction(TypeOfAction.INVALID);
-					newAction.setFeedback("From a later time to an earlier time.");
+					newAction.setFeedback("From a later id to an earlier id.");
 				}
 				for(int k=i;k<=j;k++)
 				{
@@ -798,7 +828,7 @@ public class EzParser {
 				if(!content.isEmpty()||i>j)
 				{
 					newAction.setAction(TypeOfAction.INVALID);
-					newAction.setFeedback("From a later time to an earlier time.");
+					newAction.setFeedback("From a later id to an earlier id.");
 				}
 				for(int k=i;k<=j;k++)
 				{
