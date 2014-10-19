@@ -104,8 +104,11 @@ public class EzParser {
 					|| !content.startsWith("\""))// if the string does not start
 													// with ",means invalid
 													// command type.
+				{
 				newAction.setAction(TypeOfAction.INVALID);
+				
 			    newAction.setFeedback("Invalid command.");
+				}
 			title = content.substring(content.indexOf("\"") + 1,
 					content.indexOf("\"", 1));
 			content = content.substring(content.indexOf("\"", content.indexOf("\"")+1)+1).trim();
@@ -626,7 +629,7 @@ public class EzParser {
 							"priority")) {
 						int priorityUpdate;
 						content = removeFirstWord(content);
-						if ((content.lastIndexOf("*") - content.indexOf("*")) <= EzConstants.MAXIMUM_PRIORITY) {
+						if ((content.lastIndexOf("*") - content.indexOf("*")) < EzConstants.MAXIMUM_PRIORITY) {
 							for (int i = content.indexOf("*"); i <= content
 									.lastIndexOf("*"); i++) {
 								if (content.charAt(i) != '*') {
