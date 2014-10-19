@@ -1124,6 +1124,26 @@ public class EzParser {
 	{
 		int[] results = new int[3];
 		date = date.trim();
+		if(date.equalsIgnoreCase("today"))//today
+		{
+             GregorianCalendar calendar=new GregorianCalendar();
+
+             results[0]=calendar.get(GregorianCalendar.DAY_OF_MONTH);
+           	 results[1]=calendar.get(GregorianCalendar.MONTH)+1;
+           	 results[2]=calendar.get(GregorianCalendar.YEAR);
+           	 return results;
+			   
+		}
+		if(date.equalsIgnoreCase("tomorrow"))//tomorrow
+		{
+			GregorianCalendar calendar=new GregorianCalendar();
+			calendar.add(GregorianCalendar.DATE, 1);
+
+            results[0]=calendar.get(GregorianCalendar.DAY_OF_MONTH);
+          	results[1]=calendar.get(GregorianCalendar.MONTH)+1;
+          	results[2]=calendar.get(GregorianCalendar.YEAR);
+          	return results;
+		}
 		if ((date.indexOf("/") >= 0)
 				&& (date.indexOf("/", date.indexOf("/") + 1) >= 0)
 				&& (date.indexOf("/", date.indexOf("/") + 1) == date
