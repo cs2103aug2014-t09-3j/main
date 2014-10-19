@@ -57,7 +57,7 @@ public class EzGUI extends JFrame {
 	private static JEditorPane displayArea;
 	private JButton selectedButton = null;
 	private JTextPane commandField;
-	private SimpleAttributeSet[] commandAttributeSet = new SimpleAttributeSet[3];
+	private SimpleAttributeSet[] commandAttributeSet = new SimpleAttributeSet[4];
 	private ArrayList<String> commandHistory = new ArrayList<String>();
 	private int historyPos = 0;
 	JDialog suggestPanel;
@@ -65,6 +65,7 @@ public class EzGUI extends JFrame {
 	private JList<String> suggestList;
 	private JScrollPane suggestScrollPanel;
 	private boolean selectionMode = false;
+	private boolean showingFeedback = false;
 	/**
 	 * Create the frame.
 	 */
@@ -498,6 +499,7 @@ public class EzGUI extends JFrame {
 		commandField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
+				clearFeedback();
 				if (arg0.isControlDown()){
 					switch (arg0.getKeyChar()){
 					case 22: case 25: case 26:
@@ -664,10 +666,16 @@ public class EzGUI extends JFrame {
 			}
 
 			private void enterCommand() {
-				EzController.execute(commandField.getText());
+				String fb = EzController.execute(commandField.getText());
 				commandHistory.add(commandField.getText());
-				historyPos = commandHistory.size(); 
-				commandField.setText("");
+				historyPos = commandHistory.size();
+				if (fb != null){
+					addColorForFeedBack("FEEDBACK: " + fb,commandField.getStyledDocument());
+					showingFeedback = true;
+				} else {
+					addColorForFeedBack("No feedback.",commandField.getStyledDocument());
+					showingFeedback = true;
+				}
 			}
 
 			private void goToNextCommand() {
@@ -690,6 +698,7 @@ public class EzGUI extends JFrame {
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
+				//clearFeedback();
 				int caretPos = commandField.getCaretPosition();
 				if ((!e.isControlDown()) && (!e.isAltDown())){
 					switch (e.getKeyChar()){
@@ -732,6 +741,13 @@ public class EzGUI extends JFrame {
 				}
 			}
 
+			private void clearFeedback() {
+				if (showingFeedback){
+					showingFeedback = false;
+					commandField.setText("");
+				}
+			}
+
 			private void redo() {
 				EzController.execute("redo");
 			}
@@ -747,10 +763,6 @@ public class EzGUI extends JFrame {
 				addColorForCommandField(commandField.getText(), commandField.getStyledDocument());
 				commandField.setCaretPosition(caretPos);
 			}
-
-			
-
-			
 
 			private void typeSpace(int caretPos) {
 				String contentInputField;
@@ -920,6 +932,16 @@ public class EzGUI extends JFrame {
 		}
 	}
 	
+	private void addColorForFeedBack(String feedback,
+			StyledDocument doc) {
+		try {
+			doc.remove(0, doc.getLength());
+			doc.insertString(doc.getLength(), feedback, commandAttributeSet[3]);
+		} catch (BadLocationException e2) {
+			e2.printStackTrace();
+		}
+	}
+	
 	private void loadCommandAttributeSet() {
 		commandAttributeSet[0] = new SimpleAttributeSet();
 		StyleConstants.setFontFamily(commandAttributeSet[0], COMMAND_FIELD_FONT);
@@ -930,6 +952,9 @@ public class EzGUI extends JFrame {
         
         commandAttributeSet[2] = new SimpleAttributeSet(commandAttributeSet[0]);
         StyleConstants.setForeground(commandAttributeSet[2], EzConstants.IRON_GRAY_COLOR);   
+
+        commandAttributeSet[3] = new SimpleAttributeSet(commandAttributeSet[0]);
+        StyleConstants.setForeground(commandAttributeSet[3], EzConstants.TERRA_COTTA_COLOR);
 	}
 	
 	private boolean isKeyword(String word) {
