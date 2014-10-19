@@ -192,12 +192,17 @@ public class EzParser {
 			content = content.trim();
 			content = content.toLowerCase();
 			// deal with keyword today,tomorrow
-			if (content.indexOf("today") >= 0) {
+			if (content.indexOf("today") >= 0) 
+			{
 				content = content.replace("today", "");
+				task.setStartTime(calendar.get(GregorianCalendar.YEAR),calendar.get(GregorianCalendar.MONTH),calendar.get(GregorianCalendar.DAY_OF_MONTH));
+			    task.setEndTimeAsStartTime();
 			}
 			if (content.indexOf("tomorrow") >= 0) {
 				content = content.replace("tomorrow", "");
 				calendar.add(GregorianCalendar.DATE, 1);
+				task.setStartTime(calendar.get(GregorianCalendar.YEAR),calendar.get(GregorianCalendar.MONTH),calendar.get(GregorianCalendar.DAY_OF_MONTH));
+			    task.setEndTimeAsStartTime();
 			}
 
 			content = content.trim();
