@@ -39,6 +39,7 @@ public class EzHtmlGenerator {
 	
 	
 	private static final String[] CALENDAR_MONTH = {"Jan","Feb","March","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+	private static final String[] CALENDAR_DAY_OF_WEEK = {"","Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
 	
 	private static String td(String format, String content){
 		return "<td " + format + ">" + content + "</td>";
@@ -161,11 +162,13 @@ public class EzHtmlGenerator {
 	
 	private static String createHtmlCalendar(GregorianCalendar date){
 		String monthHtmlText = createHtmlText(CALENDAR_MONTH[date.get(Calendar.MONTH)],"Arial Rounded MT Bold",2,new Color(255,255,255));
-		String dateHtmlText = createHtmlText(String.valueOf(date.get(Calendar.DATE)),"Arial",6,CALENDAR_DATE_FONT_COLOR);
+		String dateHtmlText = createHtmlText(String.valueOf(date.get(Calendar.DATE)),"Arial",5,CALENDAR_DATE_FONT_COLOR);
+		String dayOfWeekHtmlText = createHtmlText(CALENDAR_DAY_OF_WEEK[date.get(Calendar.DAY_OF_WEEK)],"Arial",2,CALENDAR_DATE_FONT_COLOR);
 		
 		return 	table("background=\"file:" + IMAGE_CALENDAR_PNG +"\" border=0 cellspacing=0 cellpadding=0 width=\"38px\"",
 					tr(td("height=\"10px\"",center(monthHtmlText))) +
-					tr(td("height=\"27px\"",center(dateHtmlText)))
+					tr(td("height=\"17px\"",center(dateHtmlText))) + 
+					tr(td("height=\"10px\"",center(dayOfWeekHtmlText)))
 				);
 	}
 	
