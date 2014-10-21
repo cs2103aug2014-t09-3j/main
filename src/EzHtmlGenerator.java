@@ -100,23 +100,29 @@ public class EzHtmlGenerator {
 		else {
 			if (date1.equals(date2)){
 				list.add(createHtmlCalendar(date1));
-				if ((date1.get(Calendar.HOUR_OF_DAY)!=0) || (date1.get(Calendar.MINUTE)!=0)){
-					list.add(createHtmlClock(date1));
-				}
+				//if ((date1.get(Calendar.HOUR_OF_DAY)!=0) || (date1.get(Calendar.MINUTE)!=0)){
+				list.add(createHtmlClock(date1));
+				//}
 			} else {
 				list.add(createHtmlCalendar(date1));
 				if ((date1.get(Calendar.HOUR_OF_DAY)!=0) || (date1.get(Calendar.MINUTE)!=0) ||
-						(date2.get(Calendar.HOUR_OF_DAY)!=0) || (date2.get(Calendar.MINUTE)!=0)){
+						(date2.get(Calendar.HOUR_OF_DAY)!=23) || (date2.get(Calendar.MINUTE)!=59)){
 					list.add(createHtmlClock(date1));
 				}
-				list.add(img("image/rightArrow.png"));
+				if ((date1.get(Calendar.YEAR) != date2.get(Calendar.YEAR))
+						|| (date1.get(Calendar.MONTH) != date2.get(Calendar.MONTH))
+						|| (date1.get(Calendar.DATE) != date2.get(Calendar.DATE))
+						|| (date1.get(Calendar.HOUR_OF_DAY)!=0) || (date1.get(Calendar.MINUTE)!=0) 
+						|| (date2.get(Calendar.HOUR_OF_DAY)!=23) || (date2.get(Calendar.MINUTE)!=59)){
+					list.add(img("image/rightArrow.png"));
+				}
 				if ((date1.get(Calendar.YEAR) != date2.get(Calendar.YEAR))
 						|| (date1.get(Calendar.MONTH) != date2.get(Calendar.MONTH))
 						|| (date1.get(Calendar.DATE) != date2.get(Calendar.DATE))){
 					list.add(createHtmlCalendar(date2));
 				}
 				if ((date1.get(Calendar.HOUR_OF_DAY)!=0) || (date1.get(Calendar.MINUTE)!=0) ||
-						(date2.get(Calendar.HOUR_OF_DAY)!=0) || (date2.get(Calendar.MINUTE)!=0)){
+						(date2.get(Calendar.HOUR_OF_DAY)!=23) || (date2.get(Calendar.MINUTE)!=59)){
 					list.add(createHtmlClock(date2));
 				}
 			}
