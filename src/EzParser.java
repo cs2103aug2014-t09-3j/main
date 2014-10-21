@@ -256,7 +256,7 @@ public class EzParser {
 				}
 				calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
 				calendar.set(GregorianCalendar.MINUTE, dateArr[4]);
-				task.setStartTime(calendar);
+				task.setStartTime(dateArr[3],dateArr[4]);
 				task.setEndTimeAsStartTime();
 
 				if (!getFirstWord(content).equalsIgnoreCase("from")
@@ -459,7 +459,7 @@ public class EzParser {
 			ArrayList<EzTask> targetUpdate = new ArrayList<EzTask>();
 			ArrayList<EzTask> resultUpdate = new ArrayList<EzTask>();
 			int[] dateUpdate = new int[5];
-			GregorianCalendar calendarUpdate = new GregorianCalendar();
+			
 			String id = getFirstWord(content);
 			content = removeFirstWord(content);
 			int index = Integer.parseInt(id);
@@ -470,6 +470,12 @@ public class EzParser {
 			else {
 				EzTask taskTarget=storage.findTask(index);
 				EzTask taskUpdate = new EzTask(taskTarget);
+				
+				GregorianCalendar calendarUpdate = new GregorianCalendar();
+				if(taskTarget.getStartTime()!=null)
+				{
+					calendarUpdate=taskTarget.getStartTime();
+				}
 				
 
 				targetUpdate.add(taskTarget);
@@ -598,6 +604,7 @@ public class EzParser {
 						}
 
 					} else if (getFirstWord(content).equalsIgnoreCase("end")) {
+						calendarUpdate=taskTarget.getEndTime();
 
 						content = removeFirstWord(content);
 						if (getFirstWord(content).equalsIgnoreCase("date")) {
@@ -612,9 +619,7 @@ public class EzParser {
 								newAction.setFeedback("Invalid date.");
 							}
 
-							calendarUpdate = new GregorianCalendar(
-									dateUpdate[2], dateUpdate[1] - 1,
-									dateUpdate[0]);
+							calendarUpdate.set(dateUpdate[2],dateUpdate[1]-1,dateUpdate[0]);
 							taskUpdate.setEndTime(calendarUpdate);
 							resultUpdate.add(taskUpdate);
 							newAction.setResults(resultUpdate);
