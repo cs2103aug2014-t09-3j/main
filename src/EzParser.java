@@ -1194,7 +1194,32 @@ public class EzParser {
 			if (results[2] < 100) {
 				results[2] = results[2] + 2000;
 			}
-		} else
+		} 
+		else if((date.indexOf("/")>=0)&&(date.indexOf("/")==date.lastIndexOf("/")))
+		{
+			results[0] = Integer.parseInt(date.substring(0, date.indexOf("/")));
+			results[1] = Integer.parseInt(date.substring(date.indexOf("/")+1));
+			GregorianCalendar calendar=new GregorianCalendar();
+			results[2]=calendar.get(GregorianCalendar.YEAR);		
+			if ((results[0] > 31) || (results[0] <= 0) || (results[1] > 12)
+					|| (results[1] <= 0) ) 
+			{
+				results[0] = -1;
+			}
+		}
+		else if((date.indexOf(".")>=0)&&(date.indexOf(".")==date.lastIndexOf(".")))
+		{
+			results[0] = Integer.parseInt(date.substring(0, date.indexOf(".")));
+			results[1] = Integer.parseInt(date.substring(date.indexOf(".")+1));
+			GregorianCalendar calendar=new GregorianCalendar();
+			results[2]=calendar.get(GregorianCalendar.YEAR);		
+			if ((results[0] > 31) || (results[0] <= 0) || (results[1] > 12)
+					|| (results[1] <= 0) ) 
+			{
+				results[0] = -1;
+			}
+		}
+		else
 			results[0] = -1;
 
 		return results;// need a method to analyze the date int[]
