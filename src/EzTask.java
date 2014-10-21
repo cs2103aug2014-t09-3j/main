@@ -71,7 +71,7 @@ public class EzTask {
 	}
 	
 	public GregorianCalendar getStartTime() {
-		return startTime;
+		return (GregorianCalendar) startTime.clone();
 	}
 	
 	public void setStartTime(GregorianCalendar startTime) {
@@ -109,7 +109,7 @@ public class EzTask {
 	
 	
 	public GregorianCalendar getEndTime() {
-		return endTime;
+		return (GregorianCalendar) endTime.clone();
 	}
 	
 	public void setEndTime(GregorianCalendar endTime) {
