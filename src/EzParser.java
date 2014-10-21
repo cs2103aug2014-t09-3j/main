@@ -513,8 +513,7 @@ public class EzParser {
 							newAction.setFeedback("Invalid date.");
 						}
 
-						calendarUpdate = new GregorianCalendar(dateUpdate[2],
-								dateUpdate[1] - 1, dateUpdate[0]);
+						calendarUpdate.set(dateUpdate[2],dateUpdate[1]-1,dateUpdate[0]);
 						taskUpdate.setStartTime(calendarUpdate);
 						taskUpdate.setEndTimeAsStartTime();
 						resultUpdate.add(taskUpdate);
