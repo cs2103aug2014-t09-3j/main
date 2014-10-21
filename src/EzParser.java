@@ -566,10 +566,14 @@ public class EzParser {
 								newAction.setAction(TypeOfAction.INVALID);
 								newAction.setFeedback("Invalid date");
 							}
-
-							calendarUpdate = new GregorianCalendar(
-									dateUpdate[2], dateUpdate[1] - 1,
-									dateUpdate[0]);
+							calendarUpdate.set(dateUpdate[2],dateUpdate[1]-1,dateUpdate[0]);
+							if(calendarUpdate.compareTo(taskUpdate.getEndTime())>0)
+							{
+								newAction.setAction(TypeOfAction.INVALID);
+								newAction.setFeedback("Start time is later than end time.");
+							}
+							
+							
 							taskUpdate.setStartTime(calendarUpdate);
 							resultUpdate.add(taskUpdate);
 							newAction.setResults(resultUpdate);
@@ -590,6 +594,11 @@ public class EzParser {
 									dateUpdate[3]);
 							calendarUpdate.set(GregorianCalendar.MINUTE,
 									dateUpdate[4]);
+							if(calendarUpdate.compareTo(taskUpdate.getEndTime())>0)
+							{
+								newAction.setAction(TypeOfAction.INVALID);
+								newAction.setFeedback("Start time is later than end time.");
+							}
 
 							taskUpdate.setStartTime(calendarUpdate);
 							resultUpdate.add(taskUpdate);
@@ -620,6 +629,12 @@ public class EzParser {
 							}
 
 							calendarUpdate.set(dateUpdate[2],dateUpdate[1]-1,dateUpdate[0]);
+							if(calendarUpdate.compareTo(taskUpdate.getStartTime())<0)
+							{
+								newAction.setAction(TypeOfAction.INVALID);
+								newAction.setFeedback("End time is earlier than start time.");
+							}
+							
 							taskUpdate.setEndTime(calendarUpdate);
 							resultUpdate.add(taskUpdate);
 							newAction.setResults(resultUpdate);
@@ -631,12 +646,17 @@ public class EzParser {
 							dateUpdate[3] = readTime(content)[0];
 							dateUpdate[4] = readTime(content)[1];
 							if (readTime(content)[0] < 0) {
-							//	newAction.setAction(TypeOfAction.INVALID);
+								newAction.setAction(TypeOfAction.INVALID);
 							}
 							calendarUpdate.set(GregorianCalendar.HOUR_OF_DAY,
 									dateUpdate[3]);
 							calendarUpdate.set(GregorianCalendar.MINUTE,
 									dateUpdate[4]);
+							if(calendarUpdate.compareTo(taskUpdate.getStartTime())<0)
+							{
+								newAction.setAction(TypeOfAction.INVALID);
+								newAction.setFeedback("End time is earlier than start time.");
+							}
 
 							taskUpdate.setEndTime(calendarUpdate);
 							resultUpdate.add(taskUpdate);
