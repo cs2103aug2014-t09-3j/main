@@ -196,13 +196,14 @@ public class EzParser {
 			{
 				content = content.replace("today", "");
 				task.setStartTime(calendar.get(GregorianCalendar.YEAR),calendar.get(GregorianCalendar.MONTH),calendar.get(GregorianCalendar.DAY_OF_MONTH));
-			    task.setEndTimeAsStartTime();
+			    task.setEndTime(23,59);
 			}
 			if (content.indexOf("tomorrow") >= 0) {
 				content = content.replace("tomorrow", "");
-				calendar.add(GregorianCalendar.DATE, 1);
+				calendar.set(GregorianCalendar.DATE, calendar.get(GregorianCalendar.DATE)+1);
 				task.setStartTime(calendar.get(GregorianCalendar.YEAR),calendar.get(GregorianCalendar.MONTH),calendar.get(GregorianCalendar.DAY_OF_MONTH));
 			    task.setEndTimeAsStartTime();
+				task.setEndTime(23,59);
 			}
 
 			content = content.trim();
@@ -225,7 +226,7 @@ public class EzParser {
 						dateArr[0]);
 				task.setStartTime(calendar);
 				task.setEndTimeAsStartTime();
-
+			
 				if (!getFirstWord(content).equalsIgnoreCase("from")
 						&& !content.isEmpty()) {
 					if (getFirstWord(content).equalsIgnoreCase("at"))//on **** at ****
@@ -238,10 +239,9 @@ public class EzParser {
 							dateArr[1] - 1, dateArr[0], dateArr[3], dateArr[4]);
 					task.setStartTime(calendar);
 					task.setEndTimeAsStartTime();
-				} else if (content.isEmpty())// if empty means no time,then no
-												// need to do anything because
-												// date is set.
+				} else if (content.isEmpty())// if empty means no time, then set it as whole day.
 				{
+					task.setEndTime(23,59);
 				} 
 			}
 			if (getFirstWord(content).equalsIgnoreCase("at")) {//at **:**
@@ -331,7 +331,7 @@ public class EzParser {
 							dateArr[1] = readDate(end)[1];
 							dateArr[2] = readDate(end)[2];
 							calendar = new GregorianCalendar(dateArr[2],
-									dateArr[1] - 1, dateArr[0]);
+									dateArr[1] - 1, dateArr[0],23,59);
 							task.setEndTime(calendar);
 							if(
 									(readDate(start)[2]>readDate(end)[2])
