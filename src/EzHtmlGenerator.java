@@ -105,14 +105,20 @@ public class EzHtmlGenerator {
 				}
 			} else {
 				list.add(createHtmlCalendar(date1));
-				list.add(createHtmlClock(date1));
+				if ((date1.get(Calendar.HOUR_OF_DAY)!=0) || (date1.get(Calendar.MINUTE)!=0) ||
+						(date2.get(Calendar.HOUR_OF_DAY)!=0) || (date2.get(Calendar.MINUTE)!=0)){
+					list.add(createHtmlClock(date1));
+				}
 				list.add(img("image/rightArrow.png"));
 				if ((date1.get(Calendar.YEAR) != date2.get(Calendar.YEAR))
 						|| (date1.get(Calendar.MONTH) != date2.get(Calendar.MONTH))
 						|| (date1.get(Calendar.DATE) != date2.get(Calendar.DATE))){
 					list.add(createHtmlCalendar(date2));
 				}
-				list.add(createHtmlClock(date2));
+				if ((date1.get(Calendar.HOUR_OF_DAY)!=0) || (date1.get(Calendar.MINUTE)!=0) ||
+						(date2.get(Calendar.HOUR_OF_DAY)!=0) || (date2.get(Calendar.MINUTE)!=0)){
+					list.add(createHtmlClock(date2));
+				}
 			}
 		}
 		return createHtmlTable(1,list.size(),list,"border=0 cellspacing=0 cellpadding=1");
@@ -161,7 +167,7 @@ public class EzHtmlGenerator {
 	}
 	
 	private static String createHtmlCalendar(GregorianCalendar date){
-		String monthHtmlText = createHtmlText(CALENDAR_MONTH[date.get(Calendar.MONTH)],"Arial Rounded MT Bold",2,new Color(255,255,255));
+		/*String monthHtmlText = createHtmlText(CALENDAR_MONTH[date.get(Calendar.MONTH)],"Arial Rounded MT Bold",2,new Color(255,255,255));
 		String dateHtmlText = createHtmlText(String.valueOf(date.get(Calendar.DATE)),"Arial",5,CALENDAR_DATE_FONT_COLOR);
 		String dayOfWeekHtmlText = createHtmlText(CALENDAR_DAY_OF_WEEK[date.get(Calendar.DAY_OF_WEEK)],"Arial",2,CALENDAR_DATE_FONT_COLOR);
 		
@@ -169,6 +175,16 @@ public class EzHtmlGenerator {
 					tr(td("height=\"10px\"",center(monthHtmlText))) +
 					tr(td("height=\"17px\"",center(dateHtmlText))) + 
 					tr(td("height=\"10px\"",center(dayOfWeekHtmlText)))
+				);*/
+		String dayOfWeekHtmlText = createHtmlText(CALENDAR_DAY_OF_WEEK[date.get(Calendar.DAY_OF_WEEK)],"Arial Rounded MT Bold",2,new Color(255,255,255));
+		String monthHtmlText = createHtmlText(CALENDAR_MONTH[date.get(Calendar.MONTH)],"Arial Rounded MT Bold",3,CALENDAR_DATE_FONT_COLOR);
+		String dateHtmlText = createHtmlText(String.valueOf(date.get(Calendar.DATE)),"Arial Rounded MT Bold",3,CALENDAR_DATE_FONT_COLOR);
+		String yearHtmlText = createHtmlText(String.valueOf(date.get(Calendar.YEAR)),"Arial",2,CALENDAR_DATE_FONT_COLOR);
+		
+		return 	table("background=\"file:" + IMAGE_CALENDAR_PNG +"\" border=0 cellspacing=0 cellpadding=0 width=\"38px\"",
+					tr(td("height=\"10px\"",center(dayOfWeekHtmlText))) +
+					tr(td("height=\"17px\"",center(monthHtmlText + " " +dateHtmlText))) + 
+					tr(td("height=\"10px\"",center(yearHtmlText)))
 				);
 	}
 	
