@@ -194,16 +194,25 @@ public class EzParser {
 			// deal with keyword today,tomorrow
 			if (content.indexOf("today") >= 0) 
 			{
+				if(!(content.indexOf("from")>=0&&content.indexOf("today")>=content.indexOf("from")))
+				{
 				content = content.replace("today", "");
+				
 				task.setStartTime(calendar.get(GregorianCalendar.YEAR),calendar.get(GregorianCalendar.MONTH),calendar.get(GregorianCalendar.DAY_OF_MONTH));
 			    task.setEndTime(23,59);
+				}
 			}
-			if (content.indexOf("tomorrow") >= 0) {
+			if (content.indexOf("tomorrow") >= 0) 
+			{
+				if(!(content.indexOf("from")>=0&&content.indexOf("tomorrow")>=content.indexOf("from")))
+				{
 				content = content.replace("tomorrow", "");
+			
 				calendar.set(GregorianCalendar.DATE, calendar.get(GregorianCalendar.DATE)+1);
 				task.setStartTime(calendar.get(GregorianCalendar.YEAR),calendar.get(GregorianCalendar.MONTH),calendar.get(GregorianCalendar.DAY_OF_MONTH));
 			    task.setEndTimeAsStartTime();
 				task.setEndTime(23,59);
+				}
 			}
 
 			content = content.trim();
@@ -441,7 +450,8 @@ public class EzParser {
 							newAction.setFeedback("Invalid command. Cannot recongize keywords.");
 						}
 					}
-				} else {
+				} 
+				else {
 					newAction.setAction(TypeOfAction.INVALID);
 					newAction.setFeedback("Invalid command. Cannot recongize keywords.");
 				}
