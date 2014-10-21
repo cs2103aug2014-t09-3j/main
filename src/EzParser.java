@@ -1233,10 +1233,12 @@ public class EzParser {
 	{
 		int[] results = new int[2];
 		time = time.trim();
+		boolean isPM=false;
 	
 		if (time.length()>=2&&(time.substring(time.length() - 2).equalsIgnoreCase("am")
 				|| time.substring(time.length() - 2).equalsIgnoreCase("pm"))) {
 			if (time.substring(time.length() - 2).equalsIgnoreCase("pm")) {
+				isPM=true;
 				results[0] = 12;
 			}
 			time = time.substring(0, time.length() - 2);
@@ -1273,6 +1275,15 @@ public class EzParser {
 		}
 		else
 			results[0] = -1;
+		if(isPM==true&&results[0]==24&&results[1]==0)
+		{
+			results[0]=12;
+		}
+		if(isPM==false&&results[0]==12&&results[1]==0)
+		{
+			results[0]=0;
+		}
+		
 		return results;// int[] readTime(String time) only accept 10h, 10:00,
 						// 10am
 	}
