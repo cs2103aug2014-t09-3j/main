@@ -17,6 +17,7 @@ public class EzController {
 	private static int pos = -1;
 	private static boolean confirmation = false;
 	private static EzAction deleteAction = null;
+	private static boolean testing = false;
 	
 	public static String execute(String userCommand){
 		EzAction userAction = EzParser.extractInfo(userCommand, storage);
@@ -32,14 +33,16 @@ public class EzController {
 				checkPos();
 				addHistory(userAction);
 				storage.addTaskWithNewId(task);
-				try {
-					EzDataManage.saveToFile(storage);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if(!testing) {
+					try {
+						EzDataManage.saveToFile(storage);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
 				}
-				ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-				EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
 			}
 			break;
 			
@@ -48,14 +51,16 @@ public class EzController {
 				storage.updateTask(userAction.getResults());
 				checkPos();
 				addHistory(userAction);
-				try {
-					EzDataManage.saveToFile(storage);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if(!testing) {
+					try {
+						EzDataManage.saveToFile(storage);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
 				}
-				ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-				EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
 			}
 			break;
 			
@@ -65,11 +70,13 @@ public class EzController {
 				ArrayList<EzTask> toBeDeleted = userAction.getTargets();
 				confirmation = true;
 				assert(toBeDeleted.size() >= 0);
-				if(toBeDeleted.size() == 1) {
-					EzGUI.showContent("Are you sure to delete this task? (Y/N)", toBeDeleted);
-				}
-				else if(toBeDeleted.size() > 1) {
-					EzGUI.showContent("Are you sure to delete these tasks? (Y/N)", toBeDeleted);
+				if(!testing) {
+					if(toBeDeleted.size() == 1) {
+						EzGUI.showContent("Are you sure to delete this task? (Y/N)", toBeDeleted);
+					}
+					else if(toBeDeleted.size() > 1) {
+						EzGUI.showContent("Are you sure to delete these tasks? (Y/N)", toBeDeleted);
+					}
 				}
 			}
 			break;
@@ -80,22 +87,26 @@ public class EzController {
 				assert(deleteAction != null);
 				storage.deleteTask(deleteAction.getTargets());
 				addHistory(deleteAction);
-				try {
-					EzDataManage.saveToFile(storage);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if(!testing) {
+					try {
+						EzDataManage.saveToFile(storage);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+					EzGUI.showContent("Tasks Deleted", EzSort.sortById(updatedList));
 				}
-				ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-				EzGUI.showContent("Tasks Deleted", EzSort.sortById(updatedList));
 				confirmation = false;
 			}
 			break;
 		
 		case N:
 			if (confirmation){
-				ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-				EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
+				if(!testing) {
+					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
+				}
 				confirmation = false;
 			}
 			break;
@@ -105,14 +116,16 @@ public class EzController {
 				storage.updateTask(userAction.getResults());
 				checkPos();
 				addHistory(userAction);
-				try {
-					EzDataManage.saveToFile(storage);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if(!testing) {
+					try {
+						EzDataManage.saveToFile(storage);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
 				}
-				ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-				EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
 			}
 			break;
 			
@@ -123,15 +136,16 @@ public class EzController {
 				}
 				else {
 					undoTask();
-					try {
-						EzDataManage.saveToFile(storage);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					if(!testing) {
+						try {
+							EzDataManage.saveToFile(storage);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+						EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
 					}
-					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
-					
 				}
 			}
 			break;
@@ -143,14 +157,16 @@ public class EzController {
 				}
 				else {
 					redoTask();
-					try {
-						EzDataManage.saveToFile(storage);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					if(!testing) {
+						try {
+							EzDataManage.saveToFile(storage);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+						EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
 					}
-					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
 				}
 			}
 			break;
@@ -390,6 +406,14 @@ public class EzController {
 	
 	public static EzStorage getStorage() {
 		return storage;
+	}
+	
+	public static void setTesting(boolean onTest) {
+		testing = onTest;
+	}
+	
+	public static ArrayList<EzAction> getHistory() {
+		return history;
 	}
 	
 	public void refresh(){
