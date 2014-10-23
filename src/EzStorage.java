@@ -22,7 +22,7 @@ public class EzStorage {
 	private int largestId = 0;
 
 	/**
-	 * this method just simply adds the task to the list and returns it.
+	 * this method just simply adds the task to listOfAllTasks and returns it.
 	 * @param task
 	 * @return task 
 	 */
@@ -38,6 +38,7 @@ public class EzStorage {
 		
 		listOfAllTasks.add(task);
 		
+		//assertions 
 		int size = listOfAllTasks.size();
 		assert size >0;
 		int largestNum = 0;
@@ -46,11 +47,13 @@ public class EzStorage {
 				largestNum = task1.getId();
 		
 		assert largestId == largestNum + 1;
+		//end assertions 
+		
 		return task;
 	}
 	
 	/**
-	 * this method adds the task to the list and provides an unique ID for the task then return it.
+	 * This method adds the task to the list and provides an unique ID for the task and returns it.
 	 * @param task
 	 * @return task with new id
 	 */
@@ -58,21 +61,22 @@ public class EzStorage {
 		
 		listOfAllTasks.add(task);
 		task.setId(getLargestId());
-		setLargestId(getLargestId() + 1);
+		setLargestId(getLargestId() + 1);  //largestId must always be 1 more than the largestTaskId
 		
 		return task;
 		
 	}
 	
 	/**
-	 * this method replaces the tasks with certain ID in the original list, with the new tasks carrying the same ID in the new list.
+	 * This method replaces the tasks with certain ID with the new tasks carrying the same ID in the list.
 	 * @param listOfTasksUpdated
 	 * @return the number of tasks found and replaced.
 	 */
 
 	public int updateTask(ArrayList<EzTask> listOfTasksUpdated) {
-		int count = 0;
-		int index;
+		int count = 0;       //number of tasks replaced
+		int index;			 //the index of the task in listOfAllTasks
+		
 		for(EzTask taskToBeUpdated : listOfTasksUpdated)
 			for(int i=0; i< listOfAllTasks.size(); i++)
 			{
@@ -92,14 +96,13 @@ public class EzStorage {
 	}
 	
 	/**
-	 * this method removes the task having the id as the id of the tasks from the listOfTasks
+	 * This method removes the task having the id with the same id as the tasks from the listOfAllTasks
 	 * @param listOfTasks
 	 * @return the number of tasks found and removed.
 	 */
 
 	public int deleteTask(ArrayList<EzTask> listOfTasksDeleted){
-		int count = 0;
-		int index = 0;
+		int count = 0;			//the number of tasks removed
 		for(EzTask taskToBeDeleted: listOfTasksDeleted)
 			for(int i = 0; i < listOfAllTasks.size(); i++)
 			{
@@ -107,8 +110,7 @@ public class EzStorage {
 				if(taskToBeDeleted.getId() == task.getId())
 
 				{
-					index = listOfAllTasks.indexOf(task);
-					listOfAllTasks.remove(index);
+					listOfAllTasks.remove(listOfAllTasks.indexOf(task));
 					count++;
 				}
 			}
@@ -126,25 +128,41 @@ public class EzStorage {
 	}
 	
 	/**
-	 * this method finds the task by ID and return it if found or else return null.
+	 * This method finds the task by taskId and returns a copy of the task if found, and returns null if otherwise.
 	 * @param id
-	 * @return EzTask 
+	 * @return taskFound
 	 */
 	public EzTask findTask(int id){
 		for(EzTask task : listOfAllTasks)
 		{
 			//System.out.println("findTask: " + task.getTitle());
-		
+			EzTask taskFound = new EzTask();
 			if(id == task.getId())
-				return task;
+				taskFound = task;
+			return taskFound;
 		}
 			return null;
 	}
 	
 	/**
-	 * this method finds all the tasks on the date and return that list.
+	 * This method finds the task by taskId and returns it if found or returns null otherwise.
+	 * @param id
+	 * @return task
+	 */
+	public EzTask getTask(int id){
+		for(EzTask task : listOfAllTasks)
+		{
+			//System.out.println("findTask: " + task.getTitle());
+			if(id == task.getId())
+			return task;
+		}
+			return null;
+	}
+	
+	/**
+	 * This method finds all the tasks on the date and return that list.
 	 * @param date
-	 * @return ArrayList called tasksByDate or null
+	 * @return ArrayList tasksByDate or null
 	 */
 	public ArrayList<EzTask> getTasksByDate(Date date){
 	
@@ -232,7 +250,7 @@ public class EzStorage {
 		ArrayList<EzTask> tasksWithKeywords = new ArrayList<EzTask>();
 		for(String keyword : listOfKeywords)
 			for(EzTask task: listOfAllTasks)
-				if(checkTitle(keyword, task))
+				if(checkTitle(keyword, task) || checkByVenue(keyword, task))
 					if(!tasksWithKeywords.contains(task))
 						tasksWithKeywords.add(task);
 				
@@ -248,8 +266,9 @@ public class EzStorage {
 	 */
 	private boolean checkTitle(String keyword, EzTask task) {
 		
-		String titleToCheck = task.getTitle();
-		if(titleToCheck.contains(keyword))
+		String titleToCheck = task.getTitle().toLowerCase();
+		String keywordToCheck = keyword.toLowerCase();
+		if(titleToCheck.contains(keywordToCheck))
 			return true;
 		
 		return false;
@@ -257,12 +276,28 @@ public class EzStorage {
 		
 	}
 
+	private boolean checkByVenue(String keyword, EzTask task) {
+
+		if(task.getVenue() != null){
+
+			String venueToCheck = task.getVenue().toLowerCase();
+			String keywordToCheck = keyword.toLowerCase();
+
+
+			if(venueToCheck.contains(keywordToCheck))
+				return true;
+		}
+		return false;
+	}
+	
+
 	/**
-	 * this function returns the list of tasks that have been done in order of id.
+	 * This method returns the list of tasks that have been done in order of id.
 	 * 
 	 * @return doneTasks
 	 */
 	public ArrayList<EzTask> getDoneTasks(){
+		
 		ArrayList<EzTask> doneTasks = new ArrayList<EzTask>();
 		for(EzTask task: listOfAllTasks)
 			if(task.isDone())
@@ -274,7 +309,7 @@ public class EzStorage {
 	}
 	
 	/**
-	 * this method returns the list of tasks that have not been done in order of id
+	 * This method returns the list of tasks that have not been done in order of id
 	 * @return undoneTasks
 	 */
 	public ArrayList<EzTask> getUndoneTasks() {
@@ -284,9 +319,14 @@ public class EzStorage {
 				undoneTasks.add(task);
 		
 		EzSort.sortById(undoneTasks);
+		
 		return undoneTasks;
 	}
 
+	/**
+	 * This method returns the list of upcoming tasks according to date
+	 * @return comingTasks
+	 */
 	public  ArrayList<EzTask> getComingTasks(){
 		ArrayList<EzTask> comingTasks = new ArrayList<EzTask>();
 		Calendar currentDate = Calendar.getInstance();
@@ -298,19 +338,23 @@ public class EzStorage {
 			endTime = task.getEndTime();
 			if(startTime != null)
 			{
-				if(currentDate.before(startTime) || currentDate.before(endTime))
+				if(currentDate.before(startTime))
 					comingTasks.add(task);
 				else if(currentDate.get(Calendar.YEAR) == startTime.get(Calendar.YEAR) && currentDate.get(Calendar.MONTH) == startTime.get(Calendar.MONTH) &&
 						currentDate.get(Calendar.DAY_OF_MONTH) == startTime.get(Calendar.DAY_OF_MONTH))
-
 					comingTasks.add(task);
-			}}
+			}
+		}
 
 		EzSort.sortByDate(comingTasks);
 
 		return comingTasks;
 	}
 	
+	/**
+	 * This method returns past tasks according to date
+	 * @return pastTasks
+	 */
 	public ArrayList<EzTask> getPastTasks() {
 		ArrayList<EzTask> pastTasks = new ArrayList<EzTask>();
 		Calendar currentDate = Calendar.getInstance();
@@ -351,6 +395,10 @@ public class EzStorage {
 		
 	}
 
+	/**
+	 * This method returns a copy of listOfAllTasks
+	 * @return list
+	 */
 	@SuppressWarnings("unchecked")
 	public ArrayList<EzTask> getListOfAllTasks(){
 		ArrayList<EzTask> list = (ArrayList<EzTask>) listOfAllTasks.clone();

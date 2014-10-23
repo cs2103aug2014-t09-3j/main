@@ -13,7 +13,7 @@ import org.junit.Test;
 
 /**
  * @author Khanh
- * 
+ * modified by Tun Leng
  */
 public class EzStorageTest {
 	private EzTask createTask(String command){
@@ -21,6 +21,7 @@ public class EzStorageTest {
 		return task;
 	}
 	
+	/* This is an equivalence partition test */
 	@Test
 	public void testGetDoneTask() {
 		EzStorage storage = new EzStorage();
@@ -35,15 +36,17 @@ public class EzStorageTest {
 		storage.addTaskWithNewId(createTask("add \"task 8\""));
 		storage.addTaskWithNewId(createTask("add \"task 9\" on " + getDateFromToday(2)));
 		
-		storage.findTask(0).setDone(true);
-		storage.findTask(2).setDone(true);
-		storage.findTask(3).setDone(true);
-		storage.findTask(5).setDone(true);
-		storage.findTask(7).setDone(true);
-		storage.findTask(8).setDone(true);
+		storage.getTask(1).setDone(true);
+		storage.getTask(2).setDone(true);
+		storage.getTask(3).setDone(true);
+		storage.getTask(5).setDone(true);
+		storage.getTask(7).setDone(true);
+		storage.getTask(8).setDone(true);
 		
 		ArrayList<EzTask> list = storage.getDoneTasks();
 		assertEquals("check number of task: ", 6, list.size()); 
+		ArrayList<EzTask> list2 = storage.getUndoneTasks();
+		assertEquals("check number of task: ", 4, list2.size());
 	}
 	
 	@Test
@@ -60,12 +63,12 @@ public class EzStorageTest {
 		storage.addTaskWithNewId(createTask("add \"task 8\""));
 		storage.addTaskWithNewId(createTask("add \"task 9\" on " + getDateFromToday(2)));
 		
-		storage.findTask(0).setDone(true);
-		storage.findTask(2).setDone(true);
-		storage.findTask(3).setDone(true);
-		storage.findTask(5).setDone(true);
-		storage.findTask(7).setDone(true);
-		storage.findTask(8).setDone(true);
+		storage.getTask(0).setDone(true);
+		storage.getTask(2).setDone(true);
+		storage.getTask(3).setDone(true);
+		storage.getTask(5).setDone(true);
+		storage.getTask(7).setDone(true);
+		storage.getTask(8).setDone(true);
 		
 		ArrayList<EzTask> list = storage.getUndoneTasks();
 		assertEquals("check number of task: ", 4, list.size()); 
@@ -88,6 +91,7 @@ public class EzStorageTest {
 		ArrayList<EzTask> list = storage.getNoDateTasks();
 		assertEquals("check number of task: ", 3, list.size()); 
 	}
+	
 	
 	@Test
 	public void testGetComingTask() {
@@ -159,6 +163,7 @@ public class EzStorageTest {
 		checkId(storage.addTaskWithNewId(new EzTask("task 8")), 8);
 	}
 	
+	/* This is an equivalence partition test */
 	@Test
 	public void testGetByDate() {
 		EzStorage storage = new EzStorage();
@@ -169,8 +174,8 @@ public class EzStorageTest {
 		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 3\" on 26/7/2014 5h30", storage).getResults().get(0));
 		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 4\" on 27/7/2014 from 5h30 to 22h", storage).getResults().get(0));
 		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 5\"", storage).getResults().get(0));
-		
-		assertEquals("Check size of storage: ", 6, storage.getSize());
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 6\" on 25/7/2014", storage).getResults().get(0));
+		assertEquals("Check size of storage: ", 7, storage.getSize());
 		ArrayList<EzTask> list = storage.getTasksByDate((new GregorianCalendar(2014,Calendar.JULY,26,0,0)).getTime());
 		assertTrue("Check list is not null: ", list!=null);
 		assertEquals("Check size of list: ", 3, list.size());
@@ -214,7 +219,7 @@ public class EzStorageTest {
 		
 		ArrayList<EzTask> list = new ArrayList<EzTask>();
 		
-		EzTask tmp = new EzTask(storage.findTask(1));
+		EzTask tmp = new EzTask(storage.getTask(1));
 		assertEquals("check title: ", "do homework", tmp.getTitle());
 		
 		tmp.setTitle("do CS2103T");
@@ -227,10 +232,10 @@ public class EzStorageTest {
 		 * 2. "do EE2021 Tut" 5
 		 */
 
-		assertEquals("check title: ", "do CS2103T", storage.findTask(1).getTitle());
+		assertEquals("check title: ", "do CS2103T", storage.getTask(1).getTitle());
 		
 		list.clear();
-		tmp = new EzTask(storage.findTask(1));
+		tmp = new EzTask(storage.getTask(1));
 		list.add(tmp);
 		
 		assertEquals("check the number of tasks affected: ", 1, storage.deleteTask(list));
@@ -252,17 +257,18 @@ public class EzStorageTest {
 	
 		ArrayList<String> listWords = new ArrayList<String>();
 		listWords.add("do");
-	
+		
 		checkSearchByKeywords(storage, listWords,2);
+
 		listWords.clear();
 		listWords.add("Tut");
 		checkSearchByKeywords(storage, listWords,2);
 		listWords.add("go");
 		checkSearchByKeywords(storage, listWords,3);
 		
-		assertEquals("check not found:",null,storage.findTask(1));
+		assertEquals("check not found:",null,storage.getTask(1));
 		
-		tmp = new EzTask(storage.findTask(3));
+		tmp = new EzTask(storage.getTask(3));
 		assertEquals("check title: ", "do CS2101 Tut", tmp.getTitle());
 		
 		tmp.setTitle("do CS2103 Tut");
@@ -277,7 +283,7 @@ public class EzStorageTest {
 		 */
 		
 		list.clear();
-		tmp = new EzTask(storage.findTask(3));
+		tmp = new EzTask(storage.getTask(3));
 		list.add(tmp);
 		assertEquals("check the number of tasks affected: ", 1, storage.deleteTask(list));
 		/**
