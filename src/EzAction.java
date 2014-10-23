@@ -24,6 +24,7 @@ public class EzAction {
 	private ArrayList<EzTask> targets;
 	private ArrayList<EzTask> results;
 	private String feedback;
+	private TypeOfSort typeSort;
 	
 	/**
 	 *  These attributes are necessary for ADD, UPDATE, DELETE and DONE.
@@ -63,6 +64,13 @@ public class EzAction {
 	public void setFeedback(String feedback) {
 		this.feedback = feedback;
 	}
-	
+
+	public TypeOfSort getTypeSort() {
+		return typeSort;
+	}
+
+	public void setTypeSort(TypeOfSort typeSort) {
+		this.typeSort = typeSort;
+	}	
 	
 }

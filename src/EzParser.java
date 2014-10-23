@@ -1,26 +1,7 @@
 import java.util.*;
 
 /**
- * COMMAND: 
- ADD "title"			: set the title of EzTask object
- AT "venue"		: set the venue of EzTask object
- AT time			: set the time 		of both startTime and endTime of EzTask object
- AT time	date	: set the date and time of both startTime and endTime of EzTask object
- ON date			: set the date 		of both startTime and endTime of EzTask object
- ON date time	: set the date and time of both startTime and endTime of EzTask object
- TODAY			: if it appears after ON, FROM or TO, it represents the date of today
- if it stands alone, the same as ON TODAY
- TOMORROW		: if it appears after ON, FROM or TO, it represents the date of tomorrow
- if it stands alone, the same as ON TOMORROW
- ****			: set the priority depending on the number of *
- FROM date		: set the date 		of startTime of EzTask object
- FROM time		: set the time 		of startTime of EzTask object
- FROM date time	: set the date & time 	of startTime of EzTask object
- FROM time date 	: set the date & time 	of startTime of EzTask object
- TO date			: set the date 		of endTime of EzTask object
- TO time			: set the time 		of endTime of EzTask object
- TO date time	: set the date & time 	of endTime of EzTask object
- TO time date 	: set the date & time 	of endTime of EzTask object
+ * 
  COMMAND:
  ADD "title"		: set the title of EzTask object
  AT "venue"	: set the venue of EzTask object
@@ -61,7 +42,13 @@ import java.util.*;
  DONE FROM [startID] TO [endID]
  DONE ALL
  ON [date]
-
+ 
+ /////new////
+ UNDONE [id1] [id2] [id3]...
+ UNDONE FROM [startID] TO [endID]
+ UNDONE ALL
+ ON [date]
+ 
  DELETE [id1] [id2] [id3]
  DELETE FROM [startId] TO [endId]
  DELETE ALL
@@ -72,7 +59,19 @@ import java.util.*;
  SHOW UNDONE
  ON [date]
  HAVE [keyword1] [keyword2]...
-
+ 
+ /////new////
+ REMOVE VENUE [id]: set venue as null
+ REMOVE DATE [id]: set both start and end date as null
+ REMOVE TIME [id]: set time as from 00:00 to 23:59
+ 
+ /////new////
+ SORT ID
+ SORT TITLE
+ SORT VENUE
+ SORT DATE
+ SORT PRIORITY
+ SORT DONE
  */
 
 /**
