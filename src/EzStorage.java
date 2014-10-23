@@ -130,24 +130,29 @@ public class EzStorage {
 	/**
 	 * This method finds the task by taskId and returns a copy of the task if found, and returns null if otherwise.
 	 * @param id
-	 * @return taskFound
+	 * @return taskFound or null
 	 */
 	public EzTask findTask(int id){
+		
+		EzTask taskFound;
 		for(EzTask task : listOfAllTasks)
 		{
 			//System.out.println("findTask: " + task.getTitle());
-			EzTask taskFound = new EzTask();
+			
 			if(id == task.getId())
-				taskFound = task;
-			return taskFound;
+			{	
+				taskFound = new  EzTask(task);
+
+				return taskFound;
+			}
 		}
-			return null;
+		return null;
 	}
-	
+
 	/**
 	 * This method finds the task by taskId and returns it if found or returns null otherwise.
 	 * @param id
-	 * @return task
+	 * @return task or null
 	 */
 	public EzTask getTask(int id){
 		for(EzTask task : listOfAllTasks)
