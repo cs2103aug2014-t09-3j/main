@@ -291,12 +291,14 @@ public class EzStorage {
 		ArrayList<EzTask> comingTasks = new ArrayList<EzTask>();
 		Calendar currentDate = Calendar.getInstance();
 		Calendar startTime = Calendar.getInstance();
+		Calendar endTime = Calendar.getInstance();
 		for(EzTask task: listOfAllTasks)
 		{
 			startTime = task.getStartTime();
+			endTime = task.getEndTime();
 			if(startTime != null)
 			{
-				if(currentDate.before(startTime))
+				if(currentDate.before(startTime) || currentDate.before(endTime))
 					comingTasks.add(task);
 				else if(currentDate.get(Calendar.YEAR) == startTime.get(Calendar.YEAR) && currentDate.get(Calendar.MONTH) == startTime.get(Calendar.MONTH) &&
 						currentDate.get(Calendar.DAY_OF_MONTH) == startTime.get(Calendar.DAY_OF_MONTH))
