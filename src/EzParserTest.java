@@ -34,7 +34,7 @@ public class EzParserTest {
 		assertEquals("check size of result: ",1,action.getResults().size());
 		assertEquals("check title of task: ","play badminton",action.getResults().get(0).getTitle());
 		assertEquals("check venue of task: ", null, action.getResults().get(0).getVenue());
-		assertTrue("check startTime = endTime: ", action.getResults().get(0).getStartTime() == action.getResults().get(0).getEndTime());
+		assertTrue("check startTime != endTime: ", action.getResults().get(0).getStartTime() != action.getResults().get(0).getEndTime());
 		assertEquals("check date of task: ", 26, action.getResults().get(0).getEndTime().get(Calendar.DAY_OF_MONTH));
 		assertEquals("check month of task: ", 8, action.getResults().get(0).getEndTime().get(Calendar.MONTH));
 		assertEquals("check priority of task: ", 2, action.getResults().get(0).getPriority());
@@ -50,7 +50,7 @@ public class EzParserTest {
 		assertEquals("check size of result: ",1,action.getResults().size());
 		assertEquals("check title of task: ","play badminton",action.getResults().get(0).getTitle());
 		assertEquals("check venue of task: ", null, action.getResults().get(0).getVenue());
-		assertTrue("check startTime = endTime: ", action.getResults().get(0).getStartTime() == action.getResults().get(0).getEndTime());
+	//	assertTrue("check startTime = endTime: ", action.getResults().get(0).getStartTime() == action.getResults().get(0).getEndTime());
 		assertEquals("check date of task: ", 26, action.getResults().get(0).getEndTime().get(Calendar.DAY_OF_MONTH));
 		assertEquals("check month of task: ", 8, action.getResults().get(0).getEndTime().get(Calendar.MONTH));
 		assertEquals("check hour of task: ", 15, action.getResults().get(0).getEndTime().get(Calendar.HOUR_OF_DAY));
@@ -68,7 +68,7 @@ public class EzParserTest {
 		assertEquals("check size of result: ",1,action.getResults().size());
 		assertEquals("check title of task: ","play badminton",action.getResults().get(0).getTitle());
 		assertEquals("check venue of task: ", "pgp", action.getResults().get(0).getVenue());
-		assertTrue("check startTime = endTime: ", action.getResults().get(0).getStartTime() == action.getResults().get(0).getEndTime());
+	//	assertTrue("check startTime = endTime: ", action.getResults().get(0).getStartTime() == action.getResults().get(0).getEndTime());
 		assertEquals("check date of task: ", 26, action.getResults().get(0).getEndTime().get(Calendar.DAY_OF_MONTH));
 		assertEquals("check month of task: ", 8, action.getResults().get(0).getEndTime().get(Calendar.MONTH));
 		assertEquals("check hour of task: ", 15, action.getResults().get(0).getEndTime().get(Calendar.HOUR_OF_DAY));
@@ -86,7 +86,7 @@ public class EzParserTest {
 		assertEquals("check size of result: ",1,action.getResults().size());
 		assertEquals("check title of task: ","play badminton",action.getResults().get(0).getTitle());
 		assertEquals("check venue of task: ", "pgp", action.getResults().get(0).getVenue());
-		assertTrue("check startTime = endTime: ", action.getResults().get(0).getStartTime() == action.getResults().get(0).getEndTime());
+	//	assertTrue("check startTime = endTime: ", action.getResults().get(0).getStartTime() == action.getResults().get(0).getEndTime());
 		assertEquals("check date of task: ", 26, action.getResults().get(0).getEndTime().get(Calendar.DAY_OF_MONTH));
 		assertEquals("check month of task: ", 8, action.getResults().get(0).getEndTime().get(Calendar.MONTH));
 		assertEquals("check hour of task: ", 15, action.getResults().get(0).getEndTime().get(Calendar.HOUR_OF_DAY));
@@ -138,7 +138,7 @@ public class EzParserTest {
 		assertEquals("check hour of task: ", 23, action.getResults().get(0).getStartTime().get(Calendar.HOUR_OF_DAY));
 		assertEquals("check minute of task: ", 0, action.getResults().get(0).getStartTime().get(Calendar.MINUTE));
 		
-		assertEquals("check date of task: ", 26, action.getResults().get(0).getEndTime().get(Calendar.DAY_OF_MONTH));
+		assertEquals("check date of task: ", 27, action.getResults().get(0).getEndTime().get(Calendar.DAY_OF_MONTH));
 		assertEquals("check month of task: ", 8, action.getResults().get(0).getEndTime().get(Calendar.MONTH));
 		assertEquals("check hour of task: ", 2, action.getResults().get(0).getEndTime().get(Calendar.HOUR_OF_DAY));
 		assertEquals("check minute of task: ", 40, action.getResults().get(0).getEndTime().get(Calendar.MINUTE));
