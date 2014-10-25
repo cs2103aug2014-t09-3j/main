@@ -66,6 +66,7 @@ public class EzGUI extends JFrame {
 	private JScrollPane suggestScrollPanel;
 	private boolean selectionMode = false;
 	private boolean showingFeedback = false;
+	private static ArrayList<EzTask> onScreenTasks;
 	/**
 	 * Create the frame.
 	 */
@@ -990,6 +991,7 @@ public class EzGUI extends JFrame {
 	
 	private void showHelp() {
 		String text = readHelpDocument();
+		onScreenTasks = new ArrayList<EzTask>();
 		showContent("Help - All commands", text);
 	}
 
@@ -1059,8 +1061,13 @@ public class EzGUI extends JFrame {
 		
 	}
 	
+	public static ArrayList<EzTask> getTasksOnScreen(){
+		return onScreenTasks;
+	}
+	
 	public static void showContent(String header, ArrayList<EzTask> listOfTasks){
 		assert(listOfTasks!=null);
+		onScreenTasks = listOfTasks;
 		ArrayList<String> list = new ArrayList<String>();
 		for(int i=0;i<listOfTasks.size();i++){
 			list.add(EzHtmlGenerator.createHtmlEzTask(listOfTasks.get(i),i%2));
@@ -1074,7 +1081,6 @@ public class EzGUI extends JFrame {
 		displayArea.setText(text);
 		displayArea.setCaretPosition(0);
 		refreshButton();
-		
 	}
 
 	private static Date getToday(){
