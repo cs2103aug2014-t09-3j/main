@@ -817,7 +817,8 @@ public class EzParser {
 			newAction.setFeedback("Set as done successfully!");
 			ArrayList<EzTask> targetsDone=new ArrayList<EzTask>();
 			ArrayList<EzTask> resultsDone=new ArrayList<EzTask>();
-			
+			try
+			{
 			if(getFirstWord(content).equalsIgnoreCase("all"))//if the command is "done all on a date"
 			{
 				content=removeFirstWord(content);
@@ -836,9 +837,11 @@ public class EzParser {
 				newAction.setTargets(temp);
 				for(int i=0;i<storage.getTasksByDate(dateDone).size();i++)
 				{
-					storage.getTasksByDate(dateDone).get(i).setDone(true);
+					EzTask result=new EzTask(storage.getTasksByDate(dateDone).get(i));
+					result.setDone(true);
+					resultsDone.add(result);
 				}
-				newAction.setResults(storage.getTasksByDate(dateDone));
+				newAction.setResults(resultsDone);
 				}
 			  else
 			  {
@@ -872,10 +875,10 @@ public class EzParser {
 				{
 					if(storage.findTask(k)!=null)
 					{
+					targetsDone.add(storage.findTask(k));
 					EzTask temp=new EzTask(storage.findTask(k));
-					targetsDone.add(temp);
-					storage.findTask(k).setDone(true);
-					resultsDone.add(storage.findTask(k));
+					temp.setDone(true);
+					resultsDone.add(temp);
 					}
 				}
 				if(targetsDone.isEmpty())//if none of the tasks are found,set as null
@@ -885,6 +888,7 @@ public class EzParser {
 				newAction.setTargets(targetsDone);
 				newAction.setResults(resultsDone);
 			}
+			else
 			try
 			{	
 			if(Integer.parseInt(getFirstWord(content))>=0)//"done id id id id "
@@ -934,7 +938,12 @@ public class EzParser {
 				newAction.setAction(TypeOfAction.INVALID);
 				newAction.setFeedback("Invalid number format or index.");		
 			}
-			
+			}
+			catch(NumberFormatException e)
+			{
+				newAction.setAction(TypeOfAction.INVALID);
+				newAction.setFeedback("Invalid number format or index.");		
+			}
 			
 			// target not found, set as null
 
@@ -1112,6 +1121,177 @@ public class EzParser {
 		case N:
 			newAction.setTargets(null);
 			newAction.setResults(null);
+		case SORT:
+			String sortType=getFirstWord(content);
+			content=removeFirstWord(content);
+			if(content.isEmpty()!=true)
+			{
+				newAction.setAction(TypeOfAction.INVALID);
+				newAction.setFeedback("Invalid command.");		
+			}
+			else if(sortType.equalsIgnoreCase("id"))
+			{
+				newAction.setTypeSort(TypeOfSort.ID);
+				newAction.setFeedback("Sorted by ID.");
+			}
+			else if(sortType.equalsIgnoreCase("title"))
+			{
+				newAction.setTypeSort(TypeOfSort.TITLE);
+				newAction.setFeedback("Sorted by TITLE.");
+			}
+			else if(sortType.equalsIgnoreCase("date"))
+			{
+				newAction.setTypeSort(TypeOfSort.DATE);
+				newAction.setFeedback("Sorted by DATE.");
+			}
+			else if(sortType.equalsIgnoreCase("priority"))
+			{
+				newAction.setTypeSort(TypeOfSort.PRIORITY);
+				newAction.setFeedback("Sorted by PRIORITY.");
+			}
+			else if(sortType.equalsIgnoreCase("done"))
+			{
+				newAction.setTypeSort(TypeOfSort.DONE);
+				newAction.setFeedback("Sorted by DONE.");
+			}
+			else
+			{
+				newAction.setAction(TypeOfAction.INVALID);
+				newAction.setFeedback("Invalid command");
+			}
+				
+			newAction.setTargets(null);
+			newAction.setResults(null);
+		case UNDONE:
+			newAction.setFeedback("Set as undone successfully!");
+			ArrayList<EzTask> targetsUndone=new ArrayList<EzTask>();
+			ArrayList<EzTask> resultsUndone=new ArrayList<EzTask>();
+			try
+			{
+			if(getFirstWord(content).equalsIgnoreCase("all"))//if the command is "undone all on a date"
+			{
+				content=removeFirstWord(content);
+				content=removeFirstWord(content);//now content is suppose to be the date
+				//find all tasks on the date and assign it to the arraylist.
+			  if(readDate(content)[0]>=0)
+			  {
+				int[] dateArrUndone=new int[3];
+				dateArrUndone[0]=readDate(content)[0];
+				dateArrUndone[1]=readDate(content)[1];
+				dateArrUndone[2]=readDate(content)[2];
+				
+				Date dateUndone=new Date(dateArrUndone[2]-1900,dateArrUndone[1]-1,dateArrUndone[0]);
+			
+				ArrayList<EzTask> temp=new ArrayList<EzTask>(storage.getTasksByDate(dateUndone));
+				newAction.setTargets(temp);
+				for(int i=0;i<storage.getTasksByDate(dateUndone).size();i++)
+				{
+					EzTask result=new EzTask(storage.getTasksByDate(dateUndone).get(i));
+					result.setDone(false);
+					resultsUndone.add(result);
+				}
+				newAction.setResults(storage.getTasksByDate(dateUndone));
+				}
+			  else
+			  {
+			  	newAction.setAction(TypeOfAction.INVALID);
+			  	newAction.setFeedback("Invalid date.");
+			  }
+			}
+			else if(getFirstWord(content).equalsIgnoreCase("from"))//"Undone from .. to "
+			{
+				content=removeFirstWord(content);
+				int i,j;
+				i=Integer.parseInt(getFirstWord(content));
+				content=removeFirstWord(content);
+				if(getFirstWord(content).equalsIgnoreCase("to"))
+				{
+					content=removeFirstWord(content);
+				}
+				else
+				{
+					newAction.setAction(TypeOfAction.INVALID);
+					newAction.setFeedback("Invalid command. Cannot recongize keywords.");
+				}
+				j=Integer.parseInt(content);
+				content=removeFirstWord(content);
+				if(!content.isEmpty()||i>j)
+				{
+					newAction.setAction(TypeOfAction.INVALID);
+					newAction.setFeedback("From a later id to an earlier id.");
+				}
+				for(int k=i;k<=j;k++)
+				{
+					if(storage.findTask(k)!=null)
+					{
+						targetsUndone.add(storage.findTask(k));
+						EzTask temp=new EzTask(storage.findTask(k));
+						temp.setDone(true);
+						resultsUndone.add(temp);
+					}
+				}
+				if(targetsUndone.isEmpty())//if none of the tasks are found,set as null
+				{
+					newAction.setTargets(null);
+				}
+				newAction.setTargets(targetsUndone);
+				newAction.setResults(resultsUndone);
+			}
+			try
+			{	
+			if(Integer.parseInt(getFirstWord(content))>=0)//"Undone id id id id "
+			{
+				
+				while(!content.isEmpty())
+				{
+					try
+					{
+					   if(storage.findTask(Integer.parseInt(getFirstWord(content)))!=null)
+					   {
+				
+						targetsUndone.add(storage.findTask(Integer.parseInt(getFirstWord(content))));
+						EzTask temp=new EzTask(storage.findTask(Integer.parseInt(getFirstWord(content))));
+						temp.setDone(false);//
+						resultsUndone.add(temp);
+					   }
+					   else//cannot find task 
+					   {
+						   newAction.setAction(TypeOfAction.INVALID);
+						   newAction.setFeedback("Cannot find task.");
+					   }
+					}
+					catch(NumberFormatException e)
+					{
+						newAction.setAction(TypeOfAction.INVALID);
+						newAction.setFeedback("Invalid input.");
+					}
+					content=removeFirstWord(content);
+				
+					
+				}
+				if(targetsUndone.isEmpty())//if none of the tasks are found,set as null
+				{
+					newAction.setTargets(null);
+				}
+				newAction.setTargets(targetsUndone);
+				newAction.setResults(resultsUndone);
+			}else // set as invalid if the command fits none of the above
+			{
+				newAction.setAction(TypeOfAction.INVALID);
+				newAction.setFeedback("Invalid command.");
+			}
+			}
+			catch(NumberFormatException e)
+			{
+				newAction.setAction(TypeOfAction.INVALID);
+				newAction.setFeedback("Invalid number format or index.");		
+			}
+			}
+			catch(NumberFormatException e)
+			{
+				newAction.setAction(TypeOfAction.INVALID);
+				newAction.setFeedback("Invalid number format or index.");		
+			}
 
 		default:
 			break;
@@ -1143,6 +1323,11 @@ public class EzParser {
 			return TypeOfAction.Y;
 		else if (action.equalsIgnoreCase("n"))
 			return TypeOfAction.N;
+		else if (action.equalsIgnoreCase("sort"))
+			return TypeOfAction.SORT;
+		else if (action.equalsIgnoreCase("undone"))
+			return TypeOfAction.UNDONE;
+		
 		
 
 		return TypeOfAction.INVALID;
