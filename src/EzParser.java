@@ -885,19 +885,37 @@ public class EzParser {
 				newAction.setTargets(targetsDone);
 				newAction.setResults(resultsDone);
 			}
-			else if(Integer.parseInt(getFirstWord(content))>=0)//"done id id id id "
+			try
+			{	
+			if(Integer.parseInt(getFirstWord(content))>=0)//"done id id id id "
 			{
 				
 				while(!content.isEmpty())
 				{
-					if(storage.findTask(Integer.parseInt(getFirstWord(content)))!=null)
+					try
 					{
+					   if(storage.findTask(Integer.parseInt(getFirstWord(content)))!=null)
+					   {
+				
+						targetsDone.add(storage.findTask(Integer.parseInt(getFirstWord(content))));
 						EzTask temp=new EzTask(storage.findTask(Integer.parseInt(getFirstWord(content))));
-						targetsDone.add(temp);
-						storage.findTask(Integer.parseInt(getFirstWord(content))).setDone(true);
-						resultsDone.add(storage.findTask(Integer.parseInt(getFirstWord(content))));
+						temp.setDone(true);//
+						resultsDone.add(temp);
+					   }
+					   else//cannot find task 
+					   {
+						   newAction.setAction(TypeOfAction.INVALID);
+						   newAction.setFeedback("Cannot find task.");
+					   }
+					}
+					catch(NumberFormatException e)
+					{
+						newAction.setAction(TypeOfAction.INVALID);
+						newAction.setFeedback("Invalid input.");
 					}
 					content=removeFirstWord(content);
+				
+					
 				}
 				if(targetsDone.isEmpty())//if none of the tasks are found,set as null
 				{
@@ -909,6 +927,12 @@ public class EzParser {
 			{
 				newAction.setAction(TypeOfAction.INVALID);
 				newAction.setFeedback("Invalid command.");
+			}
+			}
+			catch(NumberFormatException e)
+			{
+				newAction.setAction(TypeOfAction.INVALID);
+				newAction.setFeedback("Invalid number format or index.");		
 			}
 			
 			
@@ -1154,8 +1178,13 @@ public class EzParser {
 
 	private static int[] readDate(String date)// return int[0] as -1 if the date
 												// is invalid
+	throws NumberFormatException
 	{
 		int[] results = new int[3];
+		try
+		{
+		
+	
 		date = date.trim();
 		if(date.equalsIgnoreCase("today"))//today
 		{
@@ -1234,16 +1263,23 @@ public class EzParser {
 		return results;// need a method to analyze the date int[]
 						// readDate(String date) dd/mm/yy, dd/mm/yyyy,
 						// dd.mm.yy,dd.mm.yyyy
+		}
+		catch (NumberFormatException e)
+		{
+			results[0]= -1;
+		}
+		return results;
 
 	}
 
 	private static int[] readTime(String time)// return int[0] as -1 if the time
 												// is invalid.
+	throws NumberFormatException
 	{
 		int[] results = new int[2];
 		time = time.trim();
 		boolean isPM=false;
-	
+	try{
 		if (time.length()>=2&&(time.substring(time.length() - 2).equalsIgnoreCase("am")
 				|| time.substring(time.length() - 2).equalsIgnoreCase("pm"))) {
 			if (time.substring(time.length() - 2).equalsIgnoreCase("pm")) {
@@ -1292,6 +1328,11 @@ public class EzParser {
 		{
 			results[0]=0;
 		}
+	}
+	catch(NumberFormatException e)
+	{
+		results[0]=-1;
+	}
 		
 		return results;// int[] readTime(String time) only accept 10h, 10:00,
 						// 10am
