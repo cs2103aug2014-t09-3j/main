@@ -1292,6 +1292,58 @@ public class EzParser {
 				newAction.setAction(TypeOfAction.INVALID);
 				newAction.setFeedback("Invalid number format or index.");		
 			}
+		case REMOVE:
+			ArrayList<EzTask> targetsRemove=new ArrayList<EzTask>();
+			ArrayList<EzTask> resultsRemove=new ArrayList<EzTask>();
+			
+			String typeRemove=getFirstWord(content);
+			content=removeFirstWord(content);
+			String idRemove=getFirstWord(content);
+			content=removeFirstWord(content);
+			try
+			{
+				if(content.isEmpty()!=true)
+			
+			{
+				newAction.setAction(TypeOfAction.INVALID);
+				newAction.setFeedback("Cannot recognize keyword.");
+			}
+			
+		
+			targetsRemove.add(storage.findTask(Integer.parseInt(idRemove)));
+			EzTask taskRemove=new EzTask(storage.findTask(Integer.parseInt(idRemove)));
+			if(typeRemove.equalsIgnoreCase("venue"))
+			{
+				taskRemove.setVenue(null);
+				newAction.setFeedback("Remove venue successfully.");
+			}
+			else if(typeRemove.equalsIgnoreCase("date"))
+			{
+				taskRemove.setStartTime(null);
+				taskRemove.setEndTime(null);
+				newAction.setFeedback("Remove date successfully.");
+			}
+			else if(typeRemove.equalsIgnoreCase("time"))
+			{
+				taskRemove.setStartTime(0,0);
+				taskRemove.setEndTime(23, 59);
+				newAction.setFeedback("Remove time succefully.");
+			}
+			else
+			{
+				newAction.setAction(TypeOfAction.INVALID);
+				newAction.setFeedback("Cannot recognize keyword.");
+			}
+			
+			resultsRemove.add(taskRemove);
+			newAction.setTargets(targetsRemove);
+			newAction.setResults(resultsRemove);
+			}
+			catch(NumberFormatException e)
+			{
+				newAction.setAction(TypeOfAction.INVALID);
+				newAction.setFeedback("Invalid number format.");
+			}
 
 		default:
 			break;
@@ -1327,6 +1379,9 @@ public class EzParser {
 			return TypeOfAction.SORT;
 		else if (action.equalsIgnoreCase("undone"))
 			return TypeOfAction.UNDONE;
+		else if (action.equalsIgnoreCase("remove"))
+			return TypeOfAction.REMOVE;
+		
 		
 		
 
