@@ -299,7 +299,7 @@ public class EzParserTest {
 		assertEquals("Check size of the target: ", 1, action.getTargets().size());
 		assertEquals("Check id of the target: ", 2, action.getTargets().get(0).getId());
 		
-		action = EzParser.extractInfo("DONE 2 4 5",storage);	
+		action = EzParser.extractInfo("DONE 2 4",storage);	
 		assertEquals("Check type of action: ", TypeOfAction.DONE, action.getAction());
 		assertTrue("Check target is not null: ", action.getTargets() != null);
 		assertTrue("Check result is not null: ", action.getResults() != null);

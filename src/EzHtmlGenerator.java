@@ -256,10 +256,6 @@ public class EzHtmlGenerator {
 		return "<div align=\"right\">" + content + "</div>";
 	}
 	
-	private static String convertColorToHex(Color color){
-		return convertIntToHex(color.getRed(),2) + convertIntToHex(color.getGreen(),2) + convertIntToHex(color.getBlue(),2);
-	}
-	
 	public static String createHtmlText(final String content, final String font, final int size, final Color color) {
 		return "<font face=\"" + font +
 				"\" size=\"" + size +
@@ -272,6 +268,10 @@ public class EzHtmlGenerator {
 				"\" size=\"" + size +
 				"\" color=\"#" + hexColor + "\">" + 
 				content + "</font>";
+	}
+	
+	private static String convertColorToHex(Color color){
+		return convertIntToHex(color.getRed(),2) + convertIntToHex(color.getGreen(),2) + convertIntToHex(color.getBlue(),2);
 	}
 	
 	private static String convertIntToHex(int i, int length){
