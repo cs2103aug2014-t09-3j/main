@@ -152,7 +152,25 @@ public class EzController {
 				sortTask(userAction);
 			}
 			break;
-		
+
+		case REMOVE:
+			if(!confirmation) {
+				storage.updateTask(userAction.getResults());
+				checkPos();
+				addHistory(userAction);
+				if(!testing) {
+					try {
+						EzDataManage.saveToFile(storage);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
+				}
+			}
+			break;
+
 		case UNDO:
 			if (!confirmation){
 				if(pos <= -1) {
@@ -268,6 +286,10 @@ public class EzController {
 			storage.updateTask(history.get(pos).getResults());
 			break;
 			
+		case REMOVE:
+			storage.updateTask(history.get(pos).getResults());
+			break;
+			
 		default:
 			break;
 		}
@@ -295,6 +317,10 @@ public class EzController {
 			break;
 			
 		case UNDONE:
+			storage.updateTask(history.get(pos--).getTargets());
+			break;
+			
+		case REMOVE:
 			storage.updateTask(history.get(pos--).getTargets());
 			break;
 			
