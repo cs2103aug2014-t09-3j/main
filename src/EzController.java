@@ -129,6 +129,30 @@ public class EzController {
 			}
 			break;
 			
+		case UNDONE:
+			if (!confirmation){
+				storage.updateTask(userAction.getResults());
+				checkPos();
+				addHistory(userAction);
+				if(!testing) {
+					try {
+						EzDataManage.saveToFile(storage);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
+				}
+			}
+			break;
+			
+		case SORT:
+			if(!confirmation) {
+				sortTask(userAction);
+			}
+			break;
+		
 		case UNDO:
 			if (!confirmation){
 				if(pos <= -1) {
@@ -188,6 +212,38 @@ public class EzController {
 		}
 	}
 
+	private static void sortTask(EzAction userAction) {
+		// TODO Auto-generated method stub
+		switch(userAction.getTypeSort()) {
+		case ID:
+			EzGUI.showContent("Tasks sorted by ID", EzSort.sortById(EzGUI.getTasksOnScreen()));
+			break;
+			
+		case TITLE:
+			EzGUI.showContent("Tasks sorted in Alphabethical order", EzSort.sortByTitle(EzGUI.getTasksOnScreen()));
+			break;
+			
+		case VENUE:
+			EzGUI.showContent("Tasks sorted by venue", EzSort.sortByVenue(EzGUI.getTasksOnScreen()));
+			break;
+			
+		case DATE:
+			EzGUI.showContent("Tasks sorted by date", EzSort.sortByDate(EzGUI.getTasksOnScreen()));
+			break;
+			
+		case PRIORITY:
+			EzGUI.showContent("Tasks sorted by priority", EzSort.sortByPriority(EzGUI.getTasksOnScreen()));
+			break;
+			
+		case DONE:
+			EzGUI.showContent("Tasks sorted by status", EzSort.sortByDone(EzGUI.getTasksOnScreen()));
+			break;
+			
+		default:
+			break;
+		}
+	}
+
 	private static void redoTask() {
 		switch(history.get(++pos).getAction()) {
 		case ADD:
@@ -205,6 +261,10 @@ public class EzController {
 			break;
 			
 		case DONE:
+			storage.updateTask(history.get(pos).getResults());
+			break;
+			
+		case UNDONE:
 			storage.updateTask(history.get(pos).getResults());
 			break;
 			
@@ -231,6 +291,10 @@ public class EzController {
 			break;
 		
 		case DONE:
+			storage.updateTask(history.get(pos--).getTargets());
+			break;
+			
+		case UNDONE:
 			storage.updateTask(history.get(pos--).getTargets());
 			break;
 			
