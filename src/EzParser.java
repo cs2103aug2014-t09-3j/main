@@ -1156,6 +1156,11 @@ public class EzParser {
 				newAction.setTypeSort(TypeOfSort.DONE);
 				newAction.setFeedback("Sorted by DONE.");
 			}
+			else if(sortType.equalsIgnoreCase("venue"))
+			{
+				newAction.setTypeSort(TypeOfSort.VENUE);
+				newAction.setFeedback("Sorted by VENUE.");
+			}
 			else
 			{
 				newAction.setAction(TypeOfAction.INVALID);
