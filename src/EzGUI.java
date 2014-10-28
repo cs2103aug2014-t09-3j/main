@@ -18,10 +18,11 @@ import java.io.*;
 public class EzGUI extends JFrame {
 	private static final String HELP_DOCUMENT_FILE_NAME = "help.txt";
 
-	private final static Logger LOGGER = Logger.getLogger(EzGUI.class.getName());
-	
+	private final static Logger LOGGER = Logger
+			.getLogger(EzGUI.class.getName());
+
 	private static final String PROGRAM_TITLE = "EzTask";
-	
+
 	private static final int BUTTON_HEIGHT = 40;
 	private static final int BUTTON_WIDTH = 156;
 	private static final Color BUTTON_TEXT_COLOR = EzConstants.PERSIAN_GREEN_COLOR;
@@ -30,28 +31,26 @@ public class EzGUI extends JFrame {
 	private static final Color UNSELECTED_BUTTON_BG_COLOR = EzConstants.IRON_COLOR;
 	private static final String COMMAND_FIELD_FONT = "Arial";
 	private static final int COMMAND_FIELD_SIZE = 17;
-	
+
 	private static final Color BACKGROUND_COLOR = EzConstants.CHATEAU_GREEN_COLOR;
 	private static final int APP_HEIGHT = 640;
 	private static final int APP_WIDTH = 960;
 	private static final int START_LOCATION_Y = 0;
 	private static final int START_LOCATION_X = 50;
-	
-	private static final String[] KEYWORDS = {"add","delete","update","show","done","undone","undo","redo","on","at","from","to","today","tomorrow"
-												,"set","title","date","time","start","end","venue","priority","all","have","help","y","n","remove","id","sort"}; 
-	
-	private static final String[] DOUBLE_QUOTE_KEYWORDS = {"add","at","title","venue","have"}; 
-	
-	private static final String[] LIST_OF_BUTTON_NAMES = {	"All", 
-															"Done", 
-															"Not Done", 
-															"Today",
-															"Tomorrow",
-															"Coming",
-															"Past",
-															"No Date",
-															"Help"};
-	
+
+	private static final String[] KEYWORDS = { "add", "delete", "update",
+			"show", "done", "undone", "undo", "redo", "on", "at", "from", "to",
+			"today", "tomorrow", "set", "title", "date", "time", "start",
+			"end", "venue", "priority", "all", "have", "help", "y", "n",
+			"remove", "id", "sort" };
+
+	private static final String[] DOUBLE_QUOTE_KEYWORDS = { "add", "at",
+			"title", "venue", "have" };
+
+	private static final String[] LIST_OF_BUTTON_NAMES = { "All", "Done",
+			"Not Done", "Today", "Tomorrow", "Coming", "Past", "No Date",
+			"Help" };
+	private static JFrame mainFrame;
 	private JPanel mainPanel;
 	private static JScrollPane displayPanel;
 	private static JEditorPane displayArea;
@@ -67,12 +66,13 @@ public class EzGUI extends JFrame {
 	private boolean selectionMode = false;
 	private boolean showingFeedback = false;
 	private static ArrayList<EzTask> onScreenTasks;
-	
+
 	/**
 	 * Create the frame.
 	 */
-	
+
 	public EzGUI() {
+		mainFrame = this;
 		setTitle(PROGRAM_TITLE);
 		createMainPanel();
 		createButtonPanel();
@@ -81,13 +81,13 @@ public class EzGUI extends JFrame {
 		registerFont();
 		try {
 			EzController.loadFromFile();
-			LOGGER.log(Level.INFO,"Loaded file successfully");
+			LOGGER.log(Level.INFO, "Loaded file successfully");
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING,"Data file not found");
+			LOGGER.log(Level.WARNING, "Data file not found");
 			e.printStackTrace();
 		}
 		createSuggestPanel();
-		
+
 	}
 
 	private void createSuggestPanel() {
@@ -96,73 +96,78 @@ public class EzGUI extends JFrame {
 		int x = this.getLocation().x + 165;
 		int y = this.getLocation().y + this.getHeight() - 10;
 		suggestPanel.setLocation(x, y);
-		suggestPanel.setMinimumSize(new Dimension(784,0));
-		
-		ArrayList<EzTask> listTask = EzController.getStorage().getListOfAllTasks();
-		//String[] listString = {"aaaaa","aaaaa","aaaaa"};
+		suggestPanel.setMinimumSize(new Dimension(784, 0));
+
+		ArrayList<EzTask> listTask = EzController.getStorage()
+				.getListOfAllTasks();
+		// String[] listString = {"aaaaa","aaaaa","aaaaa"};
 		String[] listString = new String[listTask.size()];
-		
-		for(int i=0;i<listTask.size();i++){
+
+		for (int i = 0; i < listTask.size(); i++) {
 			listString[i] = listTask.get(i).toString();
 		}
-		
+
 		suggestList = new JList<String>(listString);
 		suggestList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if (arg0.getClickCount() == 2) {
-		            enterSelection();
-		        }
+					enterSelection();
+				}
 			}
 		});
 		suggestList.setBackground(EzConstants.WHITE_SMOKE_COLOR);
-		
-		
+
 		suggestScrollPanel = new JScrollPane(suggestList);
 		suggestScrollPanel.setFocusable(false);
-		suggestScrollPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		suggestScrollPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		suggestScrollPanel
+				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		suggestScrollPanel
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		suggestScrollPanel.setLayout(new ScrollPaneLayout());
-		suggestScrollPanel.setBorder(BorderFactory.createLineBorder(EzConstants.CHATEAU_GREEN_COLOR,5));
-		suggestScrollPanel.setPreferredSize(new Dimension(784,85));
-		suggestPanel.getContentPane().add(suggestScrollPanel, BorderLayout.SOUTH);
-		
-		//suggestPanel.getContentPane().add(list_1, BorderLayout.NORTH);
-		
-		//list_1.setSelectedIndex(4);
-		
+		suggestScrollPanel.setBorder(BorderFactory.createLineBorder(
+				EzConstants.CHATEAU_GREEN_COLOR, 5));
+		suggestScrollPanel.setPreferredSize(new Dimension(784, 85));
+		suggestPanel.getContentPane().add(suggestScrollPanel,
+				BorderLayout.SOUTH);
+
+		// suggestPanel.getContentPane().add(list_1, BorderLayout.NORTH);
+
+		// list_1.setSelectedIndex(4);
+
 		suggestPanel.setUndecorated(true);
 		suggestPanel.pack();
 		suggestPanel.setFocusableWindowState(false);
 		suggestPanel.setVisible(false);
 		selectionMode = false;
-		//suggestPanel.setVisible(true);
-		//selectionMode = true;
-		
-		
+		// suggestPanel.setVisible(true);
+		// selectionMode = true;
+
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentMoved(ComponentEvent arg0) {
 				JFrame frame = (JFrame) arg0.getSource();
-				
+
 				int x = frame.getLocation().x + 165;
 				int y = frame.getLocation().y + frame.getHeight() - 10;
 				suggestPanel.setLocation(x, y);
 			}
+
 			@Override
 			public void componentResized(ComponentEvent arg0) {
 				JFrame frame = (JFrame) arg0.getSource();
-				
+
 				int x = frame.getLocation().x + 165;
 				int y = frame.getLocation().y + frame.getHeight() - 10;
-				suggestScrollPanel.setPreferredSize(new Dimension(frame.getWidth()-(960-784),85));
+				suggestScrollPanel.setPreferredSize(new Dimension(frame
+						.getWidth() - (960 - 784), 85));
 				suggestScrollPanel.repaint();
 				suggestPanel.setLocation(x, y);
-				if (selectionMode){
+				if (selectionMode) {
 					loadSuggestion(commandField.getText());
 				}
 				suggestPanel.pack();
-				//suggestPanel.repaint();
+				// suggestPanel.repaint();
 			}
 		});
 	}
@@ -172,13 +177,13 @@ public class EzGUI extends JFrame {
 	 */
 	private void createMainPanel() {
 		setResizable(true);
-		this.setMinimumSize(new Dimension(APP_WIDTH,APP_HEIGHT));
+		this.setMinimumSize(new Dimension(APP_WIDTH, APP_HEIGHT));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(START_LOCATION_X, START_LOCATION_Y, APP_WIDTH, APP_HEIGHT);
 		mainPanel = new JPanel();
 		mainPanel.setFocusable(false);
 		mainPanel.setBackground(BACKGROUND_COLOR);
-		mainPanel.setBorder(new EmptyBorder(10,10,10,10));
+		mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		mainPanel.setLayout(new BorderLayout(0, 10));
 		setContentPane(mainPanel);
 		LOGGER.log(Level.INFO, "Created Main Panel");
@@ -193,86 +198,87 @@ public class EzGUI extends JFrame {
 		buttonPanel.setBorder(null);
 		buttonPanel.setFocusable(false);
 		mainPanel.add(buttonPanel, BorderLayout.WEST);
-		
+
 		listOfButtons = new ArrayList<JButton>();
-		for(int i=0;i<LIST_OF_BUTTON_NAMES.length;i++){
+		for (int i = 0; i < LIST_OF_BUTTON_NAMES.length; i++) {
 			JButton button = initButton(LIST_OF_BUTTON_NAMES[i]);
 			listOfButtons.add(button);
 		}
-		
+
 		GroupLayout gl_buttonPanel = new GroupLayout(buttonPanel);
-		ParallelGroup prGroup = gl_buttonPanel.createParallelGroup(Alignment.LEADING);
-		for(int i=0;i<LIST_OF_BUTTON_NAMES.length;i++){
-			prGroup.addComponent(listOfButtons.get(i),GroupLayout.DEFAULT_SIZE, BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE);
+		ParallelGroup prGroup = gl_buttonPanel
+				.createParallelGroup(Alignment.LEADING);
+		for (int i = 0; i < LIST_OF_BUTTON_NAMES.length; i++) {
+			prGroup.addComponent(listOfButtons.get(i),
+					GroupLayout.DEFAULT_SIZE, BUTTON_WIDTH,
+					GroupLayout.PREFERRED_SIZE);
 		}
-		
-		gl_buttonPanel.setHorizontalGroup(
-			gl_buttonPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_buttonPanel.createSequentialGroup()
-					.addGroup(prGroup))
-		);
-		
+
+		gl_buttonPanel.setHorizontalGroup(gl_buttonPanel.createParallelGroup(
+				Alignment.TRAILING).addGroup(
+				gl_buttonPanel.createSequentialGroup().addGroup(prGroup)));
+
 		SequentialGroup sqGroup = gl_buttonPanel.createSequentialGroup();
 		sqGroup.addGap(60);
-		for(int i=0;i<LIST_OF_BUTTON_NAMES.length;i++){
-			sqGroup.addComponent(listOfButtons.get(i), GroupLayout.PREFERRED_SIZE, BUTTON_HEIGHT, GroupLayout.PREFERRED_SIZE)
-				.addPreferredGap(ComponentPlacement.RELATED).addGap(7);
+		for (int i = 0; i < LIST_OF_BUTTON_NAMES.length; i++) {
+			sqGroup.addComponent(listOfButtons.get(i),
+					GroupLayout.PREFERRED_SIZE, BUTTON_HEIGHT,
+					GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED).addGap(7);
 		}
-		gl_buttonPanel.setVerticalGroup(
-			gl_buttonPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(sqGroup)
-		);
+		gl_buttonPanel.setVerticalGroup(gl_buttonPanel.createParallelGroup(
+				Alignment.LEADING).addGroup(sqGroup));
 		buttonPanel.setLayout(gl_buttonPanel);
-		
+
 		LOGGER.log(Level.INFO, "Created Button Panel");
 	}
 
 	/**
 	 * @param btnAll
 	 */
-	class ButtonAction implements ActionListener{
+	class ButtonAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JButton button = (JButton) e.getSource();
 			pressButton(button);
 		}
 	}
-	
+
 	private JButton initButton(String nameOfButton) {
-		assert(nameOfButton!=null);
-		
+		assert (nameOfButton != null);
+
 		JButton button = new JButton(nameOfButton);
 		button.setName(nameOfButton);
-		
-		if (nameOfButton.equalsIgnoreCase("help")){
+
+		if (nameOfButton.equalsIgnoreCase("help")) {
 			button.setMnemonic(KeyEvent.VK_H);
 			button.addActionListener(new ButtonAction());
-		} else if (nameOfButton.equalsIgnoreCase("All")){
+		} else if (nameOfButton.equalsIgnoreCase("All")) {
 			button.setMnemonic(KeyEvent.VK_A);
 			button.addActionListener(new ButtonAction());
-		} else if (nameOfButton.equalsIgnoreCase("Done")){
+		} else if (nameOfButton.equalsIgnoreCase("Done")) {
 			button.setMnemonic(KeyEvent.VK_D);
 			button.addActionListener(new ButtonAction());
-		} else if (nameOfButton.equalsIgnoreCase("Not Done")){
+		} else if (nameOfButton.equalsIgnoreCase("Not Done")) {
 			button.setMnemonic(KeyEvent.VK_N);
 			button.addActionListener(new ButtonAction());
-		} else if (nameOfButton.equalsIgnoreCase("Today")){
+		} else if (nameOfButton.equalsIgnoreCase("Today")) {
 			button.setMnemonic(KeyEvent.VK_T);
 			button.addActionListener(new ButtonAction());
-		} else if (nameOfButton.equalsIgnoreCase("Tomorrow")){
+		} else if (nameOfButton.equalsIgnoreCase("Tomorrow")) {
 			button.setMnemonic(KeyEvent.VK_M);
 			button.addActionListener(new ButtonAction());
-		} else if (nameOfButton.equalsIgnoreCase("Coming")){
+		} else if (nameOfButton.equalsIgnoreCase("Coming")) {
 			button.setMnemonic(KeyEvent.VK_C);
 			button.addActionListener(new ButtonAction());
-		} else if (nameOfButton.equalsIgnoreCase("Past")){
+		} else if (nameOfButton.equalsIgnoreCase("Past")) {
 			button.setMnemonic(KeyEvent.VK_P);
 			button.addActionListener(new ButtonAction());
-		} else if (nameOfButton.equalsIgnoreCase("No Date")){
+		} else if (nameOfButton.equalsIgnoreCase("No Date")) {
 			button.setMnemonic(KeyEvent.VK_E);
 			button.addActionListener(new ButtonAction());
 		}
-		
+
 		button.setFont(new Font(BUTTON_FONT, Font.BOLD, 16));
 		button.setBackground(UNSELECTED_BUTTON_BG_COLOR);
 		button.setBorderPainted(false);
@@ -281,15 +287,16 @@ public class EzGUI extends JFrame {
 		button.setFocusable(false);
 		return button;
 	}
-	
+
 	private String readHelpDocument() {
 		File file = new File(HELP_DOCUMENT_FILE_NAME);
-		assert(file!=null);
+		assert (file != null);
 		BufferedReader in;
 		String text = "";
 		try {
 			String line;
-			in = new BufferedReader(new InputStreamReader(file.toURI().toURL().openStream()));
+			in = new BufferedReader(new InputStreamReader(file.toURI().toURL()
+					.openStream()));
 			while ((line = in.readLine()) != null) {
 				text += line;
 			}
@@ -299,7 +306,7 @@ public class EzGUI extends JFrame {
 		}
 		return text;
 	}
-	
+
 	/**
 	 * create show panel
 	 */
@@ -309,18 +316,20 @@ public class EzGUI extends JFrame {
 		displayArea.setEditable(false);
 		displayArea.setContentType("text/html");
 		displayArea.setFocusable(false);
-		
+
 		displayPanel = new JScrollPane(displayArea);
 		displayPanel.setFocusable(false);
-		displayPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		displayPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		displayPanel
+				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		displayPanel
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		displayPanel.setLayout(new ScrollPaneLayout());
 		displayPanel.setBorder(null);
-		
+
 		mainPanel.add(displayPanel, BorderLayout.CENTER);
 		LOGGER.log(Level.INFO, "Created Display Panel");
 	}
-	
+
 	/**
 	 * create command panel
 	 */
@@ -331,7 +340,7 @@ public class EzGUI extends JFrame {
 		commandPanel.setFocusable(false);
 		commandPanel.setLayout(new BoxLayout(commandPanel, BoxLayout.X_AXIS));
 		mainPanel.add(commandPanel, BorderLayout.SOUTH);
-		
+
 		createCommandLabel(commandPanel);
 		createCommandInputField(commandPanel);
 	}
@@ -339,23 +348,25 @@ public class EzGUI extends JFrame {
 	private void enterSelection() {
 		int selectIndex = suggestList.getSelectedIndex();
 		loadSuggestion(commandField.getText());
-		if ((0<=selectIndex) && (selectIndex<suggestList.getModel().getSize())){
+		if ((0 <= selectIndex)
+				&& (selectIndex < suggestList.getModel().getSize())) {
 			int caretPos = commandField.getSelectionStart();
-			int taskId = getFirstNumber(suggestList.getModel().getElementAt(selectIndex));
-			if (taskId>-1){
+			int taskId = getFirstNumber(suggestList.getModel().getElementAt(
+					selectIndex));
+			if (taskId > -1) {
 				deleteSelection();
-				typeNormal(String.valueOf(taskId)+" ", caretPos);
+				typeNormal(String.valueOf(taskId) + " ", caretPos);
 			}
 		}
 		suggestList.setSelectedIndex(-1);
 		selectionMode = false;
 		suggestPanel.setVisible(false);
 	}
-	
+
 	private void loadSuggestion(String contentInputField) {
 		boolean activateSuggestion = false;
 		int startCaretPos = -1;
-		
+
 		ArrayList<String> notKeywordOrNumberList = new ArrayList<String>();
 		int length = contentInputField.length();
 		String word;
@@ -363,94 +374,101 @@ public class EzGUI extends JFrame {
 		boolean doneOrDeleteKeywordAvailable = false;
 		boolean removeKeywordAvailable = false;
 		int firstPosNotKeywordOrNumber = -1;
-		//int lastPosNotKeywordOrNumber = -1;
-		
-		for(int i=0;i<length;i++){
-			if (contentInputField.charAt(i)==' '){
-				while ((i+1<length) && (contentInputField.charAt(i+1)==' ')){
+		// int lastPosNotKeywordOrNumber = -1;
+
+		for (int i = 0; i < length; i++) {
+			if (contentInputField.charAt(i) == ' ') {
+				while ((i + 1 < length)
+						&& (contentInputField.charAt(i + 1) == ' ')) {
 					i++;
 				}
-			} else if (contentInputField.charAt(i)=='\"'){
-				if (firstPosNotKeywordOrNumber==-1){
+			} else if (contentInputField.charAt(i) == '\"') {
+				if (firstPosNotKeywordOrNumber == -1) {
 					firstPosNotKeywordOrNumber = i;
 				}
 				word = "";
-				while ((i+1<length) && (contentInputField.charAt(i+1)!='\"')){
+				while ((i + 1 < length)
+						&& (contentInputField.charAt(i + 1) != '\"')) {
 					i++;
 					word = word + contentInputField.charAt(i);
 				}
-				
-				if (i+1<length){
+
+				if (i + 1 < length) {
 					i++;
 				}
-				//lastPosNotKeywordOrNumber = i;
+				// lastPosNotKeywordOrNumber = i;
 				notKeywordOrNumberList.add(word.trim());
 			} else {
 				int tmp = i;
 				word = "" + contentInputField.charAt(i);
-				while ((i+1<length) && (contentInputField.charAt(i+1)!=' ')){
+				while ((i + 1 < length)
+						&& (contentInputField.charAt(i + 1) != ' ')) {
 					i++;
 					word = word + contentInputField.charAt(i);
 				}
-				
-				if (isKeyword(word)){
+
+				if (isKeyword(word)) {
 					lastKeyword = word;
-					if (word.equalsIgnoreCase("remove")){
+					if (word.equalsIgnoreCase("remove")) {
 						removeKeywordAvailable = true;
 					}
-					if (word.equalsIgnoreCase("done") || word.equalsIgnoreCase("undone") || word.equalsIgnoreCase("delete")){
+					if (word.equalsIgnoreCase("done")
+							|| word.equalsIgnoreCase("undone")
+							|| word.equalsIgnoreCase("delete")) {
 						doneOrDeleteKeywordAvailable = true;
-					}  
+					}
 				}
-				
-				if ((!isKeyword(word)) && (!isNumber(word))){
+
+				if ((!isKeyword(word)) && (!isNumber(word))) {
 					notKeywordOrNumberList.add(word);
-					if (firstPosNotKeywordOrNumber==-1){
+					if (firstPosNotKeywordOrNumber == -1) {
 						firstPosNotKeywordOrNumber = tmp;
 					}
-					//lastPosNotKeywordOrNumber = i;
-					if (startCaretPos==-1){
+					// lastPosNotKeywordOrNumber = i;
+					if (startCaretPos == -1) {
 						startCaretPos = i - word.length() + 1;
 					}
 				}
 			}
 		}
-		
-		if (lastKeyword.equalsIgnoreCase("done") || 
-				lastKeyword.equalsIgnoreCase("undone") ||
-				lastKeyword.equalsIgnoreCase("delete") ||
-				lastKeyword.equalsIgnoreCase("update") ||
-				(lastKeyword.equalsIgnoreCase("date") && removeKeywordAvailable) ||
-				(lastKeyword.equalsIgnoreCase("time") && removeKeywordAvailable) ||
-				(lastKeyword.equalsIgnoreCase("venue") && removeKeywordAvailable) ||
-				(lastKeyword.equalsIgnoreCase("from") && doneOrDeleteKeywordAvailable) || 
-				(lastKeyword.equalsIgnoreCase("to") && doneOrDeleteKeywordAvailable)){
+
+		if (lastKeyword.equalsIgnoreCase("done")
+				|| lastKeyword.equalsIgnoreCase("undone")
+				|| lastKeyword.equalsIgnoreCase("delete")
+				|| lastKeyword.equalsIgnoreCase("update")
+				|| (lastKeyword.equalsIgnoreCase("date") && removeKeywordAvailable)
+				|| (lastKeyword.equalsIgnoreCase("time") && removeKeywordAvailable)
+				|| (lastKeyword.equalsIgnoreCase("venue") && removeKeywordAvailable)
+				|| (lastKeyword.equalsIgnoreCase("from") && doneOrDeleteKeywordAvailable)
+				|| (lastKeyword.equalsIgnoreCase("to") && doneOrDeleteKeywordAvailable)) {
 			activateSuggestion = true;
 		}
-		
-		if (activateSuggestion){
+
+		if (activateSuggestion) {
 			suggestList.removeAll();
-			
-			//LOGGER.log(Level.INFO, String.format("List keywords: %d", notKeywordOrNumberList.size()));
-			
-			ArrayList<EzTask> listTask = EzSort.sortById(EzController.getStorage().getTasksByKeywords(notKeywordOrNumberList));
+
+			// LOGGER.log(Level.INFO, String.format("List keywords: %d",
+			// notKeywordOrNumberList.size()));
+
+			ArrayList<EzTask> listTask = EzSort.sortById(EzController
+					.getStorage().getTasksByKeywords(notKeywordOrNumberList));
 			String[] listString = new String[listTask.size()];
-			
-			for(int i=0;i<listTask.size();i++){
+
+			for (int i = 0; i < listTask.size(); i++) {
 				listString[i] = listTask.get(i).toString();
 			}
-			
+
 			suggestList.setListData(listString);
-			if (listString.length>0){
+			if (listString.length > 0) {
 				suggestList.setSelectedIndex(0);
 			} else {
 				suggestList.clearSelection();
 			}
-			
+
 			selectionMode = true;
 			suggestPanel.setVisible(true);
-			
-			if (firstPosNotKeywordOrNumber!=-1){
+
+			if (firstPosNotKeywordOrNumber != -1) {
 				commandField.setSelectionStart(firstPosNotKeywordOrNumber);
 				commandField.setSelectionEnd(commandField.getCaretPosition());
 			}
@@ -462,128 +480,189 @@ public class EzGUI extends JFrame {
 	}
 
 	private boolean isNumber(String word) {
-		for(int i=0;i<word.length();i++){
-			if ((word.charAt(i)<'0') || (word.charAt(i)> '9')){
+		for (int i = 0; i < word.length(); i++) {
+			if ((word.charAt(i) < '0') || (word.charAt(i) > '9')) {
 				return false;
 			}
 		}
 		return true;
 	}
-	
+
 	private void typeNormal(String typedText, int caretPos) {
 		String contentInputField;
-		contentInputField = commandField.getText().substring(0, caretPos) + typedText + commandField.getText().substring(caretPos, commandField.getText().length());
-		addColorForCommandField(contentInputField, commandField.getStyledDocument());
-		commandField.setCaretPosition(caretPos+typedText.length());
-		
+		contentInputField = commandField.getText().substring(0, caretPos)
+				+ typedText
+				+ commandField.getText().substring(caretPos,
+						commandField.getText().length());
+		addColorForCommandField(contentInputField,
+				commandField.getStyledDocument());
+		commandField.setCaretPosition(caretPos + typedText.length());
+
 		loadSuggestion(contentInputField);
 	}
-	
+
 	private int getFirstNumber(String text) {
 		int result = -1;
-		int i=0;
-		while ((text.charAt(i)<'0') || (text.charAt(i)>'9')){
+		int i = 0;
+		while ((text.charAt(i) < '0') || (text.charAt(i) > '9')) {
 			i++;
 		}
-		if ((text.charAt(i)>='0') && (text.charAt(i)<='9')){
+		if ((text.charAt(i) >= '0') && (text.charAt(i) <= '9')) {
 			result = 0;
-			while ((text.charAt(i)>='0') && (text.charAt(i)<='9')){
-				result = result * 10 + (int)(text.charAt(i)-'0');
+			while ((text.charAt(i) >= '0') && (text.charAt(i) <= '9')) {
+				result = result * 10 + (int) (text.charAt(i) - '0');
 				i++;
 			}
 		}
 		return result;
 	}
-	
+
 	private void deleteSelection() {
 		String contentInputField;
 		int endPos = commandField.getSelectionStart();
-		if (commandField.getSelectionStart() == commandField.getSelectionEnd()){
-			if (commandField.getSelectionStart()<commandField.getText().length()){
-				contentInputField = deleteString(commandField.getText(),commandField.getSelectionStart(),commandField.getSelectionEnd()+1); 
-				addColorForCommandField(contentInputField, commandField.getStyledDocument());
+		if (commandField.getSelectionStart() == commandField.getSelectionEnd()) {
+			if (commandField.getSelectionStart() < commandField.getText()
+					.length()) {
+				contentInputField = deleteString(commandField.getText(),
+						commandField.getSelectionStart(),
+						commandField.getSelectionEnd() + 1);
+				addColorForCommandField(contentInputField,
+						commandField.getStyledDocument());
 				commandField.setCaretPosition(endPos);
 				loadSuggestion(contentInputField);
 			}
 		} else {
 			int endCaretPos = commandField.getSelectionEnd();
-			if ((endCaretPos<commandField.getText().length()) && (commandField.getText().charAt(endCaretPos)=='\"')){
+			if ((endCaretPos < commandField.getText().length())
+					&& (commandField.getText().charAt(endCaretPos) == '\"')) {
 				endCaretPos++;
 			}
-			contentInputField = deleteString(commandField.getText(),commandField.getSelectionStart(),endCaretPos); 
-			addColorForCommandField(contentInputField, commandField.getStyledDocument());
+			contentInputField = deleteString(commandField.getText(),
+					commandField.getSelectionStart(), endCaretPos);
+			addColorForCommandField(contentInputField,
+					commandField.getStyledDocument());
 			commandField.setCaretPosition(endPos);
 			loadSuggestion(contentInputField);
 		}
 	}
-	
-	private String deleteString(String text,int startPos, int endPos){
+
+	private String deleteString(String text, int startPos, int endPos) {
 		return text.substring(0, startPos) + text.substring(endPos);
 	}
-	
+
 	/**
 	 * @param commandPanel
 	 */
 	private void createCommandInputField(JPanel commandPanel) {
 		JPanel commandFieldpanel = new JPanel();
-		commandFieldpanel.setLayout(new BoxLayout(commandFieldpanel, BoxLayout.X_AXIS));
+		commandFieldpanel.setLayout(new BoxLayout(commandFieldpanel,
+				BoxLayout.X_AXIS));
 		commandPanel.add(commandFieldpanel);
-		
+
 		commandField = new JTextPane();
-		/*commandField.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				//commandField.grabFocus();
-			}
-		})*/;
+		/*
+		 * commandField.addFocusListener(new FocusAdapter() {
+		 * 
+		 * @Override public void focusLost(FocusEvent arg0) {
+		 * //commandField.grabFocus(); } })
+		 */;
 		commandFieldpanel.add(commandField);
 		commandField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 				clearFeedback();
-				if (arg0.isControlDown()){
-					switch (arg0.getKeyChar()){
-					case 22: case 25: case 26:
-						arg0.consume();
-						break;
+				if (arg0.isControlDown()) {
+					if ((!arg0.isAltDown() && (!arg0.isShiftDown()))) {
+						switch (arg0.getKeyChar()) {
+						case 22:
+						case 25:
+						case 26:
+							arg0.consume();
+							break;
+						}
+						switch (arg0.getKeyCode()) {
+						case KeyEvent.VK_UP:
+							scrollUp();
+							break;
+						case KeyEvent.VK_DOWN:
+							scrollDown();
+							break;
+						case KeyEvent.VK_1:
+							pressButton(getButton("All"));
+							break;
+						case KeyEvent.VK_2:
+							pressButton(getButton("Done"));
+							break;
+						case KeyEvent.VK_3:
+							pressButton(getButton("Not done"));
+							break;
+						case KeyEvent.VK_4:
+							pressButton(getButton("Today"));
+							break;
+						case KeyEvent.VK_5:
+							pressButton(getButton("Tomorrow"));
+							break;
+						case KeyEvent.VK_6:
+							pressButton(getButton("Coming"));
+							break;
+						case KeyEvent.VK_7:
+							pressButton(getButton("Past"));
+							break;
+						case KeyEvent.VK_8:
+							pressButton(getButton("No date"));
+							break;
+						case KeyEvent.VK_9:
+						case KeyEvent.VK_H:
+							pressButton(getButton("Help"));
+							break;
+						}
+					} else if ((arg0.isAltDown() && (!arg0.isShiftDown()))) {
+						int width = mainFrame.getWidth();
+						int height = mainFrame.getHeight();
+
+						switch (arg0.getKeyCode()) { // resize the window
+						case KeyEvent.VK_UP:
+							mainFrame.setSize(width, height-10);
+							arg0.consume();
+							break;
+						case KeyEvent.VK_DOWN:
+							mainFrame.setSize(width, height+10);
+							arg0.consume();
+							break;
+						case KeyEvent.VK_LEFT:
+							mainFrame.setSize(width-10, height);
+							arg0.consume();
+							break;
+						case KeyEvent.VK_RIGHT:
+							mainFrame.setSize(width+10, height);
+							arg0.consume();
+							break;
+						}
+					} else if ((!arg0.isAltDown() && (arg0.isShiftDown()))) {
+						int x = mainFrame.getLocation().x;
+						int y = mainFrame.getLocation().y;
+
+						switch (arg0.getKeyCode()) { // resize the window
+						case KeyEvent.VK_UP:
+							mainFrame.setLocation(x, y-10);
+							arg0.consume();
+							break;
+						case KeyEvent.VK_DOWN:
+							mainFrame.setLocation(x, y+10);
+							arg0.consume();
+							break;
+						case KeyEvent.VK_LEFT:
+							mainFrame.setLocation(x-10, y);
+							arg0.consume();
+							break;
+						case KeyEvent.VK_RIGHT:
+							mainFrame.setLocation(x+10, y);
+							arg0.consume();
+							break;
+						}
 					}
-					switch (arg0.getKeyCode()){
-					case KeyEvent.VK_UP:
-						scrollUp();
-						break;
-					case KeyEvent.VK_DOWN:
-						scrollDown();
-						break;
-					case KeyEvent.VK_1:
-						pressButton(getButton("All"));
-						break;
-					case KeyEvent.VK_2:
-						pressButton(getButton("Done"));
-						break;
-					case KeyEvent.VK_3:
-						pressButton(getButton("Not done"));
-						break;
-					case KeyEvent.VK_4:
-						pressButton(getButton("Today"));
-						break;
-					case KeyEvent.VK_5:
-						pressButton(getButton("Tomorrow"));
-						break;
-					case KeyEvent.VK_6:
-						pressButton(getButton("Coming"));
-						break;
-					case KeyEvent.VK_7:
-						pressButton(getButton("Past"));
-						break;
-					case KeyEvent.VK_8:
-						pressButton(getButton("No date"));
-						break;
-					case KeyEvent.VK_9: case KeyEvent.VK_H:
-						pressButton(getButton("Help"));
-						break;
-					}
-				} else if (!arg0.isAltDown()){
-					switch (arg0.getKeyChar()){
+				} else if (!arg0.isAltDown()) {
+					switch (arg0.getKeyChar()) {
 					case KeyEvent.VK_ENTER:
 						if (!selectionMode) {
 							enterCommand();
@@ -592,12 +671,13 @@ public class EzGUI extends JFrame {
 						}
 						arg0.consume();
 						break;
-					case KeyEvent.VK_BACK_SPACE: case KeyEvent.VK_DELETE:
+					case KeyEvent.VK_BACK_SPACE:
+					case KeyEvent.VK_DELETE:
 						arg0.consume();
 						break;
 					}
-					
-					switch (arg0.getKeyCode()){
+
+					switch (arg0.getKeyCode()) {
 					case KeyEvent.VK_UP:
 						if (!selectionMode) {
 							goToPreviousCommand();
@@ -618,55 +698,55 @@ public class EzGUI extends JFrame {
 						pressButton(getButton("help"));
 						break;
 					case KeyEvent.VK_TAB:
-						if (!arg0.isShiftDown()){
-							if (selectedButton==null) {
+						if (!arg0.isShiftDown()) {
+							if (selectedButton == null) {
 								pressButton(getButton("All"));
-							} else if (selectedButton==getButton("all")){
+							} else if (selectedButton == getButton("all")) {
 								pressButton(getButton("Done"));
-							} else if (selectedButton==getButton("Done")){
+							} else if (selectedButton == getButton("Done")) {
 								pressButton(getButton("Not done"));
-							} else if (selectedButton==getButton("Not Done")){
+							} else if (selectedButton == getButton("Not Done")) {
 								pressButton(getButton("Today"));
-							} else if (selectedButton==getButton("Today")){
+							} else if (selectedButton == getButton("Today")) {
 								pressButton(getButton("Tomorrow"));
-							} else if (selectedButton==getButton("Tomorrow")){
+							} else if (selectedButton == getButton("Tomorrow")) {
 								pressButton(getButton("Coming"));
-							} else if (selectedButton==getButton("Coming")){
+							} else if (selectedButton == getButton("Coming")) {
 								pressButton(getButton("Past"));
-							} else if (selectedButton==getButton("Past")){
+							} else if (selectedButton == getButton("Past")) {
 								pressButton(getButton("No Date"));
-							} else if (selectedButton==getButton("No Date")){
+							} else if (selectedButton == getButton("No Date")) {
 								pressButton(getButton("Help"));
-							} else if (selectedButton==getButton("Help")){
+							} else if (selectedButton == getButton("Help")) {
 								pressButton(getButton("All"));
 							}
 						} else {
-							if (selectedButton==null){
+							if (selectedButton == null) {
 								pressButton(getButton("Help"));
-							} else if (selectedButton==getButton("all")){
+							} else if (selectedButton == getButton("all")) {
 								pressButton(getButton("Help"));
-							} else if (selectedButton==getButton("Done")){
+							} else if (selectedButton == getButton("Done")) {
 								pressButton(getButton("All"));
-							} else if (selectedButton==getButton("Not Done")){
+							} else if (selectedButton == getButton("Not Done")) {
 								pressButton(getButton("Done"));
-							} else if (selectedButton==getButton("Today")){
+							} else if (selectedButton == getButton("Today")) {
 								pressButton(getButton("Not Done"));
-							} else if (selectedButton==getButton("Tomorrow")){
+							} else if (selectedButton == getButton("Tomorrow")) {
 								pressButton(getButton("Today"));
-							} else if (selectedButton==getButton("Coming")){
+							} else if (selectedButton == getButton("Coming")) {
 								pressButton(getButton("Tomorrow"));
-							} else if (selectedButton==getButton("Past")){
+							} else if (selectedButton == getButton("Past")) {
 								pressButton(getButton("Coming"));
-							} else if (selectedButton==getButton("No Date")){
+							} else if (selectedButton == getButton("No Date")) {
 								pressButton(getButton("Past"));
-							} else if (selectedButton==getButton("Help")){
+							} else if (selectedButton == getButton("Help")) {
 								pressButton(getButton("No Date"));
 							}
 						}
 						arg0.consume();
 						break;
 					}
-					
+
 				}
 			}
 
@@ -676,7 +756,8 @@ public class EzGUI extends JFrame {
 				if (selectIndex >= suggestList.getModel().getSize()) {
 					selectIndex = -1;
 				}
-				if ((0<=selectIndex) && (selectIndex<suggestList.getModel().getSize())){
+				if ((0 <= selectIndex)
+						&& (selectIndex < suggestList.getModel().getSize())) {
 					suggestList.setSelectedIndex(selectIndex);
 					suggestList.ensureIndexIsVisible(selectIndex);
 				} else {
@@ -687,10 +768,11 @@ public class EzGUI extends JFrame {
 			private void selectAbove() {
 				int selectIndex = suggestList.getSelectedIndex();
 				selectIndex--;
-				if (selectIndex<-1) {
-					selectIndex = suggestList.getModel().getSize()-1;
+				if (selectIndex < -1) {
+					selectIndex = suggestList.getModel().getSize() - 1;
 				}
-				if ((0<=selectIndex) && (selectIndex<suggestList.getModel().getSize())){
+				if ((0 <= selectIndex)
+						&& (selectIndex < suggestList.getModel().getSize())) {
 					suggestList.setSelectedIndex(selectIndex);
 					suggestList.ensureIndexIsVisible(selectIndex);
 				} else {
@@ -699,50 +781,57 @@ public class EzGUI extends JFrame {
 			}
 
 			private void scrollDown() {
-				displayPanel.getVerticalScrollBar().setValue(displayPanel.getVerticalScrollBar().getValue()+20);
+				displayPanel.getVerticalScrollBar().setValue(
+						displayPanel.getVerticalScrollBar().getValue() + 20);
 			}
 
 			private void scrollUp() {
-				displayPanel.getVerticalScrollBar().setValue(displayPanel.getVerticalScrollBar().getValue()-20);
+				displayPanel.getVerticalScrollBar().setValue(
+						displayPanel.getVerticalScrollBar().getValue() - 20);
 			}
 
 			private void enterCommand() {
 				String fb = EzController.execute(commandField.getText());
 				commandHistory.add(commandField.getText());
 				historyPos = commandHistory.size();
-				if (fb != null){
-					addColorForFeedBack("FEEDBACK: " + fb,commandField.getStyledDocument());
+				if (fb != null) {
+					addColorForFeedBack("FEEDBACK: " + fb,
+							commandField.getStyledDocument());
 					showingFeedback = true;
 				} else {
-					addColorForFeedBack("No feedback.",commandField.getStyledDocument());
+					addColorForFeedBack("No feedback.",
+							commandField.getStyledDocument());
 					showingFeedback = true;
 				}
 			}
 
 			private void goToNextCommand() {
-				if (historyPos<commandHistory.size()){
+				if (historyPos < commandHistory.size()) {
 					historyPos++;
-					if (historyPos<commandHistory.size()){
-						addColorForCommandField(commandHistory.get(historyPos), commandField.getStyledDocument());
+					if (historyPos < commandHistory.size()) {
+						addColorForCommandField(commandHistory.get(historyPos),
+								commandField.getStyledDocument());
 					} else {
-						addColorForCommandField("", commandField.getStyledDocument());
+						addColorForCommandField("",
+								commandField.getStyledDocument());
 					}
 				}
 			}
 
 			private void goToPreviousCommand() {
-				if (historyPos>0){
+				if (historyPos > 0) {
 					historyPos--;
-					addColorForCommandField(commandHistory.get(historyPos), commandField.getStyledDocument());
+					addColorForCommandField(commandHistory.get(historyPos),
+							commandField.getStyledDocument());
 				}
 			}
-			
+
 			@Override
 			public void keyTyped(KeyEvent e) {
-				//clearFeedback();
+				// clearFeedback();
 				int caretPos = commandField.getCaretPosition();
-				if ((!e.isControlDown()) && (!e.isAltDown())){
-					switch (e.getKeyChar()){
+				if ((!e.isControlDown()) && (!e.isAltDown())) {
+					switch (e.getKeyChar()) {
 					case KeyEvent.VK_ENTER:
 						break;
 					case KeyEvent.VK_DELETE:
@@ -758,21 +847,21 @@ public class EzGUI extends JFrame {
 						e.consume();
 						break;
 					default:
-						typeNormal(""+e.getKeyChar(), caretPos);
-						break;	
+						typeNormal("" + e.getKeyChar(), caretPos);
+						break;
 					}
 					e.consume();
 				} else {
-					switch (e.getKeyChar()){
-					case 26:	// CTRL + Z
+					switch (e.getKeyChar()) {
+					case 26: // CTRL + Z
 						undo();
 						e.consume();
 						break;
-					case 25:	// CTRL + Y
+					case 25: // CTRL + Y
 						redo();
 						e.consume();
 						break;
-					case 22:	// CTRL + V
+					case 22: // CTRL + V
 						pasteText();
 						e.consume();
 						break;
@@ -783,7 +872,7 @@ public class EzGUI extends JFrame {
 			}
 
 			private void clearFeedback() {
-				if (showingFeedback){
+				if (showingFeedback) {
 					showingFeedback = false;
 					commandField.setText("");
 				}
@@ -801,7 +890,8 @@ public class EzGUI extends JFrame {
 				int caretPos;
 				commandField.paste();
 				caretPos = commandField.getCaretPosition();
-				addColorForCommandField(commandField.getText(), commandField.getStyledDocument());
+				addColorForCommandField(commandField.getText(),
+						commandField.getStyledDocument());
 				commandField.setCaretPosition(caretPos);
 			}
 
@@ -812,105 +902,129 @@ public class EzGUI extends JFrame {
 				String lastWord = "";
 				boolean haveKeywordAvailable = false;
 				boolean insideQuote = false;
-				
-				for(int i=0;i<caretPos;i++){
-					//String word = "";
-					if (contentInputField.charAt(i)==' '){
+
+				for (int i = 0; i < caretPos; i++) {
+					// String word = "";
+					if (contentInputField.charAt(i) == ' ') {
 						result = result + " ";
-						while ((i+1<caretPos) && (contentInputField.charAt(i+1)==' ')){
+						while ((i + 1 < caretPos)
+								&& (contentInputField.charAt(i + 1) == ' ')) {
 							i++;
 							result = result + " ";
 						}
-					} else if (contentInputField.charAt(i)=='\"'){
+					} else if (contentInputField.charAt(i) == '\"') {
 						insideQuote = true;
 						lastWord = "\"";
-						while ((i+1<caretPos) && (contentInputField.charAt(i+1)!='\"')){
+						while ((i + 1 < caretPos)
+								&& (contentInputField.charAt(i + 1) != '\"')) {
 							i++;
 							lastWord = lastWord + contentInputField.charAt(i);
 						}
-						
-						if (i+1<caretPos){
+
+						if (i + 1 < caretPos) {
 							i++;
 							lastWord = lastWord + contentInputField.charAt(i);
 						}
-						
-						if ((lastWord.charAt(lastWord.length()-1)=='\"') && (lastWord.length()>2)){
+
+						if ((lastWord.charAt(lastWord.length() - 1) == '\"')
+								&& (lastWord.length() > 2)) {
 							insideQuote = false;
 						}
-						
+
 						result = result + lastWord;
 					} else {
 						lastWord = "" + contentInputField.charAt(i);
-						while ((i+1<caretPos) && (contentInputField.charAt(i+1)!=' ')){
+						while ((i + 1 < caretPos)
+								&& (contentInputField.charAt(i + 1) != ' ')) {
 							i++;
 							lastWord = lastWord + contentInputField.charAt(i);
 						}
-						if (lastWord.equalsIgnoreCase("have")){
+						if (lastWord.equalsIgnoreCase("have")) {
 							haveKeywordAvailable = true;
 						}
 						result = result + lastWord;
 					}
 				}
-				
-				if ((!insideQuote) && (isDoubleQuoteKeyword(lastWord) || haveKeywordAvailable)){
-					result = result + " \"\"" + contentInputField.substring(caretPos, contentInputField.length());	
-					addColorForCommandField(result, commandField.getStyledDocument());
-					commandField.setCaretPosition(caretPos+2);
+
+				if ((!insideQuote)
+						&& (isDoubleQuoteKeyword(lastWord) || haveKeywordAvailable)) {
+					result = result
+							+ " \"\""
+							+ contentInputField.substring(caretPos,
+									contentInputField.length());
+					addColorForCommandField(result,
+							commandField.getStyledDocument());
+					commandField.setCaretPosition(caretPos + 2);
 				} else {
-					result = result + " " + contentInputField.substring(caretPos, contentInputField.length());	
-					addColorForCommandField(result, commandField.getStyledDocument());
-					commandField.setCaretPosition(caretPos+1);
+					result = result
+							+ " "
+							+ contentInputField.substring(caretPos,
+									contentInputField.length());
+					addColorForCommandField(result,
+							commandField.getStyledDocument());
+					commandField.setCaretPosition(caretPos + 1);
 				}
-				
+
 				loadSuggestion(contentInputField);
 			}
-			
-			private boolean isDoubleQuoteKeyword(String word){
-				for(int i=0;i<DOUBLE_QUOTE_KEYWORDS.length;i++){
-					if (word.equalsIgnoreCase(DOUBLE_QUOTE_KEYWORDS[i])){
+
+			private boolean isDoubleQuoteKeyword(String word) {
+				for (int i = 0; i < DOUBLE_QUOTE_KEYWORDS.length; i++) {
+					if (word.equalsIgnoreCase(DOUBLE_QUOTE_KEYWORDS[i])) {
 						return true;
 					}
 				}
 				return false;
 			}
-			
+
 			private void backSpaceSelection() {
 				String contentInputField;
 				int startPos = commandField.getSelectionStart();
-				if (commandField.getSelectionStart() == commandField.getSelectionEnd()){
-					if (commandField.getSelectionStart()>0){
-						if ((commandField.getText().charAt(commandField.getSelectionStart()-1) == '\"') 
-							&& (commandField.getSelectionStart()<commandField.getText().length()) 
-							&& (commandField.getText().charAt(commandField.getSelectionStart()) == '\"')){
-							contentInputField = deleteString(commandField.getText(),commandField.getSelectionStart()-1,commandField.getSelectionStart()+1); 
+				if (commandField.getSelectionStart() == commandField
+						.getSelectionEnd()) {
+					if (commandField.getSelectionStart() > 0) {
+						if ((commandField.getText().charAt(
+								commandField.getSelectionStart() - 1) == '\"')
+								&& (commandField.getSelectionStart() < commandField
+										.getText().length())
+								&& (commandField.getText().charAt(
+										commandField.getSelectionStart()) == '\"')) {
+							contentInputField = deleteString(
+									commandField.getText(),
+									commandField.getSelectionStart() - 1,
+									commandField.getSelectionStart() + 1);
 						} else {
-							contentInputField = deleteString(commandField.getText(),commandField.getSelectionStart()-1,commandField.getSelectionStart()); 
+							contentInputField = deleteString(
+									commandField.getText(),
+									commandField.getSelectionStart() - 1,
+									commandField.getSelectionStart());
 						}
-						addColorForCommandField(contentInputField, commandField.getStyledDocument());
-						commandField.setCaretPosition(startPos-1);
+						addColorForCommandField(contentInputField,
+								commandField.getStyledDocument());
+						commandField.setCaretPosition(startPos - 1);
 						loadSuggestion(contentInputField);
 					}
 				} else {
-					contentInputField = deleteString(commandField.getText(),commandField.getSelectionStart(),commandField.getSelectionEnd()); 
-					addColorForCommandField(contentInputField, commandField.getStyledDocument());
+					contentInputField = deleteString(commandField.getText(),
+							commandField.getSelectionStart(),
+							commandField.getSelectionEnd());
+					addColorForCommandField(contentInputField,
+							commandField.getStyledDocument());
 					commandField.setCaretPosition(startPos);
 					loadSuggestion(contentInputField);
 				}
-				
+
 			}
 
-			
-
-			
 		});
 		loadCommandAttributeSet();
-		//commandField.setContentType("text/html");
-		//commandField.setFont(new Font(BUTTON_FONT, Font.PLAIN, 17));
+		// commandField.setContentType("text/html");
+		// commandField.setFont(new Font(BUTTON_FONT, Font.PLAIN, 17));
 		commandField.setBackground(EzConstants.SHOW_AREA_BACKGROUND);
-		commandField.setPreferredSize(new Dimension(0,0));
+		commandField.setPreferredSize(new Dimension(0, 0));
 		commandField.grabFocus();
 	}
-	
+
 	/**
 	 * @param contentInputField
 	 * @param doc
@@ -922,49 +1036,56 @@ public class EzGUI extends JFrame {
 		} catch (BadLocationException e2) {
 			e2.printStackTrace();
 		}
-		for(int i=0;i<contentInputField.length();i++){
+		for (int i = 0; i < contentInputField.length(); i++) {
 			String word = "";
-			if (contentInputField.charAt(i)==' '){
+			if (contentInputField.charAt(i) == ' ') {
 				word = " ";
-				while ((i+1<contentInputField.length()) && (contentInputField.charAt(i+1)==' ')){
+				while ((i + 1 < contentInputField.length())
+						&& (contentInputField.charAt(i + 1) == ' ')) {
 					i++;
 					word = word + ' ';
 				}
 				try {
-					doc.insertString(doc.getLength(), word, commandAttributeSet[0]);
+					doc.insertString(doc.getLength(), word,
+							commandAttributeSet[0]);
 				} catch (BadLocationException e1) {
 					e1.printStackTrace();
 				}
-			} else if (contentInputField.charAt(i)=='\"'){
+			} else if (contentInputField.charAt(i) == '\"') {
 				word = "\"";
-				while ((i+1<contentInputField.length()) && (contentInputField.charAt(i+1)!='\"')){
+				while ((i + 1 < contentInputField.length())
+						&& (contentInputField.charAt(i + 1) != '\"')) {
 					i++;
 					word = word + contentInputField.charAt(i);
 				}
-				if (i+1<contentInputField.length()){
+				if (i + 1 < contentInputField.length()) {
 					i++;
 					word = word + contentInputField.charAt(i);
 				}
 				try {
-					doc.insertString(doc.getLength(), word, commandAttributeSet[2]);
+					doc.insertString(doc.getLength(), word,
+							commandAttributeSet[2]);
 				} catch (BadLocationException e1) {
 					e1.printStackTrace();
 				}
 			} else {
 				word = "" + contentInputField.charAt(i);
-				while ((i+1<contentInputField.length()) && (contentInputField.charAt(i+1)!=' ')){
+				while ((i + 1 < contentInputField.length())
+						&& (contentInputField.charAt(i + 1) != ' ')) {
 					i++;
 					word = word + contentInputField.charAt(i);
 				}
-				if (isKeyword(word)){
+				if (isKeyword(word)) {
 					try {
-						doc.insertString(doc.getLength(), word, commandAttributeSet[1]);
+						doc.insertString(doc.getLength(), word,
+								commandAttributeSet[1]);
 					} catch (BadLocationException e1) {
 						e1.printStackTrace();
 					}
 				} else {
 					try {
-						doc.insertString(doc.getLength(), word, commandAttributeSet[0]);
+						doc.insertString(doc.getLength(), word,
+								commandAttributeSet[0]);
 					} catch (BadLocationException e1) {
 						e1.printStackTrace();
 					}
@@ -972,9 +1093,8 @@ public class EzGUI extends JFrame {
 			}
 		}
 	}
-	
-	private void addColorForFeedBack(String feedback,
-			StyledDocument doc) {
+
+	private void addColorForFeedBack(String feedback, StyledDocument doc) {
 		try {
 			doc.remove(0, doc.getLength());
 			doc.insertString(doc.getLength(), feedback, commandAttributeSet[3]);
@@ -982,24 +1102,28 @@ public class EzGUI extends JFrame {
 			e2.printStackTrace();
 		}
 	}
-	
+
 	private void loadCommandAttributeSet() {
 		commandAttributeSet[0] = new SimpleAttributeSet();
-		StyleConstants.setFontFamily(commandAttributeSet[0], COMMAND_FIELD_FONT);
-        StyleConstants.setFontSize(commandAttributeSet[0], COMMAND_FIELD_SIZE);
+		StyleConstants
+				.setFontFamily(commandAttributeSet[0], COMMAND_FIELD_FONT);
+		StyleConstants.setFontSize(commandAttributeSet[0], COMMAND_FIELD_SIZE);
 
-        commandAttributeSet[1] = new SimpleAttributeSet(commandAttributeSet[0]);
-        StyleConstants.setForeground(commandAttributeSet[1], EzConstants.MARINER_COLOR);
-        
-        commandAttributeSet[2] = new SimpleAttributeSet(commandAttributeSet[0]);
-        StyleConstants.setForeground(commandAttributeSet[2], EzConstants.IRON_GRAY_COLOR);   
+		commandAttributeSet[1] = new SimpleAttributeSet(commandAttributeSet[0]);
+		StyleConstants.setForeground(commandAttributeSet[1],
+				EzConstants.MARINER_COLOR);
 
-        commandAttributeSet[3] = new SimpleAttributeSet(commandAttributeSet[0]);
-        StyleConstants.setForeground(commandAttributeSet[3], EzConstants.TERRA_COTTA_COLOR);
+		commandAttributeSet[2] = new SimpleAttributeSet(commandAttributeSet[0]);
+		StyleConstants.setForeground(commandAttributeSet[2],
+				EzConstants.IRON_GRAY_COLOR);
+
+		commandAttributeSet[3] = new SimpleAttributeSet(commandAttributeSet[0]);
+		StyleConstants.setForeground(commandAttributeSet[3],
+				EzConstants.TERRA_COTTA_COLOR);
 	}
-	
+
 	private boolean isKeyword(String word) {
-		for(int i=0;i<KEYWORDS.length;i++){
+		for (int i = 0; i < KEYWORDS.length; i++) {
 			if (KEYWORDS[i].equalsIgnoreCase(word)) {
 				return true;
 			}
@@ -1012,13 +1136,14 @@ public class EzGUI extends JFrame {
 	 */
 	private void createCommandLabel(JPanel commandPanel) {
 		JPanel commandLabelPanel = new JPanel();
-		FlowLayout fl_commandLabelPanel = (FlowLayout) commandLabelPanel.getLayout();
+		FlowLayout fl_commandLabelPanel = (FlowLayout) commandLabelPanel
+				.getLayout();
 		fl_commandLabelPanel.setVgap(0);
 		fl_commandLabelPanel.setHgap(0);
 		commandLabelPanel.setBackground(BACKGROUND_COLOR);
 		commandLabelPanel.setFocusable(false);
 		commandPanel.add(commandLabelPanel);
-		
+
 		JTextPane commandLabel = new JTextPane();
 		commandLabel.setEditable(false);
 		commandLabel.setForeground(Color.WHITE);
@@ -1028,7 +1153,7 @@ public class EzGUI extends JFrame {
 		commandLabel.setFocusable(false);
 		commandLabelPanel.add(commandLabel);
 	}
-	
+
 	private void showHelp() {
 		String text = readHelpDocument();
 		onScreenTasks = new ArrayList<EzTask>();
@@ -1036,141 +1161,149 @@ public class EzGUI extends JFrame {
 	}
 
 	private void paintFocusedButton(JButton button) {
-		if (selectedButton!=null){
+		if (selectedButton != null) {
 			selectedButton.setBackground(UNSELECTED_BUTTON_BG_COLOR);
 		}
 		button.setBackground(SELECTED_BUTTON_BG_COLOR);
 		selectedButton = button;
 	}
 
-	private JButton getButton(String name){
-		for(int i=0;i<listOfButtons.size();i++){
-			if (listOfButtons.get(i).getName().equalsIgnoreCase(name)){
+	private JButton getButton(String name) {
+		for (int i = 0; i < listOfButtons.size(); i++) {
+			if (listOfButtons.get(i).getName().equalsIgnoreCase(name)) {
 				return listOfButtons.get(i);
 			}
 		}
 		return null;
 	}
-	
+
 	private void pressButton(JButton button) {
 		paintFocusedButton(button);
 		EzStorage storage = EzController.getStorage();
-		assert(storage!=null);
-		
-		if (button.getName().equalsIgnoreCase("All")){
-			showContent("All tasks", EzSort.sortById(storage.getListOfAllTasks()));
-		} else if (button.getName().equalsIgnoreCase("Done")){
+		assert (storage != null);
+
+		if (button.getName().equalsIgnoreCase("All")) {
+			showContent("All tasks",
+					EzSort.sortById(storage.getListOfAllTasks()));
+		} else if (button.getName().equalsIgnoreCase("Done")) {
 			showContent("Done tasks", EzSort.sortById(storage.getDoneTasks()));
-		} else if (button.getName().equalsIgnoreCase("Not done")){
-			showContent("Not Done tasks", EzSort.sortByDate(storage.getUndoneTasks()));
-		} else if (button.getName().equalsIgnoreCase("Today")){
-			showContent("Today tasks", EzSort.sortByPriority(storage.getTasksByDate(getToday())));
-		} else if (button.getName().equalsIgnoreCase("Tomorrow")){
-			showContent("Tomorrow tasks", EzSort.sortByPriority(storage.getTasksByDate(getTomorrow())));
-		} else if (button.getName().equalsIgnoreCase("Coming")){
-			showContent("Coming tasks", EzSort.sortByDate(storage.getComingTasks()));
-		} else if (button.getName().equalsIgnoreCase("Past")){
+		} else if (button.getName().equalsIgnoreCase("Not done")) {
+			showContent("Not Done tasks",
+					EzSort.sortByDate(storage.getUndoneTasks()));
+		} else if (button.getName().equalsIgnoreCase("Today")) {
+			showContent("Today tasks",
+					EzSort.sortByPriority(storage.getTasksByDate(getToday())));
+		} else if (button.getName().equalsIgnoreCase("Tomorrow")) {
+			showContent("Tomorrow tasks", EzSort.sortByPriority(storage
+					.getTasksByDate(getTomorrow())));
+		} else if (button.getName().equalsIgnoreCase("Coming")) {
+			showContent("Coming tasks",
+					EzSort.sortByDate(storage.getComingTasks()));
+		} else if (button.getName().equalsIgnoreCase("Past")) {
 			showContent("Past tasks", EzSort.sortByDate(storage.getPastTasks()));
-		} else if (button.getName().equalsIgnoreCase("No Date")){
-			showContent("No Date tasks", EzSort.sortByPriority(storage.getNoDateTasks()));
-		} else if (button.getName().equalsIgnoreCase("Help")){
+		} else if (button.getName().equalsIgnoreCase("No Date")) {
+			showContent("No Date tasks",
+					EzSort.sortByPriority(storage.getNoDateTasks()));
+		} else if (button.getName().equalsIgnoreCase("Help")) {
 			showHelp();
-		} 
-		
+		}
+
 		commandField.requestFocus();
 	}
 
-	private static void registerFont(){
+	private static void registerFont() {
 		try {
-			Font font = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/Digital Dismay.otf")).deriveFont(16f);
-			GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			Font font = Font.createFont(Font.TRUETYPE_FONT,
+					new File("fonts/Digital Dismay.otf")).deriveFont(16f);
+			GraphicsEnvironment genv = GraphicsEnvironment
+					.getLocalGraphicsEnvironment();
 			genv.registerFont(font);
-			LOGGER.log(Level.INFO, "Registered Font Digital Dismay Successfully");
+			LOGGER.log(Level.INFO,
+					"Registered Font Digital Dismay Successfully");
 		} catch (Exception e) {
 			LOGGER.log(Level.WARNING, "Font Digital Dismay Not Found");
 		}
-		
+
 		try {
-			Font font = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/ARLRDBD.TTF")).deriveFont(16f);
-			GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			Font font = Font.createFont(Font.TRUETYPE_FONT,
+					new File("fonts/ARLRDBD.TTF")).deriveFont(16f);
+			GraphicsEnvironment genv = GraphicsEnvironment
+					.getLocalGraphicsEnvironment();
 			genv.registerFont(font);
 			LOGGER.log(Level.INFO, "Registered Font ARLRDBD Successfully");
 		} catch (Exception e) {
 			LOGGER.log(Level.WARNING, "Font ARLRDBD Not Found");
 		}
-		
+
 	}
-	
-	public static ArrayList<EzTask> getTasksOnScreen(){
+
+	public static ArrayList<EzTask> getTasksOnScreen() {
 		return onScreenTasks;
 	}
-	
-	public static void showContent(String header, ArrayList<EzTask> listOfTasks){
-		assert(listOfTasks!=null);
+
+	public static void showContent(String header, ArrayList<EzTask> listOfTasks) {
+		assert (listOfTasks != null);
 		onScreenTasks = listOfTasks;
 		ArrayList<String> list = new ArrayList<String>();
-		for(int i=0;i<listOfTasks.size();i++){
-			list.add(EzHtmlGenerator.createHtmlEzTask(listOfTasks.get(i),i%2));
+		for (int i = 0; i < listOfTasks.size(); i++) {
+			list.add(EzHtmlGenerator.createHtmlEzTask(listOfTasks.get(i), i % 2));
 		}
-		String content = EzHtmlGenerator.center(EzHtmlGenerator.createHtmlTable(list.size(),1,list,"border=0 cellspacing=4 cellpadding=1 width=\"100%\""));
+		String content = EzHtmlGenerator.center(EzHtmlGenerator
+				.createHtmlTable(list.size(), 1, list,
+						"border=0 cellspacing=4 cellpadding=1 width=\"100%\""));
 		showContent(header, content);
 	}
-	
-	public static void showContent(String header, String content){
-		//EzGUI.header = header;
-		String text = EzHtmlGenerator.createHtmlTableWithHeader(header, content, "border=0 cellspacing=0 cellpadding=0 width=\"100%\"");
+
+	public static void showContent(String header, String content) {
+		// EzGUI.header = header;
+		String text = EzHtmlGenerator.createHtmlTableWithHeader(header,
+				content, "border=0 cellspacing=0 cellpadding=0 width=\"100%\"");
 		displayArea.setText(text);
 		displayArea.setCaretPosition(0);
 		refreshButton();
 	}
 
-	private static Date getToday(){
+	private static Date getToday() {
 		Calendar cal = Calendar.getInstance();
 		return cal.getTime();
 	}
-	
-	private static Date getTomorrow(){
+
+	private static Date getTomorrow() {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DATE, 1);
 		return cal.getTime();
 	}
-	
+
 	/**
-	 * 	"All", 
-		"Done", 
-		"Undone", 
-		"Today",
-		"Tomorrow",
-		"Coming",
-		"Past",
-		"No Date",
-		"Help"
+	 * "All", "Done", "Undone", "Today", "Tomorrow", "Coming", "Past",
+	 * "No Date", "Help"
 	 */
 	private static void refreshButton() {
-		if (listOfButtons!=null){
+		if (listOfButtons != null) {
 			EzStorage storage = EzController.getStorage();
-			for(int i=0;i < listOfButtons.size();i++){
+			for (int i = 0; i < listOfButtons.size(); i++) {
 				JButton button = listOfButtons.get(i);
 				int numTask = 0;
-				if (button.getName().equalsIgnoreCase("All")){
+				if (button.getName().equalsIgnoreCase("All")) {
 					numTask = storage.getListOfAllTasks().size();
-				} else if (button.getName().equalsIgnoreCase("Done")){
+				} else if (button.getName().equalsIgnoreCase("Done")) {
 					numTask = storage.getDoneTasks().size();
-				} else if (button.getName().equalsIgnoreCase("Not Done")){
+				} else if (button.getName().equalsIgnoreCase("Not Done")) {
 					numTask = storage.getUndoneTasks().size();
-				} else if (button.getName().equalsIgnoreCase("Today")){
+				} else if (button.getName().equalsIgnoreCase("Today")) {
 					numTask = storage.getTasksByDate(getToday()).size();
-				} else if (button.getName().equalsIgnoreCase("Tomorrow")){
+				} else if (button.getName().equalsIgnoreCase("Tomorrow")) {
 					numTask = storage.getTasksByDate(getTomorrow()).size();
-				} else if (button.getName().equalsIgnoreCase("Coming")){
+				} else if (button.getName().equalsIgnoreCase("Coming")) {
 					numTask = storage.getComingTasks().size();
-				} else if (button.getName().equalsIgnoreCase("Past")){
+				} else if (button.getName().equalsIgnoreCase("Past")) {
 					numTask = storage.getPastTasks().size();
-				} else if (button.getName().equalsIgnoreCase("No Date")){
+				} else if (button.getName().equalsIgnoreCase("No Date")) {
 					numTask = storage.getNoDateTasks().size();
 				}
-				if (!button.getName().equalsIgnoreCase("Help")){
-					button.setText(button.getName() + "....[ " + String.valueOf(numTask) + " ]");
+				if (!button.getName().equalsIgnoreCase("Help")) {
+					button.setText(button.getName() + "....[ "
+							+ String.valueOf(numTask) + " ]");
 				}
 			}
 		}
