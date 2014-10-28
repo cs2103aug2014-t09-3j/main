@@ -1118,9 +1118,11 @@ public class EzParser {
 		case Y:
 			newAction.setTargets(null);
 			newAction.setResults(null);
+			break;
 		case N:
 			newAction.setTargets(null);
 			newAction.setResults(null);
+			break;
 		case SORT:
 			String sortType=getFirstWord(content);
 			content=removeFirstWord(content);
@@ -1162,6 +1164,7 @@ public class EzParser {
 				
 			newAction.setTargets(null);
 			newAction.setResults(null);
+			break;
 		case UNDONE:
 			newAction.setFeedback("Set as undone successfully!");
 			ArrayList<EzTask> targetsUndone=new ArrayList<EzTask>();
@@ -1292,6 +1295,8 @@ public class EzParser {
 				newAction.setAction(TypeOfAction.INVALID);
 				newAction.setFeedback("Invalid number format or index.");		
 			}
+			break;
+			
 		case REMOVE:
 			ArrayList<EzTask> targetsRemove=new ArrayList<EzTask>();
 			ArrayList<EzTask> resultsRemove=new ArrayList<EzTask>();
@@ -1344,6 +1349,7 @@ public class EzParser {
 				newAction.setAction(TypeOfAction.INVALID);
 				newAction.setFeedback("Invalid number format.");
 			}
+			break;
 
 		default:
 			break;
