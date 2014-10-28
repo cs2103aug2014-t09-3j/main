@@ -159,6 +159,9 @@ public class EzTask {
 	}
 	
 	public String getVenue() {
+		if (venue==null) {
+			return "";
+		}
 		return venue;
 	}
 	

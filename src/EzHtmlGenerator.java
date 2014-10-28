@@ -158,7 +158,7 @@ public class EzHtmlGenerator {
 	
 	private static String createHtmlTitleAndVenueOfEzTask(EzTask task) {
 		String result = createHtmlText(task.getTitle(),TITLE_FONT_FONT,TITLE_FONT_SIZE, TITLE_FONT_COLOR); 
-		if (task.getVenue()!=null){
+		if (task.getVenue()!=""){
 			result = result + "<br>"+right(createHtmlText("@"+task.getVenue(),VENUE_FONT_FONT,VENUE_FONT_SIZE , VENUE_FONT_COLOR));
 		}
 		return result;
