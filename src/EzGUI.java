@@ -38,7 +38,7 @@ public class EzGUI extends JFrame {
 	private static final int START_LOCATION_X = 50;
 	
 	private static final String[] KEYWORDS = {"add","delete","update","show","done","undone","undo","redo","on","at","from","to","today","tomorrow"
-												,"set","title","date","time","start","end","venue","priority","all","have","help","y","n"}; 
+												,"set","title","date","time","start","end","venue","priority","all","have","help","y","n","remove","id"}; 
 	
 	private static final String[] DOUBLE_QUOTE_KEYWORDS = {"add","at","title","venue","have"}; 
 	
@@ -67,6 +67,7 @@ public class EzGUI extends JFrame {
 	private boolean selectionMode = false;
 	private boolean showingFeedback = false;
 	private static ArrayList<EzTask> onScreenTasks;
+	
 	/**
 	 * Create the frame.
 	 */
@@ -148,6 +149,21 @@ public class EzGUI extends JFrame {
 				int y = frame.getLocation().y + frame.getHeight() - 10;
 				suggestPanel.setLocation(x, y);
 			}
+			@Override
+			public void componentResized(ComponentEvent arg0) {
+				JFrame frame = (JFrame) arg0.getSource();
+				
+				int x = frame.getLocation().x + 165;
+				int y = frame.getLocation().y + frame.getHeight() - 10;
+				suggestScrollPanel.setPreferredSize(new Dimension(frame.getWidth()-(960-784),85));
+				suggestScrollPanel.repaint();
+				suggestPanel.setLocation(x, y);
+				if (selectionMode){
+					loadSuggestion(commandField.getText());
+				}
+				suggestPanel.pack();
+				//suggestPanel.repaint();
+			}
 		});
 	}
 
@@ -155,7 +171,8 @@ public class EzGUI extends JFrame {
 	 * Create main panel
 	 */
 	private void createMainPanel() {
-		setResizable(false);
+		setResizable(true);
+		this.setMinimumSize(new Dimension(APP_WIDTH,APP_HEIGHT));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(START_LOCATION_X, START_LOCATION_Y, APP_WIDTH, APP_HEIGHT);
 		mainPanel = new JPanel();
@@ -344,6 +361,9 @@ public class EzGUI extends JFrame {
 		String word;
 		String lastKeyword = "";
 		boolean doneOrDeleteKeywordAvailable = false;
+		boolean removeKeywordAvailable = false;
+		int firstPosNotKeywordOrNumber = -1;
+		//int lastPosNotKeywordOrNumber = -1;
 		
 		for(int i=0;i<length;i++){
 			if (contentInputField.charAt(i)==' '){
@@ -351,6 +371,9 @@ public class EzGUI extends JFrame {
 					i++;
 				}
 			} else if (contentInputField.charAt(i)=='\"'){
+				if (firstPosNotKeywordOrNumber==-1){
+					firstPosNotKeywordOrNumber = i;
+				}
 				word = "";
 				while ((i+1<length) && (contentInputField.charAt(i+1)!='\"')){
 					i++;
@@ -360,8 +383,10 @@ public class EzGUI extends JFrame {
 				if (i+1<length){
 					i++;
 				}
+				//lastPosNotKeywordOrNumber = i;
 				notKeywordOrNumberList.add(word.trim());
 			} else {
+				int tmp = i;
 				word = "" + contentInputField.charAt(i);
 				while ((i+1<length) && (contentInputField.charAt(i+1)!=' ')){
 					i++;
@@ -370,13 +395,20 @@ public class EzGUI extends JFrame {
 				
 				if (isKeyword(word)){
 					lastKeyword = word;
-					if (word.equalsIgnoreCase("done") || word.equalsIgnoreCase("delete")){
+					if (word.equalsIgnoreCase("remove")){
+						removeKeywordAvailable = true;
+					}
+					if (word.equalsIgnoreCase("done") || word.equalsIgnoreCase("undone") || word.equalsIgnoreCase("delete")){
 						doneOrDeleteKeywordAvailable = true;
 					}  
 				}
 				
 				if ((!isKeyword(word)) && (!isNumber(word))){
 					notKeywordOrNumberList.add(word);
+					if (firstPosNotKeywordOrNumber==-1){
+						firstPosNotKeywordOrNumber = tmp;
+					}
+					//lastPosNotKeywordOrNumber = i;
 					if (startCaretPos==-1){
 						startCaretPos = i - word.length() + 1;
 					}
@@ -385,8 +417,12 @@ public class EzGUI extends JFrame {
 		}
 		
 		if (lastKeyword.equalsIgnoreCase("done") || 
+				lastKeyword.equalsIgnoreCase("undone") ||
 				lastKeyword.equalsIgnoreCase("delete") ||
-				lastKeyword.equalsIgnoreCase("update") || 
+				lastKeyword.equalsIgnoreCase("update") ||
+				(lastKeyword.equalsIgnoreCase("date") && removeKeywordAvailable) ||
+				(lastKeyword.equalsIgnoreCase("time") && removeKeywordAvailable) ||
+				(lastKeyword.equalsIgnoreCase("venue") && removeKeywordAvailable) ||
 				(lastKeyword.equalsIgnoreCase("from") && doneOrDeleteKeywordAvailable) || 
 				(lastKeyword.equalsIgnoreCase("to") && doneOrDeleteKeywordAvailable)){
 			activateSuggestion = true;
@@ -414,8 +450,8 @@ public class EzGUI extends JFrame {
 			selectionMode = true;
 			suggestPanel.setVisible(true);
 			
-			if (startCaretPos!=-1){
-				commandField.setSelectionStart(startCaretPos);
+			if (firstPosNotKeywordOrNumber!=-1){
+				commandField.setSelectionStart(firstPosNotKeywordOrNumber);
 				commandField.setSelectionEnd(commandField.getCaretPosition());
 			}
 		} else {
@@ -470,7 +506,11 @@ public class EzGUI extends JFrame {
 				loadSuggestion(contentInputField);
 			}
 		} else {
-			contentInputField = deleteString(commandField.getText(),commandField.getSelectionStart(),commandField.getSelectionEnd()); 
+			int endCaretPos = commandField.getSelectionEnd();
+			if ((endCaretPos<commandField.getText().length()) && (commandField.getText().charAt(endCaretPos)=='\"')){
+				endCaretPos++;
+			}
+			contentInputField = deleteString(commandField.getText(),commandField.getSelectionStart(),endCaretPos); 
 			addColorForCommandField(contentInputField, commandField.getStyledDocument());
 			commandField.setCaretPosition(endPos);
 			loadSuggestion(contentInputField);
@@ -1072,11 +1112,12 @@ public class EzGUI extends JFrame {
 		for(int i=0;i<listOfTasks.size();i++){
 			list.add(EzHtmlGenerator.createHtmlEzTask(listOfTasks.get(i),i%2));
 		}
-		String content = EzHtmlGenerator.center(EzHtmlGenerator.createHtmlTable(list.size(),1,list,"border=0 cellspacing=4 cellpadding=1"));
+		String content = EzHtmlGenerator.center(EzHtmlGenerator.createHtmlTable(list.size(),1,list,"border=0 cellspacing=4 cellpadding=1 width=\"100%\""));
 		showContent(header, content);
 	}
 	
 	public static void showContent(String header, String content){
+		//EzGUI.header = header;
 		String text = EzHtmlGenerator.createHtmlTableWithHeader(header, content, "border=0 cellspacing=0 cellpadding=0 width=\"100%\"");
 		displayArea.setText(text);
 		displayArea.setCaretPosition(0);
@@ -1106,29 +1147,31 @@ public class EzGUI extends JFrame {
 		"Help"
 	 */
 	private static void refreshButton() {
-		EzStorage storage = EzController.getStorage();
-		for(int i=0;i < listOfButtons.size();i++){
-			JButton button = listOfButtons.get(i);
-			int numTask = 0;
-			if (button.getName().equalsIgnoreCase("All")){
-				numTask = storage.getListOfAllTasks().size();
-			} else if (button.getName().equalsIgnoreCase("Done")){
-				numTask = storage.getDoneTasks().size();
-			} else if (button.getName().equalsIgnoreCase("Not Done")){
-				numTask = storage.getUndoneTasks().size();
-			} else if (button.getName().equalsIgnoreCase("Today")){
-				numTask = storage.getTasksByDate(getToday()).size();
-			} else if (button.getName().equalsIgnoreCase("Tomorrow")){
-				numTask = storage.getTasksByDate(getTomorrow()).size();
-			} else if (button.getName().equalsIgnoreCase("Coming")){
-				numTask = storage.getComingTasks().size();
-			} else if (button.getName().equalsIgnoreCase("Past")){
-				numTask = storage.getPastTasks().size();
-			} else if (button.getName().equalsIgnoreCase("No Date")){
-				numTask = storage.getNoDateTasks().size();
-			}
-			if (!button.getName().equalsIgnoreCase("Help")){
-				button.setText(button.getName() + "....[ " + String.valueOf(numTask) + " ]");
+		if (listOfButtons!=null){
+			EzStorage storage = EzController.getStorage();
+			for(int i=0;i < listOfButtons.size();i++){
+				JButton button = listOfButtons.get(i);
+				int numTask = 0;
+				if (button.getName().equalsIgnoreCase("All")){
+					numTask = storage.getListOfAllTasks().size();
+				} else if (button.getName().equalsIgnoreCase("Done")){
+					numTask = storage.getDoneTasks().size();
+				} else if (button.getName().equalsIgnoreCase("Not Done")){
+					numTask = storage.getUndoneTasks().size();
+				} else if (button.getName().equalsIgnoreCase("Today")){
+					numTask = storage.getTasksByDate(getToday()).size();
+				} else if (button.getName().equalsIgnoreCase("Tomorrow")){
+					numTask = storage.getTasksByDate(getTomorrow()).size();
+				} else if (button.getName().equalsIgnoreCase("Coming")){
+					numTask = storage.getComingTasks().size();
+				} else if (button.getName().equalsIgnoreCase("Past")){
+					numTask = storage.getPastTasks().size();
+				} else if (button.getName().equalsIgnoreCase("No Date")){
+					numTask = storage.getNoDateTasks().size();
+				}
+				if (!button.getName().equalsIgnoreCase("Help")){
+					button.setText(button.getName() + "....[ " + String.valueOf(numTask) + " ]");
+				}
 			}
 		}
 	}

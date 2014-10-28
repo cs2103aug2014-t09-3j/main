@@ -67,13 +67,15 @@ public class EzHtmlGenerator {
 	
 	public static String createHtmlEzTask(EzTask task,int type){
 		if (task!=null){
-			return 	table("border=0 cellspacing=0 cellpadding=1 bgcolor=\"#" + convertColorToHex(TASK_BG_COLOR[type]) + "\" width=\"560px\"",
+			return 	table("border=0 cellspacing=0 cellpadding=1 bgcolor=\"#" + convertColorToHex(TASK_BG_COLOR[type]) + "\" width=\"100%\"",
 						tr(
 							td("width=\"53px\" bgcolor=\"#" + convertColorToHex(ID_BG_COLOR[type]) +"\"  height=\"40px\"",createHtmlIdAndPriorityOfEzTask(task)) +
 							td("width=\"5px\"", "") +
-							td("width=\"300px\"", createHtmlTitleAndVenueOfEzTask(task)) +
+							//td("width=\"300px\"", createHtmlTitleAndVenueOfEzTask(task)) +
+							td(createHtmlTitleAndVenueOfEzTask(task)) +
 							td("width=\"15px\"", "") +
-							td("align=\"left\"", createHtmlDateOfEzTask(task)) +
+							//td("align=\"left\"", createHtmlDateOfEzTask(task)) +
+							td("align=\"left\" width=\"200px\"", createHtmlDateOfEzTask(task)) +
 							td("align=\"right\" width=\"40px\"", createHtmlDoneOfEzTask(task))
 						)
 					);
