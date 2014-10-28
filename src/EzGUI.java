@@ -161,12 +161,12 @@ public class EzGUI extends JFrame {
 				int y = frame.getLocation().y + frame.getHeight() - 10;
 				suggestScrollPanel.setPreferredSize(new Dimension(frame
 						.getWidth() - (960 - 784), 85));
-				suggestScrollPanel.repaint();
+				//suggestScrollPanel.repaint();
 				suggestPanel.setLocation(x, y);
-				if (selectionMode) {
+				//if (selectionMode) {
 					loadSuggestion(commandField.getText());
-				}
-				suggestPanel.pack();
+				//}
+				//suggestPanel.pack();
 				// suggestPanel.repaint();
 			}
 		});
@@ -477,6 +477,7 @@ public class EzGUI extends JFrame {
 			selectionMode = false;
 			suggestPanel.setVisible(false);
 		}
+		suggestPanel.pack();
 	}
 
 	private boolean isNumber(String word) {
