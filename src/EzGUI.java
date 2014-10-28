@@ -38,7 +38,7 @@ public class EzGUI extends JFrame {
 	private static final int START_LOCATION_X = 50;
 	
 	private static final String[] KEYWORDS = {"add","delete","update","show","done","undone","undo","redo","on","at","from","to","today","tomorrow"
-												,"set","title","date","time","start","end","venue","priority","all","have","help","y","n","remove","id"}; 
+												,"set","title","date","time","start","end","venue","priority","all","have","help","y","n","remove","id","sort"}; 
 	
 	private static final String[] DOUBLE_QUOTE_KEYWORDS = {"add","at","title","venue","have"}; 
 	
