@@ -95,7 +95,7 @@ public class EzGUI extends JFrame {
 		}
 		 
 		if (numTasksTodayToDo>0){
-			JOptionPane.showMessageDialog(this, "You have " + numTasksTodayToDo + " task(s) that are not done today");
+			JOptionPane.showMessageDialog(this, "You have " + numTasksTodayToDo + " task(s) that need to be done today");
 		}
 	}
 
@@ -696,7 +696,7 @@ public class EzGUI extends JFrame {
 						}
 						arg0.consume();
 						break;
-					case KeyEvent.VK_F2:
+					case KeyEvent.VK_F1:
 						pressButton(getButton("help"));
 						break;
 					case KeyEvent.VK_TAB:
@@ -973,7 +973,7 @@ public class EzGUI extends JFrame {
 				if ((!insideQuote)
 						&& (isDoubleQuoteKeyword(lastWord) || haveKeywordAvailable)) {
 					result = result
-							+ " \"\""
+							+ " \""
 							+ contentInputField.substring(caretPos,
 									contentInputField.length());
 					addColorForCommandField(result,
@@ -1283,10 +1283,11 @@ public class EzGUI extends JFrame {
 		String text = EzHtmlGenerator.createHtmlTableWithHeader(header,
 				content, "border=0 cellspacing=0 cellpadding=0 width=\"100%\"");
 		displayArea.setText(text);
-		displayArea.setCaretPosition(0);
+		//displayArea.setCaretPosition(0);
+		
 		refreshButton();
 	}
-
+	
 	private static Date getToday() {
 		Calendar cal = Calendar.getInstance();
 		return cal.getTime();

@@ -260,4 +260,23 @@ public class EzTask {
 			return this.getEndTime().before(today);
 		}
 	}
+	
+	public boolean isToday(){
+		if (this.getStartTime()==null){
+			return false;
+		} else {
+			GregorianCalendar startToday = new GregorianCalendar();
+			startToday.set(Calendar.HOUR_OF_DAY, 0);
+			startToday.set(Calendar.MINUTE,0);
+			startToday.set(Calendar.SECOND,0);
+			startToday.set(Calendar.MILLISECOND,0);
+			GregorianCalendar endToday = new GregorianCalendar();
+			endToday.set(Calendar.HOUR_OF_DAY, 23);
+			endToday.set(Calendar.MINUTE,59);
+			endToday.set(Calendar.SECOND,59);
+			endToday.set(Calendar.MILLISECOND,0);
+			return ((this.getStartTime().after(startToday) || this.getStartTime().equals(startToday)) && 
+					(this.getStartTime().before(endToday) || this.getStartTime().equals(endToday)));
+		}
+	}
 }
