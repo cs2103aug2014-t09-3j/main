@@ -23,6 +23,7 @@ public class EzAppDelegate {
 				try {
 					EzGUI frame = new EzGUI();
 					frame.setVisible(true);
+					frame.showReminder();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

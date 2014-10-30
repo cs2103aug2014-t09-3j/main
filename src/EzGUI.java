@@ -79,6 +79,31 @@ public class EzGUI extends JFrame {
 		createCommandPanel();
 		createButtonPanel();
 		registerFont();
+		loadFile();
+		setDefaultButton("Today");
+		createSuggestPanel();
+	}
+
+	public void showReminder() {
+		GregorianCalendar today = new GregorianCalendar();
+		ArrayList<EzTask> list = EzController.getStorage().getTasksByDate(today.getTime());
+		int numTasksTodayToDo = 0;
+		for(int i=0;i<list.size();i++){
+			if (!list.get(i).isDone()) {
+				numTasksTodayToDo++;
+			}
+		}
+		 
+		if (numTasksTodayToDo>0){
+			JOptionPane.showMessageDialog(this, "You have " + numTasksTodayToDo + " task(s) that are not done today");
+		}
+	}
+
+	private void setDefaultButton(String buttonName) {
+		this.pressButton(this.getButton(buttonName));
+	}
+
+	private void loadFile() {
 		try {
 			EzController.loadFromFile();
 			LOGGER.log(Level.INFO, "Loaded file successfully");
@@ -86,8 +111,6 @@ public class EzGUI extends JFrame {
 			LOGGER.log(Level.WARNING, "Data file not found");
 			e.printStackTrace();
 		}
-		this.pressButton(this.getButton("Today"));
-		createSuggestPanel();
 	}
 
 	private void createSuggestPanel() {
