@@ -250,4 +250,14 @@ public class EzTask {
 		return String.format("%s %s %s %s", idText, titleText, venueText, dateText); 
 	}
 
+	public boolean isPast(){
+		if (this.getEndTime()==null){
+			return false;
+		} else {
+			GregorianCalendar today = new GregorianCalendar();
+			today.set(Calendar.HOUR_OF_DAY, 0);
+			today.set(Calendar.MINUTE,0);
+			return this.getEndTime().before(today);
+		}
+	}
 }

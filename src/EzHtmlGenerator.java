@@ -32,7 +32,13 @@ public class EzHtmlGenerator {
 	private static final String IMAGE_CALENDAR_PNG = "image/calendar.png";
 	private static final String IMAGE_CLOCK_PNG = "image/clock.png";
 
-	private static final Color[] TASK_BG_COLOR = {EzConstants.FERN_COLOR, EzConstants.CHATEAU_GREEN_COLOR};
+	private static final int NORMAL_TASK = 0;
+	private static final int PAST_OR_DONE_TASK = 1;
+	
+	private static final Color[][] TASK_BG_COLOR = {{EzConstants.FERN_COLOR, EzConstants.CHATEAU_GREEN_COLOR},		// for normal tasks
+													{EzConstants.ALMOND_FROST_COLOR,EzConstants.IRON_GRAY_COLOR},	// for past or done tasks
+													{EzConstants.CHAMBRAY_COLOR,EzConstants.BLUE_WHALE_COLOR}};
+	
 	private static final Color[] ID_BG_COLOR = {EzConstants.WISTERIA_COLOR, EzConstants.BLUE_GEM_COLOR};
 	
 	private static final Color CALENDAR_DATE_FONT_COLOR = new Color(231,76,60);
@@ -67,7 +73,11 @@ public class EzHtmlGenerator {
 	
 	public static String createHtmlEzTask(EzTask task,int type){
 		if (task!=null){
-			return 	table("border=0 cellspacing=0 cellpadding=1 bgcolor=\"#" + convertColorToHex(TASK_BG_COLOR[type]) + "\" width=\"100%\"",
+			int typeOfTask = NORMAL_TASK;
+			if (task.isDone() || task.isPast()){
+				typeOfTask = PAST_OR_DONE_TASK;
+			}
+			return 	table("border=0 cellspacing=0 cellpadding=1 bgcolor=\"#" + convertColorToHex(TASK_BG_COLOR[typeOfTask][type]) + "\" width=\"100%\"",
 						tr(
 							td("width=\"53px\" bgcolor=\"#" + convertColorToHex(ID_BG_COLOR[type]) +"\"  height=\"40px\"",createHtmlIdAndPriorityOfEzTask(task)) +
 							td("width=\"5px\"", "") +
