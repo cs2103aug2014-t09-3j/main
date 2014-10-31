@@ -39,6 +39,8 @@ public class EzGUI extends JFrame {
 	private static final int START_LOCATION_Y = 0;
 	private static final int START_LOCATION_X = 50;
 
+	private static final int TASK_PER_PAGE = 8;
+	
 	private static final String[] KEYWORDS = { "add", "delete", "update",
 			"show", "done", "undone", "undo", "redo", "on", "at", "from", "to",
 			"today", "tomorrow", "set", "title", "date", "time", "start",
@@ -67,7 +69,8 @@ public class EzGUI extends JFrame {
 	private boolean selectionMode = false;
 	private boolean showingFeedback = false;
 	private static ArrayList<EzTask> onScreenTasks;
-
+	private static int pageToShow;
+	private static String headerToShow;
 	/**
 	 * Create the frame.
 	 */
@@ -618,6 +621,12 @@ public class EzGUI extends JFrame {
 							break;
 						case KeyEvent.VK_DOWN:
 							scrollDown();
+							break;
+						case KeyEvent.VK_RIGHT:
+							showPage(pageToShow + 1);
+							break;
+						case KeyEvent.VK_LEFT:
+							showPage(pageToShow - 1);
 							break;
 						case KeyEvent.VK_1:
 							pressButton(getButton("All"));
@@ -1276,17 +1285,80 @@ public class EzGUI extends JFrame {
 	public static void showContent(String header, ArrayList<EzTask> listOfTasks) {
 		assert (listOfTasks != null);
 		onScreenTasks = listOfTasks;
-		ArrayList<String> list = new ArrayList<String>();
-		for (int i = 0; i < listOfTasks.size(); i++) {
-			list.add(EzHtmlGenerator.createHtmlEzTask(listOfTasks.get(i), i % 2));
+		headerToShow = new String(header);
+		
+		showPage(1);
+	}
+
+	public static int getPage(){
+		return pageToShow;
+	}
+	
+	public static void showContent(String header, ArrayList<EzTask> listOfTasks, EzTask task) {
+		assert (listOfTasks != null);
+		onScreenTasks = listOfTasks;
+		headerToShow = new String(header);
+		
+		showPage(findPage(task));
+	}
+	
+	public static void showContent(String header, ArrayList<EzTask> listOfTasks, int page) {
+		assert (listOfTasks != null);
+		onScreenTasks = listOfTasks;
+		headerToShow = new String(header);
+		
+		showPage(page);
+	}
+	
+	public static int findPage(EzTask task){
+		int id = -1;
+		for(int i=0;i<onScreenTasks.size();i++){
+			if (task.getId()==onScreenTasks.get(i).getId()){
+				id = i; 
+			}
 		}
+		if (id!=-1){
+			return id/TASK_PER_PAGE + 1;
+		} else {
+			return -1;
+		}
+	}
+	
+	public static int getMaxPage(){
+		int pageMaximum = onScreenTasks.size()/TASK_PER_PAGE;
+		if (onScreenTasks.size()%TASK_PER_PAGE>0){
+			pageMaximum++;
+		}
+		
+		if (pageMaximum<1){
+			pageMaximum = 1;
+		}
+		return pageMaximum;
+	}
+	
+	public static void showPage(int numPage){
+		int pageMaximum = getMaxPage();
+		
+		if (numPage<1){
+			numPage = 1;
+		} else if (numPage>pageMaximum){
+			numPage = pageMaximum;
+		}
+		
+		pageToShow = numPage;
+		
+		ArrayList<String> list = new ArrayList<String>();
+		for (int i = (numPage-1)*TASK_PER_PAGE; i < Math.min(numPage*TASK_PER_PAGE, onScreenTasks.size()); i++) {
+			list.add(EzHtmlGenerator.createHtmlEzTask(onScreenTasks.get(i), i % 2));
+		}
+		
 		String content = EzHtmlGenerator.center(EzHtmlGenerator
 				.createHtmlTable(list.size(), 1, list,
 						"border=0 cellspacing=4 cellpadding=1 width=\"100%\""));
-		showContent(header, content);
+		showContent(headerToShow + " (" + numPage + "/" + pageMaximum + ")", content);
 	}
-
-	public static void showContent(String header, String content) {
+	
+	private static void showContent(String header, String content) {
 		// EzGUI.header = header;
 		String text = EzHtmlGenerator.createHtmlTableWithHeader(header,
 				content, "border=0 cellspacing=0 cellpadding=0 width=\"100%\"");

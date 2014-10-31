@@ -41,7 +41,7 @@ public class EzController {
 						e.printStackTrace();
 					}
 					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), task);
 				}
 			}
 			break;
@@ -59,7 +59,7 @@ public class EzController {
 						e.printStackTrace();
 					}
 					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), userAction.getResults().get(0));
 				}
 			}
 			break;
@@ -126,7 +126,7 @@ public class EzController {
 						e.printStackTrace();
 					}
 					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), userAction.getResults().get(0));
 				}
 			}
 			break;
@@ -144,7 +144,7 @@ public class EzController {
 						e.printStackTrace();
 					}
 					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), userAction.getResults().get(0));
 				}
 			}
 			break;
@@ -168,7 +168,7 @@ public class EzController {
 						e.printStackTrace();
 					}
 					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), userAction.getResults().get(0));
 				}
 			}
 			break;
@@ -188,7 +188,7 @@ public class EzController {
 							e.printStackTrace();
 						}
 						ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-						EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
+						EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), EzGUI.getPage());
 					}
 				}
 			}
@@ -209,7 +209,7 @@ public class EzController {
 							e.printStackTrace();
 						}
 						ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-						EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
+						EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), EzGUI.getPage());
 					}
 				}
 			}
