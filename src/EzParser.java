@@ -60,18 +60,19 @@ import java.util.*;
  ON [date]
  HAVE [keyword1] [keyword2]...		// no "" for keyword(s)
  
- /////new////
  REMOVE VENUE [id]: set venue as null
  REMOVE DATE [id]: set both start and end date as null
  REMOVE TIME [id]: set time as from 00:00 to 23:59
  
- /////new////
  SORT ID
  SORT TITLE
  SORT VENUE
  SORT DATE
  SORT PRIORITY
  SORT DONE
+ 
+ PAGE [page number]: set both target and result as null and set the page number and the type of action as page
+ *
  */
 
 /**

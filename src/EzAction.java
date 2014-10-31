@@ -25,6 +25,7 @@ public class EzAction {
 	private ArrayList<EzTask> results;
 	private String feedback;
 	private TypeOfSort typeSort;
+	private int pageNumber;
 	
 	/**
 	 *  These attributes are necessary for ADD, UPDATE, DELETE and DONE.
@@ -71,6 +72,14 @@ public class EzAction {
 
 	public void setTypeSort(TypeOfSort typeSort) {
 		this.typeSort = typeSort;
+	}
+
+	public int getPageNumber() {
+		return pageNumber;
+	}
+
+	public void setPageNumber(int pageNumber) {
+		this.pageNumber = pageNumber;
 	}	
 	
 }
