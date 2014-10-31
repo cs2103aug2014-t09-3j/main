@@ -23,17 +23,17 @@ import java.util.*;
  TO date time	: set the date & time 	of endTime of EzTask object
  TO time date 	: set the date & time 	of endTime of EzTask object
 
-
+//deleted the "SET" keyword
  UPDATE id 
- SET TITLE "newTitle"
- SET DATE [newDate]
- SET TIME [newTime]
- SET START DATE [newDate]
- SET START TIME [newTime]
- SET END DATE [newDate]
- SET END TIME [newTime]
- SET VENUE "newVenue"
- SET PRIORITY [newPriority]
+ 	TITLE "newTitle"
+ 	DATE [newDate]
+ 	TIME [newTime]
+ 	START DATE [newDate]
+ 	START TIME [newTime]
+ 	END DATE [newDate]
+ 	END TIME [newTime]
+ 	VENUE "newVenue"
+ 	PRIORITY [newPriority]
 
  UNDO
  REDO
@@ -58,7 +58,7 @@ import java.util.*;
  SHOW DONE
  SHOW UNDONE
  ON [date]
- HAVE [keyword1] [keyword2]...
+ HAVE [keyword1] [keyword2]...		// no "" for keyword(s)
  
  /////new////
  REMOVE VENUE [id]: set venue as null

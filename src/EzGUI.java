@@ -24,7 +24,7 @@ public class EzGUI extends JFrame {
 	private static final String PROGRAM_TITLE = "EzTask";
 
 	private static final int BUTTON_HEIGHT = 40;
-	private static final int BUTTON_WIDTH = 156;
+	private static final int BUTTON_WIDTH = 160;
 	private static final Color BUTTON_TEXT_COLOR = EzConstants.PERSIAN_GREEN_COLOR;
 	private static final String BUTTON_FONT = "Arial";
 	private static final Color SELECTED_BUTTON_BG_COLOR = EzConstants.WHITE_SMOKE_COLOR;
@@ -75,10 +75,35 @@ public class EzGUI extends JFrame {
 		mainFrame = this;
 		setTitle(PROGRAM_TITLE);
 		createMainPanel();
-		createButtonPanel();
 		createDisplayPanel();
 		createCommandPanel();
+		createButtonPanel();
 		registerFont();
+		loadFile();
+		setDefaultButton("Today");
+		createSuggestPanel();
+	}
+
+	public void showReminder() {
+		GregorianCalendar today = new GregorianCalendar();
+		ArrayList<EzTask> list = EzController.getStorage().getTasksByDate(today.getTime());
+		int numTasksTodayToDo = 0;
+		for(int i=0;i<list.size();i++){
+			if (!list.get(i).isDone()) {
+				numTasksTodayToDo++;
+			}
+		}
+		 
+		if (numTasksTodayToDo>0){
+			JOptionPane.showMessageDialog(this, "You have " + numTasksTodayToDo + " task(s) that need to be done today");
+		}
+	}
+
+	private void setDefaultButton(String buttonName) {
+		this.pressButton(this.getButton(buttonName));
+	}
+
+	private void loadFile() {
 		try {
 			EzController.loadFromFile();
 			LOGGER.log(Level.INFO, "Loaded file successfully");
@@ -86,8 +111,6 @@ public class EzGUI extends JFrame {
 			LOGGER.log(Level.WARNING, "Data file not found");
 			e.printStackTrace();
 		}
-		createSuggestPanel();
-
 	}
 
 	private void createSuggestPanel() {
@@ -617,28 +640,6 @@ public class EzGUI extends JFrame {
 							pressButton(getButton("Help"));
 							break;
 						}
-					} else if ((arg0.isAltDown() && (!arg0.isShiftDown()))) {
-						int width = mainFrame.getWidth();
-						int height = mainFrame.getHeight();
-
-						switch (arg0.getKeyCode()) { // resize the window
-						case KeyEvent.VK_UP:
-							mainFrame.setSize(width, height-10);
-							arg0.consume();
-							break;
-						case KeyEvent.VK_DOWN:
-							mainFrame.setSize(width, height+10);
-							arg0.consume();
-							break;
-						case KeyEvent.VK_LEFT:
-							mainFrame.setSize(width-10, height);
-							arg0.consume();
-							break;
-						case KeyEvent.VK_RIGHT:
-							mainFrame.setSize(width+10, height);
-							arg0.consume();
-							break;
-						}
 					} else if ((!arg0.isAltDown() && (arg0.isShiftDown()))) {
 						int x = mainFrame.getLocation().x;
 						int y = mainFrame.getLocation().y;
@@ -695,7 +696,7 @@ public class EzGUI extends JFrame {
 						}
 						arg0.consume();
 						break;
-					case KeyEvent.VK_F2:
+					case KeyEvent.VK_F1:
 						pressButton(getButton("help"));
 						break;
 					case KeyEvent.VK_TAB:
@@ -748,7 +749,29 @@ public class EzGUI extends JFrame {
 						break;
 					}
 
-				}
+				} else if ((arg0.isAltDown() && (arg0.isShiftDown()))) {
+					int width = mainFrame.getWidth();
+					int height = mainFrame.getHeight();
+
+					switch (arg0.getKeyCode()) { // resize the window
+					case KeyEvent.VK_UP:
+						mainFrame.setSize(width, height-10);
+						arg0.consume();
+						break;
+					case KeyEvent.VK_DOWN:
+						mainFrame.setSize(width, height+10);
+						arg0.consume();
+						break;
+					case KeyEvent.VK_LEFT:
+						mainFrame.setSize(width-10, height);
+						arg0.consume();
+						break;
+					case KeyEvent.VK_RIGHT:
+						mainFrame.setSize(width+10, height);
+						arg0.consume();
+						break;
+					}
+				} 
 			}
 
 			private void selectBelow() {
@@ -950,7 +973,7 @@ public class EzGUI extends JFrame {
 				if ((!insideQuote)
 						&& (isDoubleQuoteKeyword(lastWord) || haveKeywordAvailable)) {
 					result = result
-							+ " \"\""
+							+ " \""
 							+ contentInputField.substring(caretPos,
 									contentInputField.length());
 					addColorForCommandField(result,
@@ -1260,10 +1283,11 @@ public class EzGUI extends JFrame {
 		String text = EzHtmlGenerator.createHtmlTableWithHeader(header,
 				content, "border=0 cellspacing=0 cellpadding=0 width=\"100%\"");
 		displayArea.setText(text);
-		displayArea.setCaretPosition(0);
+		//displayArea.setCaretPosition(0);
+		
 		refreshButton();
 	}
-
+	
 	private static Date getToday() {
 		Calendar cal = Calendar.getInstance();
 		return cal.getTime();
