@@ -30,8 +30,8 @@ public class EzHtmlGenerator {
 	private static final int ID_FONT_SIZE = 4;
 	private static final Color ID_FONT_COLOR = EzConstants.WHITE_SMOKE_COLOR;
 	
-	private static final String IMAGE_CALENDAR_PNG = "image/calendar.png";
-	private static final String IMAGE_CLOCK_PNG = "image/clock.png";
+	private static final String IMAGE_CALENDAR_PNG = "images/calendar.png";
+	private static final String IMAGE_CLOCK_PNG = "images/clock.png";
 
 	private static final int NORMAL_TASK = 0;
 	private static final int PAST_OR_DONE_TASK = 1;
@@ -101,7 +101,7 @@ public class EzHtmlGenerator {
 	
 	private static String createHtmlDoneOfEzTask(EzTask task) {
 		if (task.isDone()){
-			return img("image/done.png");
+			return img("images/done.png");
 		}
 		return "";
 	}
@@ -131,7 +131,7 @@ public class EzHtmlGenerator {
 						|| (date1.get(Calendar.DATE) != date2.get(Calendar.DATE))
 						|| (date1.get(Calendar.HOUR_OF_DAY)!=0) || (date1.get(Calendar.MINUTE)!=0) 
 						|| (date2.get(Calendar.HOUR_OF_DAY)!=23) || (date2.get(Calendar.MINUTE)!=59)){
-					list.add(img("image/rightArrow.png"));
+					list.add(img("images/rightArrow.png"));
 				}
 				if ((date1.get(Calendar.YEAR) != date2.get(Calendar.YEAR))
 						|| (date1.get(Calendar.MONTH) != date2.get(Calendar.MONTH))
@@ -238,22 +238,22 @@ public class EzHtmlGenerator {
 		String chosenStar = "";
 		switch (numStar){
 		case 1:
-			chosenStar = img("image/star100.png");
+			chosenStar = img("images/star100.png");
 			break;
 		case 2:
-			chosenStar = img("image/star080.png");
+			chosenStar = img("images/star080.png");
 			break;
 		case 3:
-			chosenStar = img("image/star060.png");
+			chosenStar = img("images/star060.png");
 			break;
 		case 4:
-			chosenStar = img("image/star040.png");
+			chosenStar = img("images/star040.png");
 			break;
 		case 5:
-			chosenStar = img("image/star020.png");
+			chosenStar = img("images/star020.png");
 			break;
 		default:
-			chosenStar = img("image/star000.png");
+			chosenStar = img("images/star000.png");
 			break;
 		}
 		for(int i=0;i<numStar;i++) {

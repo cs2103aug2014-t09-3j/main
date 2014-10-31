@@ -14,6 +14,7 @@ import java.awt.event.*;
 import java.util.*;
 import java.util.logging.*;
 import java.io.*;
+import java.net.URL;
 
 public class EzGUI extends JFrame {
 	private static final String HELP_DOCUMENT_FILE_NAME = "help.txt";
@@ -82,6 +83,13 @@ public class EzGUI extends JFrame {
 		loadFile();
 		setDefaultButton("Today");
 		createSuggestPanel();
+		setIcon();
+	}
+
+	private void setIcon() {
+		//URL url = getClass().getResource("/icon.png");
+		//Image img = (new ImageIcon(url)).getImage();
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage(EzGUI.class.getResource("/icon.png")));
 	}
 
 	public void showReminder() {
