@@ -97,6 +97,7 @@ public class EzController {
 					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
 					EzGUI.showContent("Tasks Deleted", EzSort.sortById(updatedList));
 				}
+				deleteAction.setFeedback("Task deleted");
 				confirmation = false;
 			}
 			break;
@@ -107,6 +108,7 @@ public class EzController {
 					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
 					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
 				}
+				userAction.setFeedback("Action cancelled");
 				confirmation = false;
 			}
 			break;
