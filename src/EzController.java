@@ -98,6 +98,7 @@ public class EzController {
 					EzGUI.showContent("Tasks Deleted", EzSort.sortById(updatedList));
 				}
 				userAction.setFeedback("Task deleted");
+				deleteAction = null;
 				confirmation = false;
 			}
 			break;
@@ -109,6 +110,7 @@ public class EzController {
 					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
 				}
 				userAction.setFeedback("Action cancelled");
+				deleteAction = null;
 				confirmation = false;
 			}
 			break;
@@ -170,6 +172,16 @@ public class EzController {
 					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
 					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), userAction.getResults().get(0));
 				}
+			}
+			break;
+		
+		case PAGE:
+			if (!confirmation){
+				EzGUI.showContent("Tasks", EzSort.sortById(EzGUI.getTasksOnScreen()), userAction.getPageNumber());
+			}
+			else if(confirmation && deleteAction != null) {
+				EzGUI.showContent("Tasks", EzSort.sortById(EzGUI.getTasksOnScreen()), userAction.getPageNumber());
+				determineUserAction(deleteAction);
 			}
 			break;
 
