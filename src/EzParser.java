@@ -58,8 +58,7 @@ import java.util.*;
  SHOW DONE
  SHOW UNDONE
  ON [date]
- HAVE [keyword1] [keyword2]...		// no "" for keyword(s)
- 
+ HAVE [keyword1] [keyword2]...		// 
  REMOVE VENUE [id]: set venue as null
  REMOVE DATE [id]: set both start and end date as null
  REMOVE TIME [id]: set time as from 00:00 to 23:59
@@ -492,8 +491,7 @@ public class EzParser {
 				newAction.setTargets(targetUpdate);
 				taskUpdate.setId(taskTarget.getId());
 
-				if (getFirstWord(content).equalsIgnoreCase("set")) {
-					content = removeFirstWord(content);
+				
 					if (getFirstWord(content).equalsIgnoreCase("title")) 
 					{
 						content = removeFirstWord(content);
@@ -716,7 +714,7 @@ public class EzParser {
 						resultUpdate.add(taskUpdate);
 						newAction.setResults(resultUpdate);
 					}
-				}
+				
 			}
 			
 
@@ -1356,6 +1354,21 @@ public class EzParser {
 				newAction.setFeedback("Invalid number format.");
 			}
 			break;
+		case PAGE:
+			newAction.setTargets(null);
+			newAction.setResults(null);
+			try
+			{
+			int pageNum=Integer.parseInt(content);
+			newAction.setPageNumber(pageNum);
+			newAction.setFeedback("Page "+pageNum);
+			}
+			catch(NumberFormatException e)
+			{
+				newAction.setAction(TypeOfAction.INVALID);
+				newAction.setFeedback("Invalid number format.");
+			}
+			break;
 
 		default:
 			break;
@@ -1393,6 +1406,9 @@ public class EzParser {
 			return TypeOfAction.UNDONE;
 		else if (action.equalsIgnoreCase("remove"))
 			return TypeOfAction.REMOVE;
+		else if (action.equalsIgnoreCase("page"))
+			return TypeOfAction.PAGE;
+		
 		
 		
 		
@@ -1601,6 +1617,11 @@ public class EzParser {
 		listOfAction.add("show");
 		listOfAction.add("help");
 		listOfAction.add("invalid");
+		listOfAction.add("sort");
+		listOfAction.add("undone");
+		listOfAction.add("done");
+		listOfAction.add("page");
+		listOfAction.add("remove");
 
 		String word = getFirstWord(command);
 		while (command.isEmpty() != true) {
