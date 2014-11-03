@@ -28,7 +28,7 @@ public class EzStorage {
 	 */
 	public EzTask addTask(EzTask task){
 		
-		
+	if(listOfAllTasks != null)
 		for(EzTask taskInList : listOfAllTasks)
 			if(taskInList.getId() > getLargestId())
 				setLargestId(taskInList.getId());
@@ -47,7 +47,7 @@ public class EzStorage {
 			if(task1.getId() > largestNum)
 				largestNum = task1.getId();
 		
-		assert largestId == largestNum + 1;
+		//assert largestId == largestNum + 1;
 		//end assertions 
 		
 		return task;
