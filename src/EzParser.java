@@ -460,6 +460,8 @@ public class EzParser {
 			ArrayList<EzTask> targetUpdate = new ArrayList<EzTask>();
 			ArrayList<EzTask> resultUpdate = new ArrayList<EzTask>();
 			int[] dateUpdate = new int[5];
+			try
+			{
 			
 			String id = getFirstWord(content);
 			content = removeFirstWord(content);
@@ -513,9 +515,16 @@ public class EzParser {
 							newAction.setFeedback("Invalid date.");
 						}
 
-						calendarUpdate.set(dateUpdate[2],dateUpdate[1]-1,dateUpdate[0]);
-						taskUpdate.setStartTime(calendarUpdate);
-						taskUpdate.setEndTimeAsStartTime();
+						if(taskUpdate.getStartTime()==null&&taskUpdate.getEndTime()==null)
+						{
+							taskUpdate.setStartTime(new GregorianCalendar(dateUpdate[2],dateUpdate[1]-1,dateUpdate[0],0,0));
+						    taskUpdate.setEndTime(new GregorianCalendar(dateUpdate[2],dateUpdate[1]-1,dateUpdate[0],23,59));
+						}
+						else 
+						{
+							taskUpdate.setStartTime(new GregorianCalendar(dateUpdate[2],dateUpdate[1]-1,dateUpdate[0],taskUpdate.getStartTime().get(GregorianCalendar.HOUR_OF_DAY),taskUpdate.getStartTime().get(GregorianCalendar.MINUTE)));
+						    taskUpdate.setEndTime(new GregorianCalendar(dateUpdate[2],dateUpdate[1]-1,dateUpdate[0],taskUpdate.getEndTime().get(GregorianCalendar.HOUR_OF_DAY),taskUpdate.getEndTime().get(GregorianCalendar.MINUTE)));
+						}
 						resultUpdate.add(taskUpdate);
 						newAction.setResults(resultUpdate);
 
@@ -707,6 +716,12 @@ public class EzParser {
 						newAction.setResults(resultUpdate);
 					}
 				
+			}
+			}
+			catch(NumberFormatException e)
+			{
+				newAction.setAction(TypeOfAction.INVALID);
+				newAction.setFeedback("Invalid command.");
 			}
 			
 
