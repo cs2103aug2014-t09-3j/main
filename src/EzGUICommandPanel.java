@@ -250,8 +250,7 @@ public class EzGUICommandPanel extends JPanel {
 				commandHistory.add(commandField.getText());
 				historyPos = commandHistory.size();
 				if (fb != null) {
-					addColorForFeedBack("FEEDBACK: " + fb,
-							commandField.getStyledDocument());
+					addColorForFeedBack(fb, commandField.getStyledDocument());
 					showingFeedback = true;
 				} else {
 					addColorForFeedBack("No feedback.",

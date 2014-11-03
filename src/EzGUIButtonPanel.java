@@ -16,7 +16,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 public class EzGUIButtonPanel extends JPanel {
 	private ArrayList<JButton> listOfButtons;
 	private final String[] LIST_OF_BUTTON_NAMES = { "All", "Done",
-		"Not Done", "Today", "Tomorrow", "Coming", "Past", "No Date",
+		"Not Done", "Today", "Tomorrow", "Upcoming", "Past", "No Date",
 		"Help" };
 	private final int BUTTON_HEIGHT = 40;
 	private final int BUTTON_WIDTH = 160;
@@ -97,8 +97,8 @@ public class EzGUIButtonPanel extends JPanel {
 		} else if (nameOfButton.equalsIgnoreCase("Tomorrow")) {
 			button.setMnemonic(KeyEvent.VK_M);
 			button.addActionListener(new ButtonAction());
-		} else if (nameOfButton.equalsIgnoreCase("Coming")) {
-			button.setMnemonic(KeyEvent.VK_C);
+		} else if (nameOfButton.equalsIgnoreCase("Upcoming")) {
+			button.setMnemonic(KeyEvent.VK_U);
 			button.addActionListener(new ButtonAction());
 		} else if (nameOfButton.equalsIgnoreCase("Past")) {
 			button.setMnemonic(KeyEvent.VK_P);
@@ -147,26 +147,26 @@ public class EzGUIButtonPanel extends JPanel {
 		assert (storage != null);
 
 		if (button.getName().equalsIgnoreCase("All")) {
-			EzGUI.showContent("All tasks",
+			EzGUI.showContent("All",
 					EzSort.sortById(storage.getListOfAllTasks()));
 		} else if (button.getName().equalsIgnoreCase("Done")) {
-			EzGUI.showContent("Done tasks", EzSort.sortById(storage.getDoneTasks()));
+			EzGUI.showContent("Done", EzSort.sortById(storage.getDoneTasks()));
 		} else if (button.getName().equalsIgnoreCase("Not done")) {
-			EzGUI.showContent("Not Done tasks",
+			EzGUI.showContent("Not Done",
 					EzSort.sortByDate(storage.getUndoneTasks()));
 		} else if (button.getName().equalsIgnoreCase("Today")) {
-			EzGUI.showContent("Today tasks",
+			EzGUI.showContent("Today",
 					EzSort.sortByPriority(storage.getTasksByDate(EzGUI.getToday())));
 		} else if (button.getName().equalsIgnoreCase("Tomorrow")) {
-			EzGUI.showContent("Tomorrow tasks", EzSort.sortByPriority(storage
+			EzGUI.showContent("Tomorrow", EzSort.sortByPriority(storage
 					.getTasksByDate(EzGUI.getTomorrow())));
-		} else if (button.getName().equalsIgnoreCase("Coming")) {
-			EzGUI.showContent("Coming tasks",
+		} else if (button.getName().equalsIgnoreCase("Upcoming")) {
+			EzGUI.showContent("Upcoming",
 					EzSort.sortByDate(storage.getComingTasks()));
 		} else if (button.getName().equalsIgnoreCase("Past")) {
-			EzGUI.showContent("Past tasks", EzSort.sortByDate(storage.getPastTasks()));
+			EzGUI.showContent("Past", EzSort.sortByDate(storage.getPastTasks()));
 		} else if (button.getName().equalsIgnoreCase("No Date")) {
-			EzGUI.showContent("No Date tasks",
+			EzGUI.showContent("No Date",
 					EzSort.sortByPriority(storage.getNoDateTasks()));
 		} else if (button.getName().equalsIgnoreCase("Help")) {
 			EzGUI.showHelp();
@@ -199,7 +199,7 @@ public class EzGUIButtonPanel extends JPanel {
 					numTask = storage.getTasksByDate(EzGUI.getToday()).size();
 				} else if (button.getName().equalsIgnoreCase("Tomorrow")) {
 					numTask = storage.getTasksByDate(EzGUI.getTomorrow()).size();
-				} else if (button.getName().equalsIgnoreCase("Coming")) {
+				} else if (button.getName().equalsIgnoreCase("Upcoming")) {
 					numTask = storage.getComingTasks().size();
 				} else if (button.getName().equalsIgnoreCase("Past")) {
 					numTask = storage.getPastTasks().size();
@@ -226,8 +226,8 @@ public class EzGUIButtonPanel extends JPanel {
 		} else if (selectedButton == getButton("Today")) {
 			pressButton("Tomorrow");
 		} else if (selectedButton == getButton("Tomorrow")) {
-			pressButton("Coming");
-		} else if (selectedButton == getButton("Coming")) {
+			pressButton("Upcoming");
+		} else if (selectedButton == getButton("Upcoming")) {
 			pressButton("Past");
 		} else if (selectedButton == getButton("Past")) {
 			pressButton("No Date");
@@ -251,10 +251,10 @@ public class EzGUIButtonPanel extends JPanel {
 			pressButton(getButton("Not Done"));
 		} else if (selectedButton == getButton("Tomorrow")) {
 			pressButton(getButton("Today"));
-		} else if (selectedButton == getButton("Coming")) {
+		} else if (selectedButton == getButton("Upcoming")) {
 			pressButton(getButton("Tomorrow"));
 		} else if (selectedButton == getButton("Past")) {
-			pressButton(getButton("Coming"));
+			pressButton(getButton("Upcoming"));
 		} else if (selectedButton == getButton("No Date")) {
 			pressButton(getButton("Past"));
 		} else if (selectedButton == getButton("Help")) {

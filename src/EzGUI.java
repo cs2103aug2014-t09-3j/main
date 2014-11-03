@@ -104,35 +104,47 @@ public class EzGUI extends JFrame {
 		LOGGER.log(Level.INFO, "Created Display Panel");
 	}
 	
-	private void setIcon() {
-		this.setIconImage(Toolkit.getDefaultToolkit().getImage(EzGUI.class.getResource("/icon.png")));
-	}
-
-	public void showReminder() {
-		GregorianCalendar today = new GregorianCalendar();
-		ArrayList<EzTask> list = EzController.getStorage().getTasksByDate(today.getTime());
-		int numTasksTodayToDo = 0;
-		for(int i=0;i<list.size();i++){
-			if (!list.get(i).isDone()) {
-				numTasksTodayToDo++;
-			}
-		}
-		 
-		if (numTasksTodayToDo>0){
-			JOptionPane.showMessageDialog(this, "You have " + numTasksTodayToDo + " task(s) that need to be done today");
-		}
-	}
-
-	private void setDefaultButton(String buttonName) {
-		buttonPanel.pressButton(buttonName);
-	}
-
-	public static void scrollUp(){
-		displayPanel.scrollUp();
+	/**
+	 * create command panel
+	 */
+	private void createCommandPanel() {
+		EzGUICommandPanel commandPanel = EzGUICommandPanel.getInstance();
+		mainPanel.add(commandPanel, BorderLayout.SOUTH);
 	}
 	
-	public static void scrollDown(){
-		displayPanel.scrollDown();
+	/**
+	 * create button panel
+	 */
+	private void createButtonPanel() {
+		buttonPanel = EzGUIButtonPanel.getInstance();
+		mainPanel.add(buttonPanel, BorderLayout.WEST);
+		LOGGER.log(Level.INFO, "Created Button Panel");
+	}
+	
+	private static void registerFont() {
+		try {
+			Font font = Font.createFont(Font.TRUETYPE_FONT,
+					new File("fonts/Digital Dismay.otf")).deriveFont(16f);
+			GraphicsEnvironment genv = GraphicsEnvironment
+					.getLocalGraphicsEnvironment();
+			genv.registerFont(font);
+			LOGGER.log(Level.INFO,
+					"Registered Font Digital Dismay Successfully");
+		} catch (Exception e) {
+			LOGGER.log(Level.WARNING, "Font Digital Dismay Not Found");
+		}
+
+		try {
+			Font font = Font.createFont(Font.TRUETYPE_FONT,
+					new File("fonts/ARLRDBD.TTF")).deriveFont(16f);
+			GraphicsEnvironment genv = GraphicsEnvironment
+					.getLocalGraphicsEnvironment();
+			genv.registerFont(font);
+			LOGGER.log(Level.INFO, "Registered Font ARLRDBD Successfully");
+		} catch (Exception e) {
+			LOGGER.log(Level.WARNING, "Font ARLRDBD Not Found");
+		}
+
 	}
 	
 	private void loadFile() {
@@ -143,6 +155,14 @@ public class EzGUI extends JFrame {
 			LOGGER.log(Level.WARNING, "Data file not found");
 			e.printStackTrace();
 		}
+	}
+	
+	private void setDefaultButton(String buttonName) {
+		buttonPanel.pressButton(buttonName);
+	}
+	
+	private void setIcon() {
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage(EzGUI.class.getResource("/icon.png")));
 	}
 
 	private void createSuggestPanel() {
@@ -171,16 +191,30 @@ public class EzGUI extends JFrame {
 			}
 		});
 	}
-
-	/**
-	 * create button panel
-	 */
-	private void createButtonPanel() {
-		buttonPanel = EzGUIButtonPanel.getInstance();
-		mainPanel.add(buttonPanel, BorderLayout.WEST);
-		LOGGER.log(Level.INFO, "Created Button Panel");
+	
+	public void showReminder() {
+		GregorianCalendar today = new GregorianCalendar();
+		ArrayList<EzTask> list = EzController.getStorage().getTasksByDate(today.getTime());
+		int numTasksTodayToDo = 0;
+		for(int i=0;i<list.size();i++){
+			if (!list.get(i).isDone()) {
+				numTasksTodayToDo++;
+			}
+		}
+		 
+		if (numTasksTodayToDo>0){
+			JOptionPane.showMessageDialog(this, "You have " + numTasksTodayToDo + " task(s) that need to be done today");
+		}
 	}
 
+	public static void scrollUp(){
+		displayPanel.scrollUp();
+	}
+	
+	public static void scrollDown(){
+		displayPanel.scrollDown();
+	}
+	
 	private static String readHelpDocument() {
 		File file = new File(HELP_DOCUMENT_FILE_NAME);
 		assert (file != null);
@@ -200,14 +234,6 @@ public class EzGUI extends JFrame {
 		return text;
 	}
 
-	/**
-	 * create command panel
-	 */
-	private void createCommandPanel() {
-		EzGUICommandPanel commandPanel = EzGUICommandPanel.getInstance();
-		mainPanel.add(commandPanel, BorderLayout.SOUTH);
-	}
-
 	public static void increaseWindowSize(int x, int y){
 		int width = mainFrame.getWidth();
 		int height = mainFrame.getHeight();
@@ -220,42 +246,8 @@ public class EzGUI extends JFrame {
 		showContent("Help - All commands", text);
 	}
 
-	private static void registerFont() {
-		try {
-			Font font = Font.createFont(Font.TRUETYPE_FONT,
-					new File("fonts/Digital Dismay.otf")).deriveFont(16f);
-			GraphicsEnvironment genv = GraphicsEnvironment
-					.getLocalGraphicsEnvironment();
-			genv.registerFont(font);
-			LOGGER.log(Level.INFO,
-					"Registered Font Digital Dismay Successfully");
-		} catch (Exception e) {
-			LOGGER.log(Level.WARNING, "Font Digital Dismay Not Found");
-		}
-
-		try {
-			Font font = Font.createFont(Font.TRUETYPE_FONT,
-					new File("fonts/ARLRDBD.TTF")).deriveFont(16f);
-			GraphicsEnvironment genv = GraphicsEnvironment
-					.getLocalGraphicsEnvironment();
-			genv.registerFont(font);
-			LOGGER.log(Level.INFO, "Registered Font ARLRDBD Successfully");
-		} catch (Exception e) {
-			LOGGER.log(Level.WARNING, "Font ARLRDBD Not Found");
-		}
-
-	}
-
 	public static ArrayList<EzTask> getTasksOnScreen() {
 		return onScreenTasks;
-	}
-
-	public static void showContent(String header, ArrayList<EzTask> listOfTasks) {
-		assert (listOfTasks != null);
-		onScreenTasks = listOfTasks;
-		headerToShow = new String(header);
-		
-		showPage(1);
 	}
 
 	public static int getPage(){
@@ -266,6 +258,14 @@ public class EzGUI extends JFrame {
 		return headerToShow;
 	}
 	
+	public static void showContent(String header, ArrayList<EzTask> listOfTasks) {
+		assert (listOfTasks != null);
+		onScreenTasks = listOfTasks;
+		headerToShow = new String(header);
+		
+		showPage(1);
+	}
+
 	public static void showContent(String header, ArrayList<EzTask> listOfTasks, EzTask task) {
 		assert (listOfTasks != null);
 		onScreenTasks = listOfTasks;
