@@ -177,11 +177,11 @@ public class EzController {
 		
 		case PAGE:
 			if (!confirmation){
-				EzGUI.showContent("Tasks", EzSort.sortById(EzGUI.getTasksOnScreen()), userAction.getPageNumber());
+				EzGUI.showPage(userAction.getPageNumber());
 			}
 			else if(confirmation && deleteAction != null) {
-				EzGUI.showContent("Tasks", EzSort.sortById(EzGUI.getTasksOnScreen()), userAction.getPageNumber());
-				determineUserAction(deleteAction);
+				EzGUI.showPage(userAction.getPageNumber());
+				break;
 			}
 			break;
 
