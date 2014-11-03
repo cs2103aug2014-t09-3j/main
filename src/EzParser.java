@@ -90,28 +90,20 @@ public class EzParser {
 			assert(newAction.getAction()!=null);
 			EzTask task = new EzTask();
 			String title = new String();
-			if ((content.indexOf("\"") < 0) || (content.indexOf("\"", 1) < 0)// if
-																				// cannot
-																				// find
-																				// "***"
-																				// means
-																				// no
-																				// title
-																				// in
-																				// the
-																				// command
-					|| !content.startsWith("\""))// if the string does not start
-													// with ",means invalid
-													// command type.
+			if ((content.indexOf("\"") < 0) || (content.indexOf("\"",content.indexOf("\"")+ 1) < 0)
+					|| !content.startsWith("\""))
 				{
 				newAction.setAction(TypeOfAction.INVALID);
 				
 			    newAction.setFeedback("Invalid command.");
 				}
-			title = content.substring(content.indexOf("\"") + 1,
+			else
+			{
+				title = content.substring(content.indexOf("\"") + 1,
 					content.indexOf("\"", 1));
 			content = content.substring(content.indexOf("\"", content.indexOf("\"")+1)+1).trim();
 			task.setTitle(title);
+			}
 			String location = new String();
 			location = null;
 			
@@ -144,7 +136,7 @@ public class EzParser {
 		
 			if (content.indexOf("\"") >= 0) {
 			newAction.setAction(TypeOfAction.INVALID);
-			newAction.setFeedback("Extra \" in the command.");
+			newAction.setFeedback("Extra or missing \" in the command.");
 			}// if there is more ",the command is invalid.
 
 			if (checkMultipleAction(content) == true) {
@@ -228,7 +220,7 @@ public class EzParser {
 				dateArr[2] = readDate(date)[2];
 				if (readDate(date)[0] < 0) {
 					newAction.setAction(TypeOfAction.INVALID);
-					newAction.setFeedback("Invalid date.");
+					newAction.setFeedback("Invalid command.");
 				}
 				calendar = new GregorianCalendar(dateArr[2], dateArr[1] - 1,
 						dateArr[0]);
@@ -260,7 +252,7 @@ public class EzParser {
 				dateArr[4] = readTime(time)[1];
 				if (readTime(time)[0] < 0) {
 					newAction.setAction(TypeOfAction.INVALID);
-					newAction.setFeedback("Invalid time.");
+					newAction.setFeedback("Invalid command.");
 				}
 				calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
 				calendar.set(GregorianCalendar.MINUTE, dateArr[4]);
@@ -279,7 +271,7 @@ public class EzParser {
 					dateArr[2] = readDate(date)[2];
 					if (readDate(date)[0] < 0) {
 						newAction.setAction(TypeOfAction.INVALID);
-						newAction.setFeedback("Invalid date");
+						newAction.setFeedback("Invalid command.");
 					}
 					calendar = new GregorianCalendar(dateArr[2],
 							dateArr[1] - 1, dateArr[0], dateArr[3], dateArr[4]);
