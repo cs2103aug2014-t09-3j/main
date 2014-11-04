@@ -517,6 +517,10 @@ public class EzGUICommandPanel extends JPanel {
 		return commandField.getCaretPosition();
 	}
 	
+	public int getSelectionStart(){
+		return commandField.getSelectionStart();
+	}
+	
 	public void typeNormal(String typedText, int caretPos) {
 		String contentInputField;
 		contentInputField = commandField.getText().substring(0, caretPos)

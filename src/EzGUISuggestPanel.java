@@ -86,7 +86,7 @@ public class EzGUISuggestPanel extends JDialog {
 			int taskId = getFirstNumber(suggestList.getModel().getElementAt(
 					selectIndex));
 			if (taskId > -1) {
-				int caretPos = EzGUICommandPanel.getInstance().getCaretPosition();
+				int caretPos = EzGUICommandPanel.getInstance().getSelectionStart();
 				EzGUICommandPanel.getInstance().deleteSelection();
 				EzGUICommandPanel.getInstance().typeNormal(String.valueOf(taskId) + " ",caretPos);
 			}
