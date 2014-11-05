@@ -12,7 +12,7 @@ import org.junit.Test;
 
 /**
  * 
- * @author Tun Leng
+ * @author Ong Tun Leng *A0113922N*
  *
  */
 
@@ -20,7 +20,7 @@ import org.junit.Test;
 public class EzTaskSystemTest {
 
 	@Test
-	public void test() throws ParseException {
+	public void test() {
 		
 		
 		EzController.setTesting(true);

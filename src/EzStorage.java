@@ -7,7 +7,7 @@ import java.util.Date;
 
 /**
  * @author Khanh(Skeleton code)
- * @author Tun Leng
+ * @author Ong Tun Leng *A0113922N*
  *
  */
 public class EzStorage {
