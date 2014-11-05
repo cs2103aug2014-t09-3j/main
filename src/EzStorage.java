@@ -373,12 +373,17 @@ public class EzStorage {
 			{
 				startTime = task.getStartTime();
 				endTime = task.getEndTime();
+				if(currentDate.after(startTime) && currentDate.after(endTime))
+					pastTasks.add(task);
+				
 				if(currentDate.get(Calendar.YEAR) != startTime.get(Calendar.YEAR) || currentDate.get(Calendar.MONTH) != startTime.get(Calendar.MONTH) ||
 						currentDate.get(Calendar.DAY_OF_MONTH) != startTime.get(Calendar.DAY_OF_MONTH) || currentDate.get(Calendar.YEAR) != endTime.get(Calendar.YEAR) || currentDate.get(Calendar.MONTH) != endTime.get(Calendar.MONTH) ||
 						currentDate.get(Calendar.DAY_OF_MONTH) != endTime.get(Calendar.DAY_OF_MONTH))
 					if(currentDate.after(startTime) && currentDate.after(endTime))
 						if(!pastTasks.contains(task))
 							pastTasks.add(task);
+				
+				
 			}
 		}
 
