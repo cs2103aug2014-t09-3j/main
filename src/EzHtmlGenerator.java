@@ -165,16 +165,41 @@ public class EzHtmlGenerator {
 		header = EzHtmlGenerator.createHtmlText("__",MAIN_TITLE_FONT_FONT,2,EzConstants.SHOW_AREA_BACKGROUND)
 				+EzHtmlGenerator.createHtmlText(header,MAIN_TITLE_FONT_FONT, 8, MAIN_TITLE_FONT_COLOR);
 		String result = table(tableAttribute,
-							tr(td("height=\"44px\"", header)) +
+							tr(td("height=\"44px\" width=\"100%\" ", header)) +
 							tr(td(content))
 						);
 		return result;
 	}
 	
 	private static String createHtmlTitleAndVenueOfEzTask(EzTask task) {
-		String result = createHtmlText(task.getTitle(),TITLE_FONT_FONT,TITLE_FONT_SIZE, TITLE_FONT_COLOR); 
+		String result = createHtmlText(addBreak(task.getTitle()),TITLE_FONT_FONT,TITLE_FONT_SIZE, TITLE_FONT_COLOR); 
 		if (!task.getVenue().equalsIgnoreCase("")){
-			result = result + "<br>"+right(createHtmlText("@"+task.getVenue(),VENUE_FONT_FONT,VENUE_FONT_SIZE , VENUE_FONT_COLOR));
+			result = result + "<br>"+right(createHtmlText("@"+addBreak(task.getVenue()),VENUE_FONT_FONT,VENUE_FONT_SIZE , VENUE_FONT_COLOR));
+		}
+		return result;
+	}
+
+	private static String addBreak(String text) {
+		String result = "";
+		for(int i=0;i<text.length();i++){
+			result = result + text.charAt(i); 
+			if (text.charAt(i)==' '){
+				while((i+1<text.length()) && (text.charAt(i+1)==' ')){
+					result = result + ' ';
+					i++;
+				}
+			} else {
+				int count = 1;
+				while((i+1<text.length()) && (text.charAt(i+1)!=' ')){
+					result = result + text.charAt(i+1);
+					i++;
+					count++;
+					if (count==20){
+						result = result + "<br/>";
+						count = 0;
+					}
+				}
+			}
 		}
 		return result;
 	}
