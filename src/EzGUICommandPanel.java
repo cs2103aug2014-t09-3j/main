@@ -16,6 +16,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import java.awt.BorderLayout;
 
 
 public class EzGUICommandPanel extends JPanel {
@@ -50,46 +51,48 @@ public class EzGUICommandPanel extends JPanel {
 	 * Create the panel.
 	 */
 	private EzGUICommandPanel() {
+		setLayout(new BorderLayout(0, 0));
 		setBackground(EzGUI.BACKGROUND_COLOR);
 		setBorder(null);
 		setFocusable(false);
-		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		createCommandLabel(this);
-		createCommandInputField(this);
+		createCommandLabel();
+		createCommandInputField();
 	}
 	
 	/**
 	 * @param commandPanel
 	 */
-	private void createCommandLabel(JPanel commandPanel) {
-		JPanel commandLabelPanel = new JPanel();
-		FlowLayout fl_commandLabelPanel = (FlowLayout) commandLabelPanel
-				.getLayout();
-		fl_commandLabelPanel.setVgap(0);
-		fl_commandLabelPanel.setHgap(0);
-		commandLabelPanel.setBackground(EzGUI.BACKGROUND_COLOR);
-		commandLabelPanel.setFocusable(false);
-		commandPanel.add(commandLabelPanel);
-
+	private void createCommandLabel() {
 		JTextPane commandLabel = new JTextPane();
+		commandLabel.setBounds(0, 0, 154, 26);
 		commandLabel.setEditable(false);
 		commandLabel.setForeground(Color.WHITE);
 		commandLabel.setFont(new Font(EzGUI.BUTTON_FONT, Font.BOLD, 17));
 		commandLabel.setBackground(EzGUI.BACKGROUND_COLOR);
 		commandLabel.setText("  Enter Command: ");
 		commandLabel.setFocusable(false);
+		
+		JPanel commandLabelPanel = new JPanel();
+		commandLabelPanel.setBackground(EzGUI.BACKGROUND_COLOR);
+		commandLabelPanel.setFocusable(false);
+		commandLabelPanel.setPreferredSize(new Dimension(160, 30));
+		commandLabelPanel.setLayout(null);
 		commandLabelPanel.add(commandLabel);
+		
+		add(commandLabelPanel, BorderLayout.WEST);
+
 	}
 	
 	/**
 	 * @param commandPanel
 	 */
-	private void createCommandInputField(JPanel commandPanel) {
-		JPanel commandFieldpanel = new JPanel();
-		commandFieldpanel.setLayout(new BoxLayout(commandFieldpanel, BoxLayout.X_AXIS));
-		commandPanel.add(commandFieldpanel);
-
+	private void createCommandInputField() {
+		
 		commandField = new JTextPane();
+		commandField.setBackground(EzConstants.SHOW_AREA_BACKGROUND);
+		commandField.grabFocus();
+		commandField.addKeyListener(new EzKeyAdapter());
+		
 		JPanel newPanel = new JPanel();
 		newPanel.add(commandField);
 		newPanel.setPreferredSize(new Dimension(100000, 10));
@@ -104,216 +107,215 @@ public class EzGUICommandPanel extends JPanel {
 		//scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scroll.setLayout(new ScrollPaneLayout());
 		scroll.setBorder(null);
-		scroll.setPreferredSize(new Dimension(760,5));
+		//scroll.setPreferredSize(new Dimension(760,5));
 		
+		JPanel commandFieldpanel = new JPanel();
+		commandFieldpanel.setLayout(new BoxLayout(commandFieldpanel, BoxLayout.X_AXIS));
 		commandFieldpanel.add(scroll);
+		add(commandFieldpanel);
 		//commandFieldpanel.add(commandField);
 		//commandFieldpanel.setMinimumSize(new Dimension(600,10));
 		//commandFieldpanel.setMaximumSize(new Dimension(600,1100));
 		
-		commandField.setBackground(EzConstants.SHOW_AREA_BACKGROUND);
-		//commandField.setPreferredSize(new Dimension(1000, 10));
-		commandField.grabFocus();
-		commandField.setMinimumSize(new Dimension(1000, 10));
-		commandField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				clearFeedback();
-				if (arg0.isControlDown()) {
-					if ((!arg0.isAltDown() && (!arg0.isShiftDown()))) {	// only Ctrl
-						switch (arg0.getKeyChar()) {
-						case 22:
-						case 25:
-						case 26:
-							arg0.consume();
-							break;
-						}
-						switch (arg0.getKeyCode()) {
-						case KeyEvent.VK_UP:
-							EzGUI.scrollUp();
-							arg0.consume();
-							break;
-						case KeyEvent.VK_DOWN:
-							EzGUI.scrollDown();
-							arg0.consume();
-							break;
-						case KeyEvent.VK_RIGHT:
-							EzGUI.showPage(EzGUI.getPageToShow() + 1);
-							arg0.consume();
-							break;
-						case KeyEvent.VK_LEFT:
-							EzGUI.showPage(EzGUI.getPageToShow() - 1);
-							arg0.consume();
-							break;
-						case KeyEvent.VK_1:
-							EzGUIButtonPanel.getInstance().pressButton("All");
-							break;
-						case KeyEvent.VK_2:
-							EzGUIButtonPanel.getInstance().pressButton("Done");
-							break;
-						case KeyEvent.VK_3:
-							EzGUIButtonPanel.getInstance().pressButton("Not done");
-							break;
-						case KeyEvent.VK_4:
-							EzGUIButtonPanel.getInstance().pressButton("Today");
-							break;
-						case KeyEvent.VK_5:
-							EzGUIButtonPanel.getInstance().pressButton("Tomorrow");
-							break;
-						case KeyEvent.VK_6:
-							EzGUIButtonPanel.getInstance().pressButton("Upcoming");
-							break;
-						case KeyEvent.VK_7:
-							EzGUIButtonPanel.getInstance().pressButton("Overdue");
-							break;
-						case KeyEvent.VK_8:
-							EzGUIButtonPanel.getInstance().pressButton("No date");
-							break;
-						case KeyEvent.VK_9:
-						case KeyEvent.VK_H:
-							EzGUIButtonPanel.getInstance().pressButton("Help");
-							break;
-						}
-					} else if ((!arg0.isAltDown() && (arg0.isShiftDown()))) {	// Ctrl + Shift
-						int x = EzGUI.getMainFrameLocation().x;
-						int y = EzGUI.getMainFrameLocation().y;
-
-						switch (arg0.getKeyCode()) { // resize the window
-						case KeyEvent.VK_UP:
-							EzGUI.setMainFrameLocation(x, y-10);
-							arg0.consume();
-							break;
-						case KeyEvent.VK_DOWN:
-							EzGUI.setMainFrameLocation(x, y+10);
-							arg0.consume();
-							break;
-						case KeyEvent.VK_LEFT:
-							EzGUI.setMainFrameLocation(x-10, y);
-							arg0.consume();
-							break;
-						case KeyEvent.VK_RIGHT:
-							EzGUI.setMainFrameLocation(x+10, y);
-							arg0.consume();
-							break;
-						}
-					}
-				} else if (!arg0.isAltDown()) {
-					switch (arg0.getKeyChar()) {
-					case KeyEvent.VK_ENTER:
-						if (!EzGUISuggestPanel.getInstance().inSelectionMode()) {
-							enterCommand();
-						} else {
-							EzGUISuggestPanel.getInstance().enterSelection();
-						}
-						arg0.consume();
-						break;
-					case KeyEvent.VK_BACK_SPACE:
-					case KeyEvent.VK_DELETE:
-						arg0.consume();
-						break;
-					}
-
-					switch (arg0.getKeyCode()) {
-					case KeyEvent.VK_UP:
-						if (!EzGUISuggestPanel.getInstance().inSelectionMode()) {
-							goToPreviousCommand();
-						} else {
-							EzGUISuggestPanel.getInstance().selectAbove();
-						}
-						arg0.consume();
-						break;
-					case KeyEvent.VK_DOWN:
-						if (!EzGUISuggestPanel.getInstance().inSelectionMode()) {
-							goToNextCommand();
-						} else {
-							EzGUISuggestPanel.getInstance().selectBelow();
-						}
-						arg0.consume();
-						break;
-					case KeyEvent.VK_F1:
-						EzGUIButtonPanel.getInstance().pressButton("help");
-						break;
-					case KeyEvent.VK_TAB:
-						if (!arg0.isShiftDown()) {
-							EzGUIButtonPanel.getInstance().pressBelowButton();
-						} else {
-							EzGUIButtonPanel.getInstance().pressAboveButton();
-						}
-						arg0.consume();
-						break;
-					}
-
-				} else if ((arg0.isAltDown() && (arg0.isShiftDown()))) {
-					switch (arg0.getKeyCode()) { // resize the window
-					case KeyEvent.VK_UP:
-						EzGUI.increaseWindowSize(0,-10);
-						arg0.consume();
-						break;
-					case KeyEvent.VK_DOWN:
-						EzGUI.increaseWindowSize(0, 10);
-						arg0.consume();
-						break;
-					case KeyEvent.VK_LEFT:
-						EzGUI.increaseWindowSize(-10, 0);
-						arg0.consume();
-						break;
-					case KeyEvent.VK_RIGHT:
-						EzGUI.increaseWindowSize(10, 0);
-						arg0.consume();
-						break;
-					}
-				} 
-			}
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				// clearFeedback();
-				int caretPos = commandField.getCaretPosition();
-				if ((!e.isControlDown()) && (!e.isAltDown())) {
-					switch (e.getKeyChar()) {
-					case KeyEvent.VK_ENTER:
-						break;
-					case KeyEvent.VK_DELETE:
-						deleteSelection();
-						break;
-					case KeyEvent.VK_BACK_SPACE:
-						backSpaceSelection();
-						break;
-					case KeyEvent.VK_SPACE:
-						typeSpace(caretPos);
-						break;
-					case KeyEvent.VK_TAB:
-						e.consume();
-						break;
-					default:
-						typeNormal("" + e.getKeyChar(), caretPos);
-						break;
-					}
-					e.consume();
-				} else {
-					switch (e.getKeyChar()) {
-					case 26: // CTRL + Z
-						undo();
-						e.consume();
-						break;
-					case 25: // CTRL + Y
-						redo();
-						e.consume();
-						break;
-					case 22: // CTRL + V
-						pasteText();
-						e.consume();
-						break;
-					default:
-						break;
-					}
-				}
-			}
-
-		});
 		loadCommandAttributeSet();
 		// commandField.setContentType("text/html");
 		// commandField.setFont(new Font(BUTTON_FONT, Font.PLAIN, 17));
+	}
+	
+	class EzKeyAdapter extends KeyAdapter{
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+			clearFeedback();
+			if (arg0.isControlDown()) {
+				if ((!arg0.isAltDown() && (!arg0.isShiftDown()))) {	// only Ctrl
+					switch (arg0.getKeyChar()) {
+					case 22:
+					case 25:
+					case 26:
+						arg0.consume();
+						break;
+					}
+					switch (arg0.getKeyCode()) {
+					case KeyEvent.VK_UP:
+						EzGUI.scrollUp();
+						arg0.consume();
+						break;
+					case KeyEvent.VK_DOWN:
+						EzGUI.scrollDown();
+						arg0.consume();
+						break;
+					case KeyEvent.VK_RIGHT:
+						EzGUI.showPage(EzGUI.getPageToShow() + 1);
+						arg0.consume();
+						break;
+					case KeyEvent.VK_LEFT:
+						EzGUI.showPage(EzGUI.getPageToShow() - 1);
+						arg0.consume();
+						break;
+					case KeyEvent.VK_1:
+						EzGUIButtonPanel.getInstance().pressButton("All");
+						break;
+					case KeyEvent.VK_2:
+						EzGUIButtonPanel.getInstance().pressButton("Done");
+						break;
+					case KeyEvent.VK_3:
+						EzGUIButtonPanel.getInstance().pressButton("Not done");
+						break;
+					case KeyEvent.VK_4:
+						EzGUIButtonPanel.getInstance().pressButton("Today");
+						break;
+					case KeyEvent.VK_5:
+						EzGUIButtonPanel.getInstance().pressButton("Tomorrow");
+						break;
+					case KeyEvent.VK_6:
+						EzGUIButtonPanel.getInstance().pressButton("Upcoming");
+						break;
+					case KeyEvent.VK_7:
+						EzGUIButtonPanel.getInstance().pressButton("Overdue");
+						break;
+					case KeyEvent.VK_8:
+						EzGUIButtonPanel.getInstance().pressButton("No date");
+						break;
+					case KeyEvent.VK_9:
+					case KeyEvent.VK_H:
+						EzGUIButtonPanel.getInstance().pressButton("Help");
+						break;
+					}
+				} else if ((!arg0.isAltDown() && (arg0.isShiftDown()))) {	// Ctrl + Shift
+					int x = EzGUI.getMainFrameLocation().x;
+					int y = EzGUI.getMainFrameLocation().y;
+
+					switch (arg0.getKeyCode()) { // resize the window
+					case KeyEvent.VK_UP:
+						EzGUI.setMainFrameLocation(x, y-10);
+						arg0.consume();
+						break;
+					case KeyEvent.VK_DOWN:
+						EzGUI.setMainFrameLocation(x, y+10);
+						arg0.consume();
+						break;
+					case KeyEvent.VK_LEFT:
+						EzGUI.setMainFrameLocation(x-10, y);
+						arg0.consume();
+						break;
+					case KeyEvent.VK_RIGHT:
+						EzGUI.setMainFrameLocation(x+10, y);
+						arg0.consume();
+						break;
+					}
+				}
+			} else if (!arg0.isAltDown()) {
+				switch (arg0.getKeyChar()) {
+				case KeyEvent.VK_ENTER:
+					if (!EzGUISuggestPanel.getInstance().inSelectionMode()) {
+						enterCommand();
+					} else {
+						EzGUISuggestPanel.getInstance().enterSelection();
+					}
+					arg0.consume();
+					break;
+				case KeyEvent.VK_BACK_SPACE:
+				case KeyEvent.VK_DELETE:
+					arg0.consume();
+					break;
+				}
+
+				switch (arg0.getKeyCode()) {
+				case KeyEvent.VK_UP:
+					if (!EzGUISuggestPanel.getInstance().inSelectionMode()) {
+						goToPreviousCommand();
+					} else {
+						EzGUISuggestPanel.getInstance().selectAbove();
+					}
+					arg0.consume();
+					break;
+				case KeyEvent.VK_DOWN:
+					if (!EzGUISuggestPanel.getInstance().inSelectionMode()) {
+						goToNextCommand();
+					} else {
+						EzGUISuggestPanel.getInstance().selectBelow();
+					}
+					arg0.consume();
+					break;
+				case KeyEvent.VK_F1:
+					EzGUIButtonPanel.getInstance().pressButton("help");
+					break;
+				case KeyEvent.VK_TAB:
+					if (!arg0.isShiftDown()) {
+						EzGUIButtonPanel.getInstance().pressBelowButton();
+					} else {
+						EzGUIButtonPanel.getInstance().pressAboveButton();
+					}
+					arg0.consume();
+					break;
+				}
+
+			} else if ((arg0.isAltDown() && (arg0.isShiftDown()))) {
+				switch (arg0.getKeyCode()) { // resize the window
+				case KeyEvent.VK_UP:
+					EzGUI.increaseWindowSize(0,-10);
+					arg0.consume();
+					break;
+				case KeyEvent.VK_DOWN:
+					EzGUI.increaseWindowSize(0, 10);
+					arg0.consume();
+					break;
+				case KeyEvent.VK_LEFT:
+					EzGUI.increaseWindowSize(-10, 0);
+					arg0.consume();
+					break;
+				case KeyEvent.VK_RIGHT:
+					EzGUI.increaseWindowSize(10, 0);
+					arg0.consume();
+					break;
+				}
+			} 
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// clearFeedback();
+			int caretPos = commandField.getCaretPosition();
+			if ((!e.isControlDown()) && (!e.isAltDown())) {
+				switch (e.getKeyChar()) {
+				case KeyEvent.VK_ENTER:
+					break;
+				case KeyEvent.VK_DELETE:
+					deleteSelection();
+					break;
+				case KeyEvent.VK_BACK_SPACE:
+					backSpaceSelection();
+					break;
+				case KeyEvent.VK_SPACE:
+					typeSpace(caretPos);
+					break;
+				case KeyEvent.VK_TAB:
+					e.consume();
+					break;
+				default:
+					typeNormal("" + e.getKeyChar(), caretPos);
+					break;
+				}
+				e.consume();
+			} else {
+				switch (e.getKeyChar()) {
+				case 26: // CTRL + Z
+					undo();
+					e.consume();
+					break;
+				case 25: // CTRL + Y
+					redo();
+					e.consume();
+					break;
+				case 22: // CTRL + V
+					pasteText();
+					e.consume();
+					break;
+				default:
+					break;
+				}
+			}
+		}
 	}
 	
 	private void clearFeedback() {

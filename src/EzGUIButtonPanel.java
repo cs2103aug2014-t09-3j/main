@@ -31,6 +31,8 @@ public class EzGUIButtonPanel extends JPanel {
 	private final int BUTTON_HEIGHT = 40;
 	private final int BUTTON_WIDTH = 160;
 	private final Color BUTTON_TEXT_COLOR = EzConstants.PERSIAN_GREEN_COLOR;
+	public final Color SELECTED_BUTTON_BG_COLOR = EzConstants.WHITE_SMOKE_COLOR;
+	public final Color UNSELECTED_BUTTON_BG_COLOR = EzConstants.IRON_COLOR;
 	
 	private JButton selectedButton = null;
 	
@@ -119,7 +121,7 @@ public class EzGUIButtonPanel extends JPanel {
 		}
 
 		button.setFont(new Font(EzGUI.BUTTON_FONT, Font.BOLD, 16));
-		button.setBackground(EzGUI.UNSELECTED_BUTTON_BG_COLOR);
+		button.setBackground(UNSELECTED_BUTTON_BG_COLOR);
 		button.setBorderPainted(false);
 		button.setForeground(BUTTON_TEXT_COLOR);
 		button.setFocusPainted(false);
@@ -153,8 +155,16 @@ public class EzGUIButtonPanel extends JPanel {
 	
 	public void unhighlightButton(){
 		if (selectedButton != null) {
-			selectedButton.setBackground(EzGUI.UNSELECTED_BUTTON_BG_COLOR);
+			selectedButton.setBackground(UNSELECTED_BUTTON_BG_COLOR);
 			selectedButton = null;
+		}
+	}
+	
+	public String getCurrentTab(){
+		if (selectedButton!=null){
+			return selectedButton.getName();
+		} else {
+			return null;
 		}
 	}
 	
@@ -194,9 +204,9 @@ public class EzGUIButtonPanel extends JPanel {
 	
 	private void paintFocusedButton(JButton button) {
 		if (selectedButton != null) {
-			selectedButton.setBackground(EzGUI.UNSELECTED_BUTTON_BG_COLOR);
+			selectedButton.setBackground(UNSELECTED_BUTTON_BG_COLOR);
 		}
-		button.setBackground(EzGUI.SELECTED_BUTTON_BG_COLOR);
+		button.setBackground(SELECTED_BUTTON_BG_COLOR);
 		selectedButton = button;
 	}
 	

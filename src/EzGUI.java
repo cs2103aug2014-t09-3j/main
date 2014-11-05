@@ -13,15 +13,15 @@ import java.util.logging.*;
 import java.io.*;
 
 public class EzGUI extends JFrame {
-	public final String ALL = EzGUIButtonPanel.getInstance().ALL;
-	public final String DONE = EzGUIButtonPanel.getInstance().DONE;
-	public final String NOT_DONE = EzGUIButtonPanel.getInstance().NOT_DONE;
-	public final String TODAY = EzGUIButtonPanel.getInstance().TODAY;
-	public final String TOMORROW = EzGUIButtonPanel.getInstance().TOMORROW;
-	public final String UPCOMING = EzGUIButtonPanel.getInstance().UPCOMING;
-	public final String OVERDUE = EzGUIButtonPanel.getInstance().OVERDUE;
-	public final String NO_DATE = EzGUIButtonPanel.getInstance().NO_DATE;
-	public final String HELP = EzGUIButtonPanel.getInstance().HELP;
+	public static final String ALL = EzGUIButtonPanel.getInstance().ALL;
+	public static final String DONE = EzGUIButtonPanel.getInstance().DONE;
+	public static final String NOT_DONE = EzGUIButtonPanel.getInstance().NOT_DONE;
+	public static final String TODAY = EzGUIButtonPanel.getInstance().TODAY;
+	public static final String TOMORROW = EzGUIButtonPanel.getInstance().TOMORROW;
+	public static final String UPCOMING = EzGUIButtonPanel.getInstance().UPCOMING;
+	public static final String OVERDUE = EzGUIButtonPanel.getInstance().OVERDUE;
+	public static final String NO_DATE = EzGUIButtonPanel.getInstance().NO_DATE;
+	public static final String HELP = EzGUIButtonPanel.getInstance().HELP;
 	
 	private static final String HELP_DOCUMENT_FILE_NAME = "help.txt";
 
@@ -32,8 +32,6 @@ public class EzGUI extends JFrame {
 
 	
 	public static final String BUTTON_FONT = "Arial";
-	public static final Color SELECTED_BUTTON_BG_COLOR = EzConstants.WHITE_SMOKE_COLOR;
-	public static final Color UNSELECTED_BUTTON_BG_COLOR = EzConstants.IRON_COLOR;
 	
 	public static final Color BACKGROUND_COLOR = EzConstants.CHATEAU_GREEN_COLOR;
 	private static final int APP_HEIGHT = 640;
@@ -58,7 +56,6 @@ public class EzGUI extends JFrame {
 	private static ArrayList<EzTask> onScreenTasks;
 	private static int pageToShow;
 	private static String headerToShow;
-
 	private static EzGUIButtonPanel buttonPanel;
 	
 	public EzGUI() {
@@ -396,5 +393,9 @@ public class EzGUI extends JFrame {
 	
 	public static void unhighlightButton(){
 		EzGUIButtonPanel.getInstance().unhighlightButton();
+	}
+	
+	public static String getCurrentTab(){
+		return EzGUIButtonPanel.getInstance().getCurrentTab();
 	}
 }
