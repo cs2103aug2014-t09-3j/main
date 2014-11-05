@@ -18,6 +18,8 @@ public class EzController {
 	private static boolean confirmation = false;
 	private static EzAction deleteAction = null;
 	private static boolean testing = false;
+	private static String prevTab;
+
 
 	public static String execute(String userCommand){
 		EzAction userAction = EzParser.extractInfo(userCommand, storage);
@@ -40,9 +42,17 @@ public class EzController {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+					/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
 					EzGUI.highlightButton("All");
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), task);
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), task);*/
+					String currTab = EzGUI.getCurrentTab();
+					if(currTab != null && !currTab.equalsIgnoreCase("help")) {
+						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
+						EzGUI.showContent(currTab, list, EzGUI.getPage());
+					}
+					else {
+						EzGUI.refreshButton();
+					}
 				}
 			}
 			break;
@@ -59,9 +69,17 @@ public class EzController {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+					/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
 					EzGUI.highlightButton("All");
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), userAction.getResults().get(0));
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), userAction.getResults().get(0));*/
+					String currTab = EzGUI.getCurrentTab();
+					if(currTab != null && !currTab.equalsIgnoreCase("help")) {
+						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
+						EzGUI.showContent(currTab, list, EzGUI.getPage());
+					}
+					else {
+						EzGUI.refreshButton();
+					}
 				}
 			}
 			break;
@@ -73,6 +91,8 @@ public class EzController {
 				confirmation = true;
 				assert(toBeDeleted.size() >= 0);
 				if(!testing) {
+					prevTab = EzGUI.getCurrentTab();
+					EzGUI.unhighlightButton();
 					if(toBeDeleted.size() == 1) {
 						EzGUI.showContent("Are you sure to delete this task? (Y/N)", toBeDeleted);
 					}
@@ -96,9 +116,17 @@ public class EzController {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+					/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
 					EzGUI.highlightButton("All");
-					EzGUI.showContent("Tasks Deleted", EzSort.sortById(updatedList));
+					EzGUI.showContent("Tasks Deleted", EzSort.sortById(updatedList));*/
+					if(prevTab != null && !prevTab.equalsIgnoreCase("help")) {
+						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(prevTab);
+						EzGUI.showContent(prevTab, list, EzGUI.getPage());
+						EzGUI.highlightButton(prevTab);
+					}
+					else {
+						EzGUI.refreshButton();
+					}
 				}
 				userAction.setFeedback("Deleted successfully");
 				deleteAction = null;
@@ -109,9 +137,17 @@ public class EzController {
 		case N:
 			if (confirmation){
 				if(!testing) {
-					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+					/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
 					EzGUI.highlightButton("All");
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));*/
+					if(prevTab != null && !prevTab.equalsIgnoreCase("help")) {
+						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(prevTab);
+						EzGUI.showContent(prevTab, list, EzGUI.getPage());
+						EzGUI.highlightButton(prevTab);
+					}
+					else {
+						EzGUI.refreshButton();
+					}
 				}
 				userAction.setFeedback("Action cancelled");
 				deleteAction = null;
@@ -131,9 +167,17 @@ public class EzController {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+					/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
 					EzGUI.highlightButton("All");
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), userAction.getResults().get(0));
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), userAction.getResults().get(0));*/
+					String currTab = EzGUI.getCurrentTab();
+					if(currTab != null && !currTab.equalsIgnoreCase("help")) {
+						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
+						EzGUI.showContent(currTab, list, EzGUI.getPage());
+					}
+					else {
+						EzGUI.refreshButton();
+					}
 				}
 			}
 			break;
@@ -150,9 +194,17 @@ public class EzController {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+					/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
 					EzGUI.highlightButton("All");
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), userAction.getResults().get(0));
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), userAction.getResults().get(0));*/
+					String currTab = EzGUI.getCurrentTab();
+					if(currTab != null && !currTab.equalsIgnoreCase("help")) {
+						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
+						EzGUI.showContent(currTab, list, EzGUI.getPage());
+					}
+					else {
+						EzGUI.refreshButton();
+					}
 				}
 			}
 			break;
@@ -175,9 +227,17 @@ public class EzController {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+					/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
 					EzGUI.highlightButton("All");
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), userAction.getResults().get(0));
+					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), userAction.getResults().get(0));*/
+					String currTab = EzGUI.getCurrentTab();
+					if(currTab != null && !currTab.equalsIgnoreCase("help")) {
+						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
+						EzGUI.showContent(currTab, list, EzGUI.getPage());
+					}
+					else {
+						EzGUI.refreshButton();
+					}
 				}
 			}
 			break;
@@ -206,9 +266,17 @@ public class EzController {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+						/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
 						EzGUI.highlightButton("All");
-						EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), EzGUI.getPage());
+						EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), EzGUI.getPage());*/
+						String currTab = EzGUI.getCurrentTab();
+						if(currTab != null && !currTab.equalsIgnoreCase("help")) {
+							ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
+							EzGUI.showContent(currTab, list, EzGUI.getPage());
+						}
+						else {
+							EzGUI.refreshButton();
+						}
 					}
 				}
 			}
@@ -228,9 +296,17 @@ public class EzController {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
+						/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
 						EzGUI.highlightButton("All");
-						EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), EzGUI.getPage());
+						EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), EzGUI.getPage());*/
+						String currTab = EzGUI.getCurrentTab();
+						if(currTab != null && !currTab.equalsIgnoreCase("help")) {
+							ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
+							EzGUI.showContent(currTab, list, EzGUI.getPage());
+						}
+						else {
+							EzGUI.refreshButton();
+						}
 					}
 				}
 			}
