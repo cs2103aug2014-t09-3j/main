@@ -3,6 +3,7 @@ import static org.junit.Assert.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -22,7 +23,6 @@ public class EzTaskSystemTest {
 	public void test() throws ParseException {
 		
 		
-		
 		EzController.setTesting(true);
 		//task 1
 		EzController.execute("add \"doing automated testing\" on 4/11/2014");
@@ -34,6 +34,7 @@ public class EzTaskSystemTest {
 		EzController.execute("add \"do EE2021 tutorial\" from 5/11 to 6/11");
 		//task 5
 		EzController.execute("add \"search for keywords\" today ***" );
+		
 		
 		//checking size of task list
 		assertEquals ("size of task list = " , 5, getListSize());
@@ -55,10 +56,21 @@ public class EzTaskSystemTest {
 		assertEquals("task 3 is overdue: ", false, getTaskDateStatus(3));
 		assertEquals("task 3 is due today", true, getTaskTodayStatus(3));
 		
+		//checking task 4
+		assertEquals("task 4 title: ", "do EE2021 tutorial", getTaskTitle(4));
+		assertEquals("task 4 starts today", true, getTaskTodayStatus(4));
+		
+		//checking task 5
+		assertEquals("task 5 title: ", "search for keywords", getTaskTitle(5));
+		assertEquals("task 5 priority: ", 3, getTaskPriority(5));
+		assertEquals("task 5 is due today:", true, getTaskTodayStatus(5));
+		
+		
 		//marking task 3 as done
 		EzController.execute("done 3");
 		assertEquals("number of tasks done: ", 1, getNumDoneTasks());
-		assertEquals("task that is done: ", "automated testing 3", getTaskTitle(3));
+		assertEquals("task 3 is done", true, getTaskDoneStatus(3));
+		
 		
 		//undoing the previous action( marking task 3 as done)
 		EzController.execute("undo");
@@ -72,10 +84,46 @@ public class EzTaskSystemTest {
 		EzController.execute("redo");
 		assertEquals("redo successful", 5, getListSize());
 		
+		//TODO please add 
+		//searching for keyword: "do"
+		//EzController.execute("show all have \"do \" ");
+		ArrayList <String> keywords = new ArrayList<String>();
+		keywords.add("do");
+		assertEquals("Number of task(s) found: ", 2, getKeywordsTasks(keywords));
+		
+		//searching for keywords: "do" and "automated"
+		//EzController.execute("show all have \"do\" \"automated\" ");
+		keywords.add("automated");
+		assertEquals("Number of tasks(s) found: ", 4, getKeywordsTasks(keywords));
+		
+		//searching for keyword: "keywords"
+		//EzController.execute("show all have \"keywords\" ");
+		keywords.clear();
+		keywords.add("keywords");
+		assertEquals("Number of tasks(s) found: ", 1, getKeywordsTasks(keywords));
+		
+		
+		
+	
 		
 	}
 
 	
+
+	private int getKeywordsTasks(ArrayList <String> keywords) {
+		return EzController.getStorage().getTasksByKeywords(keywords).size();
+		
+		
+		
+	}
+
+
+
+	private int getTaskPriority(int i) {
+		return EzController.getStorage().findTask(i).getPriority();
+	}
+
+
 
 	private Object getTaskTodayStatus(int i) {
 		
@@ -102,13 +150,6 @@ public class EzTaskSystemTest {
 			if(task.isDone())
 				i++;
 		return i;
-	}
-
-
-
-	private void setAsDone(int i) {
-		EzController.getStorage().getTask(3).setDone(true);;
-		
 	}
 
 
