@@ -8,7 +8,10 @@ import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.ScrollPaneLayout;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -27,7 +30,6 @@ public class EzGUICommandPanel extends JPanel {
 	private boolean showingFeedback = false;
 	private static final String[] DOUBLE_QUOTE_KEYWORDS = { "add", "at",
 		"title", "venue", "have" };
-
 	
 	public String getText(){
 		return commandField.getText();
@@ -88,13 +90,31 @@ public class EzGUICommandPanel extends JPanel {
 		commandPanel.add(commandFieldpanel);
 
 		commandField = new JTextPane();
-		/*
-		 * commandField.addFocusListener(new FocusAdapter() {
-		 * 
-		 * @Override public void focusLost(FocusEvent arg0) {
-		 * //commandField.grabFocus(); } })
-		 */;
-		commandFieldpanel.add(commandField);
+		JPanel newPanel = new JPanel();
+		newPanel.add(commandField);
+		newPanel.setPreferredSize(new Dimension(100000, 10));
+		newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.X_AXIS));
+		
+		//commandField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+		JScrollPane scroll = new JScrollPane(newPanel);
+		
+		scroll.setFocusable(false);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		//scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scroll.setLayout(new ScrollPaneLayout());
+		scroll.setBorder(null);
+		scroll.setPreferredSize(new Dimension(760,5));
+		
+		commandFieldpanel.add(scroll);
+		//commandFieldpanel.add(commandField);
+		//commandFieldpanel.setMinimumSize(new Dimension(600,10));
+		//commandFieldpanel.setMaximumSize(new Dimension(600,1100));
+		
+		commandField.setBackground(EzConstants.SHOW_AREA_BACKGROUND);
+		//commandField.setPreferredSize(new Dimension(1000, 10));
+		commandField.grabFocus();
+		commandField.setMinimumSize(new Dimension(1000, 10));
 		commandField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
@@ -245,41 +265,6 @@ public class EzGUICommandPanel extends JPanel {
 				} 
 			}
 
-			private void enterCommand() {
-				String fb = EzController.execute(commandField.getText());
-				commandHistory.add(commandField.getText());
-				historyPos = commandHistory.size();
-				if (fb != null) {
-					addColorForFeedBack(fb, commandField.getStyledDocument());
-					showingFeedback = true;
-				} else {
-					addColorForFeedBack("No feedback.",
-							commandField.getStyledDocument());
-					showingFeedback = true;
-				}
-			}
-
-			private void goToNextCommand() {
-				if (historyPos < commandHistory.size()) {
-					historyPos++;
-					if (historyPos < commandHistory.size()) {
-						addColorForCommandField(commandHistory.get(historyPos),
-								commandField.getStyledDocument());
-					} else {
-						addColorForCommandField("",
-								commandField.getStyledDocument());
-					}
-				}
-			}
-
-			private void goToPreviousCommand() {
-				if (historyPos > 0) {
-					historyPos--;
-					addColorForCommandField(commandHistory.get(historyPos),
-							commandField.getStyledDocument());
-				}
-			}
-
 			@Override
 			public void keyTyped(KeyEvent e) {
 				// clearFeedback();
@@ -325,158 +310,190 @@ public class EzGUICommandPanel extends JPanel {
 				}
 			}
 
-			private void clearFeedback() {
-				if (showingFeedback) {
-					showingFeedback = false;
-					commandField.setText("");
-				}
-			}
-
-			private void redo() {
-				EzController.execute("redo");
-			}
-
-			private void undo() {
-				EzController.execute("undo");
-			}
-
-			private void pasteText() {
-				int caretPos;
-				commandField.paste();
-				caretPos = commandField.getCaretPosition();
-				addColorForCommandField(commandField.getText(),
-						commandField.getStyledDocument());
-				commandField.setCaretPosition(caretPos);
-			}
-
-			private void typeSpace(int caretPos) {
-				String contentInputField;
-				contentInputField = commandField.getText();
-				String result = "";
-				String lastWord = "";
-				boolean haveKeywordAvailable = false;
-				boolean insideQuote = false;
-
-				for (int i = 0; i < caretPos; i++) {
-					// String word = "";
-					if (contentInputField.charAt(i) == ' ') {
-						result = result + " ";
-						while ((i + 1 < caretPos)
-								&& (contentInputField.charAt(i + 1) == ' ')) {
-							i++;
-							result = result + " ";
-						}
-					} else if (contentInputField.charAt(i) == '\"') {
-						insideQuote = true;
-						lastWord = "\"";
-						while ((i + 1 < caretPos)
-								&& (contentInputField.charAt(i + 1) != '\"')) {
-							i++;
-							lastWord = lastWord + contentInputField.charAt(i);
-						}
-
-						if (i + 1 < caretPos) {
-							i++;
-							lastWord = lastWord + contentInputField.charAt(i);
-						}
-
-						if ((lastWord.charAt(lastWord.length() - 1) == '\"')
-								&& (lastWord.length() > 2)) {
-							insideQuote = false;
-						}
-
-						result = result + lastWord;
-					} else {
-						lastWord = "" + contentInputField.charAt(i);
-						while ((i + 1 < caretPos)
-								&& (contentInputField.charAt(i + 1) != ' ')) {
-							i++;
-							lastWord = lastWord + contentInputField.charAt(i);
-						}
-						if (lastWord.equalsIgnoreCase("have")) {
-							haveKeywordAvailable = true;
-						}
-						result = result + lastWord;
-					}
-				}
-
-				if ((!insideQuote)
-						&& (isDoubleQuoteKeyword(lastWord) || haveKeywordAvailable)) {
-					result = result
-							+ " \""
-							+ contentInputField.substring(caretPos,
-									contentInputField.length());
-					addColorForCommandField(result,
-							commandField.getStyledDocument());
-					commandField.setCaretPosition(caretPos + 2);
-				} else {
-					result = result
-							+ " "
-							+ contentInputField.substring(caretPos,
-									contentInputField.length());
-					addColorForCommandField(result,
-							commandField.getStyledDocument());
-					commandField.setCaretPosition(caretPos + 1);
-				}
-
-				EzGUISuggestPanel.getInstance().loadSuggestion(contentInputField);
-			}
-
-			private boolean isDoubleQuoteKeyword(String word) {
-				for (int i = 0; i < DOUBLE_QUOTE_KEYWORDS.length; i++) {
-					if (word.equalsIgnoreCase(DOUBLE_QUOTE_KEYWORDS[i])) {
-						return true;
-					}
-				}
-				return false;
-			}
-
-			private void backSpaceSelection() {
-				String contentInputField;
-				int startPos = commandField.getSelectionStart();
-				if (commandField.getSelectionStart() == commandField
-						.getSelectionEnd()) {
-					if (commandField.getSelectionStart() > 0) {
-						if ((commandField.getText().charAt(
-								commandField.getSelectionStart() - 1) == '\"')
-								&& (commandField.getSelectionStart() < commandField
-										.getText().length())
-								&& (commandField.getText().charAt(
-										commandField.getSelectionStart()) == '\"')) {
-							contentInputField = deleteString(
-									commandField.getText(),
-									commandField.getSelectionStart() - 1,
-									commandField.getSelectionStart() + 1);
-						} else {
-							contentInputField = deleteString(
-									commandField.getText(),
-									commandField.getSelectionStart() - 1,
-									commandField.getSelectionStart());
-						}
-						addColorForCommandField(contentInputField,
-								commandField.getStyledDocument());
-						commandField.setCaretPosition(startPos - 1);
-						EzGUISuggestPanel.getInstance().loadSuggestion(contentInputField);
-					}
-				} else {
-					contentInputField = deleteString(commandField.getText(),
-							commandField.getSelectionStart(),
-							commandField.getSelectionEnd());
-					addColorForCommandField(contentInputField,
-							commandField.getStyledDocument());
-					commandField.setCaretPosition(startPos);
-					EzGUISuggestPanel.getInstance().loadSuggestion(contentInputField);
-				}
-
-			}
-
 		});
 		loadCommandAttributeSet();
 		// commandField.setContentType("text/html");
 		// commandField.setFont(new Font(BUTTON_FONT, Font.PLAIN, 17));
-		commandField.setBackground(EzConstants.SHOW_AREA_BACKGROUND);
-		commandField.setPreferredSize(new Dimension(0, 0));
-		commandField.grabFocus();
+	}
+	
+	private void clearFeedback() {
+		if (showingFeedback) {
+			showingFeedback = false;
+			commandField.setText("");
+		}
+	}
+
+	private void redo() {
+		EzController.execute("redo");
+	}
+
+	private void undo() {
+		EzController.execute("undo");
+	}
+
+	private void pasteText() {
+		int caretPos;
+		commandField.paste();
+		caretPos = commandField.getCaretPosition();
+		addColorForCommandField(commandField.getText(),
+				commandField.getStyledDocument());
+		commandField.setCaretPosition(caretPos);
+	}
+
+	private void typeSpace(int caretPos) {
+		String contentInputField;
+		contentInputField = commandField.getText();
+		String result = "";
+		String lastWord = "";
+		boolean haveKeywordAvailable = false;
+		boolean insideQuote = false;
+
+		for (int i = 0; i < caretPos; i++) {
+			// String word = "";
+			if (contentInputField.charAt(i) == ' ') {
+				result = result + " ";
+				while ((i + 1 < caretPos)
+						&& (contentInputField.charAt(i + 1) == ' ')) {
+					i++;
+					result = result + " ";
+				}
+			} else if (contentInputField.charAt(i) == '\"') {
+				insideQuote = true;
+				lastWord = "\"";
+				while ((i + 1 < caretPos)
+						&& (contentInputField.charAt(i + 1) != '\"')) {
+					i++;
+					lastWord = lastWord + contentInputField.charAt(i);
+				}
+
+				if (i + 1 < caretPos) {
+					i++;
+					lastWord = lastWord + contentInputField.charAt(i);
+				}
+
+				if ((lastWord.charAt(lastWord.length() - 1) == '\"')
+						&& (lastWord.length() > 2)) {
+					insideQuote = false;
+				}
+
+				result = result + lastWord;
+			} else {
+				lastWord = "" + contentInputField.charAt(i);
+				while ((i + 1 < caretPos)
+						&& (contentInputField.charAt(i + 1) != ' ')) {
+					i++;
+					lastWord = lastWord + contentInputField.charAt(i);
+				}
+				if (lastWord.equalsIgnoreCase("have")) {
+					haveKeywordAvailable = true;
+				}
+				result = result + lastWord;
+			}
+		}
+
+		if ((!insideQuote)
+				&& (isDoubleQuoteKeyword(lastWord) || haveKeywordAvailable)) {
+			result = result
+					+ " \""
+					+ contentInputField.substring(caretPos,
+							contentInputField.length());
+			addColorForCommandField(result,
+					commandField.getStyledDocument());
+			commandField.setCaretPosition(caretPos + 2);
+		} else {
+			result = result
+					+ " "
+					+ contentInputField.substring(caretPos,
+							contentInputField.length());
+			addColorForCommandField(result,
+					commandField.getStyledDocument());
+			commandField.setCaretPosition(caretPos + 1);
+		}
+
+		EzGUISuggestPanel.getInstance().loadSuggestion(contentInputField);
+	}
+
+	private boolean isDoubleQuoteKeyword(String word) {
+		for (int i = 0; i < DOUBLE_QUOTE_KEYWORDS.length; i++) {
+			if (word.equalsIgnoreCase(DOUBLE_QUOTE_KEYWORDS[i])) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void backSpaceSelection() {
+		String contentInputField;
+		int startPos = commandField.getSelectionStart();
+		if (commandField.getSelectionStart() == commandField
+				.getSelectionEnd()) {
+			if (commandField.getSelectionStart() > 0) {
+				if ((commandField.getText().charAt(
+						commandField.getSelectionStart() - 1) == '\"')
+						&& (commandField.getSelectionStart() < commandField
+								.getText().length())
+						&& (commandField.getText().charAt(
+								commandField.getSelectionStart()) == '\"')) {
+					contentInputField = deleteString(
+							commandField.getText(),
+							commandField.getSelectionStart() - 1,
+							commandField.getSelectionStart() + 1);
+				} else {
+					contentInputField = deleteString(
+							commandField.getText(),
+							commandField.getSelectionStart() - 1,
+							commandField.getSelectionStart());
+				}
+				addColorForCommandField(contentInputField,
+						commandField.getStyledDocument());
+				commandField.setCaretPosition(startPos - 1);
+				EzGUISuggestPanel.getInstance().loadSuggestion(contentInputField);
+			}
+		} else {
+			contentInputField = deleteString(commandField.getText(),
+					commandField.getSelectionStart(),
+					commandField.getSelectionEnd());
+			addColorForCommandField(contentInputField,
+					commandField.getStyledDocument());
+			commandField.setCaretPosition(startPos);
+			EzGUISuggestPanel.getInstance().loadSuggestion(contentInputField);
+		}
+
+	}
+	
+	private void enterCommand() {
+		String fb = EzController.execute(commandField.getText());
+		commandHistory.add(commandField.getText());
+		historyPos = commandHistory.size();
+		if (fb != null) {
+			addColorForFeedBack(fb, commandField.getStyledDocument());
+			showingFeedback = true;
+		} else {
+			addColorForFeedBack("No feedback.",
+					commandField.getStyledDocument());
+			showingFeedback = true;
+		}
+	}
+
+	private void goToNextCommand() {
+		if (historyPos < commandHistory.size()) {
+			historyPos++;
+			if (historyPos < commandHistory.size()) {
+				addColorForCommandField(commandHistory.get(historyPos),
+						commandField.getStyledDocument());
+			} else {
+				addColorForCommandField("",
+						commandField.getStyledDocument());
+			}
+		}
+	}
+
+	private void goToPreviousCommand() {
+		if (historyPos > 0) {
+			historyPos--;
+			addColorForCommandField(commandHistory.get(historyPos),
+					commandField.getStyledDocument());
+		}
 	}
 	
 	public void deleteSelection() {
