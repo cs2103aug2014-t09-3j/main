@@ -220,7 +220,7 @@ public class EzParser {
 				dateArr[2] = readDate(date)[2];
 				if (readDate(date)[0] < 0) {
 					newAction.setAction(TypeOfAction.INVALID);
-					newAction.setFeedback("Invalid command.");
+					newAction.setFeedback("Invalid command. User might entered an invalid date.");
 				}
 				calendar = new GregorianCalendar(dateArr[2], dateArr[1] - 1,
 						dateArr[0]);
@@ -252,7 +252,7 @@ public class EzParser {
 				dateArr[4] = readTime(time)[1];
 				if (readTime(time)[0] < 0) {
 					newAction.setAction(TypeOfAction.INVALID);
-					newAction.setFeedback("Invalid command.");
+					newAction.setFeedback("Invalid command. User might entered an invalid time.");
 				}
 				calendar.set(GregorianCalendar.HOUR_OF_DAY, dateArr[3]);
 				calendar.set(GregorianCalendar.MINUTE, dateArr[4]);
@@ -271,7 +271,7 @@ public class EzParser {
 					dateArr[2] = readDate(date)[2];
 					if (readDate(date)[0] < 0) {
 						newAction.setAction(TypeOfAction.INVALID);
-						newAction.setFeedback("Invalid command.");
+						newAction.setFeedback("Invalid command. User might entered an invalid date.");
 					}
 					calendar = new GregorianCalendar(dateArr[2],
 							dateArr[1] - 1, dateArr[0], dateArr[3], dateArr[4]);
@@ -284,11 +284,11 @@ public class EzParser {
 				{
 				} else {
 					newAction.setAction(TypeOfAction.INVALID);
-					newAction.setFeedback("Invalid command. Cannot recongize keywords.");
+					newAction.setFeedback("Invalid command. Invalid keywords.");
 				}
 				if (!content.isEmpty()) {
 					newAction.setAction(TypeOfAction.INVALID);
-					newAction.setFeedback("Invalid command. Cannot recongize keywords.");
+					newAction.setFeedback("Invalid command. Invalid keywords.");
 				}
 			}
 
@@ -341,7 +341,7 @@ public class EzParser {
 									)//from an later date to an earlier date
 							{
 								newAction.setAction(TypeOfAction.INVALID);
-								newAction.setFeedback("From a later date to an earlier date!");
+								newAction.setFeedback("The task is from a later date to an earlier date!");
 							}
 						} else if (readTime(start)[0] >= 0
 								&& readTime(end)[0] >= 0) {
@@ -438,13 +438,13 @@ public class EzParser {
 							task.setEndTime(calendar);
 						} else {
 							newAction.setAction(TypeOfAction.INVALID);
-							newAction.setFeedback("Invalid command. Cannot recongize keywords.");
+							newAction.setFeedback("Invalid command. Invalid keywords.");
 						}
 					}
 				} 
 				else {
 					newAction.setAction(TypeOfAction.INVALID);
-					newAction.setFeedback("Invalid command. Cannot recongize keywords.");
+					newAction.setFeedback("Invalid command. Invalid keywords.");
 				}
 			}
 
@@ -512,7 +512,7 @@ public class EzParser {
 
 						if (readDate(content)[0] < 0) {
 							newAction.setAction(TypeOfAction.INVALID);
-							newAction.setFeedback("Invalid date.");
+							newAction.setFeedback("Invalid command. User might entered an invalid date.");
 						}
 
 						if(taskUpdate.getStartTime()==null&&taskUpdate.getEndTime()==null)
@@ -531,7 +531,7 @@ public class EzParser {
 						content = removeFirstWord(content);
 						if (!content.isEmpty()) {
 							newAction.setAction(TypeOfAction.INVALID);
-							newAction.setFeedback("Invalid command. Cannot recongize keywords.");
+							newAction.setFeedback("Invalid command. Invalid keywords.");
 						}
 					} 
 					else if (getFirstWord(content).equalsIgnoreCase("time")) {
@@ -541,7 +541,7 @@ public class EzParser {
 						dateUpdate[4] = readTime(content)[1];
 						if (readTime(content)[0] < 0) {
 							newAction.setAction(TypeOfAction.INVALID);
-							newAction.setFeedback("Invalid time.");
+							newAction.setFeedback("Invalid command. User might entered an invalid time.");
 						}
 						calendarUpdate.set(GregorianCalendar.HOUR_OF_DAY,
 								dateUpdate[3]);
@@ -556,7 +556,7 @@ public class EzParser {
 						content = removeFirstWord(content);
 						if (!content.isEmpty()) {
 							newAction.setAction(TypeOfAction.INVALID);
-							newAction.setFeedback("Invalid command. Cannot recongize keywords.");
+							newAction.setFeedback("Invalid command. Invalid keywords.");
 						}
 					} else if (getFirstWord(content).equalsIgnoreCase("start")) {
 					
@@ -572,7 +572,7 @@ public class EzParser {
 
 							if (readDate(content)[0] < 0) {
 								newAction.setAction(TypeOfAction.INVALID);
-								newAction.setFeedback("Invalid date");
+								newAction.setFeedback("Invalid command. User might entered an invalid date.");
 							}
 							calendarUpdate.set(dateUpdate[2],dateUpdate[1]-1,dateUpdate[0]);
 							if(calendarUpdate.compareTo(taskUpdate.getEndTime())>0)
@@ -595,7 +595,7 @@ public class EzParser {
 							dateUpdate[4] = readTime(content)[1];
 							if (readTime(content)[0] < 0) {
 							newAction.setAction(TypeOfAction.INVALID);
-							newAction.setFeedback("Invalid time.");
+							newAction.setFeedback("Invalid command. User might entered an invalid time.");
 							}
 						
 							calendarUpdate.set(GregorianCalendar.HOUR_OF_DAY,
@@ -617,7 +617,7 @@ public class EzParser {
 
 						if (!content.isEmpty()) {
 							newAction.setAction(TypeOfAction.INVALID);
-							newAction.setFeedback("Invalid command. Cannot recongize keywords.");
+							newAction.setFeedback("Invalid command. Invalid keywords.");
 						}
 
 					} else if (getFirstWord(content).equalsIgnoreCase("end")) {
@@ -633,7 +633,7 @@ public class EzParser {
 
 							if (readDate(content)[0] < 0) {
 								newAction.setAction(TypeOfAction.INVALID);
-								newAction.setFeedback("Invalid date.");
+								newAction.setFeedback("Invalid command. User might entered an invalid date.");
 							}
 
 							calendarUpdate.set(dateUpdate[2],dateUpdate[1]-1,dateUpdate[0]);
@@ -674,7 +674,7 @@ public class EzParser {
 
 						if (!content.isEmpty()) {
 							newAction.setAction(TypeOfAction.INVALID);
-							newAction.setFeedback("Invalid command. Cannot recongize keywords.");
+							newAction.setFeedback("Invalid command. Invalid keywords.");
 						}
 						
 					}
@@ -721,7 +721,7 @@ public class EzParser {
 			catch(NumberFormatException e)
 			{
 				newAction.setAction(TypeOfAction.INVALID);
-				newAction.setFeedback("Invalid command.");
+				newAction.setFeedback("Invalid command. User might entered an invalid number format.");
 			}
 			
 
@@ -749,7 +749,7 @@ public class EzParser {
 				else
 				{
 					newAction.setAction(TypeOfAction.INVALID);
-					newAction.setFeedback("Invalid command.");
+					newAction.setFeedback("Invalid command. User might entered an invalid date.");
 				}
 				
 			}
@@ -766,7 +766,7 @@ public class EzParser {
 				else
 				{
 					newAction.setAction(TypeOfAction.INVALID);
-					newAction.setFeedback("Invalid command. Cannot recongize keywords.");
+					newAction.setFeedback("Invalid command. Invalid keywords.");
 				}
 				j=Integer.parseInt(content);
 				content=removeFirstWord(content);
@@ -852,7 +852,7 @@ public class EzParser {
 			  else
 			  {
 			  	newAction.setAction(TypeOfAction.INVALID);
-			  	newAction.setFeedback("Invalid date.");
+			  	newAction.setFeedback("Invalid command. User might entered an invalid date.");
 			  }
 			}
 			else if(getFirstWord(content).equalsIgnoreCase("from"))//"done from .. to "
@@ -868,7 +868,7 @@ public class EzParser {
 				else
 				{
 					newAction.setAction(TypeOfAction.INVALID);
-					newAction.setFeedback("Invalid command. Cannot recongize keywords.");
+					newAction.setFeedback("Invalid command. Invalid keywords.");
 				}
 				j=Integer.parseInt(content);
 				content=removeFirstWord(content);
@@ -921,7 +921,7 @@ public class EzParser {
 					catch(NumberFormatException e)
 					{
 						newAction.setAction(TypeOfAction.INVALID);
-						newAction.setFeedback("Invalid input.");
+						newAction.setFeedback("Invalid command. User might entered an invalid number format.");
 					}
 					content=removeFirstWord(content);
 				
@@ -942,13 +942,13 @@ public class EzParser {
 			catch(NumberFormatException e)
 			{
 				newAction.setAction(TypeOfAction.INVALID);
-				newAction.setFeedback("Invalid number format or index.");		
+				newAction.setFeedback("Invalid command. User might entered an invalid number format.");		
 			}
 			}
 			catch(NumberFormatException e)
 			{
 				newAction.setAction(TypeOfAction.INVALID);
-				newAction.setFeedback("Invalid number format or index.");		
+				newAction.setFeedback("Invalid command. User might entered an invalid number format.");		
 			}
 			
 			// target not found, set as null
@@ -994,7 +994,7 @@ public class EzParser {
 					  else
 					  {
 					  	newAction.setAction(TypeOfAction.INVALID);
-					  	newAction.setFeedback("Invalid date.");
+					  	newAction.setFeedback("Invalid command. User might entered an invalid date.");
 					  }
 					
 				}
@@ -1015,7 +1015,7 @@ public class EzParser {
 						else
 						{
 							newAction.setAction(TypeOfAction.INVALID);
-							newAction.setFeedback("Extra \"");
+							newAction.setFeedback("Extra \" or missing \" in the command.");
 						}
 					}
 					targetsShow=storage.getTasksByKeywords(keywords);
@@ -1023,7 +1023,7 @@ public class EzParser {
 				else
 				{
 					newAction.setAction(TypeOfAction.INVALID);
-					newAction.setFeedback("Invalid command. Cannot recongnize keywords.");
+					newAction.setFeedback("Invalid command. Invalid keywords.");
 				}
 				newAction.setResults(targetsShow);
 				newAction.setTargets(targetsShow);
@@ -1053,14 +1053,14 @@ public class EzParser {
 					  else
 					  {
 					  	newAction.setAction(TypeOfAction.INVALID);
-					  	newAction.setFeedback("Invalid date.");
+					  	newAction.setFeedback("Invalid command. User might entered an invalid date.");
 					  }
 					
 				}
 				else
 				{
 					newAction.setAction(TypeOfAction.INVALID);
-					newAction.setFeedback("Invalid command. Cannot recongnize keywords.");
+					newAction.setFeedback("Invalid command. Invalid keywords.");
 					
 				}
 				newAction.setResults(targetsShow);
@@ -1090,14 +1090,14 @@ public class EzParser {
 					  else
 					  {
 					  	newAction.setAction(TypeOfAction.INVALID);
-					  	newAction.setFeedback("Invalid date.");
+					  	newAction.setFeedback("Invalid command. User might entered an invalid date.");
 					  }
 					
 				}
 				else
 				{
 					newAction.setAction(TypeOfAction.INVALID);
-					newAction.setFeedback("Invalid command. Cannot recongnize keywords.");
+					newAction.setFeedback("Invalid command. Invalid keywords.");
 				}
 				newAction.setResults(targetsShow);
 				newAction.setTargets(targetsShow);
@@ -1135,7 +1135,7 @@ public class EzParser {
 			if(content.isEmpty()!=true)
 			{
 				newAction.setAction(TypeOfAction.INVALID);
-				newAction.setFeedback("Invalid command.");		
+				newAction.setFeedback("Invalid command. Type of sorting not indicated.");		
 			}
 			else if(sortType.equalsIgnoreCase("id"))
 			{
@@ -1170,7 +1170,7 @@ public class EzParser {
 			else
 			{
 				newAction.setAction(TypeOfAction.INVALID);
-				newAction.setFeedback("Invalid command");
+				newAction.setFeedback("Invalid command. Invalid keywords.");
 			}
 				
 			newAction.setTargets(null);
@@ -1209,7 +1209,7 @@ public class EzParser {
 			  else
 			  {
 			  	newAction.setAction(TypeOfAction.INVALID);
-			  	newAction.setFeedback("Invalid date.");
+			  	newAction.setFeedback("Invalid command. User might entered an invalid date.");
 			  }
 			}
 			else if(getFirstWord(content).equalsIgnoreCase("from"))//"Undone from .. to "
@@ -1225,7 +1225,7 @@ public class EzParser {
 				else
 				{
 					newAction.setAction(TypeOfAction.INVALID);
-					newAction.setFeedback("Invalid command. Cannot recongize keywords.");
+					newAction.setFeedback("Invalid command. Invalid keywords.");
 				}
 				j=Integer.parseInt(content);
 				content=removeFirstWord(content);
@@ -1277,7 +1277,7 @@ public class EzParser {
 					catch(NumberFormatException e)
 					{
 						newAction.setAction(TypeOfAction.INVALID);
-						newAction.setFeedback("Invalid input.");
+						newAction.setFeedback("Invalid command. User might entered an invalid number format.");
 					}
 					content=removeFirstWord(content);
 				
@@ -1298,13 +1298,13 @@ public class EzParser {
 			catch(NumberFormatException e)
 			{
 				newAction.setAction(TypeOfAction.INVALID);
-				newAction.setFeedback("Invalid number format or index.");		
+				newAction.setFeedback("Invalid command. User might entered an invalid number format.");		
 			}
 			}
 			catch(NumberFormatException e)
 			{
 				newAction.setAction(TypeOfAction.INVALID);
-				newAction.setFeedback("Invalid number format or index.");		
+				newAction.setFeedback("Invalid command. User might entered an invalid number format.");		
 			}
 			break;
 			
@@ -1322,7 +1322,7 @@ public class EzParser {
 			
 			{
 				newAction.setAction(TypeOfAction.INVALID);
-				newAction.setFeedback("Cannot recognize keyword.");
+				newAction.setFeedback("Invalid command.");
 			}
 			
 		
@@ -1348,7 +1348,7 @@ public class EzParser {
 			else
 			{
 				newAction.setAction(TypeOfAction.INVALID);
-				newAction.setFeedback("Cannot recognize keyword.");
+				newAction.setFeedback("Invalid command.");
 			}
 			
 			resultsRemove.add(taskRemove);
@@ -1358,7 +1358,7 @@ public class EzParser {
 			catch(NumberFormatException e)
 			{
 				newAction.setAction(TypeOfAction.INVALID);
-				newAction.setFeedback("Invalid number format.");
+				newAction.setFeedback("Invalid command. User might entered an invalid number format.");
 			}
 			break;
 		case PAGE:
@@ -1373,7 +1373,7 @@ public class EzParser {
 			catch(NumberFormatException e)
 			{
 				newAction.setAction(TypeOfAction.INVALID);
-				newAction.setFeedback("Invalid number format.");
+				newAction.setFeedback("Invalid command. User might entered an invalid number format.");
 			}
 			break;
 
