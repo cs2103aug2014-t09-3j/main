@@ -63,7 +63,7 @@ public class EzStorageTest {
 		storage.addTaskWithNewId(createTask("add \"task 8\""));
 		storage.addTaskWithNewId(createTask("add \"task 9\" on " + getDateFromToday(2)));
 		
-		storage.getTask(0).setDone(true);
+		storage.getTask(1).setDone(true);
 		storage.getTask(2).setDone(true);
 		storage.getTask(3).setDone(true);
 		storage.getTask(5).setDone(true);
@@ -142,9 +142,9 @@ public class EzStorageTest {
 		EzStorage storage = new EzStorage();
 		EzTask task;
 		
-		checkId(storage.addTaskWithNewId(new EzTask("task 0")), 0);
-		checkId(storage.addTaskWithNewId(new EzTask("task 1")), 1);
-		checkId(storage.addTaskWithNewId(new EzTask("task 2")), 2);
+		checkId(storage.addTaskWithNewId(new EzTask("task 0")), 1);
+		checkId(storage.addTaskWithNewId(new EzTask("task 1")), 2);
+		checkId(storage.addTaskWithNewId(new EzTask("task 2")), 3);
 		
 		task = new EzTask("task 5");
 		task.setId(5);
@@ -205,21 +205,21 @@ public class EzStorageTest {
 	public void test() {
 		EzStorage storage = new EzStorage();
 		
-		checkId(storage.addTaskWithNewId(new EzTask("go shopping","at Clementi",3)), 0);
-		checkId(storage.addTaskWithNewId(new EzTask("do homework",2)), 1);
-		checkId(storage.addTaskWithNewId(new EzTask("do EE2021 Tut",5)),2);
+		checkId(storage.addTaskWithNewId(new EzTask("go shopping","at Clementi",3)), 1);
+		checkId(storage.addTaskWithNewId(new EzTask("do homework",2)), 2);
+		checkId(storage.addTaskWithNewId(new EzTask("do EE2021 Tut",5)),3);
 		/**
 		 * now the list is:
-		 * 0. "go shopping" "at Clementi" 3
-		 * 1. "do homework" 2
-		 * 2. "do EE2021 Tut" 5
+		 * 1. "go shopping" "at Clementi" 3
+		 * 2. "do homework" 2
+		 * 3. "do EE2021 Tut" 5
 		 */
 	
 		assertEquals("check size: ", 3, storage.getSize());
 		
 		ArrayList<EzTask> list = new ArrayList<EzTask>();
 		
-		EzTask tmp = new EzTask(storage.getTask(1));
+		EzTask tmp = new EzTask(storage.getTask(2));
 		assertEquals("check title: ", "do homework", tmp.getTitle());
 		
 		tmp.setTitle("do CS2103T");
@@ -227,36 +227,38 @@ public class EzStorageTest {
 		assertEquals("check the number of tasks affected: ", 1, storage.updateTask(list));
 		/**
 		 * now the list is:
-		 * 0. "go shopping" "at Clementi" 3
-		 * 1. "do CS2103T" 2
-		 * 2. "do EE2021 Tut" 5
+		 * 1. "go shopping" "at Clementi" 3
+		 * 2. "do CS2103T" 2
+		 * 3. "do EE2021 Tut" 5
 		 */
 
-		assertEquals("check title: ", "do CS2103T", storage.getTask(1).getTitle());
+		assertEquals("check title: ", "do CS2103T", storage.getTask(2).getTitle());
 		
 		list.clear();
-		tmp = new EzTask(storage.getTask(1));
+		tmp = new EzTask(storage.getTask(2));
 		list.add(tmp);
 		
 		assertEquals("check the number of tasks affected: ", 1, storage.deleteTask(list));
+		
 		/**
 		 * now the list is:
-		 * 0. "go shopping" "at Clementi" 3
-		 * 2. "do EE2021 Tut" 5
+		 * 1. "go shopping" "at Clementi" 3
+		 * 3. "do EE2021 Tut" 5
 		 */
 		
-		checkId(storage.addTaskWithNewId(new EzTask("do CS2101 Tut",7)),3);
+		checkId(storage.addTaskWithNewId(new EzTask("do CS2101 Tut",7)),4);
 		
 		/**
 		 * now the list is:
-		 * 0. "go shopping" "at Clementi" 3
-		 * 2. "do EE2021 Tut" 5
-		 * 3. "do CS2101 Tut" 7
+		 * 1. "go shopping" "at Clementi" 3
+		 * 3. "do EE2021 Tut" 5
+		 * 4. "do CS2101 Tut" 7
 		 */
 		
 	
 		ArrayList<String> listWords = new ArrayList<String>();
 		listWords.add("do");
+		
 		
 		checkSearchByKeywords(storage, listWords,2);
 
@@ -266,10 +268,11 @@ public class EzStorageTest {
 		listWords.add("go");
 		checkSearchByKeywords(storage, listWords,3);
 		
-		assertEquals("check not found:",null,storage.getTask(1));
+		assertEquals("check not found:",null,storage.getTask(2));
 		
-		tmp = new EzTask(storage.getTask(3));
+		tmp = new EzTask(storage.getTask(4));
 		assertEquals("check title: ", "do CS2101 Tut", tmp.getTitle());
+		
 		
 		tmp.setTitle("do CS2103 Tut");
 		list.add(tmp);
@@ -277,9 +280,9 @@ public class EzStorageTest {
 		assertEquals("check the number of tasks affected: ", 1, storage.updateTask(list));
 		/**
 		 * now the list is:
-		 * 0. "go shopping" "at Clementi" 3
-		 * 2. "do EE2021 Tut" 5
-		 * 3. "do CS2103 Tut" 7
+		 * 1. "go shopping" "at Clementi" 3
+		 * 3. "do EE2021 Tut" 5
+		 * 4. "do CS2103 Tut" 7
 		 */
 		
 		list.clear();

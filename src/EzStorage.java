@@ -28,7 +28,7 @@ public class EzStorage {
 	 */
 	public EzTask addTask(EzTask task){
 		
-	if(listOfAllTasks != null)
+	
 		for(EzTask taskInList : listOfAllTasks)
 			if(taskInList.getId() > getLargestId())
 				setLargestId(taskInList.getId());
