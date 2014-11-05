@@ -13,6 +13,16 @@ import java.util.logging.*;
 import java.io.*;
 
 public class EzGUI extends JFrame {
+	public final String ALL = EzGUIButtonPanel.getInstance().ALL;
+	public final String DONE = EzGUIButtonPanel.getInstance().DONE;
+	public final String NOT_DONE = EzGUIButtonPanel.getInstance().NOT_DONE;
+	public final String TODAY = EzGUIButtonPanel.getInstance().TODAY;
+	public final String TOMORROW = EzGUIButtonPanel.getInstance().TOMORROW;
+	public final String UPCOMING = EzGUIButtonPanel.getInstance().UPCOMING;
+	public final String OVERDUE = EzGUIButtonPanel.getInstance().OVERDUE;
+	public final String NO_DATE = EzGUIButtonPanel.getInstance().NO_DATE;
+	public final String HELP = EzGUIButtonPanel.getInstance().HELP;
+	
 	private static final String HELP_DOCUMENT_FILE_NAME = "help.txt";
 
 	private final static Logger LOGGER = Logger
@@ -361,5 +371,13 @@ public class EzGUI extends JFrame {
 			}
 		}
 		return false;
+	}
+	
+	public void pressButton(String name) {
+		EzGUIButtonPanel.getInstance().pressButton(name);
+	}
+	
+	public void unhighlightButton(){
+		EzGUIButtonPanel.getInstance().unhighlightButton();
 	}
 }

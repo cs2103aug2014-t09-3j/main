@@ -14,10 +14,20 @@ import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class EzGUIButtonPanel extends JPanel {
+	public final String ALL = "All";
+	public final String DONE = "Done";
+	public final String NOT_DONE = "Not Done";
+	public final String TODAY = "Today";
+	public final String TOMORROW = "Tomorrow";
+	public final String UPCOMING = "Upcoming";
+	public final String OVERDUE = "Overdue";
+	public final String NO_DATE = "No Date";
+	public final String HELP = "Help";
+	
 	private ArrayList<JButton> listOfButtons;
-	private final String[] LIST_OF_BUTTON_NAMES = { "All", "Done",
-		"Not Done", "Today", "Tomorrow", "Upcoming", "Overdue", "No Date",
-		"Help" };
+	private final String[] LIST_OF_BUTTON_NAMES = { ALL, DONE,
+			NOT_DONE, TODAY, TOMORROW, UPCOMING, OVERDUE, NO_DATE,
+			HELP };
 	private final int BUTTON_HEIGHT = 40;
 	private final int BUTTON_WIDTH = 160;
 	private final Color BUTTON_TEXT_COLOR = EzConstants.PERSIAN_GREEN_COLOR;
@@ -79,31 +89,31 @@ public class EzGUIButtonPanel extends JPanel {
 		JButton button = new JButton(nameOfButton);
 		button.setName(nameOfButton);
 
-		if (nameOfButton.equalsIgnoreCase("help")) {
+		if (nameOfButton.equalsIgnoreCase(HELP)) {
 			button.setMnemonic(KeyEvent.VK_H);
 			button.addActionListener(new ButtonAction());
-		} else if (nameOfButton.equalsIgnoreCase("All")) {
+		} else if (nameOfButton.equalsIgnoreCase(ALL)) {
 			button.setMnemonic(KeyEvent.VK_A);
 			button.addActionListener(new ButtonAction());
-		} else if (nameOfButton.equalsIgnoreCase("Done")) {
+		} else if (nameOfButton.equalsIgnoreCase(DONE)) {
 			button.setMnemonic(KeyEvent.VK_D);
 			button.addActionListener(new ButtonAction());
-		} else if (nameOfButton.equalsIgnoreCase("Not Done")) {
+		} else if (nameOfButton.equalsIgnoreCase(NOT_DONE)) {
 			button.setMnemonic(KeyEvent.VK_N);
 			button.addActionListener(new ButtonAction());
-		} else if (nameOfButton.equalsIgnoreCase("Today")) {
+		} else if (nameOfButton.equalsIgnoreCase(TODAY)) {
 			button.setMnemonic(KeyEvent.VK_T);
 			button.addActionListener(new ButtonAction());
-		} else if (nameOfButton.equalsIgnoreCase("Tomorrow")) {
+		} else if (nameOfButton.equalsIgnoreCase(TOMORROW)) {
 			button.setMnemonic(KeyEvent.VK_M);
 			button.addActionListener(new ButtonAction());
-		} else if (nameOfButton.equalsIgnoreCase("Upcoming")) {
+		} else if (nameOfButton.equalsIgnoreCase(UPCOMING)) {
 			button.setMnemonic(KeyEvent.VK_U);
 			button.addActionListener(new ButtonAction());
-		} else if (nameOfButton.equalsIgnoreCase("Overdue")) {
+		} else if (nameOfButton.equalsIgnoreCase(OVERDUE)) {
 			button.setMnemonic(KeyEvent.VK_P);
 			button.addActionListener(new ButtonAction());
-		} else if (nameOfButton.equalsIgnoreCase("No Date")) {
+		} else if (nameOfButton.equalsIgnoreCase(NO_DATE)) {
 			button.setMnemonic(KeyEvent.VK_E);
 			button.addActionListener(new ButtonAction());
 		}
@@ -141,34 +151,41 @@ public class EzGUIButtonPanel extends JPanel {
 		pressButton(getButton(name));
 	}
 	
+	public void unhighlightButton(){
+		if (selectedButton != null) {
+			selectedButton.setBackground(EzGUI.UNSELECTED_BUTTON_BG_COLOR);
+			selectedButton = null;
+		}
+	}
+	
 	private void pressButton(JButton button) {
 		paintFocusedButton(button);
 		EzStorage storage = EzController.getStorage();
 		assert (storage != null);
 
-		if (button.getName().equalsIgnoreCase("All")) {
-			EzGUI.showContent("All",
+		if (button.getName().equalsIgnoreCase(ALL)) {
+			EzGUI.showContent(ALL,
 					EzSort.sortById(storage.getListOfAllTasks()));
-		} else if (button.getName().equalsIgnoreCase("Done")) {
-			EzGUI.showContent("Done", EzSort.sortById(storage.getDoneTasks()));
-		} else if (button.getName().equalsIgnoreCase("Not done")) {
-			EzGUI.showContent("Not Done",
+		} else if (button.getName().equalsIgnoreCase(DONE)) {
+			EzGUI.showContent(DONE, EzSort.sortById(storage.getDoneTasks()));
+		} else if (button.getName().equalsIgnoreCase(NOT_DONE)) {
+			EzGUI.showContent(NOT_DONE,
 					EzSort.sortByDate(storage.getUndoneTasks()));
-		} else if (button.getName().equalsIgnoreCase("Today")) {
-			EzGUI.showContent("Today",
+		} else if (button.getName().equalsIgnoreCase(TODAY)) {
+			EzGUI.showContent(TODAY,
 					EzSort.sortByPriority(storage.getTasksByDate(EzGUI.getToday())));
-		} else if (button.getName().equalsIgnoreCase("Tomorrow")) {
-			EzGUI.showContent("Tomorrow", EzSort.sortByPriority(storage
+		} else if (button.getName().equalsIgnoreCase(TOMORROW)) {
+			EzGUI.showContent(TOMORROW, EzSort.sortByPriority(storage
 					.getTasksByDate(EzGUI.getTomorrow())));
-		} else if (button.getName().equalsIgnoreCase("Upcoming")) {
+		} else if (button.getName().equalsIgnoreCase(UPCOMING)) {
 			EzGUI.showContent("Upcoming",
 					EzSort.sortByDate(storage.getComingTasks()));
-		} else if (button.getName().equalsIgnoreCase("Overdue")) {
-			EzGUI.showContent("Overdue", EzSort.sortByDate(storage.getPastTasks()));
-		} else if (button.getName().equalsIgnoreCase("No Date")) {
-			EzGUI.showContent("No Date",
+		} else if (button.getName().equalsIgnoreCase(OVERDUE)) {
+			EzGUI.showContent(OVERDUE, EzSort.sortByDate(storage.getPastTasks()));
+		} else if (button.getName().equalsIgnoreCase(NO_DATE)) {
+			EzGUI.showContent(NO_DATE,
 					EzSort.sortByPriority(storage.getNoDateTasks()));
-		} else if (button.getName().equalsIgnoreCase("Help")) {
+		} else if (button.getName().equalsIgnoreCase(HELP)) {
 			EzGUI.showHelp();
 		}
 
@@ -189,24 +206,24 @@ public class EzGUIButtonPanel extends JPanel {
 			for (int i = 0; i < listOfButtons.size(); i++) {
 				JButton button = listOfButtons.get(i);
 				int numTask = 0;
-				if (button.getName().equalsIgnoreCase("All")) {
+				if (button.getName().equalsIgnoreCase(ALL)) {
 					numTask = storage.getListOfAllTasks().size();
-				} else if (button.getName().equalsIgnoreCase("Done")) {
+				} else if (button.getName().equalsIgnoreCase(DONE)) {
 					numTask = storage.getDoneTasks().size();
-				} else if (button.getName().equalsIgnoreCase("Not Done")) {
+				} else if (button.getName().equalsIgnoreCase(NOT_DONE)) {
 					numTask = storage.getUndoneTasks().size();
-				} else if (button.getName().equalsIgnoreCase("Today")) {
+				} else if (button.getName().equalsIgnoreCase(TODAY)) {
 					numTask = storage.getTasksByDate(EzGUI.getToday()).size();
-				} else if (button.getName().equalsIgnoreCase("Tomorrow")) {
+				} else if (button.getName().equalsIgnoreCase(TOMORROW)) {
 					numTask = storage.getTasksByDate(EzGUI.getTomorrow()).size();
-				} else if (button.getName().equalsIgnoreCase("Upcoming")) {
+				} else if (button.getName().equalsIgnoreCase(UPCOMING)) {
 					numTask = storage.getComingTasks().size();
-				} else if (button.getName().equalsIgnoreCase("Overdue")) {
+				} else if (button.getName().equalsIgnoreCase(OVERDUE)) {
 					numTask = storage.getPastTasks().size();
-				} else if (button.getName().equalsIgnoreCase("No Date")) {
+				} else if (button.getName().equalsIgnoreCase(NO_DATE)) {
 					numTask = storage.getNoDateTasks().size();
 				}
-				if (!button.getName().equalsIgnoreCase("Help")) {
+				if (!button.getName().equalsIgnoreCase(HELP)) {
 					button.setText(button.getName() + " ["
 							+ String.valueOf(numTask) + "]");
 				}
@@ -216,49 +233,49 @@ public class EzGUIButtonPanel extends JPanel {
 	
 	public void pressBelowButton(){
 		if (selectedButton == null) {
-			pressButton("All");
-		} else if (selectedButton == getButton("all")) {
-			pressButton("Done");
-		} else if (selectedButton == getButton("Done")) {
-			pressButton("Not done");
-		} else if (selectedButton == getButton("Not Done")) {
-			pressButton("Today");
-		} else if (selectedButton == getButton("Today")) {
-			pressButton("Tomorrow");
-		} else if (selectedButton == getButton("Tomorrow")) {
-			pressButton("Upcoming");
-		} else if (selectedButton == getButton("Upcoming")) {
-			pressButton("Overdue");
-		} else if (selectedButton == getButton("Overdue")) {
-			pressButton("No Date");
-		} else if (selectedButton == getButton("No Date")) {
-			pressButton("Help");
-		} else if (selectedButton == getButton("Help")) {
-			pressButton("All");
+			pressButton(ALL);
+		} else if (selectedButton == getButton(ALL)) {
+			pressButton(DONE);
+		} else if (selectedButton == getButton(DONE)) {
+			pressButton(NOT_DONE);
+		} else if (selectedButton == getButton(NOT_DONE)) {
+			pressButton(TODAY);
+		} else if (selectedButton == getButton(TODAY)) {
+			pressButton(TOMORROW);
+		} else if (selectedButton == getButton(TOMORROW)) {
+			pressButton(UPCOMING);
+		} else if (selectedButton == getButton(UPCOMING)) {
+			pressButton(OVERDUE);
+		} else if (selectedButton == getButton(OVERDUE)) {
+			pressButton(NO_DATE);
+		} else if (selectedButton == getButton(NO_DATE)) {
+			pressButton(HELP);
+		} else if (selectedButton == getButton(HELP)) {
+			pressButton(ALL);
 		}
 	}
 	
 	public void pressAboveButton(){
 		if (selectedButton == null) {
-			pressButton(getButton("Help"));
-		} else if (selectedButton == getButton("all")) {
-			pressButton(getButton("Help"));
-		} else if (selectedButton == getButton("Done")) {
-			pressButton(getButton("All"));
-		} else if (selectedButton == getButton("Not Done")) {
-			pressButton(getButton("Done"));
-		} else if (selectedButton == getButton("Today")) {
-			pressButton(getButton("Not Done"));
-		} else if (selectedButton == getButton("Tomorrow")) {
-			pressButton(getButton("Today"));
-		} else if (selectedButton == getButton("Upcoming")) {
-			pressButton(getButton("Tomorrow"));
-		} else if (selectedButton == getButton("Overdue")) {
-			pressButton(getButton("Upcoming"));
-		} else if (selectedButton == getButton("No Date")) {
-			pressButton(getButton("Overdue"));
-		} else if (selectedButton == getButton("Help")) {
-			pressButton(getButton("No Date"));
+			pressButton(getButton(HELP));
+		} else if (selectedButton == getButton(ALL)) {
+			pressButton(getButton(HELP));
+		} else if (selectedButton == getButton(DONE)) {
+			pressButton(getButton(ALL));
+		} else if (selectedButton == getButton(NOT_DONE)) {
+			pressButton(getButton(DONE));
+		} else if (selectedButton == getButton(TODAY)) {
+			pressButton(getButton(NOT_DONE));
+		} else if (selectedButton == getButton(TOMORROW)) {
+			pressButton(getButton(TODAY));
+		} else if (selectedButton == getButton(UPCOMING)) {
+			pressButton(getButton(TOMORROW));
+		} else if (selectedButton == getButton(OVERDUE)) {
+			pressButton(getButton(UPCOMING));
+		} else if (selectedButton == getButton(NO_DATE)) {
+			pressButton(getButton(OVERDUE));
+		} else if (selectedButton == getButton(HELP)) {
+			pressButton(getButton(NO_DATE));
 		}
 	}
 }

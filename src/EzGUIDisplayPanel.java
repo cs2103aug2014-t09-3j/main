@@ -12,7 +12,8 @@ public class EzGUIDisplayPanel extends JScrollPane {
 	public EzGUIDisplayPanel(Component view){
 		super(view);
 		setFocusable(false);
-		setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		//setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		//setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		setLayout(new ScrollPaneLayout());
 		setBorder(null);
