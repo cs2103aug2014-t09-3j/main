@@ -97,7 +97,7 @@ public class EzController {
 					ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
 					EzGUI.showContent("Tasks Deleted", EzSort.sortById(updatedList));
 				}
-				userAction.setFeedback("Task deleted");
+				userAction.setFeedback("Deleted successfully");
 				deleteAction = null;
 				confirmation = false;
 			}
