@@ -161,10 +161,10 @@ public class EzGUICommandPanel extends JPanel {
 							EzGUIButtonPanel.getInstance().pressButton("Tomorrow");
 							break;
 						case KeyEvent.VK_6:
-							EzGUIButtonPanel.getInstance().pressButton("Coming");
+							EzGUIButtonPanel.getInstance().pressButton("Upcoming");
 							break;
 						case KeyEvent.VK_7:
-							EzGUIButtonPanel.getInstance().pressButton("Past");
+							EzGUIButtonPanel.getInstance().pressButton("Overdue");
 							break;
 						case KeyEvent.VK_8:
 							EzGUIButtonPanel.getInstance().pressButton("No date");
