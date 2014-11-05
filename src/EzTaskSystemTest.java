@@ -84,7 +84,7 @@ public class EzTaskSystemTest {
 		EzController.execute("redo");
 		assertEquals("redo successful", 5, getListSize());
 		
-		//TODO please add 
+		//TODO please add the relevant part of your code. 
 		//searching for keyword: "do"
 		//EzController.execute("show all have \"do \" ");
 		ArrayList <String> keywords = new ArrayList<String>();
@@ -102,10 +102,36 @@ public class EzTaskSystemTest {
 		keywords.add("keywords");
 		assertEquals("Number of tasks(s) found: ", 1, getKeywordsTasks(keywords));
 		
+		//marking tasks 1, 2 and 3 as done
+		EzController.execute("done from 1 to 3");
+		assertEquals("task 1 is done", true, getTaskDoneStatus(1));
+		assertEquals("task 2 is done", true, getTaskDoneStatus(2));
+		assertEquals("task 3 is done", true, getTaskDoneStatus(3));
+		
+		//marking tasks 4 as done
+		EzController.execute("done 4");
+		assertEquals("task 4 is done", true, getTaskDoneStatus(4));
+		
+		//deleting task 1 
+		EzController.execute("delete 1");
+		EzController.execute("y");
+		assertEquals("Number of tasks in list: ", 4, getListSize());
+		
+		//not deleting task 2
+		EzController.execute("delete 2");
+		EzController.execute("n");
+		assertEquals("Number of tasks in list: ", 4, getListSize());
+		
+		//updating task 3 venue to utown
+		EzController.execute("update 3 venue \"utown\" ");
+		assertEquals("task 3 venue is: ", "utown", getTaskVenue(3));
+		
+		//updating task 3 title to "do something"
+		EzController.execute("update 3 title \"do something\" ");
+		assertEquals("task 3 titles is: ", "do something", getTaskTitle(3));
 		
 		
 	
-		
 	}
 
 	
