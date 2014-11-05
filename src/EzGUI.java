@@ -1,8 +1,3 @@
-/**
- * @author Khanh
- *
- */
-
 import javax.swing.*;
 
 import java.awt.*;
@@ -12,6 +7,7 @@ import java.util.*;
 import java.util.logging.*;
 import java.io.*;
 
+//@author A0112129U
 public class EzGUI extends JFrame {
 	public static final String ALL = EzGUIButtonPanel.getInstance().ALL;
 	public static final String DONE = EzGUIButtonPanel.getInstance().DONE;
@@ -271,6 +267,7 @@ public class EzGUI extends JFrame {
 		headerToShow = new String(header);
 		
 		showPage(1);
+		EzGUIButtonPanel.getInstance().refreshButton();
 	}
 
 	public static void showContent(String header, ArrayList<EzTask> listOfTasks, EzTask task) {
@@ -279,6 +276,7 @@ public class EzGUI extends JFrame {
 		headerToShow = new String(header);
 		
 		showPage(findPage(task));
+		EzGUIButtonPanel.getInstance().refreshButton();
 	}
 	
 	public static void showContent(String header, ArrayList<EzTask> listOfTasks, int page) {
@@ -287,6 +285,7 @@ public class EzGUI extends JFrame {
 		headerToShow = new String(header);
 		
 		showPage(page);
+		EzGUIButtonPanel.getInstance().refreshButton();
 	}
 	
 	public static int findPage(EzTask task){
@@ -402,5 +401,9 @@ public class EzGUI extends JFrame {
 	public static ArrayList<EzTask> getTaskListOfTheTab(String name){
 		JButton  button = EzGUIButtonPanel.getInstance().getButton(name);
 		return EzGUIButtonPanel.getInstance().getTaskListOfButton(button);
+	}
+	
+	public static void refreshButton(){
+		EzGUIButtonPanel.getInstance().refreshButton();
 	}
 }

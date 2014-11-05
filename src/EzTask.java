@@ -1,14 +1,6 @@
-/**
- * Task Object  
- */
-
-/**
- * @author Khanh
- * modified by Cao Tianwen
- * modified by Tun Leng
- */
 import java.util.*;
 
+//@author A0112129U
 public class EzTask {
 	private int id;
 	private String title;

@@ -3,7 +3,7 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-
+//@author A0112129U
 public class EzGUIMainPanel extends JPanel {
 	
 	/**

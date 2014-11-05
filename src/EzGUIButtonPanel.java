@@ -13,6 +13,7 @@ import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+//@author A0112129U
 public class EzGUIButtonPanel extends JPanel {
 	public final String ALL = "All";
 	public final String DONE = "Done";
@@ -185,7 +186,7 @@ public class EzGUIButtonPanel extends JPanel {
 		} else if (button.getName().equalsIgnoreCase(UPCOMING)) {
 			return EzSort.sortByDate(storage.getComingTasks());
 		} else if (button.getName().equalsIgnoreCase(OVERDUE)) {
-			return EzSort.sortByDate(storage.getPastTasks());
+			return EzSort.sortByDate(storage.getOverdueTasks());
 		} else if (button.getName().equalsIgnoreCase(NO_DATE)) {
 			return EzSort.sortByPriority(storage.getNoDateTasks());
 		}
@@ -241,7 +242,7 @@ public class EzGUIButtonPanel extends JPanel {
 				} else if (button.getName().equalsIgnoreCase(UPCOMING)) {
 					numTask = storage.getComingTasks().size();
 				} else if (button.getName().equalsIgnoreCase(OVERDUE)) {
-					numTask = storage.getPastTasks().size();
+					numTask = storage.getOverdueTasks().size();
 				} else if (button.getName().equalsIgnoreCase(NO_DATE)) {
 					numTask = storage.getNoDateTasks().size();
 				}

@@ -2,14 +2,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-/**
- * 
- */
-
-/**
- * @author Khanh
- *
- */
+//@author A0112129U
 public class EzBinaryWriter extends FileOutputStream {
 
 	/**

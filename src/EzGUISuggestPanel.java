@@ -12,7 +12,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ScrollPaneLayout;
 
-
+//@author A0112129U
 public class EzGUISuggestPanel extends JDialog {
 	private JList<String> suggestList;
 	private JScrollPane suggestScrollPanel;

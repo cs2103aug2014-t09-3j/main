@@ -1,6 +1,4 @@
-
+//@author A0112129U
 public enum TypeOfAction {
-
 		ADD, UPDATE, DELETE, DONE, UNDO, REDO, SHOW, HELP, INVALID, Y, N, UNDONE, SORT, REMOVE, PAGE
-
 }
