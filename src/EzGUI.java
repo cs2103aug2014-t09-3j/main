@@ -406,4 +406,8 @@ public class EzGUI extends JFrame {
 		JButton  button = EzGUIButtonPanel.getInstance().getButton(name);
 		return EzGUIButtonPanel.getInstance().getTaskListOfButton(button);
 	}
+	
+	public static void refreshButton(){
+		EzGUIButtonPanel.getInstance().refreshButton();
+	}
 }
