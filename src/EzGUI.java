@@ -252,8 +252,8 @@ public class EzGUI extends JFrame {
 
 	public static void showHelp() {
 		String text = readHelpDocument();
-		onScreenTasks = new ArrayList<EzTask>();
-		showContent("Help - All commands", text);
+		onScreenTasks = null;
+		showContentTop("Help - All commands", text);
 	}
 
 	public static ArrayList<EzTask> getTasksOnScreen() {
@@ -294,9 +294,11 @@ public class EzGUI extends JFrame {
 	
 	public static int findPage(EzTask task){
 		int id = -1;
-		for(int i=0;i<onScreenTasks.size();i++){
-			if (task.getId()==onScreenTasks.get(i).getId()){
-				id = i; 
+		if (onScreenTasks!=null){
+			for(int i=0;i<onScreenTasks.size();i++){
+				if (task.getId()==onScreenTasks.get(i).getId()){
+					id = i; 
+				}
 			}
 		}
 		if (id!=-1){
@@ -307,37 +309,43 @@ public class EzGUI extends JFrame {
 	}
 	
 	public static int getMaxPage(){
-		int pageMaximum = onScreenTasks.size()/TASK_PER_PAGE;
-		if (onScreenTasks.size()%TASK_PER_PAGE>0){
-			pageMaximum++;
+		if (onScreenTasks!=null){
+			int pageMaximum = onScreenTasks.size()/TASK_PER_PAGE;
+			if (onScreenTasks.size()%TASK_PER_PAGE>0){
+				pageMaximum++;
+			}
+			
+			if (pageMaximum<1){
+				pageMaximum = 1;
+			}
+			return pageMaximum;
+		} else {
+			return 1;
 		}
-		
-		if (pageMaximum<1){
-			pageMaximum = 1;
-		}
-		return pageMaximum;
 	}
 	
 	public static void showPage(int numPage){
-		int pageMaximum = getMaxPage();
-		
-		if (numPage<1){
-			numPage = 1;
-		} else if (numPage>pageMaximum){
-			numPage = pageMaximum;
+		if (onScreenTasks!=null){
+			int pageMaximum = getMaxPage();
+			
+			if (numPage<1){
+				numPage = 1;
+			} else if (numPage>pageMaximum){
+				numPage = pageMaximum;
+			}
+			
+			pageToShow = numPage;
+			
+			ArrayList<String> list = new ArrayList<String>();
+			for (int i = (numPage-1)*TASK_PER_PAGE; i < Math.min(numPage*TASK_PER_PAGE, onScreenTasks.size()); i++) {
+				list.add(EzHtmlGenerator.createHtmlEzTask(onScreenTasks.get(i), i % 2));
+			}
+			
+			String content = EzHtmlGenerator.center(EzHtmlGenerator
+					.createHtmlTable(list.size(), 1, list,
+							"border=0 cellspacing=4 cellpadding=1 width=\"100%\""));
+			showContent(headerToShow + " (" + numPage + "/" + pageMaximum + ")", content);
 		}
-		
-		pageToShow = numPage;
-		
-		ArrayList<String> list = new ArrayList<String>();
-		for (int i = (numPage-1)*TASK_PER_PAGE; i < Math.min(numPage*TASK_PER_PAGE, onScreenTasks.size()); i++) {
-			list.add(EzHtmlGenerator.createHtmlEzTask(onScreenTasks.get(i), i % 2));
-		}
-		
-		String content = EzHtmlGenerator.center(EzHtmlGenerator
-				.createHtmlTable(list.size(), 1, list,
-						"border=0 cellspacing=4 cellpadding=1 width=\"100%\""));
-		showContent(headerToShow + " (" + numPage + "/" + pageMaximum + ")", content);
 	}
 	
 	public static int getPageToShow(){
@@ -348,7 +356,16 @@ public class EzGUI extends JFrame {
 		String text = EzHtmlGenerator.createHtmlTableWithHeader(header,
 				content, "border=0 cellspacing=0 cellpadding=0 width=\"100%\"");
 		displayArea.setText(text);
-		//displayArea.setCaretPosition(0);
+		displayArea.setCaretPosition(0);
+		
+		EzGUIButtonPanel.getInstance().refreshButton();
+	}
+	
+	private static void showContentTop(String header, String content) {
+		String text = EzHtmlGenerator.createHtmlTableWithHeader(header,
+				content, "border=0 cellspacing=0 cellpadding=0 width=\"100%\"");
+		displayArea.setText(text);
+		displayArea.setCaretPosition(0);
 		
 		EzGUIButtonPanel.getInstance().refreshButton();
 	}
