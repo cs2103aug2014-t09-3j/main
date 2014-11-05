@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import org.junit.Test;
 
+//@author A0112220J
 public class EzControllerTest {
 	@Test
 	public void testController() {

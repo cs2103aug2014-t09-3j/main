@@ -3,12 +3,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-/**
- * 
- * 
- * @author Yu Shuen
- * @author Khanh (skeleton file)
- */
+//@ author A0112220J
 public class EzController {
 
 	private static final int MAX_SIZE = 20;
