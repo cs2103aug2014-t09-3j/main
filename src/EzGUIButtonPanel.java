@@ -200,6 +200,10 @@ public class EzGUIButtonPanel extends JPanel {
 		selectedButton = button;
 	}
 	
+	public void highlightButton(String name){
+		paintFocusedButton(getButton(name));
+	}
+	
 	public void refreshButton() {
 		if (listOfButtons != null) {
 			EzStorage storage = EzController.getStorage();

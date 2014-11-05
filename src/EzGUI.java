@@ -373,8 +373,8 @@ public class EzGUI extends JFrame {
 		return false;
 	}
 	
-	public void pressButton(String name) {
-		EzGUIButtonPanel.getInstance().pressButton(name);
+	public void highlightButton(String name) {
+		EzGUIButtonPanel.getInstance().highlightButton(name);
 	}
 	
 	public void unhighlightButton(){
