@@ -398,4 +398,9 @@ public class EzGUI extends JFrame {
 	public static String getCurrentTab(){
 		return EzGUIButtonPanel.getInstance().getCurrentTab();
 	}
+	
+	public static ArrayList<EzTask> getTaskListOfTheTab(String name){
+		JButton  button = EzGUIButtonPanel.getInstance().getButton(name);
+		return EzGUIButtonPanel.getInstance().getTaskListOfButton(button);
+	}
 }

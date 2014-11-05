@@ -140,7 +140,7 @@ public class EzGUIButtonPanel extends JPanel {
 		}
 	}
 	
-	private JButton getButton(String name) {
+	public JButton getButton(String name) {
 		for (int i = 0; i < listOfButtons.size(); i++) {
 			if (listOfButtons.get(i).getName().equalsIgnoreCase(name)) {
 				return listOfButtons.get(i);
@@ -168,35 +168,43 @@ public class EzGUIButtonPanel extends JPanel {
 		}
 	}
 	
+	public ArrayList<EzTask> getTaskListOfButton(JButton button){
+		EzStorage storage = EzController.getStorage();
+		assert (storage != null);
+
+		if (button.getName().equalsIgnoreCase(ALL)) {
+			return EzSort.sortById(storage.getListOfAllTasks());
+		} else if (button.getName().equalsIgnoreCase(DONE)) {
+			return EzSort.sortById(storage.getDoneTasks());
+		} else if (button.getName().equalsIgnoreCase(NOT_DONE)) {
+			return EzSort.sortByDate(storage.getUndoneTasks());
+		} else if (button.getName().equalsIgnoreCase(TODAY)) {
+			return EzSort.sortByPriority(storage.getTasksByDate(EzGUI.getToday()));
+		} else if (button.getName().equalsIgnoreCase(TOMORROW)) {
+			return EzSort.sortByPriority(storage.getTasksByDate(EzGUI.getTomorrow()));
+		} else if (button.getName().equalsIgnoreCase(UPCOMING)) {
+			return EzSort.sortByDate(storage.getComingTasks());
+		} else if (button.getName().equalsIgnoreCase(OVERDUE)) {
+			return EzSort.sortByDate(storage.getPastTasks());
+		} else if (button.getName().equalsIgnoreCase(NO_DATE)) {
+			return EzSort.sortByPriority(storage.getNoDateTasks());
+		}
+		return null;
+	}
+	
 	private void pressButton(JButton button) {
 		paintFocusedButton(button);
 		EzStorage storage = EzController.getStorage();
 		assert (storage != null);
 
-		if (button.getName().equalsIgnoreCase(ALL)) {
-			EzGUI.showContent(ALL,
-					EzSort.sortById(storage.getListOfAllTasks()));
-		} else if (button.getName().equalsIgnoreCase(DONE)) {
-			EzGUI.showContent(DONE, EzSort.sortById(storage.getDoneTasks()));
-		} else if (button.getName().equalsIgnoreCase(NOT_DONE)) {
-			EzGUI.showContent(NOT_DONE,
-					EzSort.sortByDate(storage.getUndoneTasks()));
-		} else if (button.getName().equalsIgnoreCase(TODAY)) {
-			EzGUI.showContent(TODAY,
-					EzSort.sortByPriority(storage.getTasksByDate(EzGUI.getToday())));
-		} else if (button.getName().equalsIgnoreCase(TOMORROW)) {
-			EzGUI.showContent(TOMORROW, EzSort.sortByPriority(storage
-					.getTasksByDate(EzGUI.getTomorrow())));
-		} else if (button.getName().equalsIgnoreCase(UPCOMING)) {
-			EzGUI.showContent("Upcoming",
-					EzSort.sortByDate(storage.getComingTasks()));
-		} else if (button.getName().equalsIgnoreCase(OVERDUE)) {
-			EzGUI.showContent(OVERDUE, EzSort.sortByDate(storage.getPastTasks()));
-		} else if (button.getName().equalsIgnoreCase(NO_DATE)) {
-			EzGUI.showContent(NO_DATE,
-					EzSort.sortByPriority(storage.getNoDateTasks()));
-		} else if (button.getName().equalsIgnoreCase(HELP)) {
+		ArrayList<EzTask> list = getTaskListOfButton(button);
+		
+		if (button.getName().equalsIgnoreCase(HELP)) {
 			EzGUI.showHelp();
+		} else {
+			if (list!=null){
+				EzGUI.showContent(button.getName(), list);
+			}
 		}
 
 		EzGUICommandPanel.getInstance().focusOnField();
