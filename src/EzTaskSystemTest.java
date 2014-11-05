@@ -47,7 +47,7 @@ public class EzTaskSystemTest {
 		//checking task 2
 		assertEquals("task 2 title: " , "automated testing 2", getTaskTitle(2));
 		assertEquals("task 2 venue: " , "utown", getTaskVenue(2));
-		//assertEquals("task 2 is overdue: ", true, getTaskDateStatus(2));
+		assertEquals("task 2 is overdue: ", true, getTaskDateStatus(2));
 		
 		
 		//checking task 3
