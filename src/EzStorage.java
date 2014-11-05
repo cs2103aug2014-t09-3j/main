@@ -362,13 +362,14 @@ public class EzStorage {
 	 * This method returns past tasks according to date
 	 * @return pastTasks
 	 */
-	public ArrayList<EzTask> getPastTasks() {
+	public ArrayList<EzTask> getOverdueTasks() {
 		ArrayList<EzTask> pastTasks = new ArrayList<EzTask>();
 		Calendar currentDate = Calendar.getInstance();
 		Calendar startTime = Calendar.getInstance();
 		Calendar endTime = Calendar.getInstance();
 		for(EzTask task: listOfAllTasks)
 		{
+			if(!task.isDone())
 			if(task.getStartTime() != null && task.getEndTime() != null)
 			{
 				startTime = task.getStartTime();
