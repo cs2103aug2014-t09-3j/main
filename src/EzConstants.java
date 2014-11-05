@@ -1,13 +1,6 @@
 import java.awt.Color;
 
-/**
- * 
- */
-
-/**
- * @author Khanh
- *
- */
+//@author A0112129U
 public class EzConstants {
 	public static final Color FERN_COLOR = new Color(97,189,109);
 	public static final Color CHATEAU_GREEN_COLOR = new Color(65,168,95);

@@ -5,7 +5,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.ScrollPaneLayout;
 
-
+//@author A0112129U
 public class EzGUIDisplayPanel extends JScrollPane {
 	private static final int SCROLLING_INCREMENT = 20;
 

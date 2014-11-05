@@ -1,8 +1,3 @@
-/**
- * @author Khanh
- *
- */
-
 import javax.swing.*;
 
 import java.awt.*;
@@ -12,6 +7,7 @@ import java.util.*;
 import java.util.logging.*;
 import java.io.*;
 
+//@author A0112129U
 public class EzGUI extends JFrame {
 	public static final String ALL = EzGUIButtonPanel.getInstance().ALL;
 	public static final String DONE = EzGUIButtonPanel.getInstance().DONE;

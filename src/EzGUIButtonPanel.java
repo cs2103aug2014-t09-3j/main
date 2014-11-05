@@ -13,6 +13,7 @@ import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+//@author A0112129U
 public class EzGUIButtonPanel extends JPanel {
 	public final String ALL = "All";
 	public final String DONE = "Done";

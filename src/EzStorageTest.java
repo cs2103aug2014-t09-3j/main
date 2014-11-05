@@ -125,7 +125,7 @@ public class EzStorageTest {
 		storage.addTaskWithNewId(createTask("add \"task 8\""));
 		storage.addTaskWithNewId(createTask("add \"task 9\" on " + getDateFromToday(2)));
 		
-		ArrayList<EzTask> list = storage.getPastTasks();
+		ArrayList<EzTask> list = storage.getOverdueTasks();
 		assertEquals("check number of task: ", 2, list.size()); 
 	}
 

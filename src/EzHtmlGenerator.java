@@ -3,14 +3,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-/**
- * 
- */
-
-/**
- * @author Khanh
- *
- */
+//@author A0112129U
 public class EzHtmlGenerator {
 	
 	private static final int STAR_PER_LINE = 5;
@@ -67,10 +60,6 @@ public class EzHtmlGenerator {
 	
 	private static String table(String format, String content){
 		return "<table " + format + ">" + content + "</table>";
-	}
-	
-	private static String table(String content){
-		return table("",content);
 	}
 	
 	public static String createHtmlEzTask(EzTask task,int type){

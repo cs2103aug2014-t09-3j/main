@@ -2,14 +2,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-/**
- * this class is for reading data from a binary file.
- */
-
-/**
- * @author Khanh
- *
- */
+//@author A0112129U
 public class EzBinaryReader extends FileInputStream {
 
 	/**

@@ -1,13 +1,6 @@
 import java.awt.EventQueue;
 
-/**
- * 
- */
-
-/**
- * @author Khanh
- *
- */
+//@author A0112129U
 public class EzAppDelegate {
 
 	/**

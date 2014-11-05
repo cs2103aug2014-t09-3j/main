@@ -1,5 +1,6 @@
 import java.util.*;
 
+//@author A0112129U
 /**
  * the EzAction Object is only used to store the information of action, which have been done.
  * targets is the list of tasks before doing the action
@@ -11,12 +12,6 @@ import java.util.*;
  * for DONE action, it is the same as UPDATE. 
  * 
  */
-
-/**
- * @author Khanh
- * 
- */
-
 
 public class EzAction {
 	
