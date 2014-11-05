@@ -13,7 +13,7 @@ import org.junit.Test;
 
 /**
  * @author Khanh
- * modified by Tun Leng
+ * @author A0113922N
  */
 public class EzStorageTest {
 	private EzTask createTask(String command){
@@ -312,7 +312,7 @@ public class EzStorageTest {
 		 *7. "do EE2021 tut" 5
 		 */
 		
-	
+		
 		task = new EzTask("do something again", 4);
 		task.setId(4);
 		checkId(storage.addTask(task), 4);
