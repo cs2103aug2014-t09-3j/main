@@ -75,7 +75,7 @@ public class EzGUICommandPanel extends JPanel {
 		JPanel commandLabelPanel = new JPanel();
 		commandLabelPanel.setBackground(EzGUI.BACKGROUND_COLOR);
 		commandLabelPanel.setFocusable(false);
-		commandLabelPanel.setPreferredSize(new Dimension(160, 30));
+		commandLabelPanel.setPreferredSize(new Dimension(160, 25));
 		commandLabelPanel.setLayout(null);
 		commandLabelPanel.add(commandLabel);
 		

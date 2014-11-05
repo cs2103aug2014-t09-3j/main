@@ -271,6 +271,7 @@ public class EzGUI extends JFrame {
 		headerToShow = new String(header);
 		
 		showPage(1);
+		EzGUIButtonPanel.getInstance().refreshButton();
 	}
 
 	public static void showContent(String header, ArrayList<EzTask> listOfTasks, EzTask task) {
@@ -279,6 +280,7 @@ public class EzGUI extends JFrame {
 		headerToShow = new String(header);
 		
 		showPage(findPage(task));
+		EzGUIButtonPanel.getInstance().refreshButton();
 	}
 	
 	public static void showContent(String header, ArrayList<EzTask> listOfTasks, int page) {
@@ -287,6 +289,7 @@ public class EzGUI extends JFrame {
 		headerToShow = new String(header);
 		
 		showPage(page);
+		EzGUIButtonPanel.getInstance().refreshButton();
 	}
 	
 	public static int findPage(EzTask task){
