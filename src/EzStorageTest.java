@@ -112,7 +112,7 @@ public class EzStorageTest {
 	}
 	
 	@Test
-	public void testGetPastTask() {
+	public void testgetOverdueTask() {
 		EzStorage storage = new EzStorage();
 		storage.addTaskWithNewId(createTask("add \"task 0\" on " + getDateFromToday(0)));
 		storage.addTaskWithNewId(createTask("add \"task 1\" on " + getDateFromToday(1)));
@@ -125,7 +125,7 @@ public class EzStorageTest {
 		storage.addTaskWithNewId(createTask("add \"task 8\""));
 		storage.addTaskWithNewId(createTask("add \"task 9\" on " + getDateFromToday(2)));
 		
-		ArrayList<EzTask> list = storage.getPastTasks();
+		ArrayList<EzTask> list = storage.getOverdueTasks();
 		assertEquals("check number of task: ", 2, list.size()); 
 	}
 
