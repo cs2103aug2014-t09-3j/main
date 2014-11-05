@@ -390,11 +390,11 @@ public class EzGUI extends JFrame {
 		return false;
 	}
 	
-	public void highlightButton(String name) {
+	public static void highlightButton(String name) {
 		EzGUIButtonPanel.getInstance().highlightButton(name);
 	}
 	
-	public void unhighlightButton(){
+	public static void unhighlightButton(){
 		EzGUIButtonPanel.getInstance().unhighlightButton();
 	}
 }
