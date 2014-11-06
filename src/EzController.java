@@ -29,6 +29,15 @@ public class EzController {
 				EzTask task = userAction.getResults().get(0);
 				checkPos();
 				addHistory(userAction);
+				String currTab = EzGUI.getCurrentTab();
+				ArrayList<EzTask> listBeforeAdd = EzGUI.getTaskListOfTheTab(currTab);
+				int sizeOfList;
+				if(listBeforeAdd == null) {
+					sizeOfList = 0;
+				}
+				else {
+					sizeOfList = listBeforeAdd.size();
+				}
 				storage.addTaskWithNewId(task);
 				if(!testing) {
 					try {
@@ -40,10 +49,16 @@ public class EzController {
 					/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
 					EzGUI.highlightButton("All");
 					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), task);*/
-					String currTab = EzGUI.getCurrentTab();
 					if(currTab != null && !currTab.equalsIgnoreCase("help")) {
-						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
-						EzGUI.showContent(currTab, list, EzGUI.getPage());
+						int newSizeOfList = EzGUI.getTaskListOfTheTab(currTab).size();
+						if(sizeOfList != newSizeOfList) {
+							ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
+							EzGUI.showContent(currTab, list, task);
+						}
+						else {
+							ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
+							EzGUI.showContent(currTab, list, EzGUI.getPage());
+						}
 					}
 					else {
 						EzGUI.refreshButton();
