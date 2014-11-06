@@ -1,0 +1,2584 @@
+//@author: a0112129u
+
+
+
+	/**
+	 * origin: E:\Java Projects\CS2103T\src\EzAction.java
+	 */
+
+/**
+ * the EzAction Object is only used to store the information of action, which have been done.
+ * targets is the list of tasks before doing the action
+ * results is the list of task after the action
+ * 
+ * for ADD action, targets is NULL and results is an 1-element array of task.
+ * for UPDATE action, targets and results are the list of task before and after doing the action respectively.
+ * for DELETE action, targets is the list of tasks that will be delete while results is NULL.
+ * for DONE action, it is the same as UPDATE. 
+ * 
+ */
+
+public class EzAction {
+	
+	private TypeOfAction action;
+	private ArrayList<EzTask> targets;
+	private ArrayList<EzTask> results;
+	private String feedback;
+	private TypeOfSort typeSort;
+	private int pageNumber;
+	
+	/**
+	 *  These attributes are necessary for ADD, UPDATE, DELETE and DONE.
+	 *  There will be more attributes for other Actions.
+	 */
+	
+
+	public TypeOfAction getAction() {
+		return action;
+	}
+
+	public void setAction(TypeOfAction action) {
+		this.action = action;
+	}
+	
+	public ArrayList<EzTask> getTargets() {
+		return targets;
+	}
+	
+	public void setTargets(ArrayList<EzTask> targets) {
+		this.targets = targets;
+	}
+	
+
+	public ArrayList<EzTask> getResults() {
+		return results;
+	}
+
+	public void setResults(ArrayList<EzTask> results) {
+		this.results = results;
+	}
+
+	public String getFeedback() {
+		return feedback;
+	}
+
+	public void setFeedback(String feedback) {
+		this.feedback = feedback;
+	}
+
+	public TypeOfSort getTypeSort() {
+		return typeSort;
+	}
+
+	public void setTypeSort(TypeOfSort typeSort) {
+		this.typeSort = typeSort;
+	}
+
+	public int getPageNumber() {
+		return pageNumber;
+	}
+
+	public void setPageNumber(int pageNumber) {
+		this.pageNumber = pageNumber;
+	}	
+	
+}
+
+	// End of segment: E:\Java Projects\CS2103T\src\EzAction.java
+
+
+
+
+
+	/**
+	 * origin: E:\Java Projects\CS2103T\src\EzAppDelegate.java
+	 */
+
+public class EzAppDelegate {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		initiateGUI();
+	}
+	
+	public static void initiateGUI(){
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					EzGUI frame = new EzGUI();
+					frame.setVisible(true);
+					frame.showReminder();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+}
+
+	// End of segment: E:\Java Projects\CS2103T\src\EzAppDelegate.java
+
+
+
+
+
+	/**
+	 * origin: E:\Java Projects\CS2103T\src\EzBinaryReader.java
+	 */
+
+public class EzBinaryReader extends FileInputStream {
+
+	/**
+	 * @param arg0
+	 * @throws FileNotFoundException
+	 */
+	public EzBinaryReader(String arg0) throws FileNotFoundException {
+		super(arg0);
+	}
+	
+	public int read(int numBytes) throws IOException{
+		int result = 0;
+		for(int i=0;i<numBytes;i++){
+			try{
+				result = (result<<8) + read();
+			}
+			catch  (IOException e){
+				throw e;
+			}
+		}
+		return result;
+	}
+	
+	public String readString(int length) throws IOException{
+		String result = "";
+		if (length == 0) {
+			return null;
+		}
+		for(int i=0;i<length;i++){
+			try{
+				result = result + (char) read();
+			}
+			catch  (IOException e){
+				throw e;
+			}
+		}
+		return result;
+	}
+}
+
+	// End of segment: E:\Java Projects\CS2103T\src\EzBinaryReader.java
+
+
+
+
+
+	/**
+	 * origin: E:\Java Projects\CS2103T\src\EzBinaryWriter.java
+	 */
+
+public class EzBinaryWriter extends FileOutputStream {
+
+	/**
+	 * @param arg0
+	 * @throws FileNotFoundException
+	 */
+	public EzBinaryWriter(String arg0) throws FileNotFoundException {
+		super(arg0);
+	}
+
+	public void write(int data, int numBytes) throws IOException{
+		if (numBytes==1){
+			write(data%256);
+		} else {
+			write(data>>8,numBytes-1);
+			write(data%256);
+		}
+	}
+	
+	public void writeString(String data) throws IOException{
+		if (data!=null){
+			for (int i=0;i<data.length();i++){
+				write(data.charAt(i));
+			}
+		}
+	}
+}
+
+	// End of segment: E:\Java Projects\CS2103T\src\EzBinaryWriter.java
+
+
+
+
+
+	/**
+	 * origin: E:\Java Projects\CS2103T\src\EzConstants.java
+	 */
+
+public class EzConstants {
+	public static final Color FERN_COLOR = new Color(97,189,109);
+	public static final Color CHATEAU_GREEN_COLOR = new Color(65,168,95);
+	
+	public static final Color MOUNTAIN_MEADOW_COLOR = new Color(26,188,156);
+	public static final Color PERSIAN_GREEN_COLOR = new Color(0,168,133);
+	
+	public static final Color PICTION_BLUE_COLOR = new Color(84,172,210);
+	public static final Color CURIOUS_BLUE_COLOR = new Color(61,142,185);
+	
+	public static final Color MARINER_COLOR = new Color(44,130,201);
+	public static final Color DENIM_COLOR = new Color(41,105,176);
+	
+	public static final Color WISTERIA_COLOR = new Color(147,101,184);
+	public static final Color BLUE_GEM_COLOR = new Color(85,57,130);
+	
+	public static final Color CHAMBRAY_COLOR = new Color(71,85,119);
+	public static final Color BLUE_WHALE_COLOR = new Color(40,50,78);
+	
+	public static final Color ENERGY_COLOR = new Color(247,218,100);
+	public static final Color TURBO_COLOR = new Color(250,197,28);
+	
+	public static final Color NEON_CARROT_COLOR = new Color(251,160,38);
+	public static final Color SUN_COLOR = new Color(243,121,52);
+	
+	public static final Color TERRA_COTTA_COLOR = new Color(235,107,86);
+	public static final Color VALENCIA_COLOR = new Color(209,72,65);
+	
+	public static final Color CINNABAR_COLOR = new Color(225,73,56);
+	public static final Color WELL_READ_COLOR = new Color(184,49,47);
+	
+	public static final Color ALMOND_FROST_COLOR = new Color(163,143,132);
+	public static final Color IRON_GRAY_COLOR = new Color(117,112,107);
+	
+	public static final Color WHITE_SMOKE_COLOR = new Color(239,239,239);
+	public static final Color IRON_COLOR = new Color(209,213,216);
+	
+	public static final Color SHOW_AREA_BACKGROUND = EzConstants.WHITE_SMOKE_COLOR;
+	
+	public static final int MAXIMUM_PRIORITY = 6;
+}
+
+	// End of segment: E:\Java Projects\CS2103T\src\EzConstants.java
+
+
+
+
+
+	/**
+	 * origin: E:\Java Projects\CS2103T\src\EzGUI.java
+	 */
+
+public class EzGUI extends JFrame {
+	public static final String ALL = EzGUIButtonPanel.getInstance().ALL;
+	public static final String DONE = EzGUIButtonPanel.getInstance().DONE;
+	public static final String NOT_DONE = EzGUIButtonPanel.getInstance().NOT_DONE;
+	public static final String TODAY = EzGUIButtonPanel.getInstance().TODAY;
+	public static final String TOMORROW = EzGUIButtonPanel.getInstance().TOMORROW;
+	public static final String UPCOMING = EzGUIButtonPanel.getInstance().UPCOMING;
+	public static final String OVERDUE = EzGUIButtonPanel.getInstance().OVERDUE;
+	public static final String NO_DATE = EzGUIButtonPanel.getInstance().NO_DATE;
+	public static final String HELP = EzGUIButtonPanel.getInstance().HELP;
+	
+	private static final String HELP_DOCUMENT_FILE_NAME = "help.txt";
+
+	private final static Logger LOGGER = Logger
+			.getLogger(EzGUI.class.getName());
+
+	private static final String PROGRAM_TITLE = "EzTask";
+
+	
+	public static final String BUTTON_FONT = "Arial";
+	
+	public static final Color BACKGROUND_COLOR = EzConstants.CHATEAU_GREEN_COLOR;
+	private static final int APP_HEIGHT = 640;
+	private static final int APP_WIDTH = 960;
+	private static final int START_LOCATION_Y = 0;
+	private static final int START_LOCATION_X = 50;
+
+	private static final int TASK_PER_PAGE = 8;
+	
+	private static final String[] KEYWORDS = { "add", "delete", "update",
+			"show", "done", "undone", "undo", "redo", "on", "at", "from", "to",
+			"today", "tomorrow", "page", "title", "date", "time", "start",
+			"end", "venue", "priority", "all", "have", "help", "y", "n",
+			"remove", "id", "sort" };
+	
+	private static JFrame mainFrame;
+	private JPanel mainPanel;
+	private static EzGUIDisplayPanel displayPanel;
+	private static JEditorPane displayArea;
+	
+	private static EzGUISuggestPanel suggestPanel;
+	private static ArrayList<EzTask> onScreenTasks;
+	private static int pageToShow;
+	private static String headerToShow;
+	private static EzGUIButtonPanel buttonPanel;
+	
+	public EzGUI() {
+		initMainFrame();
+		createMainPanel();
+		createDisplayPanel();
+		createCommandPanel();
+		createButtonPanel();
+		registerFont();
+		loadFile();
+		setDefaultButton("Today");
+		createSuggestPanel();
+		setIcon();
+	}
+
+	private void initMainFrame() {
+		mainFrame = this;
+		setTitle(PROGRAM_TITLE);
+		setResizable(true);
+		setMinimumSize(new Dimension(APP_WIDTH, APP_HEIGHT));
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(START_LOCATION_X, START_LOCATION_Y, APP_WIDTH, APP_HEIGHT);
+	}
+	
+	public static JFrame getMainFrame(){
+		return mainFrame;
+	}
+	
+	public static Point getMainFrameLocation(){
+		return mainFrame.getLocation();
+	}
+	
+	public static void setMainFrameLocation(int x, int y){
+		mainFrame.setLocation(x, y);
+	}
+	
+	/**
+	 * Create main panel
+	 */
+	private void createMainPanel() {
+		mainPanel = new EzGUIMainPanel();
+		setContentPane(mainPanel);
+		LOGGER.log(Level.INFO, "Created Main Panel");
+	}
+	
+	/**
+	 * create show panel
+	 */
+	private void createDisplayPanel() {
+		displayArea = new JEditorPane();
+		displayPanel = new EzGUIDisplayPanel(displayArea);
+		mainPanel.add(displayPanel, BorderLayout.CENTER);
+		LOGGER.log(Level.INFO, "Created Display Panel");
+	}
+	
+	/**
+	 * create command panel
+	 */
+	private void createCommandPanel() {
+		EzGUICommandPanel commandPanel = EzGUICommandPanel.getInstance();
+		mainPanel.add(commandPanel, BorderLayout.SOUTH);
+	}
+	
+	/**
+	 * create button panel
+	 */
+	private void createButtonPanel() {
+		buttonPanel = EzGUIButtonPanel.getInstance();
+		mainPanel.add(buttonPanel, BorderLayout.WEST);
+		LOGGER.log(Level.INFO, "Created Button Panel");
+	}
+	
+	private static void registerFont() {
+		try {
+			Font font = Font.createFont(Font.TRUETYPE_FONT,
+					new File("fonts/Digital Dismay.otf")).deriveFont(16f);
+			GraphicsEnvironment genv = GraphicsEnvironment
+					.getLocalGraphicsEnvironment();
+			genv.registerFont(font);
+			LOGGER.log(Level.INFO,
+					"Registered Font Digital Dismay Successfully");
+		} catch (Exception e) {
+			LOGGER.log(Level.WARNING, "Font Digital Dismay Not Found");
+		}
+
+		try {
+			Font font = Font.createFont(Font.TRUETYPE_FONT,
+					new File("fonts/ARLRDBD.TTF")).deriveFont(16f);
+			GraphicsEnvironment genv = GraphicsEnvironment
+					.getLocalGraphicsEnvironment();
+			genv.registerFont(font);
+			LOGGER.log(Level.INFO, "Registered Font ARLRDBD Successfully");
+		} catch (Exception e) {
+			LOGGER.log(Level.WARNING, "Font ARLRDBD Not Found");
+		}
+
+	}
+	
+	private void loadFile() {
+		try {
+			EzController.loadFromFile();
+			LOGGER.log(Level.INFO, "Loaded file successfully");
+		} catch (IOException e) {
+			LOGGER.log(Level.WARNING, "Data file not found");
+			e.printStackTrace();
+		}
+	}
+	
+	private void setDefaultButton(String buttonName) {
+		buttonPanel.pressButton(buttonName);
+	}
+	
+	private void setIcon() {
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage(EzGUI.class.getResource("/icon.png")));
+	}
+
+	private void createSuggestPanel() {
+		suggestPanel = EzGUISuggestPanel.getInstance();
+		
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentMoved(ComponentEvent arg0) {
+				JFrame frame = (JFrame) arg0.getSource();
+
+				int x = frame.getLocation().x + 165;
+				int y = frame.getLocation().y + frame.getHeight() - 10;
+				suggestPanel.setLocation(x, y);
+			}
+
+			@Override
+			public void componentResized(ComponentEvent arg0) {
+				JFrame frame = (JFrame) arg0.getSource();
+
+				int x = frame.getLocation().x + 165;
+				int y = frame.getLocation().y + frame.getHeight() - 10;
+				suggestPanel.setPreferredSize(new Dimension(frame
+						.getWidth() - (960 - 784), 85));
+				suggestPanel.setLocation(x, y);
+				suggestPanel.loadSuggestion(EzGUICommandPanel.getInstance().getText());
+			}
+		});
+	}
+	
+	public void showReminder() {
+		GregorianCalendar today = new GregorianCalendar();
+		ArrayList<EzTask> list = EzController.getStorage().getTasksByDate(today.getTime());
+		int numTasksTodayToDo = 0;
+		for(int i=0;i<list.size();i++){
+			if (!list.get(i).isDone()) {
+				numTasksTodayToDo++;
+			}
+		}
+		 
+		if (numTasksTodayToDo>0){
+			JOptionPane.showMessageDialog(this, "You have " + numTasksTodayToDo + " task(s) that need to be done today");
+		}
+	}
+
+	public static void scrollUp(){
+		displayPanel.scrollUp();
+	}
+	
+	public static void scrollDown(){
+		displayPanel.scrollDown();
+	}
+	
+	private static String readHelpDocument() {
+		File file = new File(HELP_DOCUMENT_FILE_NAME);
+		assert (file != null);
+		BufferedReader in;
+		String text = "";
+		try {
+			String line;
+			in = new BufferedReader(new InputStreamReader(file.toURI().toURL()
+					.openStream()));
+			while ((line = in.readLine()) != null) {
+				text += line;
+			}
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return text;
+	}
+
+	public static void increaseWindowSize(int x, int y){
+		int width = mainFrame.getWidth();
+		int height = mainFrame.getHeight();
+		mainFrame.setSize(width + x, height + y);
+	}
+
+	public static void showHelp() {
+		String text = readHelpDocument();
+		onScreenTasks = null;
+		showContentTop("Help - All commands", text);
+	}
+
+	public static ArrayList<EzTask> getTasksOnScreen() {
+		return onScreenTasks;
+	}
+
+	public static int getPage(){
+		return pageToShow;
+	}
+	
+	public static String getHeader(){
+		return headerToShow;
+	}
+	
+	public static void showContent(String header, ArrayList<EzTask> listOfTasks) {
+		assert (listOfTasks != null);
+		onScreenTasks = listOfTasks;
+		headerToShow = new String(header);
+		
+		showPage(1);
+		EzGUIButtonPanel.getInstance().refreshButton();
+	}
+
+	public static void showContent(String header, ArrayList<EzTask> listOfTasks, EzTask task) {
+		assert (listOfTasks != null);
+		onScreenTasks = listOfTasks;
+		headerToShow = new String(header);
+		
+		showPage(findPage(task));
+		EzGUIButtonPanel.getInstance().refreshButton();
+	}
+	
+	public static void showContent(String header, ArrayList<EzTask> listOfTasks, int page) {
+		assert (listOfTasks != null);
+		onScreenTasks = listOfTasks;
+		headerToShow = new String(header);
+		
+		showPage(page);
+		EzGUIButtonPanel.getInstance().refreshButton();
+	}
+	
+	public static int findPage(EzTask task){
+		int id = -1;
+		if (onScreenTasks!=null){
+			for(int i=0;i<onScreenTasks.size();i++){
+				if (task.getId()==onScreenTasks.get(i).getId()){
+					id = i; 
+				}
+			}
+		}
+		if (id!=-1){
+			return id/TASK_PER_PAGE + 1;
+		} else {
+			return -1;
+		}
+	}
+	
+	public static int getMaxPage(){
+		if (onScreenTasks!=null){
+			int pageMaximum = onScreenTasks.size()/TASK_PER_PAGE;
+			if (onScreenTasks.size()%TASK_PER_PAGE>0){
+				pageMaximum++;
+			}
+			
+			if (pageMaximum<1){
+				pageMaximum = 1;
+			}
+			return pageMaximum;
+		} else {
+			return 1;
+		}
+	}
+	
+	public static void showPage(int numPage){
+		if (onScreenTasks!=null){
+			int pageMaximum = getMaxPage();
+			
+			if (numPage<1){
+				numPage = 1;
+			} else if (numPage>pageMaximum){
+				numPage = pageMaximum;
+			}
+			
+			pageToShow = numPage;
+			
+			ArrayList<String> list = new ArrayList<String>();
+			for (int i = (numPage-1)*TASK_PER_PAGE; i < Math.min(numPage*TASK_PER_PAGE, onScreenTasks.size()); i++) {
+				list.add(EzHtmlGenerator.createHtmlEzTask(onScreenTasks.get(i), i % 2));
+			}
+			
+			String content = EzHtmlGenerator.center(EzHtmlGenerator
+					.createHtmlTable(list.size(), 1, list,
+							"border=0 cellspacing=4 cellpadding=1 width=\"100%\""));
+			showContent(headerToShow + " (" + numPage + "/" + pageMaximum + ")", content);
+		}
+	}
+	
+	public static int getPageToShow(){
+		return pageToShow;
+	}
+	
+	private static void showContent(String header, String content) {
+		String text = EzHtmlGenerator.createHtmlTableWithHeader(header,
+				content, "border=0 cellspacing=0 cellpadding=0 width=\"100%\"");
+		displayArea.setText(text);
+		displayArea.setCaretPosition(0);
+		
+		EzGUIButtonPanel.getInstance().refreshButton();
+	}
+	
+	private static void showContentTop(String header, String content) {
+		String text = EzHtmlGenerator.createHtmlTableWithHeader(header,
+				content, "border=0 cellspacing=0 cellpadding=0 width=\"100%\"");
+		displayArea.setText(text);
+		displayArea.setCaretPosition(0);
+		
+		EzGUIButtonPanel.getInstance().refreshButton();
+	}
+	
+	public static Date getToday() {
+		Calendar cal = Calendar.getInstance();
+		return cal.getTime();
+	}
+
+	public static Date getTomorrow() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, 1);
+		return cal.getTime();
+	}
+
+	public static boolean isKeyword(String word) {
+		for (int i = 0; i < KEYWORDS.length; i++) {
+			if (KEYWORDS[i].equalsIgnoreCase(word)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static void highlightButton(String name) {
+		EzGUIButtonPanel.getInstance().highlightButton(name);
+	}
+	
+	public static void unhighlightButton(){
+		EzGUIButtonPanel.getInstance().unhighlightButton();
+	}
+	
+	public static String getCurrentTab(){
+		return EzGUIButtonPanel.getInstance().getCurrentTab();
+	}
+	
+	public static ArrayList<EzTask> getTaskListOfTheTab(String name){
+		JButton  button = EzGUIButtonPanel.getInstance().getButton(name);
+		return EzGUIButtonPanel.getInstance().getTaskListOfButton(button);
+	}
+	
+	public static void refreshButton(){
+		EzGUIButtonPanel.getInstance().refreshButton();
+	}
+}
+
+	// End of segment: E:\Java Projects\CS2103T\src\EzGUI.java
+
+
+
+
+
+	/**
+	 * origin: E:\Java Projects\CS2103T\src\EzGUIButtonPanel.java
+	 */
+
+public class EzGUIButtonPanel extends JPanel {
+	public final String ALL = "All";
+	public final String DONE = "Done";
+	public final String NOT_DONE = "Not Done";
+	public final String TODAY = "Today";
+	public final String TOMORROW = "Tomorrow";
+	public final String UPCOMING = "Upcoming";
+	public final String OVERDUE = "Overdue";
+	public final String NO_DATE = "No Date";
+	public final String HELP = "Help";
+	
+	private ArrayList<JButton> listOfButtons;
+	private final String[] LIST_OF_BUTTON_NAMES = { ALL, DONE,
+			NOT_DONE, TODAY, TOMORROW, UPCOMING, OVERDUE, NO_DATE,
+			HELP };
+	private final int BUTTON_HEIGHT = 40;
+	private final int BUTTON_WIDTH = 160;
+	private final Color BUTTON_TEXT_COLOR = EzConstants.PERSIAN_GREEN_COLOR;
+	public final Color SELECTED_BUTTON_BG_COLOR = EzConstants.WHITE_SMOKE_COLOR;
+	public final Color UNSELECTED_BUTTON_BG_COLOR = EzConstants.IRON_COLOR;
+	
+	private JButton selectedButton = null;
+	
+	static EzGUIButtonPanel buttonPanel;
+	
+	public static EzGUIButtonPanel getInstance(){
+		if (buttonPanel==null){
+			buttonPanel = new EzGUIButtonPanel();
+		}
+		return buttonPanel;
+	}
+	
+	/**
+	 * Create the panel.
+	 */
+	private EzGUIButtonPanel() {
+		setBackground(EzGUI.BACKGROUND_COLOR);
+		setBorder(null);
+		setFocusable(false);
+		
+		listOfButtons = new ArrayList<JButton>();
+		for (int i = 0; i < LIST_OF_BUTTON_NAMES.length; i++) {
+			JButton button = initButton(LIST_OF_BUTTON_NAMES[i]);
+			listOfButtons.add(button);
+		}
+
+		GroupLayout gl_buttonPanel = new GroupLayout(this);
+		ParallelGroup prGroup = gl_buttonPanel
+				.createParallelGroup(Alignment.LEADING);
+		for (int i = 0; i < LIST_OF_BUTTON_NAMES.length; i++) {
+			prGroup.addComponent(listOfButtons.get(i),
+					GroupLayout.DEFAULT_SIZE, BUTTON_WIDTH,
+					GroupLayout.PREFERRED_SIZE);
+		}
+
+		gl_buttonPanel.setHorizontalGroup(gl_buttonPanel.createParallelGroup(
+				Alignment.TRAILING).addGroup(
+				gl_buttonPanel.createSequentialGroup().addGroup(prGroup)));
+
+		SequentialGroup sqGroup = gl_buttonPanel.createSequentialGroup();
+		sqGroup.addGap(60);
+		for (int i = 0; i < LIST_OF_BUTTON_NAMES.length; i++) {
+			sqGroup.addComponent(listOfButtons.get(i),
+					GroupLayout.PREFERRED_SIZE, BUTTON_HEIGHT,
+					GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED).addGap(7);
+		}
+		gl_buttonPanel.setVerticalGroup(gl_buttonPanel.createParallelGroup(
+				Alignment.LEADING).addGroup(sqGroup));
+		setLayout(gl_buttonPanel);
+	}
+	
+	private JButton initButton(String nameOfButton) {
+		assert (nameOfButton != null);
+
+		JButton button = new JButton(nameOfButton);
+		button.setName(nameOfButton);
+
+		if (nameOfButton.equalsIgnoreCase(HELP)) {
+			button.setMnemonic(KeyEvent.VK_H);
+			button.addActionListener(new ButtonAction());
+		} else if (nameOfButton.equalsIgnoreCase(ALL)) {
+			button.setMnemonic(KeyEvent.VK_A);
+			button.addActionListener(new ButtonAction());
+		} else if (nameOfButton.equalsIgnoreCase(DONE)) {
+			button.setMnemonic(KeyEvent.VK_D);
+			button.addActionListener(new ButtonAction());
+		} else if (nameOfButton.equalsIgnoreCase(NOT_DONE)) {
+			button.setMnemonic(KeyEvent.VK_N);
+			button.addActionListener(new ButtonAction());
+		} else if (nameOfButton.equalsIgnoreCase(TODAY)) {
+			button.setMnemonic(KeyEvent.VK_T);
+			button.addActionListener(new ButtonAction());
+		} else if (nameOfButton.equalsIgnoreCase(TOMORROW)) {
+			button.setMnemonic(KeyEvent.VK_M);
+			button.addActionListener(new ButtonAction());
+		} else if (nameOfButton.equalsIgnoreCase(UPCOMING)) {
+			button.setMnemonic(KeyEvent.VK_U);
+			button.addActionListener(new ButtonAction());
+		} else if (nameOfButton.equalsIgnoreCase(OVERDUE)) {
+			button.setMnemonic(KeyEvent.VK_P);
+			button.addActionListener(new ButtonAction());
+		} else if (nameOfButton.equalsIgnoreCase(NO_DATE)) {
+			button.setMnemonic(KeyEvent.VK_E);
+			button.addActionListener(new ButtonAction());
+		}
+
+		button.setFont(new Font(EzGUI.BUTTON_FONT, Font.BOLD, 16));
+		button.setBackground(UNSELECTED_BUTTON_BG_COLOR);
+		button.setBorderPainted(false);
+		button.setForeground(BUTTON_TEXT_COLOR);
+		button.setFocusPainted(false);
+		button.setFocusable(false);
+		return button;
+	}
+	
+	/**
+	 * @param btnAll
+	 */
+	class ButtonAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JButton button = (JButton) e.getSource();
+			pressButton(button);
+		}
+	}
+	
+	public JButton getButton(String name) {
+		for (int i = 0; i < listOfButtons.size(); i++) {
+			if (listOfButtons.get(i).getName().equalsIgnoreCase(name)) {
+				return listOfButtons.get(i);
+			}
+		}
+		return null;
+	}
+
+	public void pressButton(String name) {
+		pressButton(getButton(name));
+	}
+	
+	public void unhighlightButton(){
+		if (selectedButton != null) {
+			selectedButton.setBackground(UNSELECTED_BUTTON_BG_COLOR);
+			selectedButton = null;
+		}
+	}
+	
+	public String getCurrentTab(){
+		if (selectedButton!=null){
+			return selectedButton.getName();
+		} else {
+			return null;
+		}
+	}
+	
+	public ArrayList<EzTask> getTaskListOfButton(JButton button){
+		EzStorage storage = EzController.getStorage();
+		assert (storage != null);
+
+		if (button.getName().equalsIgnoreCase(ALL)) {
+			return EzSort.sortById(storage.getListOfAllTasks());
+		} else if (button.getName().equalsIgnoreCase(DONE)) {
+			return EzSort.sortById(storage.getDoneTasks());
+		} else if (button.getName().equalsIgnoreCase(NOT_DONE)) {
+			return EzSort.sortByDate(storage.getUndoneTasks());
+		} else if (button.getName().equalsIgnoreCase(TODAY)) {
+			return EzSort.sortByPriority(storage.getTasksByDate(EzGUI.getToday()));
+		} else if (button.getName().equalsIgnoreCase(TOMORROW)) {
+			return EzSort.sortByPriority(storage.getTasksByDate(EzGUI.getTomorrow()));
+		} else if (button.getName().equalsIgnoreCase(UPCOMING)) {
+			return EzSort.sortByDate(storage.getComingTasks());
+		} else if (button.getName().equalsIgnoreCase(OVERDUE)) {
+			return EzSort.sortByDate(storage.getOverdueTasks());
+		} else if (button.getName().equalsIgnoreCase(NO_DATE)) {
+			return EzSort.sortByPriority(storage.getNoDateTasks());
+		}
+		return null;
+	}
+	
+	private void pressButton(JButton button) {
+		paintFocusedButton(button);
+		EzStorage storage = EzController.getStorage();
+		assert (storage != null);
+
+		ArrayList<EzTask> list = getTaskListOfButton(button);
+		
+		if (button.getName().equalsIgnoreCase(HELP)) {
+			EzGUI.showHelp();
+		} else {
+			if (list!=null){
+				EzGUI.showContent(button.getName(), list);
+			}
+		}
+
+		EzGUICommandPanel.getInstance().focusOnField();
+	}
+	
+	private void paintFocusedButton(JButton button) {
+		if (selectedButton != null) {
+			selectedButton.setBackground(UNSELECTED_BUTTON_BG_COLOR);
+		}
+		button.setBackground(SELECTED_BUTTON_BG_COLOR);
+		selectedButton = button;
+	}
+	
+	public void highlightButton(String name){
+		paintFocusedButton(getButton(name));
+	}
+	
+	public void refreshButton() {
+		if (listOfButtons != null) {
+			EzStorage storage = EzController.getStorage();
+			for (int i = 0; i < listOfButtons.size(); i++) {
+				JButton button = listOfButtons.get(i);
+				int numTask = 0;
+				if (button.getName().equalsIgnoreCase(ALL)) {
+					numTask = storage.getListOfAllTasks().size();
+				} else if (button.getName().equalsIgnoreCase(DONE)) {
+					numTask = storage.getDoneTasks().size();
+				} else if (button.getName().equalsIgnoreCase(NOT_DONE)) {
+					numTask = storage.getUndoneTasks().size();
+				} else if (button.getName().equalsIgnoreCase(TODAY)) {
+					numTask = storage.getTasksByDate(EzGUI.getToday()).size();
+				} else if (button.getName().equalsIgnoreCase(TOMORROW)) {
+					numTask = storage.getTasksByDate(EzGUI.getTomorrow()).size();
+				} else if (button.getName().equalsIgnoreCase(UPCOMING)) {
+					numTask = storage.getComingTasks().size();
+				} else if (button.getName().equalsIgnoreCase(OVERDUE)) {
+					numTask = storage.getOverdueTasks().size();
+				} else if (button.getName().equalsIgnoreCase(NO_DATE)) {
+					numTask = storage.getNoDateTasks().size();
+				}
+				if (!button.getName().equalsIgnoreCase(HELP)) {
+					button.setText(button.getName() + " ["
+							+ String.valueOf(numTask) + "]");
+				}
+			}
+		}
+	}
+	
+	public void pressBelowButton(){
+		if (selectedButton == null) {
+			pressButton(ALL);
+		} else if (selectedButton == getButton(ALL)) {
+			pressButton(DONE);
+		} else if (selectedButton == getButton(DONE)) {
+			pressButton(NOT_DONE);
+		} else if (selectedButton == getButton(NOT_DONE)) {
+			pressButton(TODAY);
+		} else if (selectedButton == getButton(TODAY)) {
+			pressButton(TOMORROW);
+		} else if (selectedButton == getButton(TOMORROW)) {
+			pressButton(UPCOMING);
+		} else if (selectedButton == getButton(UPCOMING)) {
+			pressButton(OVERDUE);
+		} else if (selectedButton == getButton(OVERDUE)) {
+			pressButton(NO_DATE);
+		} else if (selectedButton == getButton(NO_DATE)) {
+			pressButton(HELP);
+		} else if (selectedButton == getButton(HELP)) {
+			pressButton(ALL);
+		}
+	}
+	
+	public void pressAboveButton(){
+		if (selectedButton == null) {
+			pressButton(getButton(HELP));
+		} else if (selectedButton == getButton(ALL)) {
+			pressButton(getButton(HELP));
+		} else if (selectedButton == getButton(DONE)) {
+			pressButton(getButton(ALL));
+		} else if (selectedButton == getButton(NOT_DONE)) {
+			pressButton(getButton(DONE));
+		} else if (selectedButton == getButton(TODAY)) {
+			pressButton(getButton(NOT_DONE));
+		} else if (selectedButton == getButton(TOMORROW)) {
+			pressButton(getButton(TODAY));
+		} else if (selectedButton == getButton(UPCOMING)) {
+			pressButton(getButton(TOMORROW));
+		} else if (selectedButton == getButton(OVERDUE)) {
+			pressButton(getButton(UPCOMING));
+		} else if (selectedButton == getButton(NO_DATE)) {
+			pressButton(getButton(OVERDUE));
+		} else if (selectedButton == getButton(HELP)) {
+			pressButton(getButton(NO_DATE));
+		}
+	}
+}
+
+	// End of segment: E:\Java Projects\CS2103T\src\EzGUIButtonPanel.java
+
+
+
+
+
+	/**
+	 * origin: E:\Java Projects\CS2103T\src\EzGUICommandPanel.java
+	 */
+
+public class EzGUICommandPanel extends JPanel {
+
+	private JTextPane commandField;
+	private static EzGUICommandPanel commandPanel;
+	private SimpleAttributeSet[] commandAttributeSet = new SimpleAttributeSet[4];
+	private static final String COMMAND_FIELD_FONT = "Arial";
+	private static final int COMMAND_FIELD_SIZE = 17;
+	private ArrayList<String> commandHistory = new ArrayList<String>();
+	private int historyPos = 0;
+	private boolean showingFeedback = false;
+	private static final String[] DOUBLE_QUOTE_KEYWORDS = { "add", "at",
+		"title", "venue", "have" };
+	
+	public String getText(){
+		return commandField.getText();
+	}
+	
+	public void focusOnField(){
+		commandField.requestFocus();
+	}
+	
+	public static EzGUICommandPanel getInstance(){
+		if (commandPanel==null){
+			commandPanel = new EzGUICommandPanel();
+		}
+		return commandPanel;
+	}
+	
+	/**
+	 * Create the panel.
+	 */
+	private EzGUICommandPanel() {
+		setLayout(new BorderLayout(0, 0));
+		setBackground(EzGUI.BACKGROUND_COLOR);
+		setBorder(null);
+		setFocusable(false);
+		createCommandLabel();
+		createCommandInputField();
+	}
+	
+	/**
+	 * @param commandPanel
+	 */
+	private void createCommandLabel() {
+		JTextPane commandLabel = new JTextPane();
+		commandLabel.setBounds(0, 0, 154, 26);
+		commandLabel.setEditable(false);
+		commandLabel.setForeground(Color.WHITE);
+		commandLabel.setFont(new Font(EzGUI.BUTTON_FONT, Font.BOLD, 17));
+		commandLabel.setBackground(EzGUI.BACKGROUND_COLOR);
+		commandLabel.setText("  Enter Command: ");
+		commandLabel.setFocusable(false);
+		
+		JPanel commandLabelPanel = new JPanel();
+		commandLabelPanel.setBackground(EzGUI.BACKGROUND_COLOR);
+		commandLabelPanel.setFocusable(false);
+		commandLabelPanel.setPreferredSize(new Dimension(160, 25));
+		commandLabelPanel.setLayout(null);
+		commandLabelPanel.add(commandLabel);
+		
+		add(commandLabelPanel, BorderLayout.WEST);
+
+	}
+	
+	/**
+	 * @param commandPanel
+	 */
+	private void createCommandInputField() {
+		
+		commandField = new JTextPane();
+		commandField.setBackground(EzConstants.SHOW_AREA_BACKGROUND);
+		commandField.grabFocus();
+		commandField.addKeyListener(new EzKeyAdapter());
+		
+		JPanel newPanel = new JPanel();
+		newPanel.add(commandField);
+		newPanel.setPreferredSize(new Dimension(100000, 10));
+		newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.X_AXIS));
+		
+		//commandField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+		JScrollPane scroll = new JScrollPane(newPanel);
+		
+		scroll.setFocusable(false);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		//scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scroll.setLayout(new ScrollPaneLayout());
+		scroll.setBorder(null);
+		//scroll.setPreferredSize(new Dimension(760,5));
+		
+		JPanel commandFieldpanel = new JPanel();
+		commandFieldpanel.setLayout(new BoxLayout(commandFieldpanel, BoxLayout.X_AXIS));
+		commandFieldpanel.add(scroll);
+		add(commandFieldpanel);
+		//commandFieldpanel.add(commandField);
+		//commandFieldpanel.setMinimumSize(new Dimension(600,10));
+		//commandFieldpanel.setMaximumSize(new Dimension(600,1100));
+		
+		loadCommandAttributeSet();
+		// commandField.setContentType("text/html");
+		// commandField.setFont(new Font(BUTTON_FONT, Font.PLAIN, 17));
+	}
+	
+	class EzKeyAdapter extends KeyAdapter{
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+			clearFeedback();
+			if (arg0.isControlDown()) {
+				if ((!arg0.isAltDown() && (!arg0.isShiftDown()))) {	// only Ctrl
+					switch (arg0.getKeyChar()) {
+					case 22:
+					case 25:
+					case 26:
+						arg0.consume();
+						break;
+					}
+					switch (arg0.getKeyCode()) {
+					case KeyEvent.VK_UP:
+						EzGUI.scrollUp();
+						arg0.consume();
+						break;
+					case KeyEvent.VK_DOWN:
+						EzGUI.scrollDown();
+						arg0.consume();
+						break;
+					case KeyEvent.VK_RIGHT:
+						EzGUI.showPage(EzGUI.getPageToShow() + 1);
+						arg0.consume();
+						break;
+					case KeyEvent.VK_LEFT:
+						EzGUI.showPage(EzGUI.getPageToShow() - 1);
+						arg0.consume();
+						break;
+					case KeyEvent.VK_1:
+						EzGUIButtonPanel.getInstance().pressButton("All");
+						break;
+					case KeyEvent.VK_2:
+						EzGUIButtonPanel.getInstance().pressButton("Done");
+						break;
+					case KeyEvent.VK_3:
+						EzGUIButtonPanel.getInstance().pressButton("Not done");
+						break;
+					case KeyEvent.VK_4:
+						EzGUIButtonPanel.getInstance().pressButton("Today");
+						break;
+					case KeyEvent.VK_5:
+						EzGUIButtonPanel.getInstance().pressButton("Tomorrow");
+						break;
+					case KeyEvent.VK_6:
+						EzGUIButtonPanel.getInstance().pressButton("Upcoming");
+						break;
+					case KeyEvent.VK_7:
+						EzGUIButtonPanel.getInstance().pressButton("Overdue");
+						break;
+					case KeyEvent.VK_8:
+						EzGUIButtonPanel.getInstance().pressButton("No date");
+						break;
+					case KeyEvent.VK_9:
+					case KeyEvent.VK_H:
+						EzGUIButtonPanel.getInstance().pressButton("Help");
+						break;
+					}
+				} else if ((!arg0.isAltDown() && (arg0.isShiftDown()))) {	// Ctrl + Shift
+					int x = EzGUI.getMainFrameLocation().x;
+					int y = EzGUI.getMainFrameLocation().y;
+
+					switch (arg0.getKeyCode()) { // resize the window
+					case KeyEvent.VK_UP:
+						EzGUI.setMainFrameLocation(x, y-10);
+						arg0.consume();
+						break;
+					case KeyEvent.VK_DOWN:
+						EzGUI.setMainFrameLocation(x, y+10);
+						arg0.consume();
+						break;
+					case KeyEvent.VK_LEFT:
+						EzGUI.setMainFrameLocation(x-10, y);
+						arg0.consume();
+						break;
+					case KeyEvent.VK_RIGHT:
+						EzGUI.setMainFrameLocation(x+10, y);
+						arg0.consume();
+						break;
+					}
+				}
+			} else if (!arg0.isAltDown()) {
+				switch (arg0.getKeyChar()) {
+				case KeyEvent.VK_ENTER:
+					if (!EzGUISuggestPanel.getInstance().inSelectionMode()) {
+						enterCommand();
+					} else {
+						EzGUISuggestPanel.getInstance().enterSelection();
+					}
+					arg0.consume();
+					break;
+				case KeyEvent.VK_BACK_SPACE:
+				case KeyEvent.VK_DELETE:
+					arg0.consume();
+					break;
+				}
+
+				switch (arg0.getKeyCode()) {
+				case KeyEvent.VK_UP:
+					if (!EzGUISuggestPanel.getInstance().inSelectionMode()) {
+						goToPreviousCommand();
+					} else {
+						EzGUISuggestPanel.getInstance().selectAbove();
+					}
+					arg0.consume();
+					break;
+				case KeyEvent.VK_DOWN:
+					if (!EzGUISuggestPanel.getInstance().inSelectionMode()) {
+						goToNextCommand();
+					} else {
+						EzGUISuggestPanel.getInstance().selectBelow();
+					}
+					arg0.consume();
+					break;
+				case KeyEvent.VK_F1:
+					EzGUIButtonPanel.getInstance().pressButton("help");
+					break;
+				case KeyEvent.VK_TAB:
+					if (!arg0.isShiftDown()) {
+						EzGUIButtonPanel.getInstance().pressBelowButton();
+					} else {
+						EzGUIButtonPanel.getInstance().pressAboveButton();
+					}
+					arg0.consume();
+					break;
+				}
+
+			} else if ((arg0.isAltDown() && (arg0.isShiftDown()))) {
+				switch (arg0.getKeyCode()) { // resize the window
+				case KeyEvent.VK_UP:
+					EzGUI.increaseWindowSize(0,-10);
+					arg0.consume();
+					break;
+				case KeyEvent.VK_DOWN:
+					EzGUI.increaseWindowSize(0, 10);
+					arg0.consume();
+					break;
+				case KeyEvent.VK_LEFT:
+					EzGUI.increaseWindowSize(-10, 0);
+					arg0.consume();
+					break;
+				case KeyEvent.VK_RIGHT:
+					EzGUI.increaseWindowSize(10, 0);
+					arg0.consume();
+					break;
+				}
+			} 
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// clearFeedback();
+			int caretPos = commandField.getCaretPosition();
+			if ((!e.isControlDown()) && (!e.isAltDown())) {
+				switch (e.getKeyChar()) {
+				case KeyEvent.VK_ENTER:
+					break;
+				case KeyEvent.VK_DELETE:
+					deleteSelection();
+					break;
+				case KeyEvent.VK_BACK_SPACE:
+					backSpaceSelection();
+					break;
+				case KeyEvent.VK_SPACE:
+					typeSpace(caretPos);
+					break;
+				case KeyEvent.VK_TAB:
+					e.consume();
+					break;
+				default:
+					typeNormal("" + e.getKeyChar(), caretPos);
+					break;
+				}
+				e.consume();
+			} else {
+				switch (e.getKeyChar()) {
+				case 26: // CTRL + Z
+					undo();
+					e.consume();
+					break;
+				case 25: // CTRL + Y
+					redo();
+					e.consume();
+					break;
+				case 22: // CTRL + V
+					pasteText();
+					e.consume();
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
+	
+	private void clearFeedback() {
+		if (showingFeedback) {
+			showingFeedback = false;
+			commandField.setText("");
+		}
+	}
+
+	private void redo() {
+		EzController.execute("redo");
+	}
+
+	private void undo() {
+		EzController.execute("undo");
+	}
+
+	private void pasteText() {
+		int caretPos;
+		commandField.paste();
+		caretPos = commandField.getCaretPosition();
+		addColorForCommandField(commandField.getText(),
+				commandField.getStyledDocument());
+		commandField.setCaretPosition(caretPos);
+	}
+
+	private void typeSpace(int caretPos) {
+		String contentInputField;
+		contentInputField = commandField.getText();
+		String result = "";
+		String lastWord = "";
+		boolean haveKeywordAvailable = false;
+		boolean insideQuote = false;
+
+		for (int i = 0; i < caretPos; i++) {
+			// String word = "";
+			if (contentInputField.charAt(i) == ' ') {
+				result = result + " ";
+				while ((i + 1 < caretPos)
+						&& (contentInputField.charAt(i + 1) == ' ')) {
+					i++;
+					result = result + " ";
+				}
+			} else if (contentInputField.charAt(i) == '\"') {
+				insideQuote = true;
+				lastWord = "\"";
+				while ((i + 1 < caretPos)
+						&& (contentInputField.charAt(i + 1) != '\"')) {
+					i++;
+					lastWord = lastWord + contentInputField.charAt(i);
+				}
+
+				if (i + 1 < caretPos) {
+					i++;
+					lastWord = lastWord + contentInputField.charAt(i);
+				}
+
+				if ((lastWord.charAt(lastWord.length() - 1) == '\"')
+						&& (lastWord.length() > 2)) {
+					insideQuote = false;
+				}
+
+				result = result + lastWord;
+			} else {
+				lastWord = "" + contentInputField.charAt(i);
+				while ((i + 1 < caretPos)
+						&& (contentInputField.charAt(i + 1) != ' ')) {
+					i++;
+					lastWord = lastWord + contentInputField.charAt(i);
+				}
+				if (lastWord.equalsIgnoreCase("have")) {
+					haveKeywordAvailable = true;
+				}
+				result = result + lastWord;
+			}
+		}
+
+		if ((!insideQuote)
+				&& (isDoubleQuoteKeyword(lastWord) || haveKeywordAvailable)) {
+			result = result
+					+ " \""
+					+ contentInputField.substring(caretPos,
+							contentInputField.length());
+			addColorForCommandField(result,
+					commandField.getStyledDocument());
+			commandField.setCaretPosition(caretPos + 2);
+		} else {
+			result = result
+					+ " "
+					+ contentInputField.substring(caretPos,
+							contentInputField.length());
+			addColorForCommandField(result,
+					commandField.getStyledDocument());
+			commandField.setCaretPosition(caretPos + 1);
+		}
+
+		EzGUISuggestPanel.getInstance().loadSuggestion(contentInputField);
+	}
+
+	private boolean isDoubleQuoteKeyword(String word) {
+		for (int i = 0; i < DOUBLE_QUOTE_KEYWORDS.length; i++) {
+			if (word.equalsIgnoreCase(DOUBLE_QUOTE_KEYWORDS[i])) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void backSpaceSelection() {
+		String contentInputField;
+		int startPos = commandField.getSelectionStart();
+		if (commandField.getSelectionStart() == commandField
+				.getSelectionEnd()) {
+			if (commandField.getSelectionStart() > 0) {
+				if ((commandField.getText().charAt(
+						commandField.getSelectionStart() - 1) == '\"')
+						&& (commandField.getSelectionStart() < commandField
+								.getText().length())
+						&& (commandField.getText().charAt(
+								commandField.getSelectionStart()) == '\"')) {
+					contentInputField = deleteString(
+							commandField.getText(),
+							commandField.getSelectionStart() - 1,
+							commandField.getSelectionStart() + 1);
+				} else {
+					contentInputField = deleteString(
+							commandField.getText(),
+							commandField.getSelectionStart() - 1,
+							commandField.getSelectionStart());
+				}
+				addColorForCommandField(contentInputField,
+						commandField.getStyledDocument());
+				commandField.setCaretPosition(startPos - 1);
+				EzGUISuggestPanel.getInstance().loadSuggestion(contentInputField);
+			}
+		} else {
+			contentInputField = deleteString(commandField.getText(),
+					commandField.getSelectionStart(),
+					commandField.getSelectionEnd());
+			addColorForCommandField(contentInputField,
+					commandField.getStyledDocument());
+			commandField.setCaretPosition(startPos);
+			EzGUISuggestPanel.getInstance().loadSuggestion(contentInputField);
+		}
+
+	}
+	
+	private void enterCommand() {
+		String fb = EzController.execute(commandField.getText());
+		commandHistory.add(commandField.getText());
+		historyPos = commandHistory.size();
+		if (fb != null) {
+			addColorForFeedBack(fb, commandField.getStyledDocument());
+			showingFeedback = true;
+		} else {
+			addColorForFeedBack("No feedback.",
+					commandField.getStyledDocument());
+			showingFeedback = true;
+		}
+	}
+
+	private void goToNextCommand() {
+		if (historyPos < commandHistory.size()) {
+			historyPos++;
+			if (historyPos < commandHistory.size()) {
+				addColorForCommandField(commandHistory.get(historyPos),
+						commandField.getStyledDocument());
+			} else {
+				addColorForCommandField("",
+						commandField.getStyledDocument());
+			}
+		}
+	}
+
+	private void goToPreviousCommand() {
+		if (historyPos > 0) {
+			historyPos--;
+			addColorForCommandField(commandHistory.get(historyPos),
+					commandField.getStyledDocument());
+		}
+	}
+	
+	public void deleteSelection() {
+		String contentInputField;
+		int endPos = commandField.getSelectionStart();
+		if (commandField.getSelectionStart() == commandField.getSelectionEnd()) {
+			if (commandField.getSelectionStart() < commandField.getText()
+					.length()) {
+				contentInputField = deleteString(commandField.getText(),
+						commandField.getSelectionStart(),
+						commandField.getSelectionEnd() + 1);
+				addColorForCommandField(contentInputField,
+						commandField.getStyledDocument());
+				commandField.setCaretPosition(endPos);
+				EzGUISuggestPanel.getInstance().loadSuggestion(contentInputField);
+			}
+		} else {
+			int endCaretPos = commandField.getSelectionEnd();
+			if ((endCaretPos < commandField.getText().length())
+					&& (commandField.getText().charAt(endCaretPos) == '\"')) {
+				endCaretPos++;
+			}
+			contentInputField = deleteString(commandField.getText(),
+					commandField.getSelectionStart(), endCaretPos);
+			addColorForCommandField(contentInputField,
+					commandField.getStyledDocument());
+			commandField.setCaretPosition(endPos);
+			EzGUISuggestPanel.getInstance().loadSuggestion(contentInputField);
+		}
+	}
+	
+	public void setSelection(int start, int end){
+		commandField.setSelectionStart(start);
+		commandField.setSelectionEnd(end);	
+	}
+	
+	public int getCaretPosition(){
+		return commandField.getCaretPosition();
+	}
+	
+	public int getSelectionStart(){
+		return commandField.getSelectionStart();
+	}
+	
+	public void typeNormal(String typedText, int caretPos) {
+		String contentInputField;
+		contentInputField = commandField.getText().substring(0, caretPos)
+				+ typedText
+				+ commandField.getText().substring(caretPos,
+						commandField.getText().length());
+		addColorForCommandField(contentInputField,
+				commandField.getStyledDocument());
+		commandField.setCaretPosition(caretPos + typedText.length());
+
+		EzGUISuggestPanel.getInstance().loadSuggestion(contentInputField);
+	}
+	
+	private String deleteString(String text, int startPos, int endPos) {
+		return text.substring(0, startPos) + text.substring(endPos);
+	}
+
+	/**
+	 * @param contentInputField
+	 * @param doc
+	 */
+	private void addColorForCommandField(String contentInputField,
+			StyledDocument doc) {
+		try {
+			doc.remove(0, doc.getLength());
+		} catch (BadLocationException e2) {
+			e2.printStackTrace();
+		}
+		for (int i = 0; i < contentInputField.length(); i++) {
+			String word = "";
+			if (contentInputField.charAt(i) == ' ') {
+				word = " ";
+				while ((i + 1 < contentInputField.length())
+						&& (contentInputField.charAt(i + 1) == ' ')) {
+					i++;
+					word = word + ' ';
+				}
+				try {
+					doc.insertString(doc.getLength(), word,
+							commandAttributeSet[0]);
+				} catch (BadLocationException e1) {
+					e1.printStackTrace();
+				}
+			} else if (contentInputField.charAt(i) == '\"') {
+				word = "\"";
+				while ((i + 1 < contentInputField.length())
+						&& (contentInputField.charAt(i + 1) != '\"')) {
+					i++;
+					word = word + contentInputField.charAt(i);
+				}
+				if (i + 1 < contentInputField.length()) {
+					i++;
+					word = word + contentInputField.charAt(i);
+				}
+				try {
+					doc.insertString(doc.getLength(), word,
+							commandAttributeSet[2]);
+				} catch (BadLocationException e1) {
+					e1.printStackTrace();
+				}
+			} else {
+				word = "" + contentInputField.charAt(i);
+				while ((i + 1 < contentInputField.length())
+						&& (contentInputField.charAt(i + 1) != ' ')) {
+					i++;
+					word = word + contentInputField.charAt(i);
+				}
+				if (EzGUI.isKeyword(word)) {
+					try {
+						doc.insertString(doc.getLength(), word,
+								commandAttributeSet[1]);
+					} catch (BadLocationException e1) {
+						e1.printStackTrace();
+					}
+				} else {
+					try {
+						doc.insertString(doc.getLength(), word,
+								commandAttributeSet[0]);
+					} catch (BadLocationException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+
+	private void addColorForFeedBack(String feedback, StyledDocument doc) {
+		try {
+			doc.remove(0, doc.getLength());
+			doc.insertString(doc.getLength(), feedback, commandAttributeSet[3]);
+		} catch (BadLocationException e2) {
+			e2.printStackTrace();
+		}
+	}
+
+	private void loadCommandAttributeSet() {
+		commandAttributeSet[0] = new SimpleAttributeSet();
+		StyleConstants
+				.setFontFamily(commandAttributeSet[0], COMMAND_FIELD_FONT);
+		StyleConstants.setFontSize(commandAttributeSet[0], COMMAND_FIELD_SIZE);
+
+		commandAttributeSet[1] = new SimpleAttributeSet(commandAttributeSet[0]);
+		StyleConstants.setForeground(commandAttributeSet[1],
+				EzConstants.MARINER_COLOR);
+
+		commandAttributeSet[2] = new SimpleAttributeSet(commandAttributeSet[0]);
+		StyleConstants.setForeground(commandAttributeSet[2],
+				EzConstants.IRON_GRAY_COLOR);
+
+		commandAttributeSet[3] = new SimpleAttributeSet(commandAttributeSet[0]);
+		StyleConstants.setForeground(commandAttributeSet[3],
+				EzConstants.TERRA_COTTA_COLOR);
+	}
+}
+
+	// End of segment: E:\Java Projects\CS2103T\src\EzGUICommandPanel.java
+
+
+
+
+
+	/**
+	 * origin: E:\Java Projects\CS2103T\src\EzGUIDisplayPanel.java
+	 */
+
+public class EzGUIDisplayPanel extends JScrollPane {
+	private static final int SCROLLING_INCREMENT = 20;
+
+	public EzGUIDisplayPanel(Component view){
+		super(view);
+		setFocusable(false);
+		//setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		//setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		setLayout(new ScrollPaneLayout());
+		setBorder(null);
+		
+		view.setBackground(EzConstants.SHOW_AREA_BACKGROUND);
+		((JEditorPane) view).setEditable(false);
+		((JEditorPane) view).setContentType("text/html");
+		view.setFocusable(false);
+	}
+	
+	public void scrollDown() {
+		getVerticalScrollBar().setValue(getVerticalScrollBar().getValue() + SCROLLING_INCREMENT);
+	}
+
+	public void scrollUp() {
+		getVerticalScrollBar().setValue(getVerticalScrollBar().getValue() - SCROLLING_INCREMENT);
+	}
+}
+
+	// End of segment: E:\Java Projects\CS2103T\src\EzGUIDisplayPanel.java
+
+
+
+
+
+	/**
+	 * origin: E:\Java Projects\CS2103T\src\EzGUIMainPanel.java
+	 */
+
+public class EzGUIMainPanel extends JPanel {
+	
+	/**
+	 * Create the panel.
+	 */
+	public EzGUIMainPanel() {
+		setFocusable(false);
+		setBackground(EzGUI.BACKGROUND_COLOR);
+		setBorder(new EmptyBorder(10, 10, 10, 10));
+		setLayout(new BorderLayout(0, 10));
+	}
+
+}
+
+	// End of segment: E:\Java Projects\CS2103T\src\EzGUIMainPanel.java
+
+
+
+
+
+	/**
+	 * origin: E:\Java Projects\CS2103T\src\EzGUISuggestPanel.java
+	 */
+
+public class EzGUISuggestPanel extends JDialog {
+	private JList<String> suggestList;
+	private JScrollPane suggestScrollPanel;
+	private static EzGUISuggestPanel suggestPanel;
+	private boolean selectionMode = false;
+
+	public static EzGUISuggestPanel getInstance(){
+		if (suggestPanel==null){
+			suggestPanel = new EzGUISuggestPanel(EzGUI.getMainFrame(), "Suggest", false);
+		}
+		return suggestPanel;
+	}
+	
+	public boolean inSelectionMode(){
+		return selectionMode;
+	}
+	
+	private EzGUISuggestPanel(Frame owner, String title, boolean modal) {
+		super(owner, title, modal);
+		suggestPanel = this;
+		
+		int x = owner.getLocation().x + 165;
+		int y = owner.getLocation().y + this.getHeight() - 10;
+		setLocation(x, y);
+		setMinimumSize(new Dimension(784, 0));
+
+		ArrayList<EzTask> listTask = EzController.getStorage()
+				.getListOfAllTasks();
+		// String[] listString = {"aaaaa","aaaaa","aaaaa"};
+		String[] listString = new String[listTask.size()];
+
+		for (int i = 0; i < listTask.size(); i++) {
+			listString[i] = listTask.get(i).toString();
+		}
+
+		suggestList = new JList<String>(listString);
+		suggestList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if (arg0.getClickCount() == 2) {
+					enterSelection();
+				}
+			}
+		});
+		suggestList.setBackground(EzConstants.WHITE_SMOKE_COLOR);
+
+		suggestScrollPanel = new JScrollPane(suggestList);
+		suggestScrollPanel.setFocusable(false);
+		suggestScrollPanel
+				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		suggestScrollPanel
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		suggestScrollPanel.setLayout(new ScrollPaneLayout());
+		suggestScrollPanel.setBorder(BorderFactory.createLineBorder(
+				EzConstants.CHATEAU_GREEN_COLOR, 5));
+		suggestScrollPanel.setPreferredSize(new Dimension(784, 85));
+
+		getContentPane().add(suggestScrollPanel, BorderLayout.SOUTH);
+		setUndecorated(true);
+		pack();
+		setFocusableWindowState(false);
+		setVisible(false);
+		selectionMode = false;
+	}
+
+	public void enterSelection() {
+		int selectIndex = suggestList.getSelectedIndex();
+		loadSuggestion(EzGUICommandPanel.getInstance().getText());
+		if ((0 <= selectIndex)
+				&& (selectIndex < suggestList.getModel().getSize())) {
+			int taskId = getFirstNumber(suggestList.getModel().getElementAt(
+					selectIndex));
+			if (taskId > -1) {
+				int caretPos = EzGUICommandPanel.getInstance().getSelectionStart();
+				EzGUICommandPanel.getInstance().deleteSelection();
+				EzGUICommandPanel.getInstance().typeNormal(String.valueOf(taskId) + " ",caretPos);
+			}
+		}
+		suggestList.setSelectedIndex(-1);
+		selectionMode = false;
+		setVisible(false);
+	}
+	
+	private int getFirstNumber(String text) {
+		int result = -1;
+		int i = 0;
+		while ((text.charAt(i) < '0') || (text.charAt(i) > '9')) {
+			i++;
+		}
+		if ((text.charAt(i) >= '0') && (text.charAt(i) <= '9')) {
+			result = 0;
+			while ((text.charAt(i) >= '0') && (text.charAt(i) <= '9')) {
+				result = result * 10 + (int) (text.charAt(i) - '0');
+				i++;
+			}
+		}
+		return result;
+	}
+	
+	public void loadSuggestion(String contentInputField) {
+		boolean activateSuggestion = false;
+		int startCaretPos = -1;
+
+		ArrayList<String> notKeywordOrNumberList = new ArrayList<String>();
+		int length = contentInputField.length();
+		String word;
+		String lastKeyword = "";
+		boolean doneOrDeleteKeywordAvailable = false;
+		boolean removeKeywordAvailable = false;
+		int firstPosNotKeywordOrNumber = -1;
+		// int lastPosNotKeywordOrNumber = -1;
+
+		for (int i = 0; i < length; i++) {
+			if (contentInputField.charAt(i) == ' ') {
+				while ((i + 1 < length)
+						&& (contentInputField.charAt(i + 1) == ' ')) {
+					i++;
+				}
+			} else if (contentInputField.charAt(i) == '\"') {
+				if (firstPosNotKeywordOrNumber == -1) {
+					firstPosNotKeywordOrNumber = i;
+				}
+				word = "";
+				while ((i + 1 < length)
+						&& (contentInputField.charAt(i + 1) != '\"')) {
+					i++;
+					word = word + contentInputField.charAt(i);
+				}
+
+				if (i + 1 < length) {
+					i++;
+				}
+				// lastPosNotKeywordOrNumber = i;
+				notKeywordOrNumberList.add(word.trim());
+			} else {
+				int tmp = i;
+				word = "" + contentInputField.charAt(i);
+				while ((i + 1 < length)
+						&& (contentInputField.charAt(i + 1) != ' ')) {
+					i++;
+					word = word + contentInputField.charAt(i);
+				}
+
+				if (EzGUI.isKeyword(word)) {
+					lastKeyword = word;
+					if (word.equalsIgnoreCase("remove")) {
+						removeKeywordAvailable = true;
+					}
+					if (word.equalsIgnoreCase("done")
+							|| word.equalsIgnoreCase("undone")
+							|| word.equalsIgnoreCase("delete")) {
+						doneOrDeleteKeywordAvailable = true;
+					}
+				}
+
+				if ((!EzGUI.isKeyword(word)) && (!isNumber(word))) {
+					notKeywordOrNumberList.add(word);
+					if (firstPosNotKeywordOrNumber == -1) {
+						firstPosNotKeywordOrNumber = tmp;
+					}
+					// lastPosNotKeywordOrNumber = i;
+					if (startCaretPos == -1) {
+						startCaretPos = i - word.length() + 1;
+					}
+				}
+			}
+		}
+
+		if (lastKeyword.equalsIgnoreCase("done")
+				|| lastKeyword.equalsIgnoreCase("undone")
+				|| lastKeyword.equalsIgnoreCase("delete")
+				|| lastKeyword.equalsIgnoreCase("update")
+				|| (lastKeyword.equalsIgnoreCase("date") && removeKeywordAvailable)
+				|| (lastKeyword.equalsIgnoreCase("time") && removeKeywordAvailable)
+				|| (lastKeyword.equalsIgnoreCase("venue") && removeKeywordAvailable)
+				|| (lastKeyword.equalsIgnoreCase("from") && doneOrDeleteKeywordAvailable)
+				|| (lastKeyword.equalsIgnoreCase("to") && doneOrDeleteKeywordAvailable)) {
+			activateSuggestion = true;
+		}
+
+		if (activateSuggestion) {
+			suggestList.removeAll();
+
+			// LOGGER.log(Level.INFO, String.format("List keywords: %d",
+			// notKeywordOrNumberList.size()));
+
+			ArrayList<EzTask> listTask = EzSort.sortById(EzController
+					.getStorage().getTasksByKeywords(notKeywordOrNumberList));
+			String[] listString = new String[listTask.size()];
+
+			for (int i = 0; i < listTask.size(); i++) {
+				listString[i] = listTask.get(i).toString();
+			}
+
+			suggestList.setListData(listString);
+			if (listString.length > 0) {
+				suggestList.setSelectedIndex(0);
+			} else {
+				suggestList.clearSelection();
+			}
+
+			selectionMode = true;
+			suggestPanel.setVisible(true);
+
+			if (firstPosNotKeywordOrNumber != -1) {
+				EzGUICommandPanel.getInstance().setSelection(
+						firstPosNotKeywordOrNumber, EzGUICommandPanel.getInstance().getCaretPosition());
+			}
+		} else {
+			suggestList.clearSelection();
+			selectionMode = false;
+			suggestPanel.setVisible(false);
+		}
+		suggestPanel.pack();
+	}
+	
+	private boolean isNumber(String word) {
+		for (int i = 0; i < word.length(); i++) {
+			if ((word.charAt(i) < '0') || (word.charAt(i) > '9')) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	
+	
+	public void selectBelow() {
+		int selectIndex = suggestList.getSelectedIndex();
+		selectIndex++;
+		if (selectIndex >= suggestList.getModel().getSize()) {
+			selectIndex = -1;
+		}
+		if ((0 <= selectIndex)
+				&& (selectIndex < suggestList.getModel().getSize())) {
+			suggestList.setSelectedIndex(selectIndex);
+			suggestList.ensureIndexIsVisible(selectIndex);
+		} else {
+			suggestList.clearSelection();
+		}
+	}
+	
+	public void selectAbove() {
+		int selectIndex = suggestList.getSelectedIndex();
+		selectIndex--;
+		if (selectIndex < -1) {
+			selectIndex = suggestList.getModel().getSize() - 1;
+		}
+		if ((0 <= selectIndex)
+				&& (selectIndex < suggestList.getModel().getSize())) {
+			suggestList.setSelectedIndex(selectIndex);
+			suggestList.ensureIndexIsVisible(selectIndex);
+		} else {
+			suggestList.clearSelection();
+		}
+	}
+}
+
+	// End of segment: E:\Java Projects\CS2103T\src\EzGUISuggestPanel.java
+
+
+
+
+
+	/**
+	 * origin: E:\Java Projects\CS2103T\src\EzHtmlGenerator.java
+	 */
+
+public class EzHtmlGenerator {
+	
+	private static final int STAR_PER_LINE = 5;
+	
+	private static final Color MAIN_TITLE_FONT_COLOR = new Color(231,76,60);
+	private static final String MAIN_TITLE_FONT_FONT = "Arial";
+	
+	private static final String TITLE_FONT_FONT = "Arial";
+	private static final int TITLE_FONT_SIZE = 5;
+	private static final Color TITLE_FONT_COLOR = EzConstants.WHITE_SMOKE_COLOR;
+	
+	private static final String VENUE_FONT_FONT = "Arial Rounded MT Bold";
+	private static final int VENUE_FONT_SIZE = 4;
+	private static final Color VENUE_FONT_COLOR = EzConstants.WHITE_SMOKE_COLOR;
+	
+	private static final String ID_FONT_FONT = "Arial Rounded MT Bold";
+	private static final int ID_FONT_SIZE = 4;
+	private static final Color ID_FONT_COLOR = EzConstants.WHITE_SMOKE_COLOR;
+	
+	private static final String IMAGE_CALENDAR_PNG = "images/calendar.png";
+	private static final String IMAGE_CLOCK_PNG = "images/clock.png";
+
+	private static final int NORMAL_TASK = 0;
+	private static final int PAST_OR_DONE_TASK = 1;
+	private static final int TODAY_AND_UNDONE_TASK = 2;
+
+	private static final Color[][] TASK_BG_COLOR = {{EzConstants.FERN_COLOR, EzConstants.CHATEAU_GREEN_COLOR},		// for normal tasks
+													{EzConstants.IRON_GRAY_COLOR, EzConstants.ALMOND_FROST_COLOR},	// for past or done tasks
+													{EzConstants.PICTION_BLUE_COLOR,EzConstants.CURIOUS_BLUE_COLOR}};		// for today and undone tasks
+	
+	private static final Color[] ID_BG_COLOR = { EzConstants.WISTERIA_COLOR, EzConstants.BLUE_GEM_COLOR};
+	
+	private static final Color CALENDAR_DATE_FONT_COLOR = new Color(231,76,60);
+	
+	
+	private static final String[] CALENDAR_MONTH = {"Jan","Feb","March","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+	private static final String[] CALENDAR_DAY_OF_WEEK = {"","Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
+	
+	private static String td(String format, String content){
+		return "<td " + format + ">" + content + "</td>";
+	}
+	
+	private static String td(String content){
+		return td("",content);
+	}
+	
+	private static String tr(String format, String content){
+		return "<tr " + format + ">" + content + "</tr>";
+	}
+	
+	private static String tr(String content){
+		return tr("",content);
+	}
+	
+	private static String table(String format, String content){
+		return "<table " + format + ">" + content + "</table>";
+	}
+	
+	public static String createHtmlEzTask(EzTask task,int type){
+		type = 1;
+		if (task!=null){
+			int typeOfTask = NORMAL_TASK;
+			if (task.isDone() || task.isPast()){
+				typeOfTask = PAST_OR_DONE_TASK;
+			} else if (task.isToday()){
+				typeOfTask = TODAY_AND_UNDONE_TASK;
+			}
+			return 	table("border=0 cellspacing=0 cellpadding=1 bgcolor=\"#" + convertColorToHex(TASK_BG_COLOR[typeOfTask][type]) + "\" width=\"100%\"",
+						tr(
+							td("width=\"53px\" bgcolor=\"#" + convertColorToHex(ID_BG_COLOR[type]) +"\"  height=\"40px\"",createHtmlIdAndPriorityOfEzTask(task)) +
+							td("width=\"5px\"", "") +
+							//td("width=\"300px\"", createHtmlTitleAndVenueOfEzTask(task)) +
+							td(createHtmlTitleAndVenueOfEzTask(task)) +
+							td("width=\"15px\"", "") +
+							//td("align=\"left\"", createHtmlDateOfEzTask(task)) +
+							td("align=\"left\" width=\"200px\"", createHtmlDateOfEzTask(task)) +
+							td("align=\"right\" width=\"40px\"", createHtmlDoneOfEzTask(task))
+						)
+					);
+		} else {
+			return "";
+		}
+	}
+	
+	private static String createHtmlDoneOfEzTask(EzTask task) {
+		if (task.isDone()){
+			return img("images/done.png");
+		}
+		return "";
+	}
+
+	private static String createHtmlDateOfEzTask(EzTask task) {
+		GregorianCalendar date1 = task.getStartTime();
+		GregorianCalendar date2 = task.getEndTime();
+		ArrayList<String> list = new ArrayList<String>();
+		
+		if ((date1==null) || (date2==null)){
+			return "";
+		}
+		else {
+			if (date1.equals(date2)){
+				list.add(createHtmlCalendar(date1));
+				//if ((date1.get(Calendar.HOUR_OF_DAY)!=0) || (date1.get(Calendar.MINUTE)!=0)){
+				list.add(createHtmlClock(date1));
+				//}
+			} else {
+				list.add(createHtmlCalendar(date1));
+				if ((date1.get(Calendar.HOUR_OF_DAY)!=0) || (date1.get(Calendar.MINUTE)!=0) ||
+						(date2.get(Calendar.HOUR_OF_DAY)!=23) || (date2.get(Calendar.MINUTE)!=59)){
+					list.add(createHtmlClock(date1));
+				}
+				if ((date1.get(Calendar.YEAR) != date2.get(Calendar.YEAR))
+						|| (date1.get(Calendar.MONTH) != date2.get(Calendar.MONTH))
+						|| (date1.get(Calendar.DATE) != date2.get(Calendar.DATE))
+						|| (date1.get(Calendar.HOUR_OF_DAY)!=0) || (date1.get(Calendar.MINUTE)!=0) 
+						|| (date2.get(Calendar.HOUR_OF_DAY)!=23) || (date2.get(Calendar.MINUTE)!=59)){
+					list.add(img("images/rightArrow.png"));
+				}
+				if ((date1.get(Calendar.YEAR) != date2.get(Calendar.YEAR))
+						|| (date1.get(Calendar.MONTH) != date2.get(Calendar.MONTH))
+						|| (date1.get(Calendar.DATE) != date2.get(Calendar.DATE))){
+					list.add(createHtmlCalendar(date2));
+				}
+				if ((date1.get(Calendar.HOUR_OF_DAY)!=0) || (date1.get(Calendar.MINUTE)!=0) ||
+						(date2.get(Calendar.HOUR_OF_DAY)!=23) || (date2.get(Calendar.MINUTE)!=59)){
+					list.add(createHtmlClock(date2));
+				}
+			}
+		}
+		return createHtmlTable(1,list.size(),list,"border=0 cellspacing=0 cellpadding=1");
+	}
+	
+	public static String createHtmlTable(int row, int col, ArrayList<String> list, String tableAttribute){
+		String result = "";
+		for(int i=0;i<row;i++){
+			String tdList = "";
+			for(int j=0;j<col;j++){
+				if (i*col+j<list.size()) {
+					tdList += td(list.get(i*col+j));
+				}
+			}
+			result = result + tr(tdList);
+		}
+		return table(tableAttribute,result);
+	}
+	
+	public static String createHtmlTableWithHeader(String header, String content, String tableAttribute){
+		header = EzHtmlGenerator.createHtmlText("__",MAIN_TITLE_FONT_FONT,2,EzConstants.SHOW_AREA_BACKGROUND)
+				+EzHtmlGenerator.createHtmlText(header,MAIN_TITLE_FONT_FONT, 8, MAIN_TITLE_FONT_COLOR);
+		String result = table(tableAttribute,
+							tr(td("height=\"44px\" width=\"100%\" ", header)) +
+							tr(td(content))
+						);
+		return result;
+	}
+	
+	private static String createHtmlTitleAndVenueOfEzTask(EzTask task) {
+		String result = createHtmlText(addBreak(task.getTitle()),TITLE_FONT_FONT,TITLE_FONT_SIZE, TITLE_FONT_COLOR); 
+		if (!task.getVenue().equalsIgnoreCase("")){
+			result = result + "<br>"+right(createHtmlText("@"+addBreak(task.getVenue()),VENUE_FONT_FONT,VENUE_FONT_SIZE , VENUE_FONT_COLOR));
+		}
+		return result;
+	}
+
+	private static String addBreak(String text) {
+		String result = "";
+		for(int i=0;i<text.length();i++){
+			result = result + text.charAt(i); 
+			if (text.charAt(i)==' '){
+				while((i+1<text.length()) && (text.charAt(i+1)==' ')){
+					result = result + ' ';
+					i++;
+				}
+			} else {
+				int count = 1;
+				while((i+1<text.length()) && (text.charAt(i+1)!=' ')){
+					result = result + text.charAt(i+1);
+					i++;
+					count++;
+					if (count==20){
+						result = result + "<br/>";
+						count = 0;
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	private static String createHtmlIdAndPriorityOfEzTask(EzTask task){
+		String htmlId = createHtmlText("#"+task.getId(), ID_FONT_FONT, ID_FONT_SIZE, ID_FONT_COLOR);
+		String htmlPriority = createHtmlStar(task.getPriority());
+		
+		return 	table("width=\"48px\"",
+					tr(td(center(htmlId))) +
+					tr(td(center(htmlPriority)))
+				);
+	}
+	
+	private static String createHtmlCalendar(GregorianCalendar date){
+		/*String monthHtmlText = createHtmlText(CALENDAR_MONTH[date.get(Calendar.MONTH)],"Arial Rounded MT Bold",2,new Color(255,255,255));
+		String dateHtmlText = createHtmlText(String.valueOf(date.get(Calendar.DATE)),"Arial",5,CALENDAR_DATE_FONT_COLOR);
+		String dayOfWeekHtmlText = createHtmlText(CALENDAR_DAY_OF_WEEK[date.get(Calendar.DAY_OF_WEEK)],"Arial",2,CALENDAR_DATE_FONT_COLOR);
+		
+		return 	table("background=\"file:" + IMAGE_CALENDAR_PNG +"\" border=0 cellspacing=0 cellpadding=0 width=\"38px\"",
+					tr(td("height=\"10px\"",center(monthHtmlText))) +
+					tr(td("height=\"17px\"",center(dateHtmlText))) + 
+					tr(td("height=\"10px\"",center(dayOfWeekHtmlText)))
+				);*/
+		String dayOfWeekHtmlText = createHtmlText(CALENDAR_DAY_OF_WEEK[date.get(Calendar.DAY_OF_WEEK)],"Arial Rounded MT Bold",2,new Color(255,255,255));
+		String monthHtmlText = createHtmlText(CALENDAR_MONTH[date.get(Calendar.MONTH)],"Arial Rounded MT Bold",3,CALENDAR_DATE_FONT_COLOR);
+		String dateHtmlText = createHtmlText(String.valueOf(date.get(Calendar.DATE)),"Arial Rounded MT Bold",3,CALENDAR_DATE_FONT_COLOR);
+		String yearHtmlText = createHtmlText(String.valueOf(date.get(Calendar.YEAR)),"Arial",2,CALENDAR_DATE_FONT_COLOR);
+		
+		return 	table("background=\"file:" + IMAGE_CALENDAR_PNG +"\" border=0 cellspacing=0 cellpadding=0 width=\"38px\"",
+					tr(td("height=\"10px\"",center(dayOfWeekHtmlText))) +
+					tr(td("height=\"17px\"",center(monthHtmlText + " " +dateHtmlText))) + 
+					tr(td("height=\"10px\"",center(yearHtmlText)))
+				);
+	}
+	
+	private static String createHtmlClock(GregorianCalendar date){
+		String hour = String.valueOf(date.get(Calendar.HOUR_OF_DAY));
+		if (date.get(Calendar.HOUR_OF_DAY)<10) {
+			hour = "0" + hour;
+		}
+		
+		String minute = String.valueOf(date.get(Calendar.MINUTE));
+		if (date.get(Calendar.MINUTE)<10) {
+			minute = "0" + minute;
+		}
+		
+		String timeHtmlText = createHtmlText(hour+":"+minute,"Digital Dismay",5,"38e204");
+		
+		return 	table("background=\"file:" + IMAGE_CLOCK_PNG +"\" border=0 cellspacing=0 cellpadding=0 width=\"40px\"",
+					tr(td("width=\"2px\"","") + td("height=\"25px\"",center(timeHtmlText)))
+				);
+	}
+	
+	private static String img(String url){
+		return "<img src=\"file:"+ url + "\">";
+	}
+	
+	private static String createHtmlStar(int numStar){
+		String result = "";
+		String chosenStar = "";
+		switch (numStar){
+		case 1:
+			chosenStar = img("images/star100.png");
+			break;
+		case 2:
+			chosenStar = img("images/star080.png");
+			break;
+		case 3:
+			chosenStar = img("images/star060.png");
+			break;
+		case 4:
+			chosenStar = img("images/star040.png");
+			break;
+		case 5:
+			chosenStar = img("images/star020.png");
+			break;
+		default:
+			chosenStar = img("images/star000.png");
+			break;
+		}
+		for(int i=0;i<numStar;i++) {
+			result = result + chosenStar;
+			if (i % STAR_PER_LINE == STAR_PER_LINE-1) {
+				result = result + "<br>";
+			}
+		}
+		return result;
+	}
+	
+	public static String center(String content){
+		return "<center>" + content + "</center>";
+	}
+	
+	public static String right(String content){
+		return "<div align=\"right\">" + content + "</div>";
+	}
+	
+	public static String createHtmlText(final String content, final String font, final int size, final Color color) {
+		return "<font face=\"" + font +
+				"\" size=\"" + size +
+				"\" color=\"#" + convertColorToHex(color) + "\">" + 
+				content + "</font>";
+	}
+	
+	public static String createHtmlText(String content, String font, int size, String hexColor) {
+		return "<font face=\"" + font +
+				"\" size=\"" + size +
+				"\" color=\"#" + hexColor + "\">" + 
+				content + "</font>";
+	}
+	
+	private static String convertColorToHex(Color color){
+		return convertIntToHex(color.getRed(),2) + convertIntToHex(color.getGreen(),2) + convertIntToHex(color.getBlue(),2);
+	}
+	
+	private static String convertIntToHex(int i, int length){
+		if (length == 0) return "";
+		if ((0<=i) && (i<=9)) {
+			return convertIntToHex(i/16,length-1) + (char)('0'+i);
+		}
+		else if (i<16){
+			return convertIntToHex(i/16,length-1) + (char)('a'+i-10);
+		} else {
+			return convertIntToHex(i/16,length-1) + convertIntToHex(i%16,length-1);
+		}
+	}
+}
+
+	// End of segment: E:\Java Projects\CS2103T\src\EzHtmlGenerator.java
+
+
+
+
+
+	/**
+	 * origin: E:\Java Projects\CS2103T\src\EzTask.java
+	 */
+
+public class EzTask {
+	private int id;
+	private String title;
+	private GregorianCalendar startTime;
+	private GregorianCalendar endTime;
+	private String venue;
+	private int priority;
+	private boolean done;
+	
+	public EzTask(EzTask newTask){
+		setId(newTask.getId());
+		setTitle(newTask.getTitle());
+		setStartTime(newTask.getStartTime());
+		setEndTime(newTask.getEndTime());
+		setVenue(newTask.getVenue());
+		setPriority(newTask.getPriority());
+		setDone(newTask.isDone());	
+	}
+	
+    public EzTask() {
+    }
+    
+    public EzTask(String title) {
+        setTitle(title);
+    }
+    
+    public EzTask(String title, String venue) {
+        this(title);
+        setVenue(venue);
+    }
+    
+    public EzTask(String title, int priority) {
+        this(title);
+        setPriority(priority);
+    }
+    
+    public EzTask(String title, String venue, int priority) {
+        this(title,venue);
+        setPriority(priority);
+    }
+
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+	
+	public void setTitle(String title) {
+		if (title != null){
+			this.title = new String(title);
+		} else {
+			this.title = "";
+		}
+	}
+	
+	public GregorianCalendar getStartTime() {
+		if (startTime!=null){
+			return (GregorianCalendar) startTime.clone();
+		} else {
+			return null;
+		}
+	}
+	
+	public void setStartTime(GregorianCalendar startTime) {
+		if (startTime != null){
+			this.startTime = (GregorianCalendar) startTime.clone();
+		} else {
+			this.startTime = null;
+		}
+	}
+	
+	public void setStartTime(int year, int month, int day) {
+		if (this.startTime==null){
+			this.startTime = new GregorianCalendar(year, month, day);
+		} else {
+			this.startTime = (GregorianCalendar) this.startTime.clone();
+			this.startTime.set(Calendar.YEAR, year);
+			this.startTime.set(Calendar.MONTH, month);
+			this.startTime.set(Calendar.DAY_OF_MONTH, day);
+		}
+	}
+
+	public void setStartTime(int hour, int minute) {
+		if (this.startTime==null){
+			this.startTime = new GregorianCalendar();
+		} else {
+			this.startTime = (GregorianCalendar) this.startTime.clone();
+		}
+		this.startTime.set(Calendar.HOUR_OF_DAY, hour);
+		this.startTime.set(Calendar.MINUTE, minute);
+	}
+
+	public void setStartTime(int year, int month, int day,int hour,int minute) {
+		this.startTime = new GregorianCalendar(year,month,day,hour,minute);
+	}
+	
+	
+	public GregorianCalendar getEndTime() {
+		if (endTime!=null){
+			return (GregorianCalendar) endTime.clone();
+		} else {
+			return null;
+		}
+	}
+	
+	public void setEndTime(GregorianCalendar endTime) {
+		if (endTime != null){
+			this.endTime = (GregorianCalendar) endTime.clone();
+		} else {
+			this.endTime = null;
+		}
+	}
+	
+	
+	public void setEndTime(int year, int month, int day) {
+		if (this.endTime==null){
+			this.endTime = new GregorianCalendar(year, month, day);
+		} else {
+			this.endTime = (GregorianCalendar) this.endTime.clone();
+			this.endTime.set(Calendar.YEAR, year);
+			this.endTime.set(Calendar.MONTH, month);
+			this.endTime.set(Calendar.DAY_OF_MONTH, day);
+		}
+	}
+	
+	public void setEndTime(int hour, int minute) {
+		if (this.endTime==null){
+			this.endTime = new GregorianCalendar();
+		} else {
+			this.endTime = (GregorianCalendar) this.endTime.clone();
+		}
+		this.endTime.set(Calendar.HOUR_OF_DAY, hour);
+		this.endTime.set(Calendar.MINUTE, minute);
+	}
+	
+	public void setEndTime(int year, int month, int day,int hour,int minute) {
+		this.endTime = new GregorianCalendar(year,month,day,hour,minute);
+	}
+	
+	public void setEndTimeAsStartTime(){
+		this.endTime = this.startTime;
+	}
+	
+	public String getVenue() {
+		if (venue==null) {
+			return "";
+		}
+		return venue;
+	}
+	
+	public void setVenue(String venue) {
+		if (venue!=null){
+			this.venue = new String(venue);
+		} else {
+			this.venue = null;
+		}
+	}
+	
+	public int getPriority() {
+		return priority;
+	}
+	
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+
+	public boolean isDone() {
+		return done;
+	}
+
+	public void setDone(boolean done) {
+		this.done = done;
+	}
+	
+	public String toString(){
+		String idText = String.format("[#%d]", this.getId());
+		
+		String venueText = "";
+		if (this.getVenue()!=null) {
+			if (venueText.length()>30){
+				venueText = String.format("- @[%s]", this.getVenue().substring(0, 30)) + "...";
+			} else {
+				venueText = String.format("- @[%s]", this.getVenue());
+			}
+		}
+		
+		String titleText = "\"";
+		if (this.getTitle().length()>50){
+			titleText += this.getTitle().substring(0,50) + "...";
+		} else {
+			titleText += this.getTitle();
+		}
+		titleText += "\"";
+		
+		String dateText = "";
+		if (this.getStartTime()!=null){
+			dateText = "- [";
+			if (this.getStartTime()==this.getEndTime()){
+				GregorianCalendar time = this.getStartTime(); 
+				dateText += String.format("%d/%d/%d", time.get(Calendar.DAY_OF_MONTH), time.get(Calendar.MONTH)+1, time.get(Calendar.YEAR));
+				if ((time.get(Calendar.HOUR_OF_DAY)!=0) || (time.get(Calendar.MINUTE)!=0)){
+					dateText += " " + String.format("%02d:%02d",time.get(Calendar.HOUR_OF_DAY),time.get(Calendar.MINUTE));
+				}
+			} else {
+				GregorianCalendar startTime = this.getStartTime(); 
+				GregorianCalendar endTime = this.getEndTime(); 
+				
+				if ((startTime.get(Calendar.HOUR_OF_DAY)!=0) || (startTime.get(Calendar.MINUTE)!=0) || 
+						(endTime.get(Calendar.HOUR_OF_DAY)!=0) || (endTime.get(Calendar.MINUTE)!=0)){
+					dateText += String.format("%d/%d/%d %02d:%02d => %d/%d/%d %02d:%02d",
+							startTime.get(Calendar.DAY_OF_MONTH),
+							startTime.get(Calendar.MONTH)+1,
+							startTime.get(Calendar.YEAR),
+							startTime.get(Calendar.HOUR_OF_DAY),
+							startTime.get(Calendar.MINUTE),
+							endTime.get(Calendar.DAY_OF_MONTH),
+							endTime.get(Calendar.MONTH)+1,
+							endTime.get(Calendar.YEAR),
+							endTime.get(Calendar.HOUR_OF_DAY),
+							endTime.get(Calendar.MINUTE));
+				} else {
+					dateText += String.format("%d/%d/%d => %d/%d/%d",
+							startTime.get(Calendar.DAY_OF_MONTH),
+							startTime.get(Calendar.MONTH)+1,
+							startTime.get(Calendar.YEAR),
+							endTime.get(Calendar.DAY_OF_MONTH),
+							endTime.get(Calendar.MONTH)+1,
+							endTime.get(Calendar.YEAR));
+				}
+			}
+			dateText += "]";
+		}
+		return String.format("%s %s %s %s", idText, titleText, venueText, dateText); 
+	}
+
+	public boolean isPast(){
+		if (this.getEndTime()==null){
+			return false;
+		} else {
+			GregorianCalendar today = new GregorianCalendar();
+			return this.getEndTime().before(today);
+		}
+	}
+	
+	public boolean isToday(){
+		if (this.getStartTime()==null){
+			return false;
+		} else {
+			GregorianCalendar startToday = new GregorianCalendar();
+			startToday.set(Calendar.HOUR_OF_DAY, 0);
+			startToday.set(Calendar.MINUTE,0);
+			startToday.set(Calendar.SECOND,0);
+			startToday.set(Calendar.MILLISECOND,0);
+			GregorianCalendar endToday = new GregorianCalendar();
+			endToday.set(Calendar.HOUR_OF_DAY, 23);
+			endToday.set(Calendar.MINUTE,59);
+			endToday.set(Calendar.SECOND,59);
+			endToday.set(Calendar.MILLISECOND,0);
+			return ((this.getStartTime().after(startToday) || this.getStartTime().equals(startToday)) && 
+					(this.getStartTime().before(endToday) || this.getStartTime().equals(endToday)));
+		}
+	}
+}
+
+	// End of segment: E:\Java Projects\CS2103T\src\EzTask.java
+
+
+
+
+
+	/**
+	 * origin: E:\Java Projects\CS2103T\src\TypeOfAction.java
+	 */
+
+public enum TypeOfAction {
+
+		ADD, UPDATE, DELETE, DONE, UNDO, REDO, SHOW, HELP, INVALID, Y, N, UNDONE, SORT, REMOVE, PAGE
+
+}
+
+	// End of segment: E:\Java Projects\CS2103T\src\TypeOfAction.java
+
+
+
+
+
+	/**
+	 * origin: E:\Java Projects\CS2103T\src\TypeOfSort.java
+	 */
+
+public enum TypeOfSort {
+	ID, TITLE, VENUE, DATE, PRIORITY, DONE
+}
+
+	// End of segment: E:\Java Projects\CS2103T\src\TypeOfSort.java
+
+
+
+
+
