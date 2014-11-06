@@ -74,10 +74,8 @@ import java.util.*;
  *
  */
 
-/**
- * @author Khanh Cao Tianwen
- */
-
+//@author A0113528L
+ 
 public class EzParser {
 	public static EzAction extractInfo(String userCommand, EzStorage storage) {
 		EzAction newAction = new EzAction();
