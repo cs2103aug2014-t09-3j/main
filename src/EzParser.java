@@ -83,7 +83,7 @@ public class EzParser {
 		String content = removeFirstWord(userCommand);
 		switch (newAction.getAction()) {// content starts with no Action
 		case ADD:
-			newAction.setFeedback("Add successfully!");//feedback
+			newAction.setFeedback("Added successfully!");//feedback
 			ArrayList<EzTask> targetAdd = new ArrayList<EzTask>();
 			assert(newAction.getAction()!=null);
 			EzTask task = new EzTask();
@@ -454,7 +454,7 @@ public class EzParser {
 			break;
 
 		case UPDATE:
-			newAction.setFeedback("Update successfully!");
+			newAction.setFeedback("Updated successfully!");
 			ArrayList<EzTask> targetUpdate = new ArrayList<EzTask>();
 			ArrayList<EzTask> resultUpdate = new ArrayList<EzTask>();
 			int[] dateUpdate = new int[5];
