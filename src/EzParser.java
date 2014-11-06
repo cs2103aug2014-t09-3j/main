@@ -345,7 +345,7 @@ public class EzParser {
 								&& readTime(end)[0] >= 0) {
 							if(
 									(readTime(start)[0]<readTime(end)[0])||
-									((readTime(start)[0]==readTime(end)[0])&&(readTime(start)[1]>readTime(end)[1]))
+									((readTime(start)[0]==readTime(end)[0])&&(readTime(start)[1]<readTime(end)[1]))
 											)
 							{
 							dateArr[3] = readTime(start)[0];
