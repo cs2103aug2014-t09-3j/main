@@ -13,7 +13,8 @@ public class EzStorage {
 
 	private ArrayList<EzTask> listOfAllTasks = new ArrayList<EzTask>();
 	
-	//largestId represents the largest taskId + 1  
+	//largestId represents the largest taskId + 1
+	//largestId will be 1 initially as task id starts from 1
 	private int largestId = 1;
 
 	/**
@@ -42,7 +43,7 @@ public class EzStorage {
 			if(task1.getId() > largestNum)
 				largestNum = task1.getId();
 		
-		//assert largestId == largestNum + 1;
+		
 		//end assertions 
 		
 		return task;
@@ -55,10 +56,21 @@ public class EzStorage {
 	 */
 	public EzTask addTaskWithNewId(EzTask task){
 		
+		
+		int largeTaskId = 0;            //largest task id
+		if(listOfAllTasks != null)
+		for(EzTask task1 : listOfAllTasks )
+			if(task1.getId() > largeTaskId)
+				largeTaskId = task1.getId();
+		
+		
 		if(listOfAllTasks.size() == 0)
 			setLargestId(1);
 		
 		listOfAllTasks.add(task);
+		if(largeTaskId != getLargestId() -1)
+			setLargestId(largeTaskId + 1);
+		
 		task.setId(getLargestId());
 		setLargestId(getLargestId() + 1);  //largestId must always be 1 more than the largestTaskId
 		
