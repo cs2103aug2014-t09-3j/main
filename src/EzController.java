@@ -206,7 +206,7 @@ public class EzController {
 
 		case SORT:
 			if(!confirmation) {
-				sortTask(userAction);
+				sortTask(userAction, EzGUI.getCurrentTab());
 			}
 			break;
 
@@ -320,31 +320,31 @@ public class EzController {
 		}
 	}
 
-	private static void sortTask(EzAction userAction) {
+	private static void sortTask(EzAction userAction, String currTab) {
 		// TODO Auto-generated method stub
 		switch(userAction.getTypeSort()) {
 		case ID:
-			EzGUI.showContent("Tasks sorted by ID", EzSort.sortById(EzGUI.getTasksOnScreen()));
+			EzGUI.showContent(currTab, EzSort.sortById(EzGUI.getTasksOnScreen()));
 			break;
 
 		case TITLE:
-			EzGUI.showContent("Tasks sorted in Alphabethical order", EzSort.sortByTitle(EzGUI.getTasksOnScreen()));
+			EzGUI.showContent(currTab, EzSort.sortByTitle(EzGUI.getTasksOnScreen()));
 			break;
 
 		case VENUE:
-			EzGUI.showContent("Tasks sorted by venue", EzSort.sortByVenue(EzGUI.getTasksOnScreen()));
+			EzGUI.showContent(currTab, EzSort.sortByVenue(EzGUI.getTasksOnScreen()));
 			break;
 
 		case DATE:
-			EzGUI.showContent("Tasks sorted by date", EzSort.sortByDate(EzGUI.getTasksOnScreen()));
+			EzGUI.showContent(currTab, EzSort.sortByDate(EzGUI.getTasksOnScreen()));
 			break;
 
 		case PRIORITY:
-			EzGUI.showContent("Tasks sorted by priority", EzSort.sortByPriority(EzGUI.getTasksOnScreen()));
+			EzGUI.showContent(currTab, EzSort.sortByPriority(EzGUI.getTasksOnScreen()));
 			break;
 
 		case DONE:
-			EzGUI.showContent("Tasks sorted by status", EzSort.sortByDone(EzGUI.getTasksOnScreen()));
+			EzGUI.showContent(currTab, EzSort.sortByDone(EzGUI.getTasksOnScreen()));
 			break;
 
 		default:
