@@ -374,6 +374,11 @@ public class EzParser {
 								task.setEndTime(calendar);
 							}
 						}
+						else 
+						{
+							newAction.setAction(TypeOfAction.INVALID);
+							newAction.setFeedback("Invalid command. User might entered an invalid date or time.");
+						}
 
 					} else {//from *** *** to *** ***
 						String start1 = getFirstWord(content);
@@ -1329,19 +1334,19 @@ public class EzParser {
 			if(typeRemove.equalsIgnoreCase("venue"))
 			{
 				taskRemove.setVenue(null);
-				newAction.setFeedback("Remove venue successfully.");
+				newAction.setFeedback("Venue removed successfully.");
 			}
 			else if(typeRemove.equalsIgnoreCase("date"))
 			{
 				taskRemove.setStartTime(null);
 				taskRemove.setEndTime(null);
-				newAction.setFeedback("Remove date successfully.");
+				newAction.setFeedback("Date removed successfully.");
 			}
 			else if(typeRemove.equalsIgnoreCase("time"))
 			{
 				taskRemove.setStartTime(0,0);
 				taskRemove.setEndTime(23, 59);
-				newAction.setFeedback("Remove time succefully.");
+				newAction.setFeedback("Time removed succefully.");
 			}
 			else
 			{
