@@ -7,7 +7,8 @@ import java.util.Comparator;
  */
 
 /**
- * @author Khanh
+ * @author Khanh (Skeleton Code)
+ * @author A0113922N
  *
  */
 public class EzSort {
@@ -15,12 +16,12 @@ public class EzSort {
 	/**
 	 * return the target sorted by Id
 	 * @param target
-	 * @return
+	 * @return tasksById
 	 */
 	@SuppressWarnings("unchecked")
 	public static ArrayList<EzTask> sortById(ArrayList<EzTask> target){
 		
-		ArrayList <EzTask> tasksById = new ArrayList<EzTask>();
+		ArrayList<EzTask> tasksById = new ArrayList<EzTask>();
 
 		tasksById = (ArrayList<EzTask>)target.clone();
 
@@ -34,7 +35,7 @@ public class EzSort {
 	/**
 	 * return the target sorted by start time
 	 * @param target
-	 * @return
+	 * @return tasksByDate
 	 */
 	@SuppressWarnings("unchecked")
 	public static ArrayList<EzTask> sortByDate(ArrayList<EzTask> target){
@@ -49,9 +50,8 @@ public class EzSort {
 	 * greatest priority comes first
 	 * 
 	 * @param target
-	 * @return
+	 * @return tasksByPriority
 	 */
-	
 	@SuppressWarnings("unchecked")
 	public static ArrayList<EzTask> sortByPriority(ArrayList<EzTask> target){
 		
@@ -65,7 +65,7 @@ public class EzSort {
 	/**
 	 * return the target sorted by title
 	 * @param target
-	 * @return
+	 * @return tasksByTitle
 	 */
 	@SuppressWarnings("unchecked")
 	public static ArrayList<EzTask> sortByTitle(ArrayList<EzTask> target){
@@ -79,7 +79,7 @@ public class EzSort {
 	/**
 	 * return the target sorted by venue
 	 * @param target
-	 * @return
+	 * @return tasksByVenue
 	 */
 	public static ArrayList<EzTask> sortByVenue(ArrayList<EzTask> target){
 		@SuppressWarnings("unchecked")
@@ -94,7 +94,7 @@ public class EzSort {
 	 * Undone tasks come first
 	 * 
 	 * @param target
-	 * @return
+	 * @return tasksByDone
 	 */
 	public static ArrayList<EzTask> sortByDone(ArrayList<EzTask> target){
 		ArrayList<EzTask> tasksDone = new ArrayList<EzTask>();
@@ -119,7 +119,10 @@ public class EzSort {
 	}
 	
 
-	
+	/**
+	 * sorts the task by ascending task id
+	 * 
+	 */
 	public static Comparator<EzTask> TaskIdComparator = new Comparator<EzTask>() {
 
 		public int compare(EzTask task1, EzTask task2) {
@@ -135,6 +138,10 @@ public class EzSort {
 
 	};
 	
+	/**
+	 * sorts the tasks by ascending priority
+	 */
+	
 	public static Comparator<EzTask> TaskPriorityComparator = new Comparator<EzTask>() {
 
 		public int compare(EzTask task1, EzTask task2){
@@ -146,6 +153,9 @@ public class EzSort {
 		}
 	};
 	
+	/**
+	 * sorts the tasks by the task title alphabetically
+	 */
 	public static Comparator<EzTask> TaskTitleComparator = new Comparator<EzTask>() {
         public int compare(EzTask task1, EzTask task2) {
         	
@@ -156,6 +166,9 @@ public class EzSort {
         }
     };
     
+    /**
+     * sorts the tasks by ascending date
+     */
     public static Comparator<EzTask> TaskDateComparator = new Comparator<EzTask>() {
     	public int compare(EzTask task1, EzTask task2){
     		if (task1.getStartTime() == null && task2.getStartTime() == null)
@@ -171,6 +184,9 @@ public class EzSort {
     	}
     };
     
+    /**
+     * sorts the task by venue alphabetically
+     */
     public static Comparator<EzTask> TaskVenueComparator = new Comparator<EzTask>() {
     	public int compare(EzTask task1, EzTask task2){
     		

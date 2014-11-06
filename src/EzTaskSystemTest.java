@@ -12,7 +12,7 @@ import org.junit.Test;
 
 /**
  * 
- * @author Ong Tun Leng *A0113922N*
+ * @author A0113922N
  *
  */
 
