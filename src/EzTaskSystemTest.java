@@ -10,11 +10,7 @@ import java.util.GregorianCalendar;
 
 import org.junit.Test;
 
-/**
- * 
- * @author A0113922N
- *
- */
+//@author A0113922N
 
 
 public class EzTaskSystemTest {

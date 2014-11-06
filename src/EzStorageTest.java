@@ -7,14 +7,10 @@ import java.util.GregorianCalendar;
 
 import org.junit.Test;
 
-/**
- * 
- */
 
-/**
- * @author Khanh
- * @author A0113922N
- */
+
+//@author A0113922N
+
 public class EzStorageTest {
 	private EzTask createTask(String command){
 		EzTask task = EzParser.extractInfo(command, null).getResults().get(0);

@@ -5,11 +5,8 @@ import java.util.Date;
 
 
 
-/**
- * @author Khanh(Skeleton code)
- * @author A0113922N
- *
- */
+//@author A0113922N
+
 public class EzStorage {
 	
 	//ArrayList of tasks entered by user.

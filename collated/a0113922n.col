@@ -1,0 +1,1448 @@
+//@author: a0113922n
+
+
+
+	/**
+	 * origin: C:\Users\Tun Leng\workspace\EzTask\src\EzSort.java
+	 */
+
+
+public class EzSort {
+	
+	/**
+	 * return the target sorted by Id
+	 * @param target
+	 * @return tasksById
+	 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<EzTask> sortById(ArrayList<EzTask> target){
+		
+		ArrayList<EzTask> tasksById = new ArrayList<EzTask>();
+
+		tasksById = (ArrayList<EzTask>)target.clone();
+
+		Collections.sort(tasksById, TaskIdComparator);
+
+
+		return tasksById;
+	
+	}
+	
+	/**
+	 * return the target sorted by start time
+	 * @param target
+	 * @return tasksByDate
+	 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<EzTask> sortByDate(ArrayList<EzTask> target){
+		ArrayList<EzTask> tasksByDate = (ArrayList<EzTask>) target.clone();
+		Collections.sort(tasksByDate, TaskDateComparator);
+		return tasksByDate;
+	}
+	
+	
+	/**
+	 * return the target sorted by Priority
+	 * greatest priority comes first
+	 * 
+	 * @param target
+	 * @return tasksByPriority
+	 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<EzTask> sortByPriority(ArrayList<EzTask> target){
+		
+		ArrayList<EzTask> tasksByPriority = new ArrayList<EzTask>();
+		tasksByPriority = (ArrayList<EzTask>) target.clone();
+		Collections.sort(tasksByPriority, TaskPriorityComparator);
+		return tasksByPriority;
+		
+	}
+	
+	/**
+	 * return the target sorted by title
+	 * @param target
+	 * @return tasksByTitle
+	 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<EzTask> sortByTitle(ArrayList<EzTask> target){
+		ArrayList<EzTask> tasksByTitle = new ArrayList<EzTask>();
+		tasksByTitle = (ArrayList<EzTask>) target.clone();
+		Collections.sort(tasksByTitle, TaskTitleComparator);
+		
+		return tasksByTitle;
+	}
+	
+	/**
+	 * return the target sorted by venue
+	 * @param target
+	 * @return tasksByVenue
+	 */
+	public static ArrayList<EzTask> sortByVenue(ArrayList<EzTask> target){
+		@SuppressWarnings("unchecked")
+		ArrayList<EzTask> tasksByVenue = (ArrayList<EzTask>) target.clone();
+		Collections.sort(tasksByVenue,TaskVenueComparator);
+		return tasksByVenue;
+	
+	}
+	
+	/**
+	 * return the target sorted by done
+	 * Undone tasks come first
+	 * 
+	 * @param target
+	 * @return tasksByDone
+	 */
+	public static ArrayList<EzTask> sortByDone(ArrayList<EzTask> target){
+		ArrayList<EzTask> tasksDone = new ArrayList<EzTask>();
+		ArrayList<EzTask> tasksNotDone = new ArrayList<EzTask>();
+		
+		for(EzTask task : target)
+			if(task.isDone())
+				tasksDone.add(task);
+		
+			else
+				tasksNotDone.add(task);
+				
+		sortById(tasksDone);
+		sortById(tasksNotDone);
+	
+		@SuppressWarnings("unchecked")
+		ArrayList<EzTask> taskByDone = (ArrayList<EzTask>) tasksNotDone.clone();
+		taskByDone.addAll(tasksDone);
+	
+		
+		return taskByDone;
+	}
+	
+
+	/**
+	 * sorts the task by ascending task id
+	 * 
+	 */
+	public static Comparator<EzTask> TaskIdComparator = new Comparator<EzTask>() {
+
+		public int compare(EzTask task1, EzTask task2) {
+
+			int taskId1 = task1.getId();
+			int taskId2 = task2.getId();
+
+			//ascending order
+			return taskId1 - taskId2;
+
+		}
+
+
+	};
+	
+	/**
+	 * sorts the tasks by ascending priority
+	 */
+	
+	public static Comparator<EzTask> TaskPriorityComparator = new Comparator<EzTask>() {
+
+		public int compare(EzTask task1, EzTask task2){
+
+			int taskPriority1 = task1.getPriority();
+			int taskPriority2 = task2.getPriority();
+
+			return taskPriority2 - taskPriority1;
+		}
+	};
+	
+	/**
+	 * sorts the tasks by the task title alphabetically
+	 */
+	public static Comparator<EzTask> TaskTitleComparator = new Comparator<EzTask>() {
+        public int compare(EzTask task1, EzTask task2) {
+        	
+        	String taskTitle1 = task1.getTitle().toUpperCase();
+        	String taskTitle2 = task2.getTitle().toUpperCase();
+        	
+            return taskTitle1.compareTo(taskTitle2);
+        }
+    };
+    
+    /**
+     * sorts the tasks by ascending date
+     */
+    public static Comparator<EzTask> TaskDateComparator = new Comparator<EzTask>() {
+    	public int compare(EzTask task1, EzTask task2){
+    		if (task1.getStartTime() == null && task2.getStartTime() == null)
+    	        return 0;
+    		
+    		else if(task1.getStartTime() == null && task2.getStartTime() != null)
+    			return 1;
+    		
+    		else if(task1.getStartTime() != null && task2.getStartTime() == null)
+    			return -1;
+    		
+    		return task1.getStartTime().getTime().compareTo(task2.getStartTime().getTime());
+    	}
+    };
+    
+    /**
+     * sorts the task by venue alphabetically
+     */
+    public static Comparator<EzTask> TaskVenueComparator = new Comparator<EzTask>() {
+    	public int compare(EzTask task1, EzTask task2){
+    		
+    		String taskVenue1 = task1.getVenue().toUpperCase();
+    		String taskVenue2 = task2.getVenue().toUpperCase();
+    		return taskVenue1.compareTo(taskVenue2);
+    		
+    	
+    	}
+    };
+	
+	
+}
+
+	// End of segment: C:\Users\Tun Leng\workspace\EzTask\src\EzSort.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Tun Leng\workspace\EzTask\src\EzSortTest.java
+	 */
+
+
+public class EzSortTest {
+	private EzStorage createTestCase(){
+		EzStorage storage = new EzStorage();
+		
+		// task 4
+		EzTask task = new EzTask("task4","venue4",0);
+		task.setId(4);
+		task.setDone(true);
+		task.setStartTime(2014, 10, 14);
+		task.setEndTimeAsStartTime();
+		storage.addTask(task);
+		
+		// task 5
+		task = new EzTask("task5","venue5",2);
+		task.setId(5);
+		task.setDone(false);
+		task.setStartTime(2014, 10, 10);
+		task.setEndTimeAsStartTime();
+		storage.addTask(task);
+		
+		// task 7
+		task = new EzTask("task7","venue7",3);
+		task.setId(7);
+		task.setDone(false);
+		task.setStartTime(2014, 10, 13);
+		task.setEndTimeAsStartTime();
+		storage.addTask(task);
+		
+		// task 6
+		task = new EzTask("task6","venue6",1);
+		task.setId(6);
+		task.setDone(true);
+		task.setStartTime(2014, 10, 16);
+		task.setEndTimeAsStartTime();
+		storage.addTask(task);
+		
+		// task 1
+		task = new EzTask("task1","venue1",1);
+		task.setId(1);
+		task.setDone(false);
+		task.setEndTimeAsStartTime();
+		storage.addTask(task);
+		
+		// task 2
+		task = new EzTask("task2","venue2",2);
+		task.setId(2);
+		task.setDone(true);
+		task.setStartTime(2014, 10, 12);
+		task.setEndTimeAsStartTime();
+		storage.addTask(task);
+		
+		// task 3
+		task = new EzTask("task3","venue3",0);
+		task.setId(3);
+		task.setDone(true);
+		task.setStartTime(2014, 10, 18);
+		task.setEndTimeAsStartTime();
+		storage.addTask(task);
+		
+		return storage;
+	}
+	
+	@Test
+	public void testSortByVenue() {
+		EzStorage storage = createTestCase();
+		
+		//storage.addTask(createTask(4,"add \"task4\" at \"venue4\""));
+		//storage.addTask(createTask(5,"add \"task5\" at \"venue5\""));
+		//storage.addTask(createTask(7,"add \"task7\" at \"venue7\""));
+		//storage.addTask(createTask(6,"add \"task6\" at \"venue6\""));
+		//storage.addTask(createTask(1,"add \"task1\" at \"venue1\""));
+		//storage.addTask(createTask(2,"add \"task2\" at \"venue2\""));
+		//storage.addTask(createTask(3,"add \"task3\" at \"venue3\""));
+		
+		ArrayList<EzTask> result = EzSort.sortByVenue(storage.getListOfAllTasks());
+		assertEquals("check id: ", 1, result.get(0).getId());
+		assertEquals("check id: ", 2, result.get(1).getId());
+		assertEquals("check id: ", 3, result.get(2).getId());
+		assertEquals("check id: ", 4, result.get(3).getId());
+		assertEquals("check id: ", 5, result.get(4).getId());
+		assertEquals("check id: ", 6, result.get(5).getId());
+		assertEquals("check id: ", 7, result.get(6).getId());
+		
+	}
+
+	@Test
+	public void testSortByPriority() {
+		EzStorage storage = createTestCase();
+		
+		//storage.addTask(createTask(4,"add \"task4\"",true));
+		//storage.addTask(createTask(5,"add \"task5\" **",false));
+		//storage.addTask(createTask(7,"add \"task7\" ***",false));
+		//storage.addTask(createTask(6,"add \"task6\" *",true));
+		//storage.addTask(createTask(1,"add \"task1\" *",false));
+		//storage.addTask(createTask(2,"add \"task2\" **",true));
+		//storage.addTask(createTask(3,"add \"task3\"",true));
+		
+		ArrayList<EzTask> result = EzSort.sortByPriority(storage.getListOfAllTasks());
+		assertEquals("check priority: ", 3, result.get(0).getPriority());
+		assertEquals("check priority: ", 2, result.get(1).getPriority());
+		assertEquals("check priority: ", 2, result.get(2).getPriority());
+		assertEquals("check priority: ", 1, result.get(3).getPriority());
+		assertEquals("check priority: ", 1, result.get(4).getPriority());
+		assertEquals("check priority: ", 0, result.get(5).getPriority());
+		assertEquals("check priority: ", 0, result.get(6).getPriority());
+		
+	}
+
+	@Test
+	public void testSortByDone() {
+		EzStorage storage = createTestCase();
+		
+		//storage.addTask(createTask(4,"add \"task4\"",true));
+		//storage.addTask(createTask(5,"add \"task5\"",false));
+		//storage.addTask(createTask(7,"add \"task7\"",false));
+		//storage.addTask(createTask(6,"add \"task6\"",true));
+		//storage.addTask(createTask(1,"add \"task1\"",false));
+		//storage.addTask(createTask(2,"add \"task2\"",true));
+		//storage.addTask(createTask(3,"add \"task3\"",true));
+		
+		ArrayList<EzTask> result = EzSort.sortByDone(storage.getListOfAllTasks());
+		assertEquals("check done: ", false, result.get(0).isDone());
+		assertEquals("check done: ", false, result.get(1).isDone());
+		assertEquals("check done: ", false, result.get(2).isDone());
+		assertEquals("check done: ", true, result.get(3).isDone());
+		assertEquals("check done: ", true, result.get(4).isDone());
+		assertEquals("check done: ", true, result.get(5).isDone());
+		assertEquals("check done: ", true, result.get(6).isDone());
+	}
+
+	@Test
+	public void testSortByTitle() {
+		EzStorage storage = createTestCase();
+		
+		//storage.addTask(createTask(4,"add \"task4\""));
+		//storage.addTask(createTask(5,"add \"task5\""));
+		//storage.addTask(createTask(7,"add \"task7\""));
+		//storage.addTask(createTask(6,"add \"task6\""));
+		//storage.addTask(createTask(1,"add \"task1\""));
+		//storage.addTask(createTask(2,"add \"task2\""));
+		//storage.addTask(createTask(3,"add \"task3\""));
+		
+		ArrayList<EzTask> result = EzSort.sortByTitle(storage.getListOfAllTasks());
+		assertEquals("check id: ", 1, result.get(0).getId());
+		assertEquals("check id: ", 2, result.get(1).getId());
+		assertEquals("check id: ", 3, result.get(2).getId());
+		assertEquals("check id: ", 4, result.get(3).getId());
+		assertEquals("check id: ", 5, result.get(4).getId());
+		assertEquals("check id: ", 6, result.get(5).getId());
+		assertEquals("check id: ", 7, result.get(6).getId());
+	}
+
+	@Test
+	public void testSortByDate() {
+		EzStorage storage = createTestCase();
+		
+		//storage.addTask(createTask(4,"add \"task4\" on 14/10/2014"));
+		//storage.addTask(createTask(5,"add \"task5\" on 10/10/2014"));
+		//storage.addTask(createTask(7,"add \"task7\" on 13/10/2014"));
+		//storage.addTask(createTask(6,"add \"task6\" on 16/10/2014"));
+		//storage.addTask(createTask(1,"add \"task1\""));
+		//storage.addTask(createTask(2,"add \"task2\" on 12/10/2014"));
+		//storage.addTask(createTask(3,"add \"task3\" on 18/10/2014"));
+		
+		ArrayList<EzTask> result = EzSort.sortByDate(storage.getListOfAllTasks());
+		assertEquals("check id: ", 5, result.get(0).getId());
+		assertEquals("check id: ", 2, result.get(1).getId());
+		assertEquals("check id: ", 7, result.get(2).getId());
+		assertEquals("check id: ", 4, result.get(3).getId());
+		assertEquals("check id: ", 6, result.get(4).getId());
+		assertEquals("check id: ", 3, result.get(5).getId());
+		assertEquals("check id: ", 1, result.get(6).getId());
+	}
+
+	@Test
+	public void testSortById() {
+		EzStorage storage = createTestCase();
+		
+		//storage.addTask(createTask(4,"add \"task4\""));
+		//storage.addTask(createTask(5,"add \"task5\""));
+		//storage.addTask(createTask(7,"add \"task7\""));
+		//storage.addTask(createTask(6,"add \"task6\""));
+		//storage.addTask(createTask(1,"add \"task1\""));
+		//storage.addTask(createTask(2,"add \"task2\""));
+		//storage.addTask(createTask(3,"add \"task3\""));
+		
+		ArrayList<EzTask> result = EzSort.sortById(storage.getListOfAllTasks());
+		assertEquals("check id: ", 1, result.get(0).getId());
+		assertEquals("check id: ", 2, result.get(1).getId());
+		assertEquals("check id: ", 3, result.get(2).getId());
+		assertEquals("check id: ", 4, result.get(3).getId());
+		assertEquals("check id: ", 5, result.get(4).getId());
+		assertEquals("check id: ", 6, result.get(5).getId());
+		assertEquals("check id: ", 7, result.get(6).getId());
+	}
+
+	/*private EzTask createTask(int id, String command){
+		EzTask task = EzParser.extractInfo(command, null).getResults().get(0);
+		task.setId(id);
+		return task;
+	}
+	
+	private EzTask createTask(int id, String command, boolean done){
+		EzTask task = EzParser.extractInfo(command, null).getResults().get(0);
+		task.setId(id);
+		task.setDone(done);
+		return task;
+	}*/
+	
+}
+
+	// End of segment: C:\Users\Tun Leng\workspace\EzTask\src\EzSortTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Tun Leng\workspace\EzTask\src\EzStorage.java
+	 */
+
+
+public class EzStorage {
+	
+	//ArrayList of tasks entered by user.
+
+	private ArrayList<EzTask> listOfAllTasks = new ArrayList<EzTask>();
+	
+	//largestId represents the largest taskId + 1  
+	private int largestId = 1;
+
+	/**
+	 * this method just simply adds the task to listOfAllTasks and returns it.
+	 * @param task
+	 * @return task 
+	 */
+	public EzTask addTask(EzTask task){
+		
+	
+		for(EzTask taskInList : listOfAllTasks)
+			if(taskInList.getId() > getLargestId())
+				setLargestId(taskInList.getId());
+		
+		if(task.getId()+1 > getLargestId())
+			setLargestId(task.getId() + 1);
+		
+		
+		listOfAllTasks.add(task);
+		
+		//assertions 
+		int size = listOfAllTasks.size();
+		assert size >0;
+		int largestNum = 0;
+		for(EzTask task1 : listOfAllTasks)
+			if(task1.getId() > largestNum)
+				largestNum = task1.getId();
+		
+		//assert largestId == largestNum + 1;
+		//end assertions 
+		
+		return task;
+	}
+	
+	/**
+	 * This method adds the task to the list and provides an unique ID for the task and returns it.
+	 * @param task
+	 * @return task with new id
+	 */
+	public EzTask addTaskWithNewId(EzTask task){
+		
+		if(listOfAllTasks.size() == 0)
+			setLargestId(1);
+		
+		listOfAllTasks.add(task);
+		task.setId(getLargestId());
+		setLargestId(getLargestId() + 1);  //largestId must always be 1 more than the largestTaskId
+		
+		return task;
+		
+	}
+	
+	/**
+	 * This method replaces the tasks with certain ID with the new tasks carrying the same ID in the list.
+	 * @param listOfTasksUpdated
+	 * @return the number of tasks found and replaced.
+	 */
+
+	public int updateTask(ArrayList<EzTask> listOfTasksUpdated) {
+		int count = 0;       //number of tasks replaced
+		int index;			 //the index of the task in listOfAllTasks
+		
+		for(EzTask taskToBeUpdated : listOfTasksUpdated)
+			for(int i=0; i< listOfAllTasks.size(); i++)
+			{
+				EzTask task = listOfAllTasks.get(i);
+				if(taskToBeUpdated.getId() == task.getId() )
+				{
+			
+					index = listOfAllTasks.indexOf(task);
+					
+					listOfAllTasks.remove(index);
+					listOfAllTasks.add(index, taskToBeUpdated);
+					count++;
+				}
+			}
+	
+		return count;
+	}
+	
+	/**
+	 * This method removes the task having the id with the same id as the tasks from the listOfAllTasks
+	 * @param listOfTasks
+	 * @return the number of tasks found and removed.
+	 */
+
+	public int deleteTask(ArrayList<EzTask> listOfTasksDeleted){
+		int count = 0;			//the number of tasks removed
+		for(EzTask taskToBeDeleted: listOfTasksDeleted)
+			for(int i = 0; i < listOfAllTasks.size(); i++)
+			{
+				EzTask task = listOfAllTasks.get(i);
+				if(taskToBeDeleted.getId() == task.getId())
+
+				{
+					listOfAllTasks.remove(listOfAllTasks.indexOf(task));
+					count++;
+				}
+			}
+
+	return count;
+	}
+	
+	/**
+	 * this method returns the number of tasks in the list.
+	 * @return size of task list
+	 */
+	public int getSize(){
+		return listOfAllTasks.size();
+
+	}
+	
+	/**
+	 * This method finds the task by taskId and returns a copy of the task if found, and returns null if otherwise.
+	 * @param id
+	 * @return taskFound or null
+	 */
+	public EzTask findTask(int id){
+		
+		EzTask taskFound;
+		for(EzTask task : listOfAllTasks)
+		{
+			//System.out.println("findTask: " + task.getTitle());
+			
+			if(id == task.getId())
+			{	
+				taskFound = new  EzTask(task);
+
+				return taskFound;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * This method finds the task by taskId and returns it if found or returns null otherwise.
+	 * @param id
+	 * @return task or null
+	 */
+	public EzTask getTask(int id){
+		for(EzTask task : listOfAllTasks)
+		{
+			//System.out.println("findTask: " + task.getTitle());
+			if(id == task.getId())
+			return task;
+		}
+			return null;
+	}
+	
+	/**
+	 * This method finds all the tasks on the date and return that list.
+	 * @param date
+	 * @return ArrayList tasksByDate or null
+	 */
+	public ArrayList<EzTask> getTasksByDate(Date date){
+	
+		ArrayList<EzTask> tasksByDate = new ArrayList<EzTask>();
+		for(EzTask task : listOfAllTasks)
+			if(checkByDate(date,task))
+				tasksByDate.add(task);
+
+		
+		
+		return tasksByDate;
+	}
+	
+	/**
+	 * this method returns true if the the task falls on the date specified.
+	 * @param date, task
+	 * @return boolean
+	 */
+	private boolean checkByDate(Date date, EzTask task) {
+		
+		if(task.getEndTime() == null && task.getStartTime() == null)
+			return false;
+		
+		Calendar cal1 = Calendar.getInstance();
+		Calendar startTime = Calendar.getInstance();
+		Calendar endTime = Calendar.getInstance();
+    	
+    	cal1.setTime(date);
+    	startTime.setTime(task.getStartTime().getTime());
+    	endTime.setTime(task.getEndTime().getTime());
+
+    	
+
+    	if(startTime.before(cal1) && endTime.after(cal1) )
+    		return true;
+
+    	else if(cal1.get(Calendar.YEAR) == startTime.get(Calendar.YEAR) && cal1.get(Calendar.MONTH) == startTime.get(Calendar.MONTH) &&
+    			cal1.get(Calendar.DAY_OF_MONTH) == startTime.get(Calendar.DAY_OF_MONTH)  || cal1.get(Calendar.YEAR) == endTime.get(Calendar.YEAR) &&
+    			cal1.get(Calendar.MONTH) == endTime.get(Calendar.MONTH) && cal1.get(Calendar.DAY_OF_MONTH) == endTime.get(Calendar.DAY_OF_MONTH))
+    		return true;
+
+		return false;
+	}
+
+	/**
+	 * this method returns a sorted ArrayList by id
+	 * @return ArrayList of tasksById or null
+	 */
+	/*@SuppressWarnings("unchecked")
+	public ArrayList<EzTask> getSortedTasksById(){
+		ArrayList <EzTask> tasksById = new ArrayList<EzTask>();
+		
+		tasksById = (ArrayList<EzTask>)listOfAllTasks.clone();
+		
+		Collections.sort(tasksById, EzSort.TaskIdComparator);
+		
+		
+			return tasksById;
+					
+	}*/
+	
+	
+	/**
+	 * this method return a list of tasks, which is sorted by priority then by date.
+	 * @return ArrayList tasksByPriority or null
+	 */
+	/*@SuppressWarnings("unchecked")
+	public ArrayList<EzTask> getSortedTasksByPriority(){
+		
+		ArrayList<EzTask> tasksByPriority = new ArrayList<EzTask>();
+		tasksByPriority = (ArrayList<EzTask>) listOfAllTasks.clone();
+		Collections.sort(tasksByPriority, EzSort.TaskPriorityComparator);
+		return tasksByPriority;
+				
+		
+	}*/
+	
+	/**
+	 * this method return a list of tasks, which contain one or more words in the keywords.
+	 * @param listOfKeywords
+	 * @return ArrayList tasksWithKeywords
+	 */
+	public ArrayList<EzTask> getTasksByKeywords(ArrayList<String> listOfKeywords){
+
+		ArrayList<EzTask> tasksWithKeywords = new ArrayList<EzTask>();
+		for(String keyword : listOfKeywords)
+			for(EzTask task: listOfAllTasks)
+				if(checkTitle(keyword, task) || checkByVenue(keyword, task))
+					if(!tasksWithKeywords.contains(task))
+						tasksWithKeywords.add(task);
+				
+		return tasksWithKeywords;
+
+
+	}
+	
+	/**
+	 * This method checks whether the keyword is present in the task's title
+	 * @param String keyword, EzTask task
+	 * @return boolean
+	 */
+	private boolean checkTitle(String keyword, EzTask task) {
+		
+		String titleToCheck = task.getTitle().toLowerCase();
+		String keywordToCheck = keyword.toLowerCase();
+		if(titleToCheck.contains(keywordToCheck))
+			return true;
+		
+		return false;
+		
+		
+	}
+
+	private boolean checkByVenue(String keyword, EzTask task) {
+
+		if(task.getVenue() != null){
+
+			String venueToCheck = task.getVenue().toLowerCase();
+			String keywordToCheck = keyword.toLowerCase();
+
+
+			if(venueToCheck.contains(keywordToCheck))
+				return true;
+		}
+		return false;
+	}
+	
+
+	/**
+	 * This method returns the list of tasks that have been done in order of id.
+	 * 
+	 * @return doneTasks
+	 */
+	public ArrayList<EzTask> getDoneTasks(){
+		
+		ArrayList<EzTask> doneTasks = new ArrayList<EzTask>();
+		for(EzTask task: listOfAllTasks)
+			if(task.isDone())
+				doneTasks.add(task);
+		
+		EzSort.sortById(doneTasks);
+		
+		return doneTasks;
+	}
+	
+	/**
+	 * This method returns the list of tasks that have not been done in order of id
+	 * @return undoneTasks
+	 */
+	public ArrayList<EzTask> getUndoneTasks() {
+		ArrayList<EzTask> undoneTasks  = new ArrayList<EzTask>();
+		for(EzTask task: listOfAllTasks)
+			if(!task.isDone())
+				undoneTasks.add(task);
+		
+		EzSort.sortById(undoneTasks);
+		
+		return undoneTasks;
+	}
+
+	/**
+	 * This method returns the list of upcoming tasks according to date
+	 * @return comingTasks
+	 */
+	public  ArrayList<EzTask> getComingTasks(){
+		ArrayList<EzTask> comingTasks = new ArrayList<EzTask>();
+		Calendar currentDate = Calendar.getInstance();
+		Calendar startTime = Calendar.getInstance();
+		Calendar endTime = Calendar.getInstance();
+		for(EzTask task: listOfAllTasks)
+		{
+			startTime = task.getStartTime();
+			endTime = task.getEndTime();
+			if(startTime != null)
+			{
+				if(currentDate.before(startTime))
+					comingTasks.add(task);
+				else if(currentDate.get(Calendar.YEAR) == startTime.get(Calendar.YEAR) && currentDate.get(Calendar.MONTH) == startTime.get(Calendar.MONTH) &&
+						currentDate.get(Calendar.DAY_OF_MONTH) == startTime.get(Calendar.DAY_OF_MONTH))
+					comingTasks.add(task);
+			}
+		}
+
+		EzSort.sortByDate(comingTasks);
+
+		return comingTasks;
+	}
+	
+	/**
+	 * This method returns past tasks according to date
+	 * @return pastTasks
+	 */
+	public ArrayList<EzTask> getOverdueTasks() {
+		ArrayList<EzTask> pastTasks = new ArrayList<EzTask>();
+		Calendar currentDate = Calendar.getInstance();
+		Calendar startTime = Calendar.getInstance();
+		Calendar endTime = Calendar.getInstance();
+		for(EzTask task: listOfAllTasks)
+		{
+			if(!task.isDone())
+			if(task.getStartTime() != null && task.getEndTime() != null)
+			{
+				startTime = task.getStartTime();
+				endTime = task.getEndTime();
+				if(currentDate.after(startTime) && currentDate.after(endTime))
+					pastTasks.add(task);
+				
+				if(currentDate.get(Calendar.YEAR) != startTime.get(Calendar.YEAR) || currentDate.get(Calendar.MONTH) != startTime.get(Calendar.MONTH) ||
+						currentDate.get(Calendar.DAY_OF_MONTH) != startTime.get(Calendar.DAY_OF_MONTH) || currentDate.get(Calendar.YEAR) != endTime.get(Calendar.YEAR) || currentDate.get(Calendar.MONTH) != endTime.get(Calendar.MONTH) ||
+						currentDate.get(Calendar.DAY_OF_MONTH) != endTime.get(Calendar.DAY_OF_MONTH))
+					if(currentDate.after(startTime) && currentDate.after(endTime))
+						if(!pastTasks.contains(task))
+							pastTasks.add(task);
+				
+				
+			}
+		}
+
+		EzSort.sortByDate(pastTasks);
+		return pastTasks;
+
+	}
+
+	/**
+	 * this method returns the list of tasks that have no date
+	 * @return noDateTasks
+	 */
+	public ArrayList<EzTask> getNoDateTasks(){
+		ArrayList<EzTask> noDateTasks = new ArrayList<EzTask>();
+		for(EzTask task: listOfAllTasks)
+			if(task.getStartTime() == null)
+				noDateTasks.add(task);
+		
+		EzSort.sortById(noDateTasks);
+		return noDateTasks;
+		
+	}
+
+	/**
+	 * This method returns a copy of listOfAllTasks
+	 * @return list
+	 */
+	@SuppressWarnings("unchecked")
+	public ArrayList<EzTask> getListOfAllTasks(){
+		ArrayList<EzTask> list = (ArrayList<EzTask>) listOfAllTasks.clone();
+		return list;
+	}
+
+
+	/**
+	 * This method prints the title of each task in the ArrayList
+	 */
+	public void printList() {
+		for(EzTask task: listOfAllTasks)
+		System.out.println(task.getTitle());
+	}
+
+	/**
+	 * Gets the largestId 
+	 * @return largestId
+	 */
+	public int getLargestId() {
+		return this.largestId;
+	}
+
+	/**
+	 * Assigns the largestId
+	 * @param largestId
+	 */
+	public void setLargestId(int largestId) {
+		this.largestId = largestId;
+	}
+	
+	
+}
+
+	// End of segment: C:\Users\Tun Leng\workspace\EzTask\src\EzStorage.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Tun Leng\workspace\EzTask\src\EzStorageTest.java
+	 */
+
+
+public class EzStorageTest {
+	private EzTask createTask(String command){
+		EzTask task = EzParser.extractInfo(command, null).getResults().get(0);
+		return task;
+	}
+	
+	/* This is an equivalence partition test */
+	@Test
+	public void testGetDoneTask() {
+		EzStorage storage = new EzStorage();
+		storage.addTaskWithNewId(createTask("add \"task 0\" on " + getDateFromToday(0)));
+		storage.addTaskWithNewId(createTask("add \"task 1\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 2\""));
+		storage.addTaskWithNewId(createTask("add \"task 3\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 4\""));
+		storage.addTaskWithNewId(createTask("add \"task 5\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 6\" on " + getDateFromToday(2)));
+		storage.addTaskWithNewId(createTask("add \"task 7\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 8\""));
+		storage.addTaskWithNewId(createTask("add \"task 9\" on " + getDateFromToday(2)));
+		
+		storage.getTask(1).setDone(true);
+		storage.getTask(2).setDone(true);
+		storage.getTask(3).setDone(true);
+		storage.getTask(5).setDone(true);
+		storage.getTask(7).setDone(true);
+		storage.getTask(8).setDone(true);
+		
+		ArrayList<EzTask> list = storage.getDoneTasks();
+		assertEquals("check number of task: ", 6, list.size()); 
+		ArrayList<EzTask> list2 = storage.getUndoneTasks();
+		assertEquals("check number of task: ", 4, list2.size());
+	}
+	
+	@Test
+	public void testGetUndoneTask() {
+		EzStorage storage = new EzStorage();
+		storage.addTaskWithNewId(createTask("add \"task 0\" on " + getDateFromToday(0)));
+		storage.addTaskWithNewId(createTask("add \"task 1\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 2\""));
+		storage.addTaskWithNewId(createTask("add \"task 3\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 4\""));
+		storage.addTaskWithNewId(createTask("add \"task 5\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 6\" on " + getDateFromToday(2)));
+		storage.addTaskWithNewId(createTask("add \"task 7\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 8\""));
+		storage.addTaskWithNewId(createTask("add \"task 9\" on " + getDateFromToday(2)));
+		
+		storage.getTask(1).setDone(true);
+		storage.getTask(2).setDone(true);
+		storage.getTask(3).setDone(true);
+		storage.getTask(5).setDone(true);
+		storage.getTask(7).setDone(true);
+		storage.getTask(8).setDone(true);
+		
+		ArrayList<EzTask> list = storage.getUndoneTasks();
+		assertEquals("check number of task: ", 4, list.size()); 
+	}
+	
+	@Test
+	public void testGetNoDateTask() {
+		EzStorage storage = new EzStorage();
+		storage.addTaskWithNewId(createTask("add \"task 0\" on " + getDateFromToday(0)));
+		storage.addTaskWithNewId(createTask("add \"task 1\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 2\""));
+		storage.addTaskWithNewId(createTask("add \"task 3\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 4\""));
+		storage.addTaskWithNewId(createTask("add \"task 5\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 6\" on " + getDateFromToday(2)));
+		storage.addTaskWithNewId(createTask("add \"task 7\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 8\""));
+		storage.addTaskWithNewId(createTask("add \"task 9\" on " + getDateFromToday(2)));
+		
+		ArrayList<EzTask> list = storage.getNoDateTasks();
+		assertEquals("check number of task: ", 3, list.size()); 
+	}
+	
+	
+	@Test
+	public void testGetComingTask() {
+		EzStorage storage = new EzStorage();
+		storage.addTaskWithNewId(createTask("add \"task 0\" on " + getDateFromToday(0)));
+		storage.addTaskWithNewId(createTask("add \"task 1\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 2\""));
+		storage.addTaskWithNewId(createTask("add \"task 3\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 4\""));
+		storage.addTaskWithNewId(createTask("add \"task 5\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 6\" on " + getDateFromToday(2)));
+		storage.addTaskWithNewId(createTask("add \"task 7\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 8\""));
+		storage.addTaskWithNewId(createTask("add \"task 9\" on " + getDateFromToday(2)));
+		
+		ArrayList<EzTask> list = storage.getComingTasks();
+		assertEquals("check number of task: ", 5, list.size()); 
+	}
+	
+	@Test
+	public void testgetOverdueTask() {
+		EzStorage storage = new EzStorage();
+		storage.addTaskWithNewId(createTask("add \"task 0\" on " + getDateFromToday(0)));
+		storage.addTaskWithNewId(createTask("add \"task 1\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 2\""));
+		storage.addTaskWithNewId(createTask("add \"task 3\" on " + getDateFromToday(1)));
+		storage.addTaskWithNewId(createTask("add \"task 4\""));
+		storage.addTaskWithNewId(createTask("add \"task 5\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 6\" on " + getDateFromToday(2)));
+		storage.addTaskWithNewId(createTask("add \"task 7\" on " + getDateFromToday(-1)));
+		storage.addTaskWithNewId(createTask("add \"task 8\""));
+		storage.addTaskWithNewId(createTask("add \"task 9\" on " + getDateFromToday(2)));
+		
+		ArrayList<EzTask> list = storage.getOverdueTasks();
+		assertEquals("check number of task: ", 2, list.size()); 
+	}
+
+	private String getDateFromToday(int step){
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, step);
+		return "" + String.valueOf(cal.get(Calendar.DAY_OF_MONTH)) 
+				+ "/" + String.valueOf(cal.get(Calendar.MONTH)+1)
+				+ "/" + String.valueOf(cal.get(Calendar.YEAR));
+	}
+	
+	@Test
+	public void testAddTask() {
+		EzStorage storage = new EzStorage();
+		EzTask task;
+		
+		checkId(storage.addTaskWithNewId(new EzTask("task 0")), 1);
+		checkId(storage.addTaskWithNewId(new EzTask("task 1")), 2);
+		checkId(storage.addTaskWithNewId(new EzTask("task 2")), 3);
+		
+		task = new EzTask("task 5");
+		task.setId(5);
+		checkId(storage.addTask(task), 5);
+		
+		task = new EzTask("task 4");
+		task.setId(4);
+		checkId(storage.addTask(task), 4);
+		
+		checkId(storage.addTaskWithNewId(new EzTask("task 6")), 6);
+		
+		task = new EzTask("task 7");
+		task.setId(7);
+		checkId(storage.addTask(task), 7);
+		
+		checkId(storage.addTaskWithNewId(new EzTask("task 8")), 8);
+	}
+	
+	/* This is an equivalence partition test */
+	@Test
+	public void testGetByDate() {
+		EzStorage storage = new EzStorage();
+		
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 0\" on 26/7/2014", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 1\" on 26/7/2014 5h30", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 2\" on 27/7/2014 from 5h30 to 22h", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 3\" on 26/7/2014 5h30", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 4\" on 27/7/2014 from 5h30 to 22h", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 5\"", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 6\" on 25/7/2014", storage).getResults().get(0));
+		assertEquals("Check size of storage: ", 7, storage.getSize());
+		ArrayList<EzTask> list = storage.getTasksByDate((new GregorianCalendar(2014,Calendar.JULY,26,0,0)).getTime());
+		assertTrue("Check list is not null: ", list!=null);
+		assertEquals("Check size of list: ", 3, list.size());
+	}
+	
+	@Test
+	public void testGetByKeywords() {
+		EzStorage storage = new EzStorage();
+		
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 0 ab bc\" on 26/7/2014", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 1 ab ca\" on 26/7/2014 5h30", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 2 ee ab\" on 27/7/2014 from 5h30 to 22h", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 3 ac ee\" on 26/7/2014 5h30", storage).getResults().get(0));
+		storage.addTaskWithNewId(EzParser.extractInfo("add \"task 4 bf aa\" on 27/7/2014 from 5h30 to 22h", storage).getResults().get(0));
+		
+		assertEquals("Check size of storage: ", 5, storage.getSize());
+		
+		ArrayList<String> listOfKeywords = new ArrayList<String>();
+		listOfKeywords.add("ab");
+		listOfKeywords.add("bc");
+		ArrayList<EzTask> list = storage.getTasksByKeywords(listOfKeywords);
+		assertTrue("Check list is not null: ", list!=null);
+		assertEquals("Check size of list: ", 3, list.size());
+	}
+	
+	@Test
+	public void test() {
+		EzStorage storage = new EzStorage();
+		
+		checkId(storage.addTaskWithNewId(new EzTask("go shopping","at Clementi",3)), 1);
+		checkId(storage.addTaskWithNewId(new EzTask("do homework",2)), 2);
+		checkId(storage.addTaskWithNewId(new EzTask("do EE2021 Tut",5)),3);
+		/**
+		 * now the list is:
+		 * 1. "go shopping" "at Clementi" 3
+		 * 2. "do homework" 2
+		 * 3. "do EE2021 Tut" 5
+		 */
+	
+		assertEquals("check size: ", 3, storage.getSize());
+		
+		ArrayList<EzTask> list = new ArrayList<EzTask>();
+		
+		EzTask tmp = new EzTask(storage.getTask(2));
+		assertEquals("check title: ", "do homework", tmp.getTitle());
+		
+		tmp.setTitle("do CS2103T");
+		list.add(tmp);
+		assertEquals("check the number of tasks affected: ", 1, storage.updateTask(list));
+		/**
+		 * now the list is:
+		 * 1. "go shopping" "at Clementi" 3
+		 * 2. "do CS2103T" 2
+		 * 3. "do EE2021 Tut" 5
+		 */
+
+		assertEquals("check title: ", "do CS2103T", storage.getTask(2).getTitle());
+		
+		list.clear();
+		tmp = new EzTask(storage.getTask(2));
+		list.add(tmp);
+		
+		assertEquals("check the number of tasks affected: ", 1, storage.deleteTask(list));
+		
+		/**
+		 * now the list is:
+		 * 1. "go shopping" "at Clementi" 3
+		 * 3. "do EE2021 Tut" 5
+		 */
+		
+		checkId(storage.addTaskWithNewId(new EzTask("do CS2101 Tut",7)),4);
+		
+		/**
+		 * now the list is:
+		 * 1. "go shopping" "at Clementi" 3
+		 * 3. "do EE2021 Tut" 5
+		 * 4. "do CS2101 Tut" 7
+		 */
+		
+	
+		ArrayList<String> listWords = new ArrayList<String>();
+		listWords.add("do");
+		
+		
+		checkSearchByKeywords(storage, listWords,2);
+
+		listWords.clear();
+		listWords.add("Tut");
+		checkSearchByKeywords(storage, listWords,2);
+		listWords.add("go");
+		checkSearchByKeywords(storage, listWords,3);
+		
+		assertEquals("check not found:",null,storage.getTask(2));
+		
+		tmp = new EzTask(storage.getTask(4));
+		assertEquals("check title: ", "do CS2101 Tut", tmp.getTitle());
+		
+		
+		tmp.setTitle("do CS2103 Tut");
+		list.add(tmp);
+	
+		assertEquals("check the number of tasks affected: ", 1, storage.updateTask(list));
+		/**
+		 * now the list is:
+		 * 1. "go shopping" "at Clementi" 3
+		 * 3. "do EE2021 Tut" 5
+		 * 4. "do CS2103 Tut" 7
+		 */
+		
+		list.clear();
+		tmp = new EzTask(storage.getTask(3));
+		list.add(tmp);
+		assertEquals("check the number of tasks affected: ", 1, storage.deleteTask(list));
+		/**
+		 * now the list is:
+		 * 0. "go shopping" "at Clementi" 3
+		 * 2. "do EE2021 Tut" 5
+		 */
+		
+		
+		EzTask task = new EzTask("do something", 4);
+		task.setId(6);
+		
+		checkId(storage.addTask(new EzTask(task)), 6);
+		checkNumTask(storage, 7);
+		
+		checkId(storage.addTaskWithNewId(new EzTask("do EE2021 tut", 5)), 7);
+		
+		/**
+		 * now the list is:
+		 * 0. "go shopping" "at Clementi" 3
+		 *2. "do EE2021 Tut" 5
+		 *6. "do something" 4
+		 *7. "do EE2021 tut" 5
+		 */
+		
+		
+		task = new EzTask("do something again", 4);
+		task.setId(4);
+		checkId(storage.addTask(task), 4);
+		checkNumTask(storage, 8);
+		
+		task = new EzTask("do something again", 4);
+		task.setId(5);
+		checkId(storage.addTask(task), 5);
+		checkNumTask(storage, 8);
+		
+		checkId(storage.addTaskWithNewId(new EzTask("do EE2021 tut", 5)), 8);
+		
+		/**
+		 * now the list is:
+		 * 0. "go shopping" "at Clementi" 3
+		 *2. "do EE2021 Tut" 5
+		 *6. "do something" 4
+		 *7. "do EE2021 tut" 5
+		 *4. "do something again" 4
+		 *5. "do something again" 4
+		 *8. "do EE2021 tut" 5
+		 */
+		
+		EzStorage storage2 = new EzStorage();
+		
+		
+		task = new EzTask("do something", 4);
+		task.setId(6);
+		checkId(storage2.addTask(task), 6);
+		checkNumTask(storage2, 7);
+		
+	}
+
+
+	/**
+	 * @param task0
+	 */
+	private void checkId(EzTask task0, int expectedId) {
+		assertEquals("check id:", expectedId, task0.getId());
+	}
+
+
+	/**
+	 * @param storage
+	 * @param listWords
+	 */
+	private void checkSearchByKeywords(EzStorage storage,
+			ArrayList<String> listWords, int expectedNumber) {
+		assertEquals("check search by keyword: ", expectedNumber, storage.getTasksByKeywords(listWords).size());
+	}
+
+	/** 
+	 * Prints the task list
+	 * @param storage
+	 */
+	public void printTaskList(EzStorage storage){
+		storage.printList();
+	}
+
+	private void checkNumTask(EzStorage storage, int expectedNumber){
+		assertEquals("checkNumTasks: " , expectedNumber, storage.getLargestId());
+	}
+}
+
+	// End of segment: C:\Users\Tun Leng\workspace\EzTask\src\EzStorageTest.java
+
+
+
+
+
+	/**
+	 * origin: C:\Users\Tun Leng\workspace\EzTask\src\EzTaskSystemTest.java
+	 */
+
+
+
+public class EzTaskSystemTest {
+
+	@Test
+	public void test() {
+		
+		
+		EzController.setTesting(true);
+		//task 1
+		EzController.execute("add \"doing automated testing\" on 4/11/2014");
+		//task 2
+		EzController.execute("add \"automated testing 2\" at \"utown\" at 10am");
+		//task 3
+		EzController.execute("add \"automated testing 3\" at 5pm 5/11/2014 ");
+		//task 4
+		EzController.execute("add \"do EE2021 tutorial\" from 5/11 to 6/11");
+		//task 5
+		EzController.execute("add \"search for keywords\" today ***" );
+		
+		
+		//checking size of task list
+		assertEquals ("size of task list = " , 5, getListSize());
+		
+		//checking task 1
+		assertEquals ("task 1 title: " , "doing automated testing", getTaskTitle(1));
+		assertEquals("task 1 is overdue: ", true, getTaskDateStatus(1));
+		
+	
+		
+		//checking task 2
+		assertEquals("task 2 title: " , "automated testing 2", getTaskTitle(2));
+		assertEquals("task 2 venue: " , "utown", getTaskVenue(2));
+		assertEquals("task 2 is overdue: ", true, getTaskDateStatus(2));
+		
+		
+		//checking task 3
+		assertEquals("task 3 title: " , "automated testing 3", getTaskTitle(3));
+		assertEquals("task 3 is overdue: ", false, getTaskDateStatus(3));
+		assertEquals("task 3 is due today", true, getTaskTodayStatus(3));
+		
+		//checking task 4
+		assertEquals("task 4 title: ", "do EE2021 tutorial", getTaskTitle(4));
+		assertEquals("task 4 starts today", true, getTaskTodayStatus(4));
+		
+		//checking task 5
+		assertEquals("task 5 title: ", "search for keywords", getTaskTitle(5));
+		assertEquals("task 5 priority: ", 3, getTaskPriority(5));
+		assertEquals("task 5 is due today:", true, getTaskTodayStatus(5));
+		
+		
+		//marking task 3 as done
+		EzController.execute("done 3");
+		assertEquals("number of tasks done: ", 1, getNumDoneTasks());
+		assertEquals("task 3 is done", true, getTaskDoneStatus(3));
+		
+		
+		//undoing the previous action( marking task 3 as done)
+		EzController.execute("undo");
+		assertEquals("undo successful ", false, getTaskDoneStatus(3));
+		
+		//undoing the previous action(adding task 3)
+		EzController.execute("undo");
+		assertEquals("undo successful ", 4, getListSize());
+		
+		//redoing previous action(adding task 3)
+		EzController.execute("redo");
+		assertEquals("redo successful", 5, getListSize());
+		
+		//TODO please add the relevant part of your code. 
+		//searching for keyword: "do"
+		//EzController.execute("show all have \"do \" ");
+		ArrayList <String> keywords = new ArrayList<String>();
+		keywords.add("do");
+		assertEquals("Number of task(s) found: ", 2, getKeywordsTasks(keywords));
+		
+		//searching for keywords: "do" and "automated"
+		//EzController.execute("show all have \"do\" \"automated\" ");
+		keywords.add("automated");
+		assertEquals("Number of tasks(s) found: ", 4, getKeywordsTasks(keywords));
+		
+		//searching for keyword: "keywords"
+		//EzController.execute("show all have \"keywords\" ");
+		keywords.clear();
+		keywords.add("keywords");
+		assertEquals("Number of tasks(s) found: ", 1, getKeywordsTasks(keywords));
+		
+		//marking tasks 1, 2 and 3 as done
+		EzController.execute("done from 1 to 3");
+		assertEquals("task 1 is done", true, getTaskDoneStatus(1));
+		assertEquals("task 2 is done", true, getTaskDoneStatus(2));
+		assertEquals("task 3 is done", true, getTaskDoneStatus(3));
+		
+		//marking tasks 4 as done
+		EzController.execute("done 4");
+		assertEquals("task 4 is done", true, getTaskDoneStatus(4));
+		
+		//deleting task 1 
+		EzController.execute("delete 1");
+		EzController.execute("y");
+		assertEquals("Number of tasks in list: ", 4, getListSize());
+		
+		//not deleting task 2
+		EzController.execute("delete 2");
+		EzController.execute("n");
+		assertEquals("Number of tasks in list: ", 4, getListSize());
+		
+		//updating task 3 venue to utown
+		EzController.execute("update 3 venue \"utown\" ");
+		assertEquals("task 3 venue is: ", "utown", getTaskVenue(3));
+		
+		//updating task 3 title to "do something"
+		EzController.execute("update 3 title \"do something\" ");
+		assertEquals("task 3 titles is: ", "do something", getTaskTitle(3));
+		
+		
+	
+	}
+
+	
+
+	private int getKeywordsTasks(ArrayList <String> keywords) {
+		return EzController.getStorage().getTasksByKeywords(keywords).size();
+		
+		
+		
+	}
+
+
+
+	private int getTaskPriority(int i) {
+		return EzController.getStorage().findTask(i).getPriority();
+	}
+
+
+
+	private Object getTaskTodayStatus(int i) {
+		
+		return EzController.getStorage().getTask(i).isToday();
+	}
+
+
+
+	private Object getTaskDateStatus(int i) {
+		return EzController.getStorage().getTask(i).isPast();
+	}
+
+
+
+	private Object getTaskDoneStatus(int i) {
+		return EzController.getStorage().getTask(i).isDone();
+	}
+
+
+
+	private int getNumDoneTasks() {
+		int i = 0;
+		for(EzTask task: EzController.getStorage().getListOfAllTasks())
+			if(task.isDone())
+				i++;
+		return i;
+	}
+
+
+
+	private Object getListSize() {
+		return EzController.getStorage().getListOfAllTasks().size();
+	}
+
+
+
+	private Object getTaskVenue(int i) {
+		return EzController.getStorage().findTask(i).getVenue();
+	}
+
+
+
+	private Object getTaskTitle(int i) {
+		return EzController.getStorage().findTask(i).getTitle();
+		
+	}
+	
+
+
+
+	
+
+	
+
+}
+
+	// End of segment: C:\Users\Tun Leng\workspace\EzTask\src\EzTaskSystemTest.java
+
+
+
+
+

@@ -2,15 +2,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-/**
- * 
- */
 
-/**
- * @author Khanh (Skeleton Code)
- * @author A0113922N
- *
- */
+//@author A0113922N
+
 public class EzSort {
 	
 	/**
