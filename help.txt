@@ -1,143 +1,143 @@
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 40px;">&nbsp;</p>
+<p dir="ltr" style="margin-left: 40px;">&nbsp;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 40px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">Use CTRL + up/down arrows to scroll through the help page.</span></span></p>
+<p dir="ltr" style="margin-left: 40px;">Use CTRL + up/down arrows to scroll through the help page.</p>
 
 <p style="margin-left: 40px;">&nbsp;</p>
 
 <h1 dir="ltr" style="margin-left: 40px;">To add tasks</h1>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">add </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&lt;&ldquo;task name&rdquo;&gt; </span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">add</span> &lt;&ldquo;task name&rdquo;&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; text-indent: 36pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(109, 158, 235); vertical-align: baseline; white-space: pre-wrap;">at &lt;</span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&ldquo;venue&rdquo;&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 120px;"><span style="color:#3c78d8;">at</span> &lt;&ldquo;venue&rdquo;&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; text-indent: 36pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">at</span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;"> &lt;time&gt; &lt;date&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 120px;"><span style="color:#3c78d8;">at</span> &lt;time&gt; &lt;date&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; text-indent: 36pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">on</span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;"> &lt;date&gt; &lt;time&gt;</span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&nbsp;&nbsp; &nbsp;</span></span></p>
+<p dir="ltr" style="margin-left: 120px;"><span style="color:#3c78d8;">on</span> &lt;date&gt; &lt;time&gt;&nbsp;&nbsp; &nbsp;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; text-indent: 36pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">today</span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;"> or</span><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;"> tomorrow</span><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">&nbsp;&nbsp; &nbsp;</span></span></p>
+<p dir="ltr" style="margin-left: 120px;"><span style="color:#3c78d8;">today</span> or <span style="color:#3c78d8;">tomorrow</span>&nbsp;&nbsp; &nbsp;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; text-indent: 36pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">from</span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;"> &lt;date&gt; &lt;time&gt; </span><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">to</span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;"> &lt;date&gt; &lt;time&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 120px;"><span style="color:#3c78d8;">from</span> &lt;date&gt; &lt;time&gt; <span style="color:#3c78d8;">to</span> &lt;date&gt; &lt;time&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; text-indent: 36pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">******</span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;"> : priority from 1 * to 6 *s</span></span></p>
+<p dir="ltr" style="margin-left: 120px;"><span style="color:#3c78d8;">****** </span>: priority from 1 * to 6 *s</p>
 
-<p style="margin-left: 80px;">&nbsp;</p>
+<p style="margin-left: 40px;">&nbsp;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">*&lt;time&gt; and &lt;date&gt; can be omitted or switched around. </span></span></p>
+<p dir="ltr" style="margin-left: 80px;">*&lt;time&gt; and &lt;date&gt; can be omitted or switched around.</p>
 
 <p style="margin-left: 40px;">&nbsp;</p>
 
 <h1 dir="ltr" style="margin-left: 40px;">To update tasks:</h1>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">update</span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;"> &lt;task number&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">update </span>&lt;task number&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&nbsp;&nbsp; &nbsp;</span><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">title </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&nbsp;&lt;title&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 120px;"><span style="color:#3c78d8;">title &nbsp;</span>&lt;title&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&nbsp;&nbsp; &nbsp;</span><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">time </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&lt;time&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 120px;"><span style="color:#3c78d8;">time </span>&lt;time&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&nbsp;&nbsp; &nbsp;</span><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">start time </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&lt;start time for task&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 120px;"><span style="color:#3c78d8;">start time </span>&lt;start time for task&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&nbsp;&nbsp; &nbsp;</span><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">end time</span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;"> &lt;end time for task&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 120px;"><span style="color:#3c78d8;">end time</span> &lt;end time for task&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; text-indent: 36pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">date </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&lt;date&gt;</span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&nbsp;&nbsp; &nbsp;</span></span></p>
+<p dir="ltr" style="margin-left: 120px;"><span style="color:#3c78d8;">date </span>&lt;date&gt;&nbsp;&nbsp; &nbsp;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; text-indent: 36pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">start date </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&lt;starting time of task&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 120px;"><span style="color:#3c78d8;">start date </span>&lt;starting time of task&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; text-indent: 36pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">end date </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&lt;ending time of task&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 120px;"><span style="color:#3c78d8;">end date</span> &lt;ending time of task&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; text-indent: 36pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">venue </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&lt;&rdquo;new venue&rdquo;&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 120px;"><span style="color:#3c78d8;">venue </span>&lt;&rdquo;new venue&rdquo;&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; text-indent: 36pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">priority </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&lt;new priority&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 120px;"><span style="color:#3c78d8;">priority </span>&lt;new priority&gt;</p>
 
 <p style="margin-left: 40px;">&nbsp;</p>
 
 <h1 dir="ltr" style="margin-left: 40px;">To undo or redo:</h1>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">undo </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">: undo the previous action</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">undo </span>: undo the previous action</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">redo </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&nbsp;: redo the previous action</span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&nbsp;&nbsp; &nbsp;</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">redo &nbsp;</span>: redo the previous action&nbsp;&nbsp; &nbsp;</p>
 
 <p style="margin-left: 40px;">&nbsp;</p>
 
 <h1 dir="ltr" style="margin-left: 40px;">To mark tasks as done, use the task numbers:</h1>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">done</span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;"> &lt;task number #1&gt; &lt;task number #2&gt;..</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">done </span>&lt;task number #1&gt; &lt;task number #2&gt;..</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">done from</span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;"> &lt;task number #1&gt; </span><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">to </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&lt;task number #2&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">done from</span> &lt;task number #1&gt; <span style="color:#3c78d8;">to</span> &lt;task number #2&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">done all on </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&lt;date&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">done all on </span>&lt;date&gt;</p>
 
 <p style="margin-left: 40px;">&nbsp;</p>
 
 <h1 dir="ltr" style="margin-left: 40px;">To delete tasks or task atrributes:</h1>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">delete </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&lt;task number&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">delete </span>&lt;task number&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">delete from</span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;"> &lt;task number #1&gt; </span><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">to </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&lt;task number #2&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">delete from </span>&lt;task number #1&gt; <span style="color:#3c78d8;">to</span> &lt;task number #2&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">delete all on</span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;"> &lt;date&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">delete all on</span> &lt;date&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">remove venue</span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;"> &lt;task number&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">remove venue </span>&lt;task number&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">remove date </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&lt;task number&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">remove date </span>&lt;task number&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">remove time </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&lt;task number&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">remove time </span>&lt;task number&gt;</p>
 
 <p style="margin-left: 40px;"><br />
 &nbsp;</p>
 
 <h1 dir="ltr" style="margin-left: 40px;">To display tasks</h1>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">show all</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">show all</span></p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">show all done</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">show all done</span></p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">show all undone</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">show all undone</span></p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">show all on </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&lt;date&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">show all on </span>&lt;date&gt;</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">show all have </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&lt;keyword&gt; &lt;keyword&gt;</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">show all have </span>&lt;keyword&gt; &lt;keyword&gt;</p>
 
 <p style="margin-left: 40px;">&nbsp;</p>
 
 <h1 dir="ltr" style="margin-left: 40px;">To sort through the tasks:</h1>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">sort id</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">sort id</span></p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">sort date</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">sort date</span></p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">sort title </span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">sort title</span></p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">sort venue</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">sort venue</span></p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">sort done</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">sort done</span></p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">sort priority</span></span></p>
+<p dir="ltr" style="margin-left: 80px;"><span style="color:#3c78d8;">sort priority</span></p>
 
 <p style="margin-left: 40px;"><br />
 &nbsp;</p>
 
 <h1 dir="ltr" style="margin-left: 40px;">To move through the tabs:</h1>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">CTRL + 1~9</span></span></p>
+<p dir="ltr" style="margin-left: 80px;">CTRL + 1~9</p>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">CTRL + underlined letter in each tab</span></span></p>
+<p dir="ltr" style="margin-left: 80px;">CTRL + underlined letter in each tab</p>
 
 <p style="margin-left: 40px;">&nbsp;</p>
 
 <h1 dir="ltr" style="margin-left: 40px;">To resize the window:</h1>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">SHIFT + ALT + arrow keys</span></span></p>
+<p dir="ltr" style="margin-left: 80px;">SHIFT + ALT + arrow keys</p>
 
 <p style="margin-left: 40px;">&nbsp;</p>
 
 <h1 dir="ltr" style="margin-left: 40px;">To move the window:</h1>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">CTRL + SHIFT + arrow keys</span></span></p>
+<p dir="ltr" style="margin-left: 80px;">CTRL + SHIFT + arrow keys</p>
 
 <p style="margin-left: 40px;">&nbsp;</p>
 
 <h1 dir="ltr" style="margin-left: 40px;">To move through pages</h1>
 
-<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt; margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">CTRL + left/right arrow keys</span></span></p>
+<p dir="ltr" style="margin-left: 80px;">CTRL + left/right arrow keys</p>
 
-<p style="margin-left: 80px;"><span id="docs-internal-guid-9ddd5f96-7f5c-6359-96d3-db8e4abcdbad"><span style="font-size: 15px; font-family: Arial; color: rgb(60, 120, 216); vertical-align: baseline; white-space: pre-wrap;">Page </span><span style="font-size: 15px; font-family: Arial; vertical-align: baseline; white-space: pre-wrap;">&nbsp;&lt;page number&gt;</span></span></p>
+<p style="margin-left: 80px;"><span style="color:#3c78d8;">Page &nbsp;</span>&lt;page number&gt;</p>
