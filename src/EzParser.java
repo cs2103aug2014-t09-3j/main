@@ -1243,7 +1243,7 @@ public class EzParser {
 					{
 						targetsUndone.add(storage.findTask(k));
 						EzTask temp=new EzTask(storage.findTask(k));
-						temp.setDone(true);
+						temp.setDone(false);
 						resultsUndone.add(temp);
 					}
 				}
@@ -1254,8 +1254,7 @@ public class EzParser {
 				newAction.setTargets(targetsUndone);
 				newAction.setResults(resultsUndone);
 			}
-			try
-			{	
+			else 	
 			if(Integer.parseInt(getFirstWord(content))>=0)//"Undone id id id id "
 			{
 				
@@ -1298,12 +1297,7 @@ public class EzParser {
 				newAction.setFeedback("Invalid command.");
 			}
 			}
-			catch(NumberFormatException e)
-			{
-				newAction.setAction(TypeOfAction.INVALID);
-				newAction.setFeedback("Invalid command. User might entered an invalid number format.");		
-			}
-			}
+			
 			catch(NumberFormatException e)
 			{
 				newAction.setAction(TypeOfAction.INVALID);
