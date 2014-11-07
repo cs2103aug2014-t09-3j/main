@@ -19,7 +19,15 @@ import java.awt.BorderLayout;
 
 //@author A0112129U
 public class EzGUICommandPanel extends JPanel {
+	private static final int WINDOW_SIZE_INCREMENT = 10;
 
+	private static final int COMMAND_FIELD_HEIGHT = 10;
+	private static final int COMMAND_FIELD_LENGTH = 100000;
+	private static final int COMMAND_LABEL_FONT_SIZE = 17;
+	private static final int COMMAND_LABEL_HEIGHT = 26;
+	private static final int COMMAND_LABEL_WIDTH = 154;
+	private static final int COMMAND_LABEL_PANEL_HEIGHT = 25;
+	private static final int COMMAND_LABEL_PANEL_WIDTH = 160;
 	private JTextPane commandField;
 	private static EzGUICommandPanel commandPanel;
 	private SimpleAttributeSet[] commandAttributeSet = new SimpleAttributeSet[4];
@@ -63,10 +71,10 @@ public class EzGUICommandPanel extends JPanel {
 	 */
 	private void createCommandLabel() {
 		JTextPane commandLabel = new JTextPane();
-		commandLabel.setBounds(0, 0, 154, 26);
+		commandLabel.setBounds(0, 0, COMMAND_LABEL_WIDTH, COMMAND_LABEL_HEIGHT);
 		commandLabel.setEditable(false);
 		commandLabel.setForeground(Color.WHITE);
-		commandLabel.setFont(new Font(EzGUI.BUTTON_FONT, Font.BOLD, 17));
+		commandLabel.setFont(new Font(EzGUI.BUTTON_FONT, Font.BOLD, COMMAND_LABEL_FONT_SIZE));
 		commandLabel.setBackground(EzGUI.BACKGROUND_COLOR);
 		commandLabel.setText("  Enter Command: ");
 		commandLabel.setFocusable(false);
@@ -74,7 +82,7 @@ public class EzGUICommandPanel extends JPanel {
 		JPanel commandLabelPanel = new JPanel();
 		commandLabelPanel.setBackground(EzGUI.BACKGROUND_COLOR);
 		commandLabelPanel.setFocusable(false);
-		commandLabelPanel.setPreferredSize(new Dimension(160, 25));
+		commandLabelPanel.setPreferredSize(new Dimension(COMMAND_LABEL_PANEL_WIDTH, COMMAND_LABEL_PANEL_HEIGHT));
 		commandLabelPanel.setLayout(null);
 		commandLabelPanel.add(commandLabel);
 		
@@ -94,34 +102,27 @@ public class EzGUICommandPanel extends JPanel {
 		
 		JPanel newPanel = new JPanel();
 		newPanel.add(commandField);
-		newPanel.setPreferredSize(new Dimension(100000, 10));
+		newPanel.setPreferredSize(new Dimension(COMMAND_FIELD_LENGTH, COMMAND_FIELD_HEIGHT));
 		newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.X_AXIS));
 		
-		//commandField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
 		JScrollPane scroll = new JScrollPane(newPanel);
 		
 		scroll.setFocusable(false);
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		//scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scroll.setLayout(new ScrollPaneLayout());
 		scroll.setBorder(null);
-		//scroll.setPreferredSize(new Dimension(760,5));
 		
 		JPanel commandFieldpanel = new JPanel();
 		commandFieldpanel.setLayout(new BoxLayout(commandFieldpanel, BoxLayout.X_AXIS));
 		commandFieldpanel.add(scroll);
 		add(commandFieldpanel);
-		//commandFieldpanel.add(commandField);
-		//commandFieldpanel.setMinimumSize(new Dimension(600,10));
-		//commandFieldpanel.setMaximumSize(new Dimension(600,1100));
 		
 		loadCommandAttributeSet();
-		// commandField.setContentType("text/html");
-		// commandField.setFont(new Font(BUTTON_FONT, Font.PLAIN, 17));
 	}
 	
 	class EzKeyAdapter extends KeyAdapter{
+		
 		@Override
 		public void keyPressed(KeyEvent arg0) {
 			clearFeedback();
@@ -249,24 +250,26 @@ public class EzGUICommandPanel extends JPanel {
 					break;
 				}
 
-			} else if ((arg0.isAltDown() && (arg0.isShiftDown()))) {
-				switch (arg0.getKeyCode()) { // resize the window
-				case KeyEvent.VK_UP:
-					EzGUI.increaseWindowSize(0,-10);
-					arg0.consume();
-					break;
-				case KeyEvent.VK_DOWN:
-					EzGUI.increaseWindowSize(0, 10);
-					arg0.consume();
-					break;
-				case KeyEvent.VK_LEFT:
-					EzGUI.increaseWindowSize(-10, 0);
-					arg0.consume();
-					break;
-				case KeyEvent.VK_RIGHT:
-					EzGUI.increaseWindowSize(10, 0);
-					arg0.consume();
-					break;
+			} else {
+				if ((arg0.isAltDown() && (arg0.isShiftDown()))) {
+					switch (arg0.getKeyCode()) { // resize the window
+					case KeyEvent.VK_UP:
+						EzGUI.increaseWindowSize(0,-WINDOW_SIZE_INCREMENT);
+						arg0.consume();
+						break;
+					case KeyEvent.VK_DOWN:
+						EzGUI.increaseWindowSize(0, WINDOW_SIZE_INCREMENT);
+						arg0.consume();
+						break;
+					case KeyEvent.VK_LEFT:
+						EzGUI.increaseWindowSize(-WINDOW_SIZE_INCREMENT, 0);
+						arg0.consume();
+						break;
+					case KeyEvent.VK_RIGHT:
+						EzGUI.increaseWindowSize(WINDOW_SIZE_INCREMENT, 0);
+						arg0.consume();
+						break;
+					}
 				}
 			} 
 		}
@@ -350,7 +353,6 @@ public class EzGUICommandPanel extends JPanel {
 		boolean insideQuote = false;
 
 		for (int i = 0; i < caretPos; i++) {
-			// String word = "";
 			if (contentInputField.charAt(i) == ' ') {
 				result = result + " ";
 				while ((i + 1 < caretPos)

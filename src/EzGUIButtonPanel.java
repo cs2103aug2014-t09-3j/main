@@ -94,33 +94,24 @@ public class EzGUIButtonPanel extends JPanel {
 
 		if (nameOfButton.equalsIgnoreCase(HELP)) {
 			button.setMnemonic(KeyEvent.VK_H);
-			button.addActionListener(new ButtonAction());
 		} else if (nameOfButton.equalsIgnoreCase(ALL)) {
 			button.setMnemonic(KeyEvent.VK_A);
-			button.addActionListener(new ButtonAction());
 		} else if (nameOfButton.equalsIgnoreCase(DONE)) {
 			button.setMnemonic(KeyEvent.VK_D);
-			button.addActionListener(new ButtonAction());
 		} else if (nameOfButton.equalsIgnoreCase(NOT_DONE)) {
 			button.setMnemonic(KeyEvent.VK_N);
-			button.addActionListener(new ButtonAction());
 		} else if (nameOfButton.equalsIgnoreCase(TODAY)) {
 			button.setMnemonic(KeyEvent.VK_T);
-			button.addActionListener(new ButtonAction());
 		} else if (nameOfButton.equalsIgnoreCase(TOMORROW)) {
 			button.setMnemonic(KeyEvent.VK_M);
-			button.addActionListener(new ButtonAction());
 		} else if (nameOfButton.equalsIgnoreCase(UPCOMING)) {
 			button.setMnemonic(KeyEvent.VK_U);
-			button.addActionListener(new ButtonAction());
 		} else if (nameOfButton.equalsIgnoreCase(OVERDUE)) {
 			button.setMnemonic(KeyEvent.VK_P);
-			button.addActionListener(new ButtonAction());
 		} else if (nameOfButton.equalsIgnoreCase(NO_DATE)) {
 			button.setMnemonic(KeyEvent.VK_E);
-			button.addActionListener(new ButtonAction());
 		}
-
+		button.addActionListener(new ButtonAction());
 		button.setFont(new Font(EzGUI.BUTTON_FONT, Font.BOLD, 16));
 		button.setBackground(UNSELECTED_BUTTON_BG_COLOR);
 		button.setBorderPainted(false);

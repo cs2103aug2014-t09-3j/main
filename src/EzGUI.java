@@ -9,6 +9,8 @@ import java.io.*;
 
 //@author A0112129U
 public class EzGUI extends JFrame {
+	
+	private static final String ICON_FILENAME = "/icon.png";
 	public static final String ALL = EzGUIButtonPanel.getInstance().ALL;
 	public static final String DONE = EzGUIButtonPanel.getInstance().DONE;
 	public static final String NOT_DONE = EzGUIButtonPanel.getInstance().NOT_DONE;
@@ -21,12 +23,10 @@ public class EzGUI extends JFrame {
 	
 	private static final String HELP_DOCUMENT_FILE_NAME = "help.txt";
 
-	private final static Logger LOGGER = Logger
-			.getLogger(EzGUI.class.getName());
+	private final static Logger LOGGER = Logger.getLogger(EzGUI.class.getName());
 
 	private static final String PROGRAM_TITLE = "EzTask";
 
-	
 	public static final String BUTTON_FONT = "Arial";
 	
 	public static final Color BACKGROUND_COLOR = EzConstants.CHATEAU_GREEN_COLOR;
@@ -62,6 +62,21 @@ public class EzGUI extends JFrame {
 		createButtonPanel();
 		registerFont();
 		loadFile();
+		setDefaultButton("Today");
+		createSuggestPanel();
+		setIcon();
+	}
+	
+	public EzGUI(boolean newFile) {
+		initMainFrame();
+		createMainPanel();
+		createDisplayPanel();
+		createCommandPanel();
+		createButtonPanel();
+		registerFont();
+		if (!newFile){
+			loadFile();
+		}
 		setDefaultButton("Today");
 		createSuggestPanel();
 		setIcon();
@@ -165,7 +180,7 @@ public class EzGUI extends JFrame {
 	}
 	
 	private void setIcon() {
-		this.setIconImage(Toolkit.getDefaultToolkit().getImage(EzGUI.class.getResource("/icon.png")));
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage(EzGUI.class.getResource(ICON_FILENAME)));
 	}
 
 	private void createSuggestPanel() {
@@ -176,8 +191,8 @@ public class EzGUI extends JFrame {
 			public void componentMoved(ComponentEvent arg0) {
 				JFrame frame = (JFrame) arg0.getSource();
 
-				int x = frame.getLocation().x + 165;
-				int y = frame.getLocation().y + frame.getHeight() - 10;
+				int x = frame.getLocation().x + EzGUISuggestPanel.SUGGEST_PANEL_X_RELATIVE_POS;
+				int y = frame.getLocation().y + frame.getHeight() - EzGUISuggestPanel.SUGGEST_PANEL_Y_RELATIVE_POS;
 				suggestPanel.setLocation(x, y);
 			}
 
@@ -185,10 +200,9 @@ public class EzGUI extends JFrame {
 			public void componentResized(ComponentEvent arg0) {
 				JFrame frame = (JFrame) arg0.getSource();
 
-				int x = frame.getLocation().x + 165;
-				int y = frame.getLocation().y + frame.getHeight() - 10;
-				suggestPanel.setPreferredSize(new Dimension(frame
-						.getWidth() - (960 - 784), 85));
+				int x = frame.getLocation().x + EzGUISuggestPanel.SUGGEST_PANEL_X_RELATIVE_POS;
+				int y = frame.getLocation().y + frame.getHeight() - EzGUISuggestPanel.SUGGEST_PANEL_Y_RELATIVE_POS;
+				suggestPanel.setPreferredSize(new Dimension(frame.getWidth() - (APP_WIDTH - EzGUISuggestPanel.ORIGINAL_WIDTH), EzGUISuggestPanel.ORIGINAL_HEIGHT));
 				suggestPanel.setLocation(x, y);
 				suggestPanel.loadSuggestion(EzGUICommandPanel.getInstance().getText());
 			}
@@ -262,12 +276,7 @@ public class EzGUI extends JFrame {
 	}
 	
 	public static void showContent(String header, ArrayList<EzTask> listOfTasks) {
-		assert (listOfTasks != null);
-		onScreenTasks = listOfTasks;
-		headerToShow = new String(header);
-		
-		showPage(1);
-		EzGUIButtonPanel.getInstance().refreshButton();
+		showContent(header, listOfTasks, 1);
 	}
 
 	public static void showContent(String header, ArrayList<EzTask> listOfTasks, EzTask task) {
@@ -334,7 +343,7 @@ public class EzGUI extends JFrame {
 			
 			ArrayList<String> list = new ArrayList<String>();
 			for (int i = (numPage-1)*TASK_PER_PAGE; i < Math.min(numPage*TASK_PER_PAGE, onScreenTasks.size()); i++) {
-				list.add(EzHtmlGenerator.createHtmlEzTask(onScreenTasks.get(i), i % 2));
+				list.add(EzHtmlGenerator.createHtmlEzTask(onScreenTasks.get(i)));
 			}
 			
 			String content = EzHtmlGenerator.center(EzHtmlGenerator

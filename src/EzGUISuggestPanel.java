@@ -14,6 +14,11 @@ import javax.swing.ScrollPaneLayout;
 
 //@author A0112129U
 public class EzGUISuggestPanel extends JDialog {
+	public static final int ORIGINAL_HEIGHT = 85;
+	public static final int ORIGINAL_WIDTH = 784;
+	public static final int SUGGEST_PANEL_Y_RELATIVE_POS = 10;
+	public static final int SUGGEST_PANEL_X_RELATIVE_POS = 165;
+	
 	private JList<String> suggestList;
 	private JScrollPane suggestScrollPanel;
 	private static EzGUISuggestPanel suggestPanel;
@@ -34,14 +39,12 @@ public class EzGUISuggestPanel extends JDialog {
 		super(owner, title, modal);
 		suggestPanel = this;
 		
-		int x = owner.getLocation().x + 165;
-		int y = owner.getLocation().y + this.getHeight() - 10;
+		int x = owner.getLocation().x + SUGGEST_PANEL_X_RELATIVE_POS;
+		int y = owner.getLocation().y + this.getHeight() - SUGGEST_PANEL_Y_RELATIVE_POS;
 		setLocation(x, y);
-		setMinimumSize(new Dimension(784, 0));
+		setMinimumSize(new Dimension(ORIGINAL_WIDTH, ORIGINAL_HEIGHT));
 
-		ArrayList<EzTask> listTask = EzController.getStorage()
-				.getListOfAllTasks();
-		// String[] listString = {"aaaaa","aaaaa","aaaaa"};
+		ArrayList<EzTask> listTask = EzController.getStorage().getListOfAllTasks();
 		String[] listString = new String[listTask.size()];
 
 		for (int i = 0; i < listTask.size(); i++) {
@@ -68,7 +71,7 @@ public class EzGUISuggestPanel extends JDialog {
 		suggestScrollPanel.setLayout(new ScrollPaneLayout());
 		suggestScrollPanel.setBorder(BorderFactory.createLineBorder(
 				EzConstants.CHATEAU_GREEN_COLOR, 5));
-		suggestScrollPanel.setPreferredSize(new Dimension(784, 85));
+		suggestScrollPanel.setPreferredSize(new Dimension(ORIGINAL_WIDTH, ORIGINAL_HEIGHT));
 
 		getContentPane().add(suggestScrollPanel, BorderLayout.SOUTH);
 		setUndecorated(true);
