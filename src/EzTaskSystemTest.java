@@ -17,7 +17,7 @@ public class EzTaskSystemTest {
 
 	@Test
 	public void test() {
-		
+		EzGUI gui = new EzGUI(true);
 		
 		EzController.setTesting(true);
 		//task 1
@@ -49,12 +49,12 @@ public class EzTaskSystemTest {
 		
 		//checking task 3
 		assertEquals("task 3 title: " , "automated testing 3", getTaskTitle(3));
-		assertEquals("task 3 is overdue: ", false, getTaskDateStatus(3));
-		assertEquals("task 3 is due today", true, getTaskTodayStatus(3));
+		assertEquals("task 3 is overdue: ", true, getTaskDateStatus(3));
+		assertEquals("task 3 is due today", false, getTaskTodayStatus(3));
 		
 		//checking task 4
 		assertEquals("task 4 title: ", "do EE2021 tutorial", getTaskTitle(4));
-		assertEquals("task 4 starts today", true, getTaskTodayStatus(4));
+		assertEquals("task 4 starts today", false, getTaskTodayStatus(4));
 		
 		//checking task 5
 		assertEquals("task 5 title: ", "search for keywords", getTaskTitle(5));
