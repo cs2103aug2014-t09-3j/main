@@ -265,7 +265,7 @@ public class EzTask {
 			endToday.set(Calendar.MINUTE,59);
 			endToday.set(Calendar.SECOND,59);
 			endToday.set(Calendar.MILLISECOND,0);
-			return ((this.getStartTime().after(startToday) || this.getStartTime().equals(startToday)) && 
+			return ((this.getEndTime().after(startToday) || this.getEndTime().equals(startToday)) && 
 					(this.getStartTime().before(endToday) || this.getStartTime().equals(endToday)));
 		}
 	}
