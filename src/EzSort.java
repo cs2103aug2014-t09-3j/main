@@ -8,16 +8,15 @@ import java.util.Comparator;
 public class EzSort {
 	
 	/**
-	 * return the target sorted by Id
+	 * returns ArrayList tasksById sorted by task Id
+	 * task id is sorted by ascending order
 	 * @param target
 	 * @return tasksById
 	 */
-	@SuppressWarnings("unchecked")
+	
 	public static ArrayList<EzTask> sortById(ArrayList<EzTask> target){
-		
-		ArrayList<EzTask> tasksById = new ArrayList<EzTask>();
-
-		tasksById = (ArrayList<EzTask>)target.clone();
+		@SuppressWarnings("unchecked")
+		ArrayList<EzTask> tasksById = (ArrayList<EzTask>)target.clone();
 
 		Collections.sort(tasksById, TaskIdComparator);
 
@@ -27,51 +26,55 @@ public class EzSort {
 	}
 	
 	/**
-	 * return the target sorted by start time
+	 * returns ArrayList tasksByDate sorted by start time
+	 *start time is sorted by how close is startTime to the current time.
 	 * @param target
 	 * @return tasksByDate
 	 */
-	@SuppressWarnings("unchecked")
+	
 	public static ArrayList<EzTask> sortByDate(ArrayList<EzTask> target){
+		@SuppressWarnings("unchecked")
 		ArrayList<EzTask> tasksByDate = (ArrayList<EzTask>) target.clone();
+		
 		Collections.sort(tasksByDate, TaskDateComparator);
+		
 		return tasksByDate;
 	}
 	
 	
 	/**
-	 * return the target sorted by Priority
+	 * returns ArrayList tasksByPriority sorted by Priority
 	 * greatest priority comes first
-	 * 
 	 * @param target
 	 * @return tasksByPriority
 	 */
-	@SuppressWarnings("unchecked")
+	
 	public static ArrayList<EzTask> sortByPriority(ArrayList<EzTask> target){
-		
-		ArrayList<EzTask> tasksByPriority = new ArrayList<EzTask>();
-		tasksByPriority = (ArrayList<EzTask>) target.clone();
+		@SuppressWarnings("unchecked")
+		ArrayList<EzTask> tasksByPriority = (ArrayList<EzTask>) target.clone();
 		Collections.sort(tasksByPriority, TaskPriorityComparator);
 		return tasksByPriority;
 		
 	}
 	
 	/**
-	 * return the target sorted by title
+	 * returns ArrayList tasksByTitle sorted by task title
+	 * titles are sorted alphabetically  
 	 * @param target
 	 * @return tasksByTitle
 	 */
-	@SuppressWarnings("unchecked")
+	
 	public static ArrayList<EzTask> sortByTitle(ArrayList<EzTask> target){
-		ArrayList<EzTask> tasksByTitle = new ArrayList<EzTask>();
-		tasksByTitle = (ArrayList<EzTask>) target.clone();
+		@SuppressWarnings("unchecked")
+		ArrayList<EzTask> tasksByTitle = (ArrayList<EzTask>) target.clone();
 		Collections.sort(tasksByTitle, TaskTitleComparator);
 		
 		return tasksByTitle;
 	}
 	
 	/**
-	 * return the target sorted by venue
+	 * returns ArrayList tasksByVenue sorted by task venue
+	 * venues are sorted alphabetically
 	 * @param target
 	 * @return tasksByVenue
 	 */
@@ -84,8 +87,8 @@ public class EzSort {
 	}
 	
 	/**
-	 * return the target sorted by done
-	 * Undone tasks come first
+	 * returns ArrayList tasksByDone sorted by the done status of tasks
+	 * Undone tasks come before done tasks
 	 * 
 	 * @param target
 	 * @return tasksByDone
@@ -159,6 +162,7 @@ public class EzSort {
             return taskTitle1.compareTo(taskTitle2);
         }
     };
+   
     
     /**
      * sorts the tasks by ascending date
@@ -177,6 +181,7 @@ public class EzSort {
     		return task1.getStartTime().getTime().compareTo(task2.getStartTime().getTime());
     	}
     };
+    
     
     /**
      * sorts the task by venue alphabetically
