@@ -6,6 +6,20 @@ import java.util.GregorianCalendar;
 //@author A0112129U
 public class EzHtmlGenerator {
 	
+		private static final int TIME_FONT_SIZE = 5;
+
+	private static final int DAY_OF_WEEK_CALENDAR_FONT_SIZE = 2;
+
+	private static final int MONTH_CALENDAR_FONT_SIZE = 3;
+
+	private static final int DATE_CALENDAR_FONT_SIZE = 3;
+
+	private static final int YEAR_CALENDAR_FONT_SIZE = 2;
+
+	private static final int MAXIMUM_CHARACTER = 20;
+
+	private static final int MAIN_TITLE_FONT_SIZE = 8;
+
 	private static final int STAR_PER_LINE = 5;
 	
 	private static final Color MAIN_TITLE_FONT_COLOR = new Color(231,76,60);
@@ -29,12 +43,15 @@ public class EzHtmlGenerator {
 	private static final int NORMAL_TASK = 0;
 	private static final int PAST_OR_DONE_TASK = 1;
 	private static final int TODAY_AND_UNDONE_TASK = 2;
+	private static final int OVERDUE_TASK = 3;
 
-	private static final Color[][] TASK_BG_COLOR = {{EzConstants.FERN_COLOR, EzConstants.CHATEAU_GREEN_COLOR},		// for normal tasks
-													{EzConstants.IRON_GRAY_COLOR, EzConstants.ALMOND_FROST_COLOR},	// for past or done tasks
-													{EzConstants.PICTION_BLUE_COLOR,EzConstants.CURIOUS_BLUE_COLOR}};		// for today and undone tasks
+
+	private static final Color[] TASK_BG_COLOR = {EzConstants.CHATEAU_GREEN_COLOR,	// for normal tasks
+													EzConstants.ALMOND_FROST_COLOR,		// for past or done tasks
+													EzConstants.CURIOUS_BLUE_COLOR,	// for today and undone tasks
+													EzConstants.TERRA_COTTA_COLOR};
 	
-	private static final Color[] ID_BG_COLOR = { EzConstants.WISTERIA_COLOR, EzConstants.BLUE_GEM_COLOR};
+	private static final Color ID_BG_COLOR = EzConstants.BLUE_GEM_COLOR;
 	
 	private static final Color CALENDAR_DATE_FONT_COLOR = new Color(231,76,60);
 	
@@ -62,18 +79,19 @@ public class EzHtmlGenerator {
 		return "<table " + format + ">" + content + "</table>";
 	}
 	
-	public static String createHtmlEzTask(EzTask task,int type){
-		type = 1;
+	public static String createHtmlEzTask(EzTask task){
 		if (task!=null){
 			int typeOfTask = NORMAL_TASK;
-			if (task.isDone() || task.isPast()){
+			if (task.isDone()){
 				typeOfTask = PAST_OR_DONE_TASK;
+			} else if (task.isPast() && (!task.isDone())){
+				typeOfTask = OVERDUE_TASK;
 			} else if (task.isToday()){
 				typeOfTask = TODAY_AND_UNDONE_TASK;
 			}
-			return 	table("border=0 cellspacing=0 cellpadding=1 bgcolor=\"#" + convertColorToHex(TASK_BG_COLOR[typeOfTask][type]) + "\" width=\"100%\"",
+			return 	table("border=0 cellspacing=0 cellpadding=1 bgcolor=\"#" + convertColorToHex(TASK_BG_COLOR[typeOfTask]) + "\" width=\"100%\"",
 						tr(
-							td("width=\"53px\" bgcolor=\"#" + convertColorToHex(ID_BG_COLOR[type]) +"\"  height=\"40px\"",createHtmlIdAndPriorityOfEzTask(task)) +
+							td("width=\"53px\" bgcolor=\"#" + convertColorToHex(ID_BG_COLOR) +"\"  height=\"40px\"",createHtmlIdAndPriorityOfEzTask(task)) +
 							td("width=\"5px\"", "") +
 							//td("width=\"300px\"", createHtmlTitleAndVenueOfEzTask(task)) +
 							td(createHtmlTitleAndVenueOfEzTask(task)) +
@@ -152,7 +170,7 @@ public class EzHtmlGenerator {
 	
 	public static String createHtmlTableWithHeader(String header, String content, String tableAttribute){
 		header = EzHtmlGenerator.createHtmlText("__",MAIN_TITLE_FONT_FONT,2,EzConstants.SHOW_AREA_BACKGROUND)
-				+EzHtmlGenerator.createHtmlText(header,MAIN_TITLE_FONT_FONT, 8, MAIN_TITLE_FONT_COLOR);
+				+EzHtmlGenerator.createHtmlText(header,MAIN_TITLE_FONT_FONT, MAIN_TITLE_FONT_SIZE, MAIN_TITLE_FONT_COLOR);
 		String result = table(tableAttribute,
 							tr(td("height=\"44px\" width=\"100%\" ", header)) +
 							tr(td(content))
@@ -183,8 +201,8 @@ public class EzHtmlGenerator {
 					result = result + text.charAt(i+1);
 					i++;
 					count++;
-					if (count==20){
-						result = result + "<br/>";
+					if (count==MAXIMUM_CHARACTER){
+						result = result + "-<br/>";
 						count = 0;
 					}
 				}
@@ -204,19 +222,10 @@ public class EzHtmlGenerator {
 	}
 	
 	private static String createHtmlCalendar(GregorianCalendar date){
-		/*String monthHtmlText = createHtmlText(CALENDAR_MONTH[date.get(Calendar.MONTH)],"Arial Rounded MT Bold",2,new Color(255,255,255));
-		String dateHtmlText = createHtmlText(String.valueOf(date.get(Calendar.DATE)),"Arial",5,CALENDAR_DATE_FONT_COLOR);
-		String dayOfWeekHtmlText = createHtmlText(CALENDAR_DAY_OF_WEEK[date.get(Calendar.DAY_OF_WEEK)],"Arial",2,CALENDAR_DATE_FONT_COLOR);
-		
-		return 	table("background=\"file:" + IMAGE_CALENDAR_PNG +"\" border=0 cellspacing=0 cellpadding=0 width=\"38px\"",
-					tr(td("height=\"10px\"",center(monthHtmlText))) +
-					tr(td("height=\"17px\"",center(dateHtmlText))) + 
-					tr(td("height=\"10px\"",center(dayOfWeekHtmlText)))
-				);*/
-		String dayOfWeekHtmlText = createHtmlText(CALENDAR_DAY_OF_WEEK[date.get(Calendar.DAY_OF_WEEK)],"Arial Rounded MT Bold",2,new Color(255,255,255));
-		String monthHtmlText = createHtmlText(CALENDAR_MONTH[date.get(Calendar.MONTH)],"Arial Rounded MT Bold",3,CALENDAR_DATE_FONT_COLOR);
-		String dateHtmlText = createHtmlText(String.valueOf(date.get(Calendar.DATE)),"Arial Rounded MT Bold",3,CALENDAR_DATE_FONT_COLOR);
-		String yearHtmlText = createHtmlText(String.valueOf(date.get(Calendar.YEAR)),"Arial",2,CALENDAR_DATE_FONT_COLOR);
+		String dayOfWeekHtmlText = createHtmlText(CALENDAR_DAY_OF_WEEK[date.get(Calendar.DAY_OF_WEEK)],"Arial Rounded MT Bold",DAY_OF_WEEK_CALENDAR_FONT_SIZE, Color.white);
+		String monthHtmlText = createHtmlText(CALENDAR_MONTH[date.get(Calendar.MONTH)],"Arial Rounded MT Bold",MONTH_CALENDAR_FONT_SIZE,CALENDAR_DATE_FONT_COLOR);
+		String dateHtmlText = createHtmlText(String.valueOf(date.get(Calendar.DATE)),"Arial Rounded MT Bold",DATE_CALENDAR_FONT_SIZE,CALENDAR_DATE_FONT_COLOR);
+		String yearHtmlText = createHtmlText(String.valueOf(date.get(Calendar.YEAR)),"Arial",YEAR_CALENDAR_FONT_SIZE,CALENDAR_DATE_FONT_COLOR);
 		
 		return 	table("background=\"file:" + IMAGE_CALENDAR_PNG +"\" border=0 cellspacing=0 cellpadding=0 width=\"38px\"",
 					tr(td("height=\"10px\"",center(dayOfWeekHtmlText))) +
@@ -236,7 +245,7 @@ public class EzHtmlGenerator {
 			minute = "0" + minute;
 		}
 		
-		String timeHtmlText = createHtmlText(hour+":"+minute,"Digital Dismay",5,"38e204");
+		String timeHtmlText = createHtmlText(hour+":"+minute,"Digital Dismay",TIME_FONT_SIZE,"38e204");
 		
 		return 	table("background=\"file:" + IMAGE_CLOCK_PNG +"\" border=0 cellspacing=0 cellpadding=0 width=\"40px\"",
 					tr(td("width=\"2px\"","") + td("height=\"25px\"",center(timeHtmlText)))
