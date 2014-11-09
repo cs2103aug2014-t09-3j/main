@@ -54,6 +54,9 @@ public class EzGUI extends JFrame {
 	private static String headerToShow;
 	private static EzGUIButtonPanel buttonPanel;
 	
+	/**
+	 * initiate the GUI, it will read the available data file
+	 */
 	public EzGUI() {
 		initMainFrame();
 		createMainPanel();
@@ -67,6 +70,9 @@ public class EzGUI extends JFrame {
 		setIcon();
 	}
 	
+	/**
+	 * initiate the GUI with a choice to have a new file or not
+	 */
 	public EzGUI(boolean newFile) {
 		initMainFrame();
 		createMainPanel();
@@ -81,7 +87,10 @@ public class EzGUI extends JFrame {
 		createSuggestPanel();
 		setIcon();
 	}
-
+	
+	/**
+	 * assigned values to the main frame
+	 */
 	private void initMainFrame() {
 		mainFrame = this;
 		setTitle(PROGRAM_TITLE);
@@ -91,14 +100,23 @@ public class EzGUI extends JFrame {
 		setBounds(START_LOCATION_X, START_LOCATION_Y, APP_WIDTH, APP_HEIGHT);
 	}
 	
+	/**
+	 * return the main frame;
+	 */
 	public static JFrame getMainFrame(){
 		return mainFrame;
 	}
 	
+	/**
+	 * return the window's location
+	 */
 	public static Point getMainFrameLocation(){
 		return mainFrame.getLocation();
 	}
 	
+	/**
+	 * set the location of the window
+	 */
 	public static void setMainFrameLocation(int x, int y){
 		mainFrame.setLocation(x, y);
 	}
@@ -139,6 +157,9 @@ public class EzGUI extends JFrame {
 		LOGGER.log(Level.INFO, "Created Button Panel");
 	}
 	
+	/**
+	 * add the font to the program
+	 */
 	private static void registerFont() {
 		try {
 			Font font = Font.createFont(Font.TRUETYPE_FONT,
@@ -165,6 +186,9 @@ public class EzGUI extends JFrame {
 
 	}
 	
+	/**
+	 * load the external file
+	 */
 	private void loadFile() {
 		try {
 			EzController.loadFromFile();
@@ -175,14 +199,24 @@ public class EzGUI extends JFrame {
 		}
 	}
 	
+	/**
+	 * press the button
+	 * @param buttonName is the name of the button
+	 */
 	private void setDefaultButton(String buttonName) {
 		buttonPanel.pressButton(buttonName);
 	}
 	
+	/**
+	 * set the icon for the program
+	 */
 	private void setIcon() {
 		this.setIconImage(Toolkit.getDefaultToolkit().getImage(EzGUI.class.getResource(ICON_FILENAME)));
 	}
 
+	/**
+	 * create suggest panel
+	 */
 	private void createSuggestPanel() {
 		suggestPanel = EzGUISuggestPanel.getInstance();
 		
@@ -209,6 +243,9 @@ public class EzGUI extends JFrame {
 		});
 	}
 	
+	/**
+	 * show the reminder if you have tasks to be done on today
+	 */
 	public void showReminder() {
 		GregorianCalendar today = new GregorianCalendar();
 		ArrayList<EzTask> list = EzController.getStorage().getTasksByDate(today.getTime());
@@ -224,14 +261,24 @@ public class EzGUI extends JFrame {
 		}
 	}
 
+	/**
+	 * scroll the main display up
+	 */
 	public static void scrollUp(){
 		displayPanel.scrollUp();
 	}
 	
+	/**
+	 * scroll the main display down
+	 */
 	public static void scrollDown(){
 		displayPanel.scrollDown();
 	}
 	
+	/**
+	 * read the content of the help file
+	 * @return the content of the help file in HTML format
+	 */
 	private static String readHelpDocument() {
 		File file = new File(HELP_DOCUMENT_FILE_NAME);
 		assert (file != null);
@@ -251,34 +298,65 @@ public class EzGUI extends JFrame {
 		return text;
 	}
 
+	/**
+	 * change the window's size
+	 * @param x is the increment of the width
+	 * @param y is the increment of the height
+	 */
 	public static void increaseWindowSize(int x, int y){
 		int width = mainFrame.getWidth();
 		int height = mainFrame.getHeight();
 		mainFrame.setSize(width + x, height + y);
 	}
 
+	/**
+	 * show the help page
+	 */
 	public static void showHelp() {
 		String text = readHelpDocument();
 		onScreenTasks = null;
-		showContentTop("Help - All commands", text);
+		showContent("Help - All commands", text);
 	}
 
+	/**
+	 * get the tasks are shown on the screen
+	 * @return the tasks are shown on the screen
+	 */
 	public static ArrayList<EzTask> getTasksOnScreen() {
 		return onScreenTasks;
 	}
 
+	/**
+	 * get the current page
+	 * @return the current page
+	 */
 	public static int getPage(){
 		return pageToShow;
 	}
 	
+	/**
+	 * get the header
+	 * @return the header
+	 */
 	public static String getHeader(){
 		return headerToShow;
 	}
 	
+	/** 
+	 * show the list of task with the header. Showing the first page is default.
+	 * @param header
+	 * @param listOfTasks
+	 */
 	public static void showContent(String header, ArrayList<EzTask> listOfTasks) {
 		showContent(header, listOfTasks, 1);
 	}
 
+	/** 
+	 * show the list of task with the header. Showing the page the contains the task
+	 * @param header
+	 * @param listOfTasks
+	 * @param task
+	 */
 	public static void showContent(String header, ArrayList<EzTask> listOfTasks, EzTask task) {
 		assert (listOfTasks != null);
 		onScreenTasks = listOfTasks;
@@ -288,6 +366,12 @@ public class EzGUI extends JFrame {
 		EzGUIButtonPanel.getInstance().refreshButton();
 	}
 	
+	/**
+	 *  show the list of task with the header.
+	 * @param header
+	 * @param listOfTasks
+	 * @param page
+	 */
 	public static void showContent(String header, ArrayList<EzTask> listOfTasks, int page) {
 		assert (listOfTasks != null);
 		onScreenTasks = listOfTasks;
@@ -297,6 +381,9 @@ public class EzGUI extends JFrame {
 		EzGUIButtonPanel.getInstance().refreshButton();
 	}
 	
+	/**
+	 * find the page that contains the task
+	 */
 	public static int findPage(EzTask task){
 		int id = -1;
 		if (onScreenTasks!=null){
@@ -313,6 +400,10 @@ public class EzGUI extends JFrame {
 		}
 	}
 	
+	/**
+	 * get the maximum page
+	 * @return
+	 */
 	public static int getMaxPage(){
 		if (onScreenTasks!=null){
 			int pageMaximum = onScreenTasks.size()/TASK_PER_PAGE;
@@ -329,6 +420,10 @@ public class EzGUI extends JFrame {
 		}
 	}
 	
+	/**
+	 * show the page according to the numPage
+	 * @param numPage
+	 */
 	public static void showPage(int numPage){
 		if (onScreenTasks!=null){
 			int pageMaximum = getMaxPage();
@@ -353,20 +448,20 @@ public class EzGUI extends JFrame {
 		}
 	}
 	
+	/**
+	 * get the page that is being shown
+	 * @return
+	 */
 	public static int getPageToShow(){
 		return pageToShow;
 	}
 	
+	/**
+	 * show the content with a header
+	 * @param header
+	 * @param content
+	 */
 	private static void showContent(String header, String content) {
-		String text = EzHtmlGenerator.createHtmlTableWithHeader(header,
-				content, "border=0 cellspacing=0 cellpadding=0 width=\"100%\"");
-		displayArea.setText(text);
-		displayArea.setCaretPosition(0);
-		
-		EzGUIButtonPanel.getInstance().refreshButton();
-	}
-	
-	private static void showContentTop(String header, String content) {
 		String text = EzHtmlGenerator.createHtmlTableWithHeader(header,
 				content, "border=0 cellspacing=0 cellpadding=0 width=\"100%\"");
 		displayArea.setText(text);

@@ -6,7 +6,7 @@ import java.util.GregorianCalendar;
 //@author A0112129U
 public class EzHtmlGenerator {
 	
-	private static final int TIME_FONT_SIZE = 5;
+		private static final int TIME_FONT_SIZE = 5;
 
 	private static final int DAY_OF_WEEK_CALENDAR_FONT_SIZE = 2;
 
@@ -43,10 +43,13 @@ public class EzHtmlGenerator {
 	private static final int NORMAL_TASK = 0;
 	private static final int PAST_OR_DONE_TASK = 1;
 	private static final int TODAY_AND_UNDONE_TASK = 2;
+	private static final int OVERDUE_TASK = 3;
+
 
 	private static final Color[] TASK_BG_COLOR = {EzConstants.CHATEAU_GREEN_COLOR,	// for normal tasks
 													EzConstants.ALMOND_FROST_COLOR,		// for past or done tasks
-													EzConstants.CURIOUS_BLUE_COLOR};	// for today and undone tasks
+													EzConstants.CURIOUS_BLUE_COLOR,	// for today and undone tasks
+													EzConstants.TERRA_COTTA_COLOR};
 	
 	private static final Color ID_BG_COLOR = EzConstants.BLUE_GEM_COLOR;
 	
@@ -79,8 +82,10 @@ public class EzHtmlGenerator {
 	public static String createHtmlEzTask(EzTask task){
 		if (task!=null){
 			int typeOfTask = NORMAL_TASK;
-			if (task.isDone() || task.isPast()){
+			if (task.isDone()){
 				typeOfTask = PAST_OR_DONE_TASK;
+			} else if (task.isPast() && (!task.isDone())){
+				typeOfTask = OVERDUE_TASK;
 			} else if (task.isToday()){
 				typeOfTask = TODAY_AND_UNDONE_TASK;
 			}
