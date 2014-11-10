@@ -291,7 +291,7 @@ public class EzController {
 	}
 
 	private static void setPageFeedback(EzAction userAction) {
-		if(EzGUI.getMaxPage() >= userAction.getPageNumber()) {
+		if(EzGUI.getMaxPage() < userAction.getPageNumber()) {
 			userAction.setFeedback("Page " + EzGUI.getMaxPage());
 		}
 		else if(userAction.getPageNumber() <= 0) {
