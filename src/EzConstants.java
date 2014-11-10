@@ -45,5 +45,5 @@ public class EzConstants {
 
 	public static final Color SHOW_AREA_BACKGROUND = EzConstants.WHITE_SMOKE_COLOR;
 
-	public static final int MAXIMUM_PRIORITY = 6;
+	public static final int MAXIMUM_PRIORITY = 3;
 }

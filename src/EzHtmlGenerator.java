@@ -296,25 +296,16 @@ public class EzHtmlGenerator {
 		String chosenStar = "";
 		switch (numStar) {
 		case 1:
-			chosenStar = img("images/star100.png");
-			break;
-		case 2:
 			chosenStar = img("images/star080.png");
 			break;
-		case 3:
-			chosenStar = img("images/star060.png");
-			break;
-		case 4:
+		case 2:
 			chosenStar = img("images/star040.png");
-			break;
-		case 5:
-			chosenStar = img("images/star020.png");
 			break;
 		default:
 			chosenStar = img("images/star000.png");
 			break;
 		}
-		for (int i = 0; i < numStar; i++) {
+		for (int i = 0; i < Math.min(EzConstants.MAXIMUM_PRIORITY, numStar); i++) {
 			result = result + chosenStar;
 			if (i % STAR_PER_LINE == STAR_PER_LINE - 1) {
 				result = result + "<br>";
