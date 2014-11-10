@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class EzController {
 
 	private static final int MAX_SIZE = 20;
-	
+
 	private static EzStorage storage = new EzStorage();
 	private static EzAction deleteAction = null;
 	private static ArrayList<EzAction> history = new ArrayList<EzAction>();
@@ -69,65 +69,15 @@ public class EzController {
 			break;
 
 		case PAGE:
-			if (!confirmation){
-				EzGUI.showPage(userAction.getPageNumber());
-			}
-			else if(confirmation && deleteAction != null) {
-				EzGUI.showPage(userAction.getPageNumber());
-				break;
-			}
+			navigatePage(userAction);
 			break;
 
 		case UNDO:
-			if (!confirmation){
-				if(pos <= -1) {
-					return;
-				}
-				else {
-					undoTask();
-					if(!testing) {
-						try {
-							EzDataManage.saveToFile(storage);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-						String currTab = EzGUI.getCurrentTab();
-						if(currTab != null && !currTab.equalsIgnoreCase("help")) {
-							ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
-							EzGUI.showContent(currTab, list, EzGUI.getPage());
-						}
-						else {
-							EzGUI.refreshButton();
-						}
-					}
-				}
-			}
+			undoAction(userAction);
 			break;
 
 		case REDO:
-			if (!confirmation){
-				if(pos >= history.size()-1) {
-					return;
-				}
-				else {
-					redoTask();
-					if(!testing) {
-						try {
-							EzDataManage.saveToFile(storage);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-						String currTab = EzGUI.getCurrentTab();
-						if(currTab != null && !currTab.equalsIgnoreCase("help")) {
-							ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
-							EzGUI.showContent(currTab, list, EzGUI.getPage());
-						}
-						else {
-							EzGUI.refreshButton();
-						}
-					}
-				}
-			}
+			redoAction(userAction);
 			break;
 
 		case SHOW:
@@ -139,121 +89,7 @@ public class EzController {
 		}
 	}
 
-	/**
-	 * This method calls the GUI to display the list of tasks
-	 * @param userAction
-	 */
-	private static void showTask(EzAction userAction) {
-		if (!confirmation){
-			ArrayList<EzTask> toBeShown = userAction.getTargets();
-			EzGUI.highlightButton("All");
-			EzGUI.showContent("Result", toBeShown);
-		}
-	}
-
-	/** 
-	 * This method abort the deletion if the user enter a N
-	 * @param userAction
-	 */
-	private static void abortDelete(EzAction userAction) {
-		if (confirmation){
-			if(!testing) {
-				if(prevTab != null && !prevTab.equalsIgnoreCase("help")) {
-					ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(prevTab);
-					EzGUI.showContent(prevTab, list, EzGUI.getPage());
-					EzGUI.highlightButton(prevTab);
-				}
-				else {
-					EzGUI.refreshButton();
-				}
-			}
-			userAction.setFeedback("Action cancelled");
-			deleteAction = null;
-			confirmation = false;
-		}
-	}
-
-	/**
-	 * This method proceed the deletion if the user enter a Y
-	 * @param userAction
-	 */
-	private static void confirmDelete(EzAction userAction) {
-		if (confirmation){
-			checkPos();
-			assert(deleteAction != null);
-			storage.deleteTask(deleteAction.getTargets());
-			addHistory(deleteAction);
-			if(!testing) {
-				try {
-					EzDataManage.saveToFile(storage);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				if(prevTab != null && !prevTab.equalsIgnoreCase("help")) {
-					ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(prevTab);
-					EzGUI.showContent(prevTab, list, EzGUI.getPage());
-					EzGUI.highlightButton(prevTab);
-				}
-				else {
-					EzGUI.refreshButton();
-				}
-			}
-			userAction.setFeedback("Deleted successfully");
-			deleteAction = null;
-			confirmation = false;
-		}
-	}
 	
-	/**
-	 * This method prepares the deletion and wait for user's confirmation
-	 * @param userAction
-	 */
-	private static void deleteTask(EzAction userAction) {
-		if (!confirmation){
-			deleteAction = userAction;
-			ArrayList<EzTask> toBeDeleted = userAction.getTargets();
-			confirmation = true;
-			assert(toBeDeleted.size() >= 0);
-			if(!testing) {
-				prevTab = EzGUI.getCurrentTab();
-				EzGUI.unhighlightButton();
-				if(toBeDeleted.size() == 1) {
-					EzGUI.showContent("Are you sure to delete this task? (Y/N)", toBeDeleted);
-				}
-				else if(toBeDeleted.size() > 1) {
-					EzGUI.showContent("Are you sure to delete these tasks? (Y/N)", toBeDeleted);
-				}
-			}
-		}
-	}
-	
-	/**
-	 * This method update a task or a list of tasks to their new attributes
-	 * @param userAction
-	 */
-	private static void updateTask(EzAction userAction) {
-		if (!confirmation){
-			storage.updateTask(userAction.getResults());
-			checkPos();
-			addHistory(userAction);
-			if(!testing) {
-				try {
-					EzDataManage.saveToFile(storage);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				String currTab = EzGUI.getCurrentTab();
-				if(currTab != null && !currTab.equalsIgnoreCase("help")) {
-					ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
-					EzGUI.showContent(currTab, list, EzGUI.getPage());
-				}
-				else {
-					EzGUI.refreshButton();
-				}
-			}
-		}
-	}
-
 	/**
 	 * This method adds a task to the list of task in storage
 	 * @param userAction
@@ -298,6 +134,109 @@ public class EzController {
 	}
 
 	/**
+	 * This method update a task or a list of tasks to their new attributes
+	 * @param userAction
+	 */
+	private static void updateTask(EzAction userAction) {
+		if (!confirmation){
+			storage.updateTask(userAction.getResults());
+			checkPos();
+			addHistory(userAction);
+			if(!testing) {
+				try {
+					EzDataManage.saveToFile(storage);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				String currTab = EzGUI.getCurrentTab();
+				if(currTab != null && !currTab.equalsIgnoreCase("help")) {
+					ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
+					EzGUI.showContent(currTab, list, EzGUI.getPage());
+				}
+				else {
+					EzGUI.refreshButton();
+				}
+			}
+		}
+	}
+
+	/**
+	 * This method prepares the deletion and wait for user's confirmation
+	 * @param userAction
+	 */
+	private static void deleteTask(EzAction userAction) {
+		if (!confirmation){
+			deleteAction = userAction;
+			ArrayList<EzTask> toBeDeleted = userAction.getTargets();
+			confirmation = true;
+			assert(toBeDeleted.size() >= 0);
+			if(!testing) {
+				prevTab = EzGUI.getCurrentTab();
+				EzGUI.unhighlightButton();
+				if(toBeDeleted.size() == 1) {
+					EzGUI.showContent("Are you sure to delete this task? (Y/N)", toBeDeleted);
+				}
+				else if(toBeDeleted.size() > 1) {
+					EzGUI.showContent("Are you sure to delete these tasks? (Y/N)", toBeDeleted);
+				}
+			}
+		}
+	}
+
+	/**
+	 * This method proceed the deletion if the user enter a Y
+	 * @param userAction
+	 */
+	private static void confirmDelete(EzAction userAction) {
+		if (confirmation){
+			checkPos();
+			assert(deleteAction != null);
+			storage.deleteTask(deleteAction.getTargets());
+			addHistory(deleteAction);
+			if(!testing) {
+				try {
+					EzDataManage.saveToFile(storage);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				if(prevTab != null && !prevTab.equalsIgnoreCase("help")) {
+					ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(prevTab);
+					EzGUI.showContent(prevTab, list, EzGUI.getPage());
+					EzGUI.highlightButton(prevTab);
+				}
+				else {
+					EzGUI.refreshButton();
+				}
+			}
+			userAction.setFeedback("Deleted successfully");
+			deleteAction = null;
+			confirmation = false;
+		}
+	}
+
+	/** 
+	 * This method abort the deletion if the user enter a N
+	 * @param userAction
+	 */
+	private static void abortDelete(EzAction userAction) {
+		if (confirmation){
+			if(!testing) {
+				if(prevTab != null && !prevTab.equalsIgnoreCase("help")) {
+					ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(prevTab);
+					EzGUI.showContent(prevTab, list, EzGUI.getPage());
+					EzGUI.highlightButton(prevTab);
+				}
+				else {
+					EzGUI.refreshButton();
+				}
+			}
+			userAction.setFeedback("Action cancelled");
+			deleteAction = null;
+			confirmation = false;
+		}
+	}
+
+	/**
 	 * This method calls the corresponding sorting method according to user's input
 	 * @param userAction
 	 * @param currTab
@@ -335,39 +274,105 @@ public class EzController {
 		}
 	}
 
-	/*
-	 * This method calls the corresponding method to perform the previous undo'ed action 
+	/**
+	 * This method allows navigation between multiple pages
+	 * @param userAction
 	 */
-	private static void redoTask() {
-		switch(history.get(++pos).getAction()) {
-		case ADD:
-			EzTask reTask = history.get(pos).getResults().get(0);
-			storage.addTask(reTask);
-			break;
+	private static void navigatePage(EzAction userAction) {
+		if (!confirmation){
+			setPageFeedback(userAction);
+			EzGUI.showPage(userAction.getPageNumber());
+		}
+		else if(confirmation && deleteAction != null) {
+			setPageFeedback(userAction);
+			EzGUI.showPage(userAction.getPageNumber());
+			return;
+		}
+	}
 
-		case DELETE:
-			ArrayList<EzTask> delete = history.get(pos).getTargets();
-			storage.deleteTask(delete);
-			break;
+	private static void setPageFeedback(EzAction userAction) {
+		if(EzGUI.getMaxPage() >= userAction.getPageNumber()) {
+			userAction.setFeedback("Page " + EzGUI.getMaxPage());
+		}
+		else if(userAction.getPageNumber() <= 0) {
+			userAction.setFeedback("Page " + "1");
+		}
+		else {
+			userAction.setFeedback("Page " + userAction.getPageNumber());
+		}
+	}
+	
+	/**
+	 * This method checks the validity of undo action before calling the actual method
+	 * @param userAction
+	 */
+	private static void undoAction(EzAction userAction) {
+		if (!confirmation){
+			if(pos <= -1) {
+				userAction.setFeedback("Nothing to undo!");
+				return;
+			}
+			else {
+				undoTask();
+				if(!testing) {
+					try {
+						EzDataManage.saveToFile(storage);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					String currTab = EzGUI.getCurrentTab();
+					if(currTab != null && !currTab.equalsIgnoreCase("help")) {
+						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
+						EzGUI.showContent(currTab, list, EzGUI.getPage());
+					}
+					else {
+						EzGUI.refreshButton();
+					}
+				}
+			}
+		}
+	}
 
-		case UPDATE:
-			storage.updateTask(history.get(pos).getResults());
-			break;
+	/**
+	 * This method checks the validity of redo action before calling the actual method
+	 * @param userAction
+	 */
+	private static void redoAction(EzAction userAction) {
+		if (!confirmation){
+			if(pos >= history.size()-1) {
+				userAction.setFeedback("Nothing to redo!");
+				return;
+			}
+			else {
+				redoTask();
+				if(!testing) {
+					try {
+						EzDataManage.saveToFile(storage);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					String currTab = EzGUI.getCurrentTab();
+					if(currTab != null && !currTab.equalsIgnoreCase("help")) {
+						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
+						EzGUI.showContent(currTab, list, EzGUI.getPage());
+					}
+					else {
+						EzGUI.refreshButton();
+					}
+				}
+			}
+		}
+	}
 
-		case DONE:
-			storage.updateTask(history.get(pos).getResults());
-			break;
-
-		case UNDONE:
-			storage.updateTask(history.get(pos).getResults());
-			break;
-
-		case REMOVE:
-			storage.updateTask(history.get(pos).getResults());
-			break;
-
-		default:
-			break;
+	/**
+	 * This method calls the GUI to display the list of tasks
+	 * @param userAction
+	 */
+	private static void showTask(EzAction userAction) {
+		if (!confirmation){
+			ArrayList<EzTask> toBeShown = userAction.getTargets();
+			EzGUI.highlightButton("All");
+			EzGUI.showContent("Result", toBeShown);
 		}
 	}
 
@@ -401,6 +406,42 @@ public class EzController {
 
 		case REMOVE:
 			storage.updateTask(history.get(pos--).getTargets());
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	/*
+	 * This method calls the corresponding method to perform the previous undo'ed action 
+	 */
+	private static void redoTask() {
+		switch(history.get(++pos).getAction()) {
+		case ADD:
+			EzTask reTask = history.get(pos).getResults().get(0);
+			storage.addTask(reTask);
+			break;
+
+		case DELETE:
+			ArrayList<EzTask> delete = history.get(pos).getTargets();
+			storage.deleteTask(delete);
+			break;
+
+		case UPDATE:
+			storage.updateTask(history.get(pos).getResults());
+			break;
+
+		case DONE:
+			storage.updateTask(history.get(pos).getResults());
+			break;
+
+		case UNDONE:
+			storage.updateTask(history.get(pos).getResults());
+			break;
+
+		case REMOVE:
+			storage.updateTask(history.get(pos).getResults());
 			break;
 
 		default:

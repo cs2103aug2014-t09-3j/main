@@ -1,4 +1,5 @@
 import static org.junit.Assert.*;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -12,6 +13,7 @@ public class EzControllerTest {
 		ArrayList<EzAction> history;
 		String tempCommand;
 		
+		EzGUI gui = new EzGUI(true);
 		EzController.setTesting(true);
 		// history index 0
 		EzController.execute("Add \"do automated testing\"");
@@ -22,17 +24,21 @@ public class EzControllerTest {
 		// history index 3
 		EzController.execute("Add \"task 2\"");
 		// history index 4
-		EzController.execute("delete from 2 to 3");
+		EzController.execute("delete from 3 to 4");
 		EzController.execute("Y");
 		// history index 5
-		EzController.execute("update 1 set venue \"COM 1\"");
+		EzController.execute("update 2 venue \"COM 1\"");
 		// history index 6
-		EzController.execute("done 1");
+		EzController.execute("done 2");
+		// history index 7
+		EzController.execute("undone 2");
+		// history index 8
+		EzController.execute("remove venue 2");
 		
 		history = EzController.getHistory();
 		
 		// check the size of history
-		assertEquals(7, history.size());
+		assertEquals(9, history.size());
 	
 		// check history index 0
 		assertEquals(TypeOfAction.ADD, history.get(0).getAction());
@@ -73,11 +79,21 @@ public class EzControllerTest {
 		assertTrue(history.get(6).getResults() != null);
 		assertTrue(history.get(6).getTargets() != null);
 		
-		// history index 7 to index 21
-		// a total of 7 tasks added previously
-		// a total of 14 tasks added here
+		// check history index 7
+		assertEquals(TypeOfAction.UNDONE, history.get(7).getAction());
+		assertTrue(history.get(7).getResults() != null);
+		assertTrue(history.get(7).getTargets() != null);
+		
+		// check history index 8
+		assertEquals(TypeOfAction.REMOVE, history.get(8).getAction());
+		assertTrue(history.get(8).getTargets().get(0).getVenue().equals("COM 1"));
+		assertTrue(history.get(8).getResults().get(0).getVenue().equals(""));
+		
+		// history index 9 to index 20
+		// a total of 9  (index 0 to 8) tasks added previously
+		// a total of 12 (index 9 to 20) tasks added here
 		// history exceeds 20, the first action in history will be removed
-		for(int i = 0; i <= 13; i++) { 
+		for(int i = 0; i <= 11; i++) { 
 			tempCommand = "add \"task " + i + "\"";
 			EzController.execute(tempCommand);
 		}

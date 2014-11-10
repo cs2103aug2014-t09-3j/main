@@ -96,16 +96,16 @@ public class EzDataManage {
 			}
 			writer.write(numAttribute, NUM_OF_ATTRIBUTES_BYTES);
 			
-			//id
-			writer.write(ID_INDEX, INDEX_BYTES); // indicate ID
+			// id
+			writer.write(ID_INDEX, INDEX_BYTES); 
 			writer.write(task.getId(), ID_BYTES);
 			
-			//title
-			writer.write(TITLE_INDEX, INDEX_BYTES); //indicate title
+			// title
+			writer.write(TITLE_INDEX, INDEX_BYTES); 
 			writer.write(task.getTitle().length(), TITLE_BYTES);
 			writer.writeString(task.getTitle());
 			
-			//venue
+			// venue
 			writer.write(VENUE_INDEX, INDEX_BYTES);
 			int lenVenue;
 			if(task.getVenue() == null) {
@@ -117,11 +117,11 @@ public class EzDataManage {
 			writer.write(lenVenue, VENUE_BYTES);
 			writer.writeString(task.getVenue());
 			
-			//priority
+			// priority
 			writer.write(PRIORITY_INDEX, INDEX_BYTES);
 			writer.write(task.getPriority(), PRIORITY_BYTES);
 			
-			//done
+			// done
 			writer.write(STATUS_INDEX, INDEX_BYTES);
 			int status;
 			if(task.isDone()) {
@@ -132,6 +132,7 @@ public class EzDataManage {
 			}
 			writer.write(status, STATUS_BYTES);
 			
+			// time
 			if(typeOfTask != FLOATING_TYPE_OF_TASK) {
 				writer.write(START_TIME_INDEX, INDEX_BYTES);
 				writer.write(task.getStartTime().get(Calendar.YEAR), YEAR_BYTES);
