@@ -4,6 +4,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 //@author A0112129U
+/**
+ * this class creates HTML code for displaying the content
+ * 
+ */
 public class EzHtmlGenerator {
 
 	private static final int TIME_FONT_SIZE = 5;
@@ -57,26 +61,59 @@ public class EzHtmlGenerator {
 	private static final String[] CALENDAR_DAY_OF_WEEK = { "", "Sun", "Mon",
 			"Tue", "Wed", "Thu", "Fri", "Sat" };
 
+	/**
+	 * wrap the content in <td> tag
+	 * @param format
+	 * @param content
+	 * @return
+	 */
 	private static String td(String format, String content) {
 		return "<td " + format + ">" + content + "</td>";
 	}
 
+	/**
+	 * wrap the content in <td> tag
+	 * @param content
+	 * @return
+	 */
 	private static String td(String content) {
 		return td("", content);
 	}
 
+	/**
+	 * wrap the content in <tr> tag
+	 * @param format
+	 * @param content
+	 * @return
+	 */
 	private static String tr(String format, String content) {
 		return "<tr " + format + ">" + content + "</tr>";
 	}
 
+	/**
+	 * wrap the content in <tr> tag
+	 * @param content
+	 * @return
+	 */
 	private static String tr(String content) {
 		return tr("", content);
 	}
 
+	/**
+	 * wrap the content in <table> tag
+	 * @param format
+	 * @param content
+	 * @return
+	 */
 	private static String table(String format, String content) {
 		return "<table " + format + ">" + content + "</table>";
 	}
 
+	/**
+	 * create HTML code representing the task
+	 * @param task
+	 * @return
+	 */
 	public static String createHtmlEzTask(EzTask task) {
 		if (task != null) {
 			int typeOfTask = NORMAL_TASK;
@@ -106,6 +143,11 @@ public class EzHtmlGenerator {
 		}
 	}
 
+	/**
+	 * create HTML code for DONE part
+	 * @param task
+	 * @return
+	 */
 	private static String createHtmlDoneOfEzTask(EzTask task) {
 		if (task.isDone()) {
 			return img(IMAGE_DONE_PNG);
@@ -113,6 +155,11 @@ public class EzHtmlGenerator {
 		return "";
 	}
 
+	/**
+	 * create HTML code for DATE part
+	 * @param task
+	 * @return
+	 */
 	private static String createHtmlDateOfEzTask(EzTask task) {
 		GregorianCalendar date1 = task.getStartTime();
 		GregorianCalendar date2 = task.getEndTime();
@@ -165,6 +212,14 @@ public class EzHtmlGenerator {
 				"border=0 cellspacing=0 cellpadding=1");
 	}
 
+	/**
+	 * create the table with a specific number of rows and columns
+	 * @param row
+	 * @param col
+	 * @param list
+	 * @param tableAttribute
+	 * @return
+	 */
 	public static String createHtmlTable(int row, int col,
 			ArrayList<String> list, String tableAttribute) {
 		String result = "";
@@ -180,6 +235,13 @@ public class EzHtmlGenerator {
 		return table(tableAttribute, result);
 	}
 
+	/**
+	 * create the table with a header
+	 * @param header
+	 * @param content
+	 * @param tableAttribute
+	 * @return
+	 */
 	public static String createHtmlTableWithHeader(String header,
 			String content, String tableAttribute) {
 		header = EzHtmlGenerator.createHtmlText("__", MAIN_TITLE_FONT_FONT, 2,
@@ -192,6 +254,11 @@ public class EzHtmlGenerator {
 		return result;
 	}
 
+	/**
+	 * create HTML code for TITLE and VENUE part
+	 * @param task
+	 * @return
+	 */
 	private static String createHtmlTitleAndVenueOfEzTask(EzTask task) {
 		String result = createHtmlText(addBreak(task.getTitle()),
 				TITLE_FONT_FONT, TITLE_FONT_SIZE, TITLE_FONT_COLOR);
@@ -204,6 +271,11 @@ public class EzHtmlGenerator {
 		return result;
 	}
 
+	/**
+	 * add breaks for too long word
+	 * @param text
+	 * @return
+	 */
 	private static String addBreak(String text) {
 		String result = "";
 		for (int i = 0; i < text.length(); i++) {
@@ -229,6 +301,11 @@ public class EzHtmlGenerator {
 		return result;
 	}
 
+	/**
+	 * create HTML code for ID and PRIORITY part
+	 * @param task
+	 * @return
+	 */
 	private static String createHtmlIdAndPriorityOfEzTask(EzTask task) {
 		String htmlId = createHtmlText("#" + task.getId(), ID_FONT_FONT,
 				ID_FONT_SIZE, ID_FONT_COLOR);
@@ -238,6 +315,11 @@ public class EzHtmlGenerator {
 				+ tr(td(center(htmlPriority))));
 	}
 
+	/**
+	 * create HTML code the the calendar
+	 * @param date
+	 * @return
+	 */
 	private static String createHtmlCalendar(GregorianCalendar date) {
 		String dayOfWeekHtmlText = createHtmlText(
 				CALENDAR_DAY_OF_WEEK[date.get(Calendar.DAY_OF_WEEK)],
@@ -265,6 +347,11 @@ public class EzHtmlGenerator {
 						+ tr(td("height=\"10px\"", center(yearHtmlText))));
 	}
 
+	/**
+	 * create HTML code for the clock
+	 * @param date
+	 * @return
+	 */
 	private static String createHtmlClock(GregorianCalendar date) {
 		String hour = String.valueOf(date.get(Calendar.HOUR_OF_DAY));
 		if (date.get(Calendar.HOUR_OF_DAY) < 10) {
@@ -287,10 +374,20 @@ public class EzHtmlGenerator {
 						+ td("height=\"25px\"", center(timeHtmlText))));
 	}
 
+	/**
+	 * create HTML code to show an image by its URL
+	 * @param url
+	 * @return
+	 */
 	private static String img(String url) {
 		return "<img src=\"file:" + url + "\">";
 	}
 
+	/**
+	 * create the stars for priority part
+	 * @param numStar
+	 * @return
+	 */
 	private static String createHtmlStar(int numStar) {
 		String result = "";
 		String chosenStar = "";
@@ -314,32 +411,69 @@ public class EzHtmlGenerator {
 		return result;
 	}
 
+	/**
+	 * wrap the content in <center> tag
+	 * @param content
+	 * @return
+	 */
 	public static String center(String content) {
 		return "<center>" + content + "</center>";
 	}
 
+	/**
+	 * make the content align to the right side
+	 * @param content
+	 * @return
+	 */
 	public static String right(String content) {
 		return "<div align=\"right\">" + content + "</div>";
 	}
 
+	/**
+	 * add format for the text
+	 * @param content
+	 * @param font
+	 * @param size
+	 * @param color
+	 * @return
+	 */
 	public static String createHtmlText(final String content,
 			final String font, final int size, final Color color) {
 		return "<font face=\"" + font + "\" size=\"" + size + "\" color=\"#"
 				+ convertColorToHex(color) + "\">" + content + "</font>";
 	}
 
+	/**
+	 * add format for the text
+	 * @param content
+	 * @param font
+	 * @param size
+	 * @param hexColor
+	 * @return
+	 */
 	public static String createHtmlText(String content, String font, int size,
 			String hexColor) {
 		return "<font face=\"" + font + "\" size=\"" + size + "\" color=\"#"
 				+ hexColor + "\">" + content + "</font>";
 	}
 
+	/**
+	 * convert Color to hex value
+	 * @param color
+	 * @return
+	 */
 	private static String convertColorToHex(Color color) {
 		return convertIntToHex(color.getRed(), 2)
 				+ convertIntToHex(color.getGreen(), 2)
 				+ convertIntToHex(color.getBlue(), 2);
 	}
 
+	/**
+	 * convert integer to hex value
+	 * @param i
+	 * @param length
+	 * @return
+	 */
 	private static String convertIntToHex(int i, int length) {
 		if (length == 0)
 			return "";

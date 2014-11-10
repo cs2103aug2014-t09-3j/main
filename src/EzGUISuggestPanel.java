@@ -18,33 +18,51 @@ public class EzGUISuggestPanel extends JDialog {
 	public static final int ORIGINAL_WIDTH = 784;
 	public static final int SUGGEST_PANEL_Y_RELATIVE_POS = 10;
 	public static final int SUGGEST_PANEL_X_RELATIVE_POS = 165;
-	
+
 	private JList<String> suggestList;
 	private JScrollPane suggestScrollPanel;
 	private static EzGUISuggestPanel suggestPanel;
 	private boolean selectionMode = false;
 
-	public static EzGUISuggestPanel getInstance(){
-		if (suggestPanel==null){
-			suggestPanel = new EzGUISuggestPanel(EzGUI.getMainFrame(), "Suggest", false);
+	/**
+	 * create or get the instance of this class
+	 * 
+	 * @return
+	 */
+	public static EzGUISuggestPanel getInstance() {
+		if (suggestPanel == null) {
+			suggestPanel = new EzGUISuggestPanel(EzGUI.getMainFrame(),
+					"Suggest", false);
 		}
 		return suggestPanel;
 	}
-	
-	public boolean inSelectionMode(){
+
+	/**
+	 * check if it is in the selection mode or not
+	 */
+	public boolean inSelectionMode() {
 		return selectionMode;
 	}
-	
+
+	/**
+	 * initiate the suggest panel
+	 * 
+	 * @param owner
+	 * @param title
+	 * @param modal
+	 */
 	private EzGUISuggestPanel(Frame owner, String title, boolean modal) {
 		super(owner, title, modal);
 		suggestPanel = this;
-		
+
 		int x = owner.getLocation().x + SUGGEST_PANEL_X_RELATIVE_POS;
-		int y = owner.getLocation().y + this.getHeight() - SUGGEST_PANEL_Y_RELATIVE_POS;
+		int y = owner.getLocation().y + this.getHeight()
+				- SUGGEST_PANEL_Y_RELATIVE_POS;
 		setLocation(x, y);
 		setMinimumSize(new Dimension(ORIGINAL_WIDTH, ORIGINAL_HEIGHT));
 
-		ArrayList<EzTask> listTask = EzController.getStorage().getListOfAllTasks();
+		ArrayList<EzTask> listTask = EzController.getStorage()
+				.getListOfAllTasks();
 		String[] listString = new String[listTask.size()];
 
 		for (int i = 0; i < listTask.size(); i++) {
@@ -71,7 +89,8 @@ public class EzGUISuggestPanel extends JDialog {
 		suggestScrollPanel.setLayout(new ScrollPaneLayout());
 		suggestScrollPanel.setBorder(BorderFactory.createLineBorder(
 				EzConstants.CHATEAU_GREEN_COLOR, 5));
-		suggestScrollPanel.setPreferredSize(new Dimension(ORIGINAL_WIDTH, ORIGINAL_HEIGHT));
+		suggestScrollPanel.setPreferredSize(new Dimension(ORIGINAL_WIDTH,
+				ORIGINAL_HEIGHT));
 
 		getContentPane().add(suggestScrollPanel, BorderLayout.SOUTH);
 		setUndecorated(true);
@@ -81,6 +100,9 @@ public class EzGUISuggestPanel extends JDialog {
 		selectionMode = false;
 	}
 
+	/**
+	 * process when the user presses enter
+	 */
 	public void enterSelection() {
 		int selectIndex = suggestList.getSelectedIndex();
 		loadSuggestion(EzGUICommandPanel.getInstance().getText());
@@ -89,16 +111,22 @@ public class EzGUISuggestPanel extends JDialog {
 			int taskId = getFirstNumber(suggestList.getModel().getElementAt(
 					selectIndex));
 			if (taskId > -1) {
-				int caretPos = EzGUICommandPanel.getInstance().getSelectionStart();
+				int caretPos = EzGUICommandPanel.getInstance()
+						.getSelectionStart();
 				EzGUICommandPanel.getInstance().deleteSelection();
-				EzGUICommandPanel.getInstance().typeNormal(String.valueOf(taskId) + " ",caretPos);
+				EzGUICommandPanel.getInstance().typeNormal(
+						String.valueOf(taskId) + " ", caretPos);
 			}
 		}
 		suggestList.setSelectedIndex(-1);
 		selectionMode = false;
 		setVisible(false);
 	}
-	
+
+	/**
+	 * @param text
+	 * @return the first number in a string
+	 */
 	private int getFirstNumber(String text) {
 		int result = -1;
 		int i = 0;
@@ -114,7 +142,12 @@ public class EzGUISuggestPanel extends JDialog {
 		}
 		return result;
 	}
-	
+
+	/**
+	 * load the suggestion when the user types
+	 * 
+	 * @param contentInputField
+	 */
 	public void loadSuggestion(String contentInputField) {
 		boolean activateSuggestion = false;
 		int startCaretPos = -1;
@@ -222,7 +255,8 @@ public class EzGUISuggestPanel extends JDialog {
 
 			if (firstPosNotKeywordOrNumber != -1) {
 				EzGUICommandPanel.getInstance().setSelection(
-						firstPosNotKeywordOrNumber, EzGUICommandPanel.getInstance().getCaretPosition());
+						firstPosNotKeywordOrNumber,
+						EzGUICommandPanel.getInstance().getCaretPosition());
 			}
 		} else {
 			suggestList.clearSelection();
@@ -231,7 +265,13 @@ public class EzGUISuggestPanel extends JDialog {
 		}
 		suggestPanel.pack();
 	}
-	
+
+	/**
+	 * check if the string is a number or not
+	 * 
+	 * @param word
+	 * @return
+	 */
 	private boolean isNumber(String word) {
 		for (int i = 0; i < word.length(); i++) {
 			if ((word.charAt(i) < '0') || (word.charAt(i) > '9')) {
@@ -241,8 +281,9 @@ public class EzGUISuggestPanel extends JDialog {
 		return true;
 	}
 
-	
-	
+	/**
+	 * process when the user press down arrow
+	 */
 	public void selectBelow() {
 		int selectIndex = suggestList.getSelectedIndex();
 		selectIndex++;
@@ -257,7 +298,10 @@ public class EzGUISuggestPanel extends JDialog {
 			suggestList.clearSelection();
 		}
 	}
-	
+
+	/**
+	 * process when the user press up arrow
+	 */
 	public void selectAbove() {
 		int selectIndex = suggestList.getSelectedIndex();
 		selectIndex--;

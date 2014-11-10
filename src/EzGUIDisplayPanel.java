@@ -6,9 +6,19 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.ScrollPaneLayout;
 
 //@author A0112129U
+
+/**
+ * this class is a scroll panel for storing the content
+ */
 public class EzGUIDisplayPanel extends JScrollPane {
 	private static final int SCROLLING_INCREMENT = 20;
 
+	/**
+	 * initialize the scroll panel
+	 * 
+	 * @param view
+	 *            is a JEditorPane, which actually show the content
+	 */
 	public EzGUIDisplayPanel(Component view) {
 		super(view);
 		setFocusable(false);
@@ -23,11 +33,17 @@ public class EzGUIDisplayPanel extends JScrollPane {
 		view.setFocusable(false);
 	}
 
+	/**
+	 * scroll the view down
+	 */
 	public void scrollDown() {
 		getVerticalScrollBar().setValue(
 				getVerticalScrollBar().getValue() + SCROLLING_INCREMENT);
 	}
 
+	/**
+	 * scroll the view up
+	 */
 	public void scrollUp() {
 		getVerticalScrollBar().setValue(
 				getVerticalScrollBar().getValue() - SCROLLING_INCREMENT);
