@@ -360,14 +360,16 @@ public class EzGUICommandPanel extends JPanel {
 	 * redo the action
 	 */
 	private void redo() {
-		EzController.execute("redo");
+		String fb = EzController.execute("redo");
+		loadFeedBack(fb);
 	}
 
 	/**
 	 * undo the action
 	 */
 	private void undo() {
-		EzController.execute("undo");
+		String fb = EzController.execute("undo");
+		loadFeedBack(fb);
 	}
 
 	/**
@@ -516,6 +518,10 @@ public class EzGUICommandPanel extends JPanel {
 		String fb = EzController.execute(commandField.getText());
 		commandHistory.add(commandField.getText());
 		historyPos = commandHistory.size();
+		loadFeedBack(fb);
+	}
+
+	private void loadFeedBack(String fb) {
 		if (fb != null) {
 			addColorForFeedBack(fb, commandField.getStyledDocument());
 			showingFeedback = true;
