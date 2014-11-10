@@ -343,7 +343,7 @@ public class EzConstants {
 
 	public static final Color SHOW_AREA_BACKGROUND = EzConstants.WHITE_SMOKE_COLOR;
 
-	public static final int MAXIMUM_PRIORITY = 6;
+	public static final int MAXIMUM_PRIORITY = 3;
 }
 
 	// End of segment: E:\Java Projects\CS2103T\src\EzConstants.java
@@ -2033,9 +2033,19 @@ public class EzGUICommandPanel extends JPanel {
 	 * origin: E:\Java Projects\CS2103T\src\EzGUIDisplayPanel.java
 	 */
 
+
+/**
+ * this class is a scroll panel for storing the content
+ */
 public class EzGUIDisplayPanel extends JScrollPane {
 	private static final int SCROLLING_INCREMENT = 20;
 
+	/**
+	 * initialize the scroll panel
+	 * 
+	 * @param view
+	 *            is a JEditorPane, which actually show the content
+	 */
 	public EzGUIDisplayPanel(Component view) {
 		super(view);
 		setFocusable(false);
@@ -2050,11 +2060,17 @@ public class EzGUIDisplayPanel extends JScrollPane {
 		view.setFocusable(false);
 	}
 
+	/**
+	 * scroll the view down
+	 */
 	public void scrollDown() {
 		getVerticalScrollBar().setValue(
 				getVerticalScrollBar().getValue() + SCROLLING_INCREMENT);
 	}
 
+	/**
+	 * scroll the view up
+	 */
 	public void scrollUp() {
 		getVerticalScrollBar().setValue(
 				getVerticalScrollBar().getValue() - SCROLLING_INCREMENT);
@@ -2105,33 +2121,51 @@ public class EzGUISuggestPanel extends JDialog {
 	public static final int ORIGINAL_WIDTH = 784;
 	public static final int SUGGEST_PANEL_Y_RELATIVE_POS = 10;
 	public static final int SUGGEST_PANEL_X_RELATIVE_POS = 165;
-	
+
 	private JList<String> suggestList;
 	private JScrollPane suggestScrollPanel;
 	private static EzGUISuggestPanel suggestPanel;
 	private boolean selectionMode = false;
 
-	public static EzGUISuggestPanel getInstance(){
-		if (suggestPanel==null){
-			suggestPanel = new EzGUISuggestPanel(EzGUI.getMainFrame(), "Suggest", false);
+	/**
+	 * create or get the instance of this class
+	 * 
+	 * @return
+	 */
+	public static EzGUISuggestPanel getInstance() {
+		if (suggestPanel == null) {
+			suggestPanel = new EzGUISuggestPanel(EzGUI.getMainFrame(),
+					"Suggest", false);
 		}
 		return suggestPanel;
 	}
-	
-	public boolean inSelectionMode(){
+
+	/**
+	 * check if it is in the selection mode or not
+	 */
+	public boolean inSelectionMode() {
 		return selectionMode;
 	}
-	
+
+	/**
+	 * initiate the suggest panel
+	 * 
+	 * @param owner
+	 * @param title
+	 * @param modal
+	 */
 	private EzGUISuggestPanel(Frame owner, String title, boolean modal) {
 		super(owner, title, modal);
 		suggestPanel = this;
-		
+
 		int x = owner.getLocation().x + SUGGEST_PANEL_X_RELATIVE_POS;
-		int y = owner.getLocation().y + this.getHeight() - SUGGEST_PANEL_Y_RELATIVE_POS;
+		int y = owner.getLocation().y + this.getHeight()
+				- SUGGEST_PANEL_Y_RELATIVE_POS;
 		setLocation(x, y);
 		setMinimumSize(new Dimension(ORIGINAL_WIDTH, ORIGINAL_HEIGHT));
 
-		ArrayList<EzTask> listTask = EzController.getStorage().getListOfAllTasks();
+		ArrayList<EzTask> listTask = EzController.getStorage()
+				.getListOfAllTasks();
 		String[] listString = new String[listTask.size()];
 
 		for (int i = 0; i < listTask.size(); i++) {
@@ -2158,7 +2192,8 @@ public class EzGUISuggestPanel extends JDialog {
 		suggestScrollPanel.setLayout(new ScrollPaneLayout());
 		suggestScrollPanel.setBorder(BorderFactory.createLineBorder(
 				EzConstants.CHATEAU_GREEN_COLOR, 5));
-		suggestScrollPanel.setPreferredSize(new Dimension(ORIGINAL_WIDTH, ORIGINAL_HEIGHT));
+		suggestScrollPanel.setPreferredSize(new Dimension(ORIGINAL_WIDTH,
+				ORIGINAL_HEIGHT));
 
 		getContentPane().add(suggestScrollPanel, BorderLayout.SOUTH);
 		setUndecorated(true);
@@ -2168,6 +2203,9 @@ public class EzGUISuggestPanel extends JDialog {
 		selectionMode = false;
 	}
 
+	/**
+	 * process when the user presses enter
+	 */
 	public void enterSelection() {
 		int selectIndex = suggestList.getSelectedIndex();
 		loadSuggestion(EzGUICommandPanel.getInstance().getText());
@@ -2176,16 +2214,22 @@ public class EzGUISuggestPanel extends JDialog {
 			int taskId = getFirstNumber(suggestList.getModel().getElementAt(
 					selectIndex));
 			if (taskId > -1) {
-				int caretPos = EzGUICommandPanel.getInstance().getSelectionStart();
+				int caretPos = EzGUICommandPanel.getInstance()
+						.getSelectionStart();
 				EzGUICommandPanel.getInstance().deleteSelection();
-				EzGUICommandPanel.getInstance().typeNormal(String.valueOf(taskId) + " ",caretPos);
+				EzGUICommandPanel.getInstance().typeNormal(
+						String.valueOf(taskId) + " ", caretPos);
 			}
 		}
 		suggestList.setSelectedIndex(-1);
 		selectionMode = false;
 		setVisible(false);
 	}
-	
+
+	/**
+	 * @param text
+	 * @return the first number in a string
+	 */
 	private int getFirstNumber(String text) {
 		int result = -1;
 		int i = 0;
@@ -2201,7 +2245,12 @@ public class EzGUISuggestPanel extends JDialog {
 		}
 		return result;
 	}
-	
+
+	/**
+	 * load the suggestion when the user types
+	 * 
+	 * @param contentInputField
+	 */
 	public void loadSuggestion(String contentInputField) {
 		boolean activateSuggestion = false;
 		int startCaretPos = -1;
@@ -2309,7 +2358,8 @@ public class EzGUISuggestPanel extends JDialog {
 
 			if (firstPosNotKeywordOrNumber != -1) {
 				EzGUICommandPanel.getInstance().setSelection(
-						firstPosNotKeywordOrNumber, EzGUICommandPanel.getInstance().getCaretPosition());
+						firstPosNotKeywordOrNumber,
+						EzGUICommandPanel.getInstance().getCaretPosition());
 			}
 		} else {
 			suggestList.clearSelection();
@@ -2318,7 +2368,13 @@ public class EzGUISuggestPanel extends JDialog {
 		}
 		suggestPanel.pack();
 	}
-	
+
+	/**
+	 * check if the string is a number or not
+	 * 
+	 * @param word
+	 * @return
+	 */
 	private boolean isNumber(String word) {
 		for (int i = 0; i < word.length(); i++) {
 			if ((word.charAt(i) < '0') || (word.charAt(i) > '9')) {
@@ -2328,8 +2384,9 @@ public class EzGUISuggestPanel extends JDialog {
 		return true;
 	}
 
-	
-	
+	/**
+	 * process when the user press down arrow
+	 */
 	public void selectBelow() {
 		int selectIndex = suggestList.getSelectedIndex();
 		selectIndex++;
@@ -2344,7 +2401,10 @@ public class EzGUISuggestPanel extends JDialog {
 			suggestList.clearSelection();
 		}
 	}
-	
+
+	/**
+	 * process when the user press up arrow
+	 */
 	public void selectAbove() {
 		int selectIndex = suggestList.getSelectedIndex();
 		selectIndex--;
@@ -2371,6 +2431,10 @@ public class EzGUISuggestPanel extends JDialog {
 	 * origin: E:\Java Projects\CS2103T\src\EzHtmlGenerator.java
 	 */
 
+/**
+ * this class creates HTML code for displaying the content
+ * 
+ */
 public class EzHtmlGenerator {
 
 	private static final int TIME_FONT_SIZE = 5;
@@ -2424,26 +2488,59 @@ public class EzHtmlGenerator {
 	private static final String[] CALENDAR_DAY_OF_WEEK = { "", "Sun", "Mon",
 			"Tue", "Wed", "Thu", "Fri", "Sat" };
 
+	/**
+	 * wrap the content in <td> tag
+	 * @param format
+	 * @param content
+	 * @return
+	 */
 	private static String td(String format, String content) {
 		return "<td " + format + ">" + content + "</td>";
 	}
 
+	/**
+	 * wrap the content in <td> tag
+	 * @param content
+	 * @return
+	 */
 	private static String td(String content) {
 		return td("", content);
 	}
 
+	/**
+	 * wrap the content in <tr> tag
+	 * @param format
+	 * @param content
+	 * @return
+	 */
 	private static String tr(String format, String content) {
 		return "<tr " + format + ">" + content + "</tr>";
 	}
 
+	/**
+	 * wrap the content in <tr> tag
+	 * @param content
+	 * @return
+	 */
 	private static String tr(String content) {
 		return tr("", content);
 	}
 
+	/**
+	 * wrap the content in <table> tag
+	 * @param format
+	 * @param content
+	 * @return
+	 */
 	private static String table(String format, String content) {
 		return "<table " + format + ">" + content + "</table>";
 	}
 
+	/**
+	 * create HTML code representing the task
+	 * @param task
+	 * @return
+	 */
 	public static String createHtmlEzTask(EzTask task) {
 		if (task != null) {
 			int typeOfTask = NORMAL_TASK;
@@ -2473,6 +2570,11 @@ public class EzHtmlGenerator {
 		}
 	}
 
+	/**
+	 * create HTML code for DONE part
+	 * @param task
+	 * @return
+	 */
 	private static String createHtmlDoneOfEzTask(EzTask task) {
 		if (task.isDone()) {
 			return img(IMAGE_DONE_PNG);
@@ -2480,6 +2582,11 @@ public class EzHtmlGenerator {
 		return "";
 	}
 
+	/**
+	 * create HTML code for DATE part
+	 * @param task
+	 * @return
+	 */
 	private static String createHtmlDateOfEzTask(EzTask task) {
 		GregorianCalendar date1 = task.getStartTime();
 		GregorianCalendar date2 = task.getEndTime();
@@ -2532,6 +2639,14 @@ public class EzHtmlGenerator {
 				"border=0 cellspacing=0 cellpadding=1");
 	}
 
+	/**
+	 * create the table with a specific number of rows and columns
+	 * @param row
+	 * @param col
+	 * @param list
+	 * @param tableAttribute
+	 * @return
+	 */
 	public static String createHtmlTable(int row, int col,
 			ArrayList<String> list, String tableAttribute) {
 		String result = "";
@@ -2547,6 +2662,13 @@ public class EzHtmlGenerator {
 		return table(tableAttribute, result);
 	}
 
+	/**
+	 * create the table with a header
+	 * @param header
+	 * @param content
+	 * @param tableAttribute
+	 * @return
+	 */
 	public static String createHtmlTableWithHeader(String header,
 			String content, String tableAttribute) {
 		header = EzHtmlGenerator.createHtmlText("__", MAIN_TITLE_FONT_FONT, 2,
@@ -2559,6 +2681,11 @@ public class EzHtmlGenerator {
 		return result;
 	}
 
+	/**
+	 * create HTML code for TITLE and VENUE part
+	 * @param task
+	 * @return
+	 */
 	private static String createHtmlTitleAndVenueOfEzTask(EzTask task) {
 		String result = createHtmlText(addBreak(task.getTitle()),
 				TITLE_FONT_FONT, TITLE_FONT_SIZE, TITLE_FONT_COLOR);
@@ -2571,6 +2698,11 @@ public class EzHtmlGenerator {
 		return result;
 	}
 
+	/**
+	 * add breaks for too long word
+	 * @param text
+	 * @return
+	 */
 	private static String addBreak(String text) {
 		String result = "";
 		for (int i = 0; i < text.length(); i++) {
@@ -2596,6 +2728,11 @@ public class EzHtmlGenerator {
 		return result;
 	}
 
+	/**
+	 * create HTML code for ID and PRIORITY part
+	 * @param task
+	 * @return
+	 */
 	private static String createHtmlIdAndPriorityOfEzTask(EzTask task) {
 		String htmlId = createHtmlText("#" + task.getId(), ID_FONT_FONT,
 				ID_FONT_SIZE, ID_FONT_COLOR);
@@ -2605,6 +2742,11 @@ public class EzHtmlGenerator {
 				+ tr(td(center(htmlPriority))));
 	}
 
+	/**
+	 * create HTML code the the calendar
+	 * @param date
+	 * @return
+	 */
 	private static String createHtmlCalendar(GregorianCalendar date) {
 		String dayOfWeekHtmlText = createHtmlText(
 				CALENDAR_DAY_OF_WEEK[date.get(Calendar.DAY_OF_WEEK)],
@@ -2632,6 +2774,11 @@ public class EzHtmlGenerator {
 						+ tr(td("height=\"10px\"", center(yearHtmlText))));
 	}
 
+	/**
+	 * create HTML code for the clock
+	 * @param date
+	 * @return
+	 */
 	private static String createHtmlClock(GregorianCalendar date) {
 		String hour = String.valueOf(date.get(Calendar.HOUR_OF_DAY));
 		if (date.get(Calendar.HOUR_OF_DAY) < 10) {
@@ -2654,34 +2801,35 @@ public class EzHtmlGenerator {
 						+ td("height=\"25px\"", center(timeHtmlText))));
 	}
 
+	/**
+	 * create HTML code to show an image by its URL
+	 * @param url
+	 * @return
+	 */
 	private static String img(String url) {
 		return "<img src=\"file:" + url + "\">";
 	}
 
+	/**
+	 * create the stars for priority part
+	 * @param numStar
+	 * @return
+	 */
 	private static String createHtmlStar(int numStar) {
 		String result = "";
 		String chosenStar = "";
 		switch (numStar) {
 		case 1:
-			chosenStar = img("images/star100.png");
-			break;
-		case 2:
 			chosenStar = img("images/star080.png");
 			break;
-		case 3:
-			chosenStar = img("images/star060.png");
-			break;
-		case 4:
+		case 2:
 			chosenStar = img("images/star040.png");
-			break;
-		case 5:
-			chosenStar = img("images/star020.png");
 			break;
 		default:
 			chosenStar = img("images/star000.png");
 			break;
 		}
-		for (int i = 0; i < numStar; i++) {
+		for (int i = 0; i < Math.min(EzConstants.MAXIMUM_PRIORITY, numStar); i++) {
 			result = result + chosenStar;
 			if (i % STAR_PER_LINE == STAR_PER_LINE - 1) {
 				result = result + "<br>";
@@ -2690,32 +2838,69 @@ public class EzHtmlGenerator {
 		return result;
 	}
 
+	/**
+	 * wrap the content in <center> tag
+	 * @param content
+	 * @return
+	 */
 	public static String center(String content) {
 		return "<center>" + content + "</center>";
 	}
 
+	/**
+	 * make the content align to the right side
+	 * @param content
+	 * @return
+	 */
 	public static String right(String content) {
 		return "<div align=\"right\">" + content + "</div>";
 	}
 
+	/**
+	 * add format for the text
+	 * @param content
+	 * @param font
+	 * @param size
+	 * @param color
+	 * @return
+	 */
 	public static String createHtmlText(final String content,
 			final String font, final int size, final Color color) {
 		return "<font face=\"" + font + "\" size=\"" + size + "\" color=\"#"
 				+ convertColorToHex(color) + "\">" + content + "</font>";
 	}
 
+	/**
+	 * add format for the text
+	 * @param content
+	 * @param font
+	 * @param size
+	 * @param hexColor
+	 * @return
+	 */
 	public static String createHtmlText(String content, String font, int size,
 			String hexColor) {
 		return "<font face=\"" + font + "\" size=\"" + size + "\" color=\"#"
 				+ hexColor + "\">" + content + "</font>";
 	}
 
+	/**
+	 * convert Color to hex value
+	 * @param color
+	 * @return
+	 */
 	private static String convertColorToHex(Color color) {
 		return convertIntToHex(color.getRed(), 2)
 				+ convertIntToHex(color.getGreen(), 2)
 				+ convertIntToHex(color.getBlue(), 2);
 	}
 
+	/**
+	 * convert integer to hex value
+	 * @param i
+	 * @param length
+	 * @return
+	 */
 	private static String convertIntToHex(int i, int length) {
 		if (length == 0)
 			return "";
@@ -3157,6 +3342,45 @@ public class EzTask {
 }
 
 	// End of segment: E:\Java Projects\CS2103T\src\EzTask.java
+
+
+
+
+
+	/**
+	 * origin: E:\Java Projects\CS2103T\src\EzTaskTest.java
+	 */
+
+public class EzTaskTest {
+
+	@Test
+	public void test() {
+		EzTask task = new EzTask();
+		task.setStartTime(new GregorianCalendar());
+
+		// set date 10/11/2014 at 23:23
+		task.setStartTime(2014, 10, 10, 23, 23);
+
+		// change time to 15:15
+		task.setStartTime(15, 15);
+
+		// check for 10/11/2014 at 15:15
+		assertEquals("Check Year: ", 2014,
+				task.getStartTime().get(Calendar.YEAR));
+		assertEquals("Check Month: ", Calendar.NOVEMBER, task.getStartTime()
+				.get(Calendar.MONTH));
+		assertEquals("Check Day: ", 10,
+				task.getStartTime().get(Calendar.DAY_OF_MONTH));
+		assertEquals("Check Hour: ", 15,
+				task.getStartTime().get(Calendar.HOUR_OF_DAY));
+		assertEquals("Check Minute: ", 15,
+				task.getStartTime().get(Calendar.MINUTE));
+
+	}
+
+}
+
+	// End of segment: E:\Java Projects\CS2103T\src\EzTaskTest.java
 
 
 
