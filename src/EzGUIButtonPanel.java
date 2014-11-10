@@ -14,6 +14,11 @@ import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 //@author A0112129U
+
+/**
+ * this class is the button panel of the GUI
+ * 
+ */
 public class EzGUIButtonPanel extends JPanel {
 	public final String ALL = "All";
 	public final String DONE = "Done";
@@ -24,36 +29,40 @@ public class EzGUIButtonPanel extends JPanel {
 	public final String OVERDUE = "Overdue";
 	public final String NO_DATE = "No Date";
 	public final String HELP = "Help";
-	
+
 	private ArrayList<JButton> listOfButtons;
-	private final String[] LIST_OF_BUTTON_NAMES = { ALL, DONE,
-			NOT_DONE, TODAY, TOMORROW, UPCOMING, OVERDUE, NO_DATE,
-			HELP };
+	private final String[] LIST_OF_BUTTON_NAMES = { ALL, DONE, NOT_DONE, TODAY,
+			TOMORROW, UPCOMING, OVERDUE, NO_DATE, HELP };
 	private final int BUTTON_HEIGHT = 40;
 	private final int BUTTON_WIDTH = 160;
 	private final Color BUTTON_TEXT_COLOR = EzConstants.PERSIAN_GREEN_COLOR;
 	public final Color SELECTED_BUTTON_BG_COLOR = EzConstants.WHITE_SMOKE_COLOR;
 	public final Color UNSELECTED_BUTTON_BG_COLOR = EzConstants.IRON_COLOR;
-	
+
 	private JButton selectedButton = null;
-	
+
 	static EzGUIButtonPanel buttonPanel;
-	
-	public static EzGUIButtonPanel getInstance(){
-		if (buttonPanel==null){
+
+	/**
+	 * create or get the instance of this class
+	 * 
+	 * @return
+	 */
+	public static EzGUIButtonPanel getInstance() {
+		if (buttonPanel == null) {
 			buttonPanel = new EzGUIButtonPanel();
 		}
 		return buttonPanel;
 	}
-	
+
 	/**
-	 * Create the panel.
+	 * Create the main panel.
 	 */
 	private EzGUIButtonPanel() {
 		setBackground(EzGUI.BACKGROUND_COLOR);
 		setBorder(null);
 		setFocusable(false);
-		
+
 		listOfButtons = new ArrayList<JButton>();
 		for (int i = 0; i < LIST_OF_BUTTON_NAMES.length; i++) {
 			JButton button = initButton(LIST_OF_BUTTON_NAMES[i]);
@@ -85,7 +94,13 @@ public class EzGUIButtonPanel extends JPanel {
 				Alignment.LEADING).addGroup(sqGroup));
 		setLayout(gl_buttonPanel);
 	}
-	
+
+	/**
+	 * create a button with a name
+	 * 
+	 * @param nameOfButton
+	 * @return a JButton object
+	 */
 	private JButton initButton(String nameOfButton) {
 		assert (nameOfButton != null);
 
@@ -120,9 +135,9 @@ public class EzGUIButtonPanel extends JPanel {
 		button.setFocusable(false);
 		return button;
 	}
-	
+
 	/**
-	 * @param btnAll
+	 * this class will perform the action of the button
 	 */
 	class ButtonAction implements ActionListener {
 		@Override
@@ -131,7 +146,12 @@ public class EzGUIButtonPanel extends JPanel {
 			pressButton(button);
 		}
 	}
-	
+
+	/**
+	 * @param name
+	 *            is the name of the button
+	 * @return the button with the @param name
+	 */
 	public JButton getButton(String name) {
 		for (int i = 0; i < listOfButtons.size(); i++) {
 			if (listOfButtons.get(i).getName().equalsIgnoreCase(name)) {
@@ -141,26 +161,41 @@ public class EzGUIButtonPanel extends JPanel {
 		return null;
 	}
 
+	/**
+	 * activate the button by its name
+	 * 
+	 * @param name
+	 */
 	public void pressButton(String name) {
 		pressButton(getButton(name));
 	}
-	
-	public void unhighlightButton(){
+
+	/**
+	 * unhighlight all buttons
+	 */
+	public void unhighlightButton() {
 		if (selectedButton != null) {
 			selectedButton.setBackground(UNSELECTED_BUTTON_BG_COLOR);
 			selectedButton = null;
 		}
 	}
-	
-	public String getCurrentTab(){
-		if (selectedButton!=null){
+
+	/**
+	 * @return the current selected tab
+	 */
+	public String getCurrentTab() {
+		if (selectedButton != null) {
 			return selectedButton.getName();
 		} else {
 			return null;
 		}
 	}
-	
-	public ArrayList<EzTask> getTaskListOfButton(JButton button){
+
+	/**
+	 * @param button
+	 * @return the list of tasks that the button represents
+	 */
+	public ArrayList<EzTask> getTaskListOfButton(JButton button) {
 		EzStorage storage = EzController.getStorage();
 		assert (storage != null);
 
@@ -171,9 +206,11 @@ public class EzGUIButtonPanel extends JPanel {
 		} else if (button.getName().equalsIgnoreCase(NOT_DONE)) {
 			return EzSort.sortByDate(storage.getUndoneTasks());
 		} else if (button.getName().equalsIgnoreCase(TODAY)) {
-			return EzSort.sortByPriority(storage.getTasksByDate(EzGUI.getToday()));
+			return EzSort.sortByPriority(storage.getTasksByDate(EzGUI
+					.getToday()));
 		} else if (button.getName().equalsIgnoreCase(TOMORROW)) {
-			return EzSort.sortByPriority(storage.getTasksByDate(EzGUI.getTomorrow()));
+			return EzSort.sortByPriority(storage.getTasksByDate(EzGUI
+					.getTomorrow()));
 		} else if (button.getName().equalsIgnoreCase(UPCOMING)) {
 			return EzSort.sortByDate(storage.getComingTasks());
 		} else if (button.getName().equalsIgnoreCase(OVERDUE)) {
@@ -183,25 +220,33 @@ public class EzGUIButtonPanel extends JPanel {
 		}
 		return null;
 	}
-	
+
+	/**
+	 * activate the buttons
+	 * 
+	 * @param button
+	 */
 	private void pressButton(JButton button) {
 		paintFocusedButton(button);
 		EzStorage storage = EzController.getStorage();
 		assert (storage != null);
 
 		ArrayList<EzTask> list = getTaskListOfButton(button);
-		
+
 		if (button.getName().equalsIgnoreCase(HELP)) {
 			EzGUI.showHelp();
 		} else {
-			if (list!=null){
+			if (list != null) {
 				EzGUI.showContent(button.getName(), list);
 			}
 		}
 
 		EzGUICommandPanel.getInstance().focusOnField();
 	}
-	
+
+	/**
+	 * highlight the @param button
+	 */
 	private void paintFocusedButton(JButton button) {
 		if (selectedButton != null) {
 			selectedButton.setBackground(UNSELECTED_BUTTON_BG_COLOR);
@@ -209,11 +254,19 @@ public class EzGUIButtonPanel extends JPanel {
 		button.setBackground(SELECTED_BUTTON_BG_COLOR);
 		selectedButton = button;
 	}
-	
-	public void highlightButton(String name){
+
+	/**
+	 * highlight the button by its name
+	 * 
+	 * @param name
+	 */
+	public void highlightButton(String name) {
 		paintFocusedButton(getButton(name));
 	}
-	
+
+	/**
+	 * refresh the number on the button
+	 */
 	public void refreshButton() {
 		if (listOfButtons != null) {
 			EzStorage storage = EzController.getStorage();
@@ -229,7 +282,8 @@ public class EzGUIButtonPanel extends JPanel {
 				} else if (button.getName().equalsIgnoreCase(TODAY)) {
 					numTask = storage.getTasksByDate(EzGUI.getToday()).size();
 				} else if (button.getName().equalsIgnoreCase(TOMORROW)) {
-					numTask = storage.getTasksByDate(EzGUI.getTomorrow()).size();
+					numTask = storage.getTasksByDate(EzGUI.getTomorrow())
+							.size();
 				} else if (button.getName().equalsIgnoreCase(UPCOMING)) {
 					numTask = storage.getComingTasks().size();
 				} else if (button.getName().equalsIgnoreCase(OVERDUE)) {
@@ -244,8 +298,11 @@ public class EzGUIButtonPanel extends JPanel {
 			}
 		}
 	}
-	
-	public void pressBelowButton(){
+
+	/**
+	 * press the below button
+	 */
+	public void pressBelowButton() {
 		if (selectedButton == null) {
 			pressButton(ALL);
 		} else if (selectedButton == getButton(ALL)) {
@@ -268,8 +325,11 @@ public class EzGUIButtonPanel extends JPanel {
 			pressButton(ALL);
 		}
 	}
-	
-	public void pressAboveButton(){
+
+	/**
+	 * press the above button
+	 */
+	public void pressAboveButton() {
 		if (selectedButton == null) {
 			pressButton(getButton(HELP));
 		} else if (selectedButton == getButton(ALL)) {

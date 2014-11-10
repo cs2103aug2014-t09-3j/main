@@ -15,10 +15,17 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+
 import java.awt.BorderLayout;
 
 //@author A0112129U
+
+/**
+ * this class is the command panel of the GUI
+ */
 public class EzGUICommandPanel extends JPanel {
+	private static final String COMMAND_LABEL = "  Enter Command: ";
+
 	private static final int WINDOW_SIZE_INCREMENT = 10;
 
 	private static final int COMMAND_FIELD_HEIGHT = 10;
@@ -37,25 +44,34 @@ public class EzGUICommandPanel extends JPanel {
 	private int historyPos = 0;
 	private boolean showingFeedback = false;
 	private static final String[] DOUBLE_QUOTE_KEYWORDS = { "add", "at",
-		"title", "venue", "have" };
-	
-	public String getText(){
+			"title", "venue", "have" };
+
+	/**
+	 * @return the text of the command field
+	 */
+	public String getText() {
 		return commandField.getText();
 	}
-	
-	public void focusOnField(){
+
+	/**
+	 * focus on the command field
+	 */
+	public void focusOnField() {
 		commandField.requestFocus();
 	}
-	
-	public static EzGUICommandPanel getInstance(){
-		if (commandPanel==null){
+
+	/**
+	 * @return the instance of this class
+	 */
+	public static EzGUICommandPanel getInstance() {
+		if (commandPanel == null) {
 			commandPanel = new EzGUICommandPanel();
 		}
 		return commandPanel;
 	}
-	
+
 	/**
-	 * Create the panel.
+	 * Create the main panel.
 	 */
 	private EzGUICommandPanel() {
 		setLayout(new BorderLayout(0, 0));
@@ -65,69 +81,77 @@ public class EzGUICommandPanel extends JPanel {
 		createCommandLabel();
 		createCommandInputField();
 	}
-	
+
 	/**
-	 * @param commandPanel
+	 * create a panel for the label next to the command field
 	 */
 	private void createCommandLabel() {
 		JTextPane commandLabel = new JTextPane();
 		commandLabel.setBounds(0, 0, COMMAND_LABEL_WIDTH, COMMAND_LABEL_HEIGHT);
 		commandLabel.setEditable(false);
 		commandLabel.setForeground(Color.WHITE);
-		commandLabel.setFont(new Font(EzGUI.BUTTON_FONT, Font.BOLD, COMMAND_LABEL_FONT_SIZE));
+		commandLabel.setFont(new Font(EzGUI.BUTTON_FONT, Font.BOLD,
+				COMMAND_LABEL_FONT_SIZE));
 		commandLabel.setBackground(EzGUI.BACKGROUND_COLOR);
-		commandLabel.setText("  Enter Command: ");
+		commandLabel.setText(COMMAND_LABEL);
 		commandLabel.setFocusable(false);
-		
+
 		JPanel commandLabelPanel = new JPanel();
 		commandLabelPanel.setBackground(EzGUI.BACKGROUND_COLOR);
 		commandLabelPanel.setFocusable(false);
-		commandLabelPanel.setPreferredSize(new Dimension(COMMAND_LABEL_PANEL_WIDTH, COMMAND_LABEL_PANEL_HEIGHT));
+		commandLabelPanel.setPreferredSize(new Dimension(
+				COMMAND_LABEL_PANEL_WIDTH, COMMAND_LABEL_PANEL_HEIGHT));
 		commandLabelPanel.setLayout(null);
 		commandLabelPanel.add(commandLabel);
-		
+
 		add(commandLabelPanel, BorderLayout.WEST);
 
 	}
-	
+
 	/**
-	 * @param commandPanel
+	 * create the panel for the command field
 	 */
 	private void createCommandInputField() {
-		
+
 		commandField = new JTextPane();
 		commandField.setBackground(EzConstants.SHOW_AREA_BACKGROUND);
 		commandField.grabFocus();
 		commandField.addKeyListener(new EzKeyAdapter());
-		
+
 		JPanel newPanel = new JPanel();
 		newPanel.add(commandField);
-		newPanel.setPreferredSize(new Dimension(COMMAND_FIELD_LENGTH, COMMAND_FIELD_HEIGHT));
+		newPanel.setPreferredSize(new Dimension(COMMAND_FIELD_LENGTH,
+				COMMAND_FIELD_HEIGHT));
 		newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.X_AXIS));
-		
+
 		JScrollPane scroll = new JScrollPane(newPanel);
-		
+
 		scroll.setFocusable(false);
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll.setLayout(new ScrollPaneLayout());
 		scroll.setBorder(null);
-		
+
 		JPanel commandFieldpanel = new JPanel();
-		commandFieldpanel.setLayout(new BoxLayout(commandFieldpanel, BoxLayout.X_AXIS));
+		commandFieldpanel.setLayout(new BoxLayout(commandFieldpanel,
+				BoxLayout.X_AXIS));
 		commandFieldpanel.add(scroll);
 		add(commandFieldpanel);
-		
+
 		loadCommandAttributeSet();
 	}
-	
-	class EzKeyAdapter extends KeyAdapter{
-		
+
+	/**
+	 * this class will process according to the keyboard stroke
+	 * 
+	 */
+	class EzKeyAdapter extends KeyAdapter {
+
 		@Override
 		public void keyPressed(KeyEvent arg0) {
 			clearFeedback();
 			if (arg0.isControlDown()) {
-				if ((!arg0.isAltDown() && (!arg0.isShiftDown()))) {	// only Ctrl
+				if ((!arg0.isAltDown() && (!arg0.isShiftDown()))) { // only Ctrl
 					switch (arg0.getKeyChar()) {
 					case 22:
 					case 25:
@@ -181,25 +205,27 @@ public class EzGUICommandPanel extends JPanel {
 						EzGUIButtonPanel.getInstance().pressButton("Help");
 						break;
 					}
-				} else if ((!arg0.isAltDown() && (arg0.isShiftDown()))) {	// Ctrl + Shift
+				} else if ((!arg0.isAltDown() && (arg0.isShiftDown()))) { // Ctrl
+																			// +
+																			// Shift
 					int x = EzGUI.getMainFrameLocation().x;
 					int y = EzGUI.getMainFrameLocation().y;
 
 					switch (arg0.getKeyCode()) { // resize the window
 					case KeyEvent.VK_UP:
-						EzGUI.setMainFrameLocation(x, y-10);
+						EzGUI.setMainFrameLocation(x, y - 10);
 						arg0.consume();
 						break;
 					case KeyEvent.VK_DOWN:
-						EzGUI.setMainFrameLocation(x, y+10);
+						EzGUI.setMainFrameLocation(x, y + 10);
 						arg0.consume();
 						break;
 					case KeyEvent.VK_LEFT:
-						EzGUI.setMainFrameLocation(x-10, y);
+						EzGUI.setMainFrameLocation(x - 10, y);
 						arg0.consume();
 						break;
 					case KeyEvent.VK_RIGHT:
-						EzGUI.setMainFrameLocation(x+10, y);
+						EzGUI.setMainFrameLocation(x + 10, y);
 						arg0.consume();
 						break;
 					}
@@ -254,7 +280,7 @@ public class EzGUICommandPanel extends JPanel {
 				if ((arg0.isAltDown() && (arg0.isShiftDown()))) {
 					switch (arg0.getKeyCode()) { // resize the window
 					case KeyEvent.VK_UP:
-						EzGUI.increaseWindowSize(0,-WINDOW_SIZE_INCREMENT);
+						EzGUI.increaseWindowSize(0, -WINDOW_SIZE_INCREMENT);
 						arg0.consume();
 						break;
 					case KeyEvent.VK_DOWN:
@@ -271,7 +297,7 @@ public class EzGUICommandPanel extends JPanel {
 						break;
 					}
 				}
-			} 
+			}
 		}
 
 		@Override
@@ -319,7 +345,10 @@ public class EzGUICommandPanel extends JPanel {
 			}
 		}
 	}
-	
+
+	/**
+	 * clear the feedback on the command field
+	 */
 	private void clearFeedback() {
 		if (showingFeedback) {
 			showingFeedback = false;
@@ -327,14 +356,23 @@ public class EzGUICommandPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * redo the action
+	 */
 	private void redo() {
 		EzController.execute("redo");
 	}
 
+	/**
+	 * undo the action
+	 */
 	private void undo() {
 		EzController.execute("undo");
 	}
 
+	/**
+	 * do the action paste into the command field
+	 */
 	private void pasteText() {
 		int caretPos;
 		commandField.paste();
@@ -344,6 +382,11 @@ public class EzGUICommandPanel extends JPanel {
 		commandField.setCaretPosition(caretPos);
 	}
 
+	/**
+	 * process when user type a space into the command field
+	 * 
+	 * @param caretPos
+	 */
 	private void typeSpace(int caretPos) {
 		String contentInputField;
 		contentInputField = commandField.getText();
@@ -400,22 +443,23 @@ public class EzGUICommandPanel extends JPanel {
 					+ " \""
 					+ contentInputField.substring(caretPos,
 							contentInputField.length());
-			addColorForCommandField(result,
-					commandField.getStyledDocument());
+			addColorForCommandField(result, commandField.getStyledDocument());
 			commandField.setCaretPosition(caretPos + 2);
 		} else {
 			result = result
 					+ " "
 					+ contentInputField.substring(caretPos,
 							contentInputField.length());
-			addColorForCommandField(result,
-					commandField.getStyledDocument());
+			addColorForCommandField(result, commandField.getStyledDocument());
 			commandField.setCaretPosition(caretPos + 1);
 		}
 
 		EzGUISuggestPanel.getInstance().loadSuggestion(contentInputField);
 	}
 
+	/**
+	 * check if the word is the keyword that needs a quote after it or not
+	 */
 	private boolean isDoubleQuoteKeyword(String word) {
 		for (int i = 0; i < DOUBLE_QUOTE_KEYWORDS.length; i++) {
 			if (word.equalsIgnoreCase(DOUBLE_QUOTE_KEYWORDS[i])) {
@@ -425,11 +469,13 @@ public class EzGUICommandPanel extends JPanel {
 		return false;
 	}
 
+	/**
+	 * delete the selection when pressing backspace
+	 */
 	private void backSpaceSelection() {
 		String contentInputField;
 		int startPos = commandField.getSelectionStart();
-		if (commandField.getSelectionStart() == commandField
-				.getSelectionEnd()) {
+		if (commandField.getSelectionStart() == commandField.getSelectionEnd()) {
 			if (commandField.getSelectionStart() > 0) {
 				if ((commandField.getText().charAt(
 						commandField.getSelectionStart() - 1) == '\"')
@@ -437,20 +483,19 @@ public class EzGUICommandPanel extends JPanel {
 								.getText().length())
 						&& (commandField.getText().charAt(
 								commandField.getSelectionStart()) == '\"')) {
-					contentInputField = deleteString(
-							commandField.getText(),
+					contentInputField = deleteString(commandField.getText(),
 							commandField.getSelectionStart() - 1,
 							commandField.getSelectionStart() + 1);
 				} else {
-					contentInputField = deleteString(
-							commandField.getText(),
+					contentInputField = deleteString(commandField.getText(),
 							commandField.getSelectionStart() - 1,
 							commandField.getSelectionStart());
 				}
 				addColorForCommandField(contentInputField,
 						commandField.getStyledDocument());
 				commandField.setCaretPosition(startPos - 1);
-				EzGUISuggestPanel.getInstance().loadSuggestion(contentInputField);
+				EzGUISuggestPanel.getInstance().loadSuggestion(
+						contentInputField);
 			}
 		} else {
 			contentInputField = deleteString(commandField.getText(),
@@ -463,7 +508,10 @@ public class EzGUICommandPanel extends JPanel {
 		}
 
 	}
-	
+
+	/**
+	 * process when user press ENTER
+	 */
 	private void enterCommand() {
 		String fb = EzController.execute(commandField.getText());
 		commandHistory.add(commandField.getText());
@@ -478,6 +526,9 @@ public class EzGUICommandPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * go to the next command in the command history
+	 */
 	private void goToNextCommand() {
 		if (historyPos < commandHistory.size()) {
 			historyPos++;
@@ -485,12 +536,14 @@ public class EzGUICommandPanel extends JPanel {
 				addColorForCommandField(commandHistory.get(historyPos),
 						commandField.getStyledDocument());
 			} else {
-				addColorForCommandField("",
-						commandField.getStyledDocument());
+				addColorForCommandField("", commandField.getStyledDocument());
 			}
 		}
 	}
 
+	/**
+	 * go to the previous command in the command history
+	 */
 	private void goToPreviousCommand() {
 		if (historyPos > 0) {
 			historyPos--;
@@ -498,7 +551,10 @@ public class EzGUICommandPanel extends JPanel {
 					commandField.getStyledDocument());
 		}
 	}
-	
+
+	/**
+	 * delete the selection when DEL is pressed
+	 */
 	public void deleteSelection() {
 		String contentInputField;
 		int endPos = commandField.getSelectionStart();
@@ -511,7 +567,8 @@ public class EzGUICommandPanel extends JPanel {
 				addColorForCommandField(contentInputField,
 						commandField.getStyledDocument());
 				commandField.setCaretPosition(endPos);
-				EzGUISuggestPanel.getInstance().loadSuggestion(contentInputField);
+				EzGUISuggestPanel.getInstance().loadSuggestion(
+						contentInputField);
 			}
 		} else {
 			int endCaretPos = commandField.getSelectionEnd();
@@ -527,20 +584,40 @@ public class EzGUICommandPanel extends JPanel {
 			EzGUISuggestPanel.getInstance().loadSuggestion(contentInputField);
 		}
 	}
-	
-	public void setSelection(int start, int end){
+
+	/**
+	 * set the selection in the command field
+	 * 
+	 * @param start
+	 * @param end
+	 */
+	public void setSelection(int start, int end) {
 		commandField.setSelectionStart(start);
-		commandField.setSelectionEnd(end);	
+		commandField.setSelectionEnd(end);
 	}
-	
-	public int getCaretPosition(){
+
+	/**
+	 * @return the position of the caret
+	 */
+	public int getCaretPosition() {
 		return commandField.getCaretPosition();
 	}
-	
-	public int getSelectionStart(){
+
+	/**
+	 * get the start position of the selection in the command field
+	 * 
+	 * @return
+	 */
+	public int getSelectionStart() {
 		return commandField.getSelectionStart();
 	}
-	
+
+	/**
+	 * process when user type normal character
+	 * 
+	 * @param typedText
+	 * @param caretPos
+	 */
 	public void typeNormal(String typedText, int caretPos) {
 		String contentInputField;
 		contentInputField = commandField.getText().substring(0, caretPos)
@@ -553,12 +630,22 @@ public class EzGUICommandPanel extends JPanel {
 
 		EzGUISuggestPanel.getInstance().loadSuggestion(contentInputField);
 	}
-	
+
+	/**
+	 * delete a part of a string
+	 * 
+	 * @param text
+	 * @param startPos
+	 * @param endPos
+	 * @return the result string
+	 */
 	private String deleteString(String text, int startPos, int endPos) {
 		return text.substring(0, startPos) + text.substring(endPos);
 	}
 
 	/**
+	 * add color to the command field
+	 * 
 	 * @param contentInputField
 	 * @param doc
 	 */
@@ -627,6 +714,12 @@ public class EzGUICommandPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * add color for the feedback
+	 * 
+	 * @param feedback
+	 * @param doc
+	 */
 	private void addColorForFeedBack(String feedback, StyledDocument doc) {
 		try {
 			doc.remove(0, doc.getLength());
@@ -636,6 +729,9 @@ public class EzGUICommandPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * load the text attributes used in the command field
+	 */
 	private void loadCommandAttributeSet() {
 		commandAttributeSet[0] = new SimpleAttributeSet();
 		StyleConstants

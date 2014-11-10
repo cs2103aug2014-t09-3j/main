@@ -4,10 +4,15 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 //@author A0112129U
+
+/**
+ * this class is the main panel of the GUI, containing other components
+ * 
+ */
 public class EzGUIMainPanel extends JPanel {
-	
+
 	/**
-	 * Create the panel.
+	 * Create the main panel.
 	 */
 	public EzGUIMainPanel() {
 		setFocusable(false);

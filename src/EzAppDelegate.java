@@ -1,6 +1,12 @@
 import java.awt.EventQueue;
 
 //@author A0112129U
+
+/**
+ * this class contains the main function. It will call the initialization of the
+ * GUI
+ * 
+ */
 public class EzAppDelegate {
 
 	/**
@@ -9,8 +15,11 @@ public class EzAppDelegate {
 	public static void main(String[] args) {
 		initiateGUI();
 	}
-	
-	public static void initiateGUI(){
+
+	/**
+	 * initiate the GUI
+	 */
+	public static void initiateGUI() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
