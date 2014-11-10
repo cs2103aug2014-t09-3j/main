@@ -3,230 +3,327 @@
 
 
 	/**
-	 * origin: C:\Users\uSER\Documents\CS2103 Project\src\EzController.java
+	 * origin: C:\Users\Galaxy\Documents\CS2103T\src\EzController.java
 	 */
 
 public class EzController {
 
 	private static final int MAX_SIZE = 20;
+
 	private static EzStorage storage = new EzStorage();
+	private static EzAction deleteAction = null;
 	private static ArrayList<EzAction> history = new ArrayList<EzAction>();
+	private static String prevTab;
 	private static int pos = -1;
 	private static boolean confirmation = false;
-	private static EzAction deleteAction = null;
 	private static boolean testing = false;
-	private static String prevTab;
 
-
+	/**
+	 * This method takes in raw user input and pass it to the parser to generate an userAction object
+	 * a feedback is returned after execution
+	 * @param userCommand 
+	 * @return feedback of the operation
+	 */
 	public static String execute(String userCommand){
 		EzAction userAction = EzParser.extractInfo(userCommand, storage);
 		determineUserAction(userAction);
 		return userAction.getFeedback();
 	}
 
+	/**
+	 * This method determine the intention of the user through userAction object
+	 * @param userAction
+	 */
 	public static void determineUserAction(EzAction userAction) {
 		switch(userAction.getAction()) {
 		case ADD:
-			if (!confirmation){
-				EzTask task = userAction.getResults().get(0);
-				checkPos();
-				addHistory(userAction);
-				storage.addTaskWithNewId(task);
-				if(!testing) {
-					try {
-						EzDataManage.saveToFile(storage);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-					EzGUI.highlightButton("All");
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), task);*/
-					String currTab = EzGUI.getCurrentTab();
-					if(currTab != null && !currTab.equalsIgnoreCase("help")) {
-						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
-						EzGUI.showContent(currTab, list, EzGUI.getPage());
-					}
-					else {
-						EzGUI.refreshButton();
-					}
-				}
-			}
+			addTask(userAction);
 			break;
 
 		case UPDATE:
-			if (!confirmation){
-				storage.updateTask(userAction.getResults());
-				checkPos();
-				addHistory(userAction);
-				if(!testing) {
-					try {
-						EzDataManage.saveToFile(storage);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-					EzGUI.highlightButton("All");
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), userAction.getResults().get(0));*/
-					String currTab = EzGUI.getCurrentTab();
-					if(currTab != null && !currTab.equalsIgnoreCase("help")) {
-						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
-						EzGUI.showContent(currTab, list, EzGUI.getPage());
-					}
-					else {
-						EzGUI.refreshButton();
-					}
-				}
-			}
+			updateTask(userAction);
 			break;
 
 		case DELETE:
-			if (!confirmation){
-				deleteAction = userAction;
-				ArrayList<EzTask> toBeDeleted = userAction.getTargets();
-				confirmation = true;
-				assert(toBeDeleted.size() >= 0);
-				if(!testing) {
-					prevTab = EzGUI.getCurrentTab();
-					EzGUI.unhighlightButton();
-					if(toBeDeleted.size() == 1) {
-						EzGUI.showContent("Are you sure to delete this task? (Y/N)", toBeDeleted);
-					}
-					else if(toBeDeleted.size() > 1) {
-						EzGUI.showContent("Are you sure to delete these tasks? (Y/N)", toBeDeleted);
-					}
-				}
-			}
+			deleteTask(userAction);
 			break;
 
 		case Y:
-			if (confirmation){
-				checkPos();
-				assert(deleteAction != null);
-				storage.deleteTask(deleteAction.getTargets());
-				addHistory(deleteAction);
-				if(!testing) {
-					try {
-						EzDataManage.saveToFile(storage);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-					EzGUI.highlightButton("All");
-					EzGUI.showContent("Tasks Deleted", EzSort.sortById(updatedList));*/
-					if(prevTab != null && !prevTab.equalsIgnoreCase("help")) {
-						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(prevTab);
-						EzGUI.showContent(prevTab, list, EzGUI.getPage());
-						EzGUI.highlightButton(prevTab);
-					}
-					else {
-						EzGUI.refreshButton();
-					}
-				}
-				userAction.setFeedback("Deleted successfully");
-				deleteAction = null;
-				confirmation = false;
-			}
+			confirmDelete(userAction);
 			break;
 
 		case N:
-			if (confirmation){
-				if(!testing) {
-					/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-					EzGUI.highlightButton("All");
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList));*/
-					if(prevTab != null && !prevTab.equalsIgnoreCase("help")) {
-						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(prevTab);
-						EzGUI.showContent(prevTab, list, EzGUI.getPage());
-						EzGUI.highlightButton(prevTab);
-					}
-					else {
-						EzGUI.refreshButton();
-					}
-				}
-				userAction.setFeedback("Action cancelled");
-				deleteAction = null;
-				confirmation = false;
-			}
+			abortDelete(userAction);
 			break;
 
 		case DONE:
-			if (!confirmation){
-				storage.updateTask(userAction.getResults());
-				checkPos();
-				addHistory(userAction);
-				if(!testing) {
-					try {
-						EzDataManage.saveToFile(storage);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-					EzGUI.highlightButton("All");
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), userAction.getResults().get(0));*/
-					String currTab = EzGUI.getCurrentTab();
-					if(currTab != null && !currTab.equalsIgnoreCase("help")) {
-						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
-						EzGUI.showContent(currTab, list, EzGUI.getPage());
-					}
-					else {
-						EzGUI.refreshButton();
-					}
-				}
-			}
+			updateTask(userAction);
 			break;
 
 		case UNDONE:
-			if (!confirmation){
-				storage.updateTask(userAction.getResults());
-				checkPos();
-				addHistory(userAction);
-				if(!testing) {
-					try {
-						EzDataManage.saveToFile(storage);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-					EzGUI.highlightButton("All");
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), userAction.getResults().get(0));*/
-					String currTab = EzGUI.getCurrentTab();
-					if(currTab != null && !currTab.equalsIgnoreCase("help")) {
-						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
-						EzGUI.showContent(currTab, list, EzGUI.getPage());
-					}
-					else {
-						EzGUI.refreshButton();
-					}
-				}
-			}
+			updateTask(userAction);
 			break;
 
 		case SORT:
-			if(!confirmation) {
-				sortTask(userAction);
-			}
+			sortTask(userAction, EzGUI.getCurrentTab());
 			break;
 
 		case REMOVE:
-			if(!confirmation) {
-				storage.updateTask(userAction.getResults());
-				checkPos();
-				addHistory(userAction);
+			updateTask(userAction);
+			break;
+
+		case PAGE:
+			navigatePage(userAction);
+			break;
+
+		case UNDO:
+			undoAction(userAction);
+			break;
+
+		case REDO:
+			redoAction(userAction);
+			break;
+
+		case SHOW:
+			showTask(userAction);
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	
+	/**
+	 * This method adds a task to the list of task in storage
+	 * @param userAction
+	 */
+	private static void addTask(EzAction userAction) {
+		if (!confirmation){
+			EzTask task = userAction.getResults().get(0);
+			checkPos();
+			addHistory(userAction);
+			String currTab = EzGUI.getCurrentTab();
+			ArrayList<EzTask> listBeforeAdd = EzGUI.getTaskListOfTheTab(currTab);
+			int sizeOfList;
+			if(listBeforeAdd == null) {
+				sizeOfList = 0;
+			}
+			else {
+				sizeOfList = listBeforeAdd.size();
+			}
+			storage.addTaskWithNewId(task);
+			if(!testing) {
+				try {
+					EzDataManage.saveToFile(storage);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				if(currTab != null && !currTab.equalsIgnoreCase("help")) {
+					int newSizeOfList = EzGUI.getTaskListOfTheTab(currTab).size();
+					if(sizeOfList != newSizeOfList) {
+						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
+						EzGUI.showContent(currTab, list, task);
+					}
+					else {
+						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
+						EzGUI.showContent(currTab, list, EzGUI.getPage());
+					}
+				}
+				else {
+					EzGUI.refreshButton();
+				}
+			}
+		}
+	}
+
+	/**
+	 * This method update a task or a list of tasks to their new attributes
+	 * @param userAction
+	 */
+	private static void updateTask(EzAction userAction) {
+		if (!confirmation){
+			storage.updateTask(userAction.getResults());
+			checkPos();
+			addHistory(userAction);
+			if(!testing) {
+				try {
+					EzDataManage.saveToFile(storage);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				String currTab = EzGUI.getCurrentTab();
+				if(currTab != null && !currTab.equalsIgnoreCase("help")) {
+					ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
+					EzGUI.showContent(currTab, list, EzGUI.getPage());
+				}
+				else {
+					EzGUI.refreshButton();
+				}
+			}
+		}
+	}
+
+	/**
+	 * This method prepares the deletion and wait for user's confirmation
+	 * @param userAction
+	 */
+	private static void deleteTask(EzAction userAction) {
+		if (!confirmation){
+			deleteAction = userAction;
+			ArrayList<EzTask> toBeDeleted = userAction.getTargets();
+			confirmation = true;
+			assert(toBeDeleted.size() >= 0);
+			if(!testing) {
+				prevTab = EzGUI.getCurrentTab();
+				EzGUI.unhighlightButton();
+				if(toBeDeleted.size() == 1) {
+					EzGUI.showContent("Are you sure to delete this task? (Y/N)", toBeDeleted);
+				}
+				else if(toBeDeleted.size() > 1) {
+					EzGUI.showContent("Are you sure to delete these tasks? (Y/N)", toBeDeleted);
+				}
+			}
+		}
+	}
+
+	/**
+	 * This method proceed the deletion if the user enter a Y
+	 * @param userAction
+	 */
+	private static void confirmDelete(EzAction userAction) {
+		if (confirmation){
+			checkPos();
+			assert(deleteAction != null);
+			storage.deleteTask(deleteAction.getTargets());
+			addHistory(deleteAction);
+			if(!testing) {
+				try {
+					EzDataManage.saveToFile(storage);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				if(prevTab != null && !prevTab.equalsIgnoreCase("help")) {
+					ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(prevTab);
+					EzGUI.showContent(prevTab, list, EzGUI.getPage());
+					EzGUI.highlightButton(prevTab);
+				}
+				else {
+					EzGUI.refreshButton();
+				}
+			}
+			userAction.setFeedback("Deleted successfully");
+			deleteAction = null;
+			confirmation = false;
+		}
+	}
+
+	/** 
+	 * This method abort the deletion if the user enter a N
+	 * @param userAction
+	 */
+	private static void abortDelete(EzAction userAction) {
+		if (confirmation){
+			if(!testing) {
+				if(prevTab != null && !prevTab.equalsIgnoreCase("help")) {
+					ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(prevTab);
+					EzGUI.showContent(prevTab, list, EzGUI.getPage());
+					EzGUI.highlightButton(prevTab);
+				}
+				else {
+					EzGUI.refreshButton();
+				}
+			}
+			userAction.setFeedback("Action cancelled");
+			deleteAction = null;
+			confirmation = false;
+		}
+	}
+
+	/**
+	 * This method calls the corresponding sorting method according to user's input
+	 * @param userAction
+	 * @param currTab
+	 */
+	private static void sortTask(EzAction userAction, String currTab) {
+		if(!confirmation) {
+			switch(userAction.getTypeSort()) {
+			case ID:
+				EzGUI.showContent(currTab, EzSort.sortById(EzGUI.getTasksOnScreen()));
+				break;
+
+			case TITLE:
+				EzGUI.showContent(currTab, EzSort.sortByTitle(EzGUI.getTasksOnScreen()));
+				break;
+
+			case VENUE:
+				EzGUI.showContent(currTab, EzSort.sortByVenue(EzGUI.getTasksOnScreen()));
+				break;
+
+			case DATE:
+				EzGUI.showContent(currTab, EzSort.sortByDate(EzGUI.getTasksOnScreen()));
+				break;
+
+			case PRIORITY:
+				EzGUI.showContent(currTab, EzSort.sortByPriority(EzGUI.getTasksOnScreen()));
+				break;
+
+			case DONE:
+				EzGUI.showContent(currTab, EzSort.sortByDone(EzGUI.getTasksOnScreen()));
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+
+	/**
+	 * This method allows navigation between multiple pages
+	 * @param userAction
+	 */
+	private static void navigatePage(EzAction userAction) {
+		if (!confirmation){
+			setPageFeedback(userAction);
+			EzGUI.showPage(userAction.getPageNumber());
+		}
+		else if(confirmation && deleteAction != null) {
+			setPageFeedback(userAction);
+			EzGUI.showPage(userAction.getPageNumber());
+			return;
+		}
+	}
+
+	private static void setPageFeedback(EzAction userAction) {
+		if(EzGUI.getMaxPage() < userAction.getPageNumber()) {
+			userAction.setFeedback("Page " + EzGUI.getMaxPage());
+		}
+		else if(userAction.getPageNumber() <= 0) {
+			userAction.setFeedback("Page " + "1");
+		}
+		else {
+			userAction.setFeedback("Page " + userAction.getPageNumber());
+		}
+	}
+	
+	/**
+	 * This method checks the validity of undo action before calling the actual method
+	 * @param userAction
+	 */
+	private static void undoAction(EzAction userAction) {
+		if (!confirmation){
+			if(pos <= -1) {
+				userAction.setFeedback("Nothing to undo!");
+				return;
+			}
+			else {
+				undoTask();
 				if(!testing) {
 					try {
 						EzDataManage.saveToFile(storage);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-					EzGUI.highlightButton("All");
-					EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), userAction.getResults().get(0));*/
 					String currTab = EzGUI.getCurrentTab();
 					if(currTab != null && !currTab.equalsIgnoreCase("help")) {
 						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
@@ -237,156 +334,55 @@ public class EzController {
 					}
 				}
 			}
-			break;
+		}
+	}
 
-		case PAGE:
-			if (!confirmation){
-				EzGUI.showPage(userAction.getPageNumber());
+	/**
+	 * This method checks the validity of redo action before calling the actual method
+	 * @param userAction
+	 */
+	private static void redoAction(EzAction userAction) {
+		if (!confirmation){
+			if(pos >= history.size()-1) {
+				userAction.setFeedback("Nothing to redo!");
+				return;
 			}
-			else if(confirmation && deleteAction != null) {
-				EzGUI.showPage(userAction.getPageNumber());
-				break;
-			}
-			break;
-
-		case UNDO:
-			if (!confirmation){
-				if(pos <= -1) {
-					return;
-				}
-				else {
-					undoTask();
-					if(!testing) {
-						try {
-							EzDataManage.saveToFile(storage);
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-						EzGUI.highlightButton("All");
-						EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), EzGUI.getPage());*/
-						String currTab = EzGUI.getCurrentTab();
-						if(currTab != null && !currTab.equalsIgnoreCase("help")) {
-							ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
-							EzGUI.showContent(currTab, list, EzGUI.getPage());
-						}
-						else {
-							EzGUI.refreshButton();
-						}
+			else {
+				redoTask();
+				if(!testing) {
+					try {
+						EzDataManage.saveToFile(storage);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					String currTab = EzGUI.getCurrentTab();
+					if(currTab != null && !currTab.equalsIgnoreCase("help")) {
+						ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
+						EzGUI.showContent(currTab, list, EzGUI.getPage());
+					}
+					else {
+						EzGUI.refreshButton();
 					}
 				}
 			}
-			break;
-
-		case REDO:
-			if (!confirmation){
-				if(pos >= history.size()-1) {
-					return;
-				}
-				else {
-					redoTask();
-					if(!testing) {
-						try {
-							EzDataManage.saveToFile(storage);
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						/*ArrayList<EzTask> updatedList = storage.getListOfAllTasks();
-						EzGUI.highlightButton("All");
-						EzGUI.showContent("All Tasks", EzSort.sortById(updatedList), EzGUI.getPage());*/
-						String currTab = EzGUI.getCurrentTab();
-						if(currTab != null && !currTab.equalsIgnoreCase("help")) {
-							ArrayList<EzTask> list = EzGUI.getTaskListOfTheTab(currTab);
-							EzGUI.showContent(currTab, list, EzGUI.getPage());
-						}
-						else {
-							EzGUI.refreshButton();
-						}
-					}
-				}
-			}
-			break;
-
-		case SHOW:
-			if (!confirmation){
-				ArrayList<EzTask> toBeShown = userAction.getTargets();
-				EzGUI.highlightButton("All");
-				EzGUI.showContent("Result", toBeShown);
-			}
-			break;
-
-		default:
-			break;
 		}
 	}
 
-	private static void sortTask(EzAction userAction) {
-		// TODO Auto-generated method stub
-		switch(userAction.getTypeSort()) {
-		case ID:
-			EzGUI.showContent("Tasks sorted by ID", EzSort.sortById(EzGUI.getTasksOnScreen()));
-			break;
-
-		case TITLE:
-			EzGUI.showContent("Tasks sorted in Alphabethical order", EzSort.sortByTitle(EzGUI.getTasksOnScreen()));
-			break;
-
-		case VENUE:
-			EzGUI.showContent("Tasks sorted by venue", EzSort.sortByVenue(EzGUI.getTasksOnScreen()));
-			break;
-
-		case DATE:
-			EzGUI.showContent("Tasks sorted by date", EzSort.sortByDate(EzGUI.getTasksOnScreen()));
-			break;
-
-		case PRIORITY:
-			EzGUI.showContent("Tasks sorted by priority", EzSort.sortByPriority(EzGUI.getTasksOnScreen()));
-			break;
-
-		case DONE:
-			EzGUI.showContent("Tasks sorted by status", EzSort.sortByDone(EzGUI.getTasksOnScreen()));
-			break;
-
-		default:
-			break;
+	/**
+	 * This method calls the GUI to display the list of tasks
+	 * @param userAction
+	 */
+	private static void showTask(EzAction userAction) {
+		if (!confirmation){
+			ArrayList<EzTask> toBeShown = userAction.getTargets();
+			EzGUI.highlightButton("All");
+			EzGUI.showContent("Result", toBeShown);
 		}
 	}
 
-	private static void redoTask() {
-		switch(history.get(++pos).getAction()) {
-		case ADD:
-			EzTask reTask = history.get(pos).getResults().get(0);
-			storage.addTask(reTask);
-			break;
-
-		case DELETE:
-			ArrayList<EzTask> delete = history.get(pos).getTargets();
-			storage.deleteTask(delete);
-			break;
-
-		case UPDATE:
-			storage.updateTask(history.get(pos).getResults());
-			break;
-
-		case DONE:
-			storage.updateTask(history.get(pos).getResults());
-			break;
-
-		case UNDONE:
-			storage.updateTask(history.get(pos).getResults());
-			break;
-
-		case REMOVE:
-			storage.updateTask(history.get(pos).getResults());
-			break;
-
-		default:
-			break;
-		}
-	}
-
+	/*
+	 * This method calls the corresponding method to remove the previous action of the user
+	 */
 	private static void undoTask() {
 		switch(history.get(pos).getAction()) {
 		case ADD:
@@ -421,6 +417,46 @@ public class EzController {
 		}
 	}
 
+	/*
+	 * This method calls the corresponding method to perform the previous undo'ed action 
+	 */
+	private static void redoTask() {
+		switch(history.get(++pos).getAction()) {
+		case ADD:
+			EzTask reTask = history.get(pos).getResults().get(0);
+			storage.addTask(reTask);
+			break;
+
+		case DELETE:
+			ArrayList<EzTask> delete = history.get(pos).getTargets();
+			storage.deleteTask(delete);
+			break;
+
+		case UPDATE:
+			storage.updateTask(history.get(pos).getResults());
+			break;
+
+		case DONE:
+			storage.updateTask(history.get(pos).getResults());
+			break;
+
+		case UNDONE:
+			storage.updateTask(history.get(pos).getResults());
+			break;
+
+		case REMOVE:
+			storage.updateTask(history.get(pos).getResults());
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	/**
+	 * This method adds user actions to a list of history for undo and redo operations
+	 * @param userAction
+	 */
 	private static void addHistory(EzAction userAction) {
 		if(history.size() == MAX_SIZE) {
 			history.remove(0);
@@ -429,6 +465,9 @@ public class EzController {
 		pos = history.size()-1;
 	}
 
+	/*
+	 * This method ensures the latest version of history by checking the pointer on the history list
+	 */
 	private static void checkPos() {
 		int sizeOfHistory = history.size();
 		if(pos < sizeOfHistory-1) {
@@ -446,6 +485,10 @@ public class EzController {
 		return storage;
 	}
 
+	/**
+	 * This method sets the controller in testing mode to disable feedback function
+	 * @param onTest
+	 */
 	public static void setTesting(boolean onTest) {
 		testing = onTest;
 	}
@@ -454,15 +497,14 @@ public class EzController {
 		return history;
 	}
 }
-
-	// End of segment: C:\Users\uSER\Documents\CS2103 Project\src\EzController.java
+	// End of segment: C:\Users\Galaxy\Documents\CS2103T\src\EzController.java
 
 
 
 
 
 	/**
-	 * origin: C:\Users\uSER\Documents\CS2103 Project\src\EzControllerTest.java
+	 * origin: C:\Users\Galaxy\Documents\CS2103T\src\EzControllerTest.java
 	 */
 
 public class EzControllerTest {
@@ -472,6 +514,7 @@ public class EzControllerTest {
 		ArrayList<EzAction> history;
 		String tempCommand;
 		
+		EzGUI gui = new EzGUI(true);
 		EzController.setTesting(true);
 		// history index 0
 		EzController.execute("Add \"do automated testing\"");
@@ -482,17 +525,21 @@ public class EzControllerTest {
 		// history index 3
 		EzController.execute("Add \"task 2\"");
 		// history index 4
-		EzController.execute("delete from 2 to 3");
+		EzController.execute("delete from 3 to 4");
 		EzController.execute("Y");
 		// history index 5
-		EzController.execute("update 1 set venue \"COM 1\"");
+		EzController.execute("update 2 venue \"COM 1\"");
 		// history index 6
-		EzController.execute("done 1");
+		EzController.execute("done 2");
+		// history index 7
+		EzController.execute("undone 2");
+		// history index 8
+		EzController.execute("remove venue 2");
 		
 		history = EzController.getHistory();
 		
 		// check the size of history
-		assertEquals(7, history.size());
+		assertEquals(9, history.size());
 	
 		// check history index 0
 		assertEquals(TypeOfAction.ADD, history.get(0).getAction());
@@ -533,11 +580,21 @@ public class EzControllerTest {
 		assertTrue(history.get(6).getResults() != null);
 		assertTrue(history.get(6).getTargets() != null);
 		
-		// history index 7 to index 21
-		// a total of 7 tasks added previously
-		// a total of 14 tasks added here
+		// check history index 7
+		assertEquals(TypeOfAction.UNDONE, history.get(7).getAction());
+		assertTrue(history.get(7).getResults() != null);
+		assertTrue(history.get(7).getTargets() != null);
+		
+		// check history index 8
+		assertEquals(TypeOfAction.REMOVE, history.get(8).getAction());
+		assertTrue(history.get(8).getTargets().get(0).getVenue().equals("COM 1"));
+		assertTrue(history.get(8).getResults().get(0).getVenue().equals(""));
+		
+		// history index 9 to index 20
+		// a total of 9  (index 0 to 8) tasks added previously
+		// a total of 12 (index 9 to 20) tasks added here
 		// history exceeds 20, the first action in history will be removed
-		for(int i = 0; i <= 13; i++) { 
+		for(int i = 0; i <= 11; i++) { 
 			tempCommand = "add \"task " + i + "\"";
 			EzController.execute(tempCommand);
 		}
@@ -552,66 +609,121 @@ public class EzControllerTest {
 	}
 }
 
-	// End of segment: C:\Users\uSER\Documents\CS2103 Project\src\EzControllerTest.java
+	// End of segment: C:\Users\Galaxy\Documents\CS2103T\src\EzControllerTest.java
 
 
 
 
 
 	/**
-	 * origin: C:\Users\uSER\Documents\CS2103 Project\src\EzDataManage.java
+	 * origin: C:\Users\Galaxy\Documents\CS2103T\src\EzDataManage.java
 	 */
 
 
 public class EzDataManage {
 	
+	private static final String EXTERNAL_FILENAME = "external.ezt";
+	
+	private static final int TASKS_LIST_BYTES = 4;
+	private static final int TYPE_OF_TASK_BYTES = 1;
+	private static final int NUM_OF_ATTRIBUTES_BYTES = 1;
+	
+	/*
+	 * Time bytes constants
+	 */
+	private static final int YEAR_BYTES = 2;
+	private static final int MONTH_BYTES = 1;
+	private static final int DAY_OF_MONTH_BYTES = 1;
+	private static final int HOUR_OF_DAY_BYTES = 1;
+	private static final int MINUTES_BYTES = 1;
+	
+	/*
+	 * Task attributes bytes constants
+	 */
+	private static final int INDEX_BYTES = 1;
+	private static final int ID_BYTES = 4;
+	private static final int TITLE_BYTES = 2;
+	private static final int VENUE_BYTES = 2;
+	private static final int PRIORITY_BYTES = 1;
+	private static final int STATUS_BYTES = 1;
+	
+	/*
+	 * Number of attributes of tasks with different type of time
+	 */
+	private static final int FLOATING_NUM_OF_ATTRIBUTES = 5;
+	private static final int DEADLINE_NUM_OF_ATTRIBUTES = 6;
+	private static final int TIMED_NUM_OF_ATTRIBUTES = 7;
+	
+	/*
+	 * Type of task indices
+	 */
+	private static final int FLOATING_TYPE_OF_TASK = 0;
+	private static final int DEADLINE_TYPE_OF_TASK = 1;
+	private static final int TIMED_TYPE_OF_TASK = 2;
+	
+	/*
+	 * Indices
+	 */
+	private static final int ID_INDEX = 0;
+	private static final int TITLE_INDEX = 1;
+	private static final int VENUE_INDEX = 2;
+	private static final int START_TIME_INDEX = 3;
+	private static final int END_TIME_INDEX = 4;
+	private static final int PRIORITY_INDEX = 5;
+	private static final int STATUS_INDEX = 6;
+	private static final int DONE_INDEX = 1;
+	private static final int UNDONE_INDEX = 0;
 
+	/**
+	 * This method writes tasks stored in storage into the external file
+	 * @param storage
+	 * @throws IOException
+	 */
 	public static void saveToFile(EzStorage storage) throws IOException {
-		EzBinaryWriter writer = new EzBinaryWriter("external.ezt");
-		
+		EzBinaryWriter writer = new EzBinaryWriter(EXTERNAL_FILENAME);
 		
 		ArrayList<EzTask> tempStorage = EzSort.sortByPriority(storage.getListOfAllTasks());
-		writer.write(tempStorage.size(), 4);
+		writer.write(tempStorage.size(), TASKS_LIST_BYTES);
 		for(int i = 0; i < tempStorage.size(); i++) {
 			int typeOfTask;
 			int numAttribute;
 			EzTask task = tempStorage.get(i);
 			if(task.getStartTime() != tempStorage.get(i).getEndTime()) {
-				typeOfTask = 2; // means start and endtime task
+				typeOfTask = TIMED_TYPE_OF_TASK;
 			}
 			else {
 				if(task.getStartTime() == null) {
-					typeOfTask = 0; // floating task
+					typeOfTask = FLOATING_TYPE_OF_TASK;
 				}
 				else {
-					typeOfTask = 1; // deadline task;
+					typeOfTask = DEADLINE_TYPE_OF_TASK;
 				}
 			}
-			writer.write(typeOfTask, 1);
+			writer.write(typeOfTask, TYPE_OF_TASK_BYTES);
 			switch(typeOfTask) {
-			case 0:
-				numAttribute = 5;
+			case FLOATING_TYPE_OF_TASK:
+				numAttribute = FLOATING_NUM_OF_ATTRIBUTES;
 				break;
-			case 1:
-				numAttribute = 6;
+			case DEADLINE_TYPE_OF_TASK:
+				numAttribute = DEADLINE_NUM_OF_ATTRIBUTES;
 				break;
 			default:
-				numAttribute = 7;
+				numAttribute = TIMED_NUM_OF_ATTRIBUTES;
 				break;
 			}
-			writer.write(numAttribute, 1);
+			writer.write(numAttribute, NUM_OF_ATTRIBUTES_BYTES);
 			
-			//id
-			writer.write(0, 1); // indicate ID
-			writer.write(task.getId(),4);
+			// id
+			writer.write(ID_INDEX, INDEX_BYTES); 
+			writer.write(task.getId(), ID_BYTES);
 			
-			//title
-			writer.write(1, 1); //indicate title
-			writer.write(task.getTitle().length(), 2);
+			// title
+			writer.write(TITLE_INDEX, INDEX_BYTES); 
+			writer.write(task.getTitle().length(), TITLE_BYTES);
 			writer.writeString(task.getTitle());
 			
-			//venue
-			writer.write(2, 1);
+			// venue
+			writer.write(VENUE_INDEX, INDEX_BYTES);
 			int lenVenue;
 			if(task.getVenue() == null) {
 				lenVenue = 0;
@@ -619,82 +731,88 @@ public class EzDataManage {
 			else {
 				lenVenue = task.getVenue().length();
 			}
-			writer.write(lenVenue, 2);
+			writer.write(lenVenue, VENUE_BYTES);
 			writer.writeString(task.getVenue());
 			
-			//priority
-			writer.write(5, 1);
-			writer.write(task.getPriority(), 1);
+			// priority
+			writer.write(PRIORITY_INDEX, INDEX_BYTES);
+			writer.write(task.getPriority(), PRIORITY_BYTES);
 			
-			//done
-			writer.write(6, 1);
+			// done
+			writer.write(STATUS_INDEX, INDEX_BYTES);
 			int status;
 			if(task.isDone()) {
-				status = 1;
+				status = DONE_INDEX;
 			}
 			else {
-				status = 0;
+				status = UNDONE_INDEX;
 			}
-			writer.write(status, 1);
+			writer.write(status, STATUS_BYTES);
 			
-			if(typeOfTask != 0) {
-				writer.write(3, 1);
-				writer.write(task.getStartTime().get(Calendar.YEAR),2);
-				writer.write(task.getStartTime().get(Calendar.MONTH),1);
-				writer.write(task.getStartTime().get(Calendar.DAY_OF_MONTH),1);
-				writer.write(task.getStartTime().get(Calendar.HOUR_OF_DAY),1);
-				writer.write(task.getStartTime().get(Calendar.MINUTE),1);
+			// time
+			if(typeOfTask != FLOATING_TYPE_OF_TASK) {
+				writer.write(START_TIME_INDEX, INDEX_BYTES);
+				writer.write(task.getStartTime().get(Calendar.YEAR), YEAR_BYTES);
+				writer.write(task.getStartTime().get(Calendar.MONTH), MONTH_BYTES);
+				writer.write(task.getStartTime().get(Calendar.DAY_OF_MONTH), DAY_OF_MONTH_BYTES);
+				writer.write(task.getStartTime().get(Calendar.HOUR_OF_DAY), HOUR_OF_DAY_BYTES);
+				writer.write(task.getStartTime().get(Calendar.MINUTE), MINUTES_BYTES);
 				
-				if(typeOfTask == 2) {
-					writer.write(4, 1);
-					writer.write(task.getEndTime().get(Calendar.YEAR),2);
-					writer.write(task.getEndTime().get(Calendar.MONTH),1);
-					writer.write(task.getEndTime().get(Calendar.DAY_OF_MONTH),1);
-					writer.write(task.getEndTime().get(Calendar.HOUR_OF_DAY),1);
-					writer.write(task.getEndTime().get(Calendar.MINUTE),1);
+				if(typeOfTask == TIMED_TYPE_OF_TASK) {
+					writer.write(END_TIME_INDEX, INDEX_BYTES);
+					writer.write(task.getEndTime().get(Calendar.YEAR), YEAR_BYTES);
+					writer.write(task.getEndTime().get(Calendar.MONTH), MONTH_BYTES);
+					writer.write(task.getEndTime().get(Calendar.DAY_OF_MONTH), DAY_OF_MONTH_BYTES);
+					writer.write(task.getEndTime().get(Calendar.HOUR_OF_DAY), HOUR_OF_DAY_BYTES);
+					writer.write(task.getEndTime().get(Calendar.MINUTE), MINUTES_BYTES);
 				}
 			}
 		}
 		writer.close();
 	}
 	
+	/**
+	 * This method reads the data from the external file once the program starts up
+	 * @param storage
+	 * @throws IOException
+	 */
 	public static void loadFromFile(EzStorage storage) throws IOException {
 		try{
-			EzBinaryReader rd = new EzBinaryReader("external.ezt");
+			EzBinaryReader rd = new EzBinaryReader(EXTERNAL_FILENAME);
 			if (rd.available() > 0){
-				int numTask = rd.read(4);
+				int numTask = rd.read(TASKS_LIST_BYTES);
 				for (int i = 0; i < numTask; i++){
-					int typeOfTask = rd.read(1);
-					int numAttribute = rd.read(1);
+					int typeOfTask = rd.read(TYPE_OF_TASK_BYTES);
+					int numAttribute = rd.read(NUM_OF_ATTRIBUTES_BYTES);
 					EzTask temp = new EzTask();
 					for(int j = 0; j < numAttribute; j++) {
-						int typeAtt = rd.read(1);
+						int typeAtt = rd.read(INDEX_BYTES);
 						switch(typeAtt) {
 						case 0:
-							temp.setId(rd.read(4));
+							temp.setId(rd.read(ID_BYTES));
 							break;
 						case 1:
-							int sizeOfTitle = rd.read(2);
+							int sizeOfTitle = rd.read(TITLE_BYTES);
 							temp.setTitle(rd.readString(sizeOfTitle));
 							break;
 						case 2:
-							int sizeOfVenue = rd.read(2);
+							int sizeOfVenue = rd.read(VENUE_BYTES);
 							temp.setVenue(rd.readString(sizeOfVenue));
 							break;
 						case 3:
-							temp.setStartTime(rd.read(2), rd.read(1), rd.read(1), rd.read(1), rd.read(1));
+							temp.setStartTime(rd.read(YEAR_BYTES), rd.read(MONTH_BYTES), rd.read(DAY_OF_MONTH_BYTES), rd.read(HOUR_OF_DAY_BYTES), rd.read(MINUTES_BYTES));
 							break;
 						case 4:
-							temp.setEndTime(rd.read(2), rd.read(1), rd.read(1), rd.read(1), rd.read(1));
+							temp.setEndTime(rd.read(YEAR_BYTES), rd.read(MONTH_BYTES), rd.read(DAY_OF_MONTH_BYTES), rd.read(HOUR_OF_DAY_BYTES), rd.read(MINUTES_BYTES));
 							break;
 						case 5:
-							temp.setPriority(rd.read(1));
+							temp.setPriority(rd.read(PRIORITY_BYTES));
 							break;
 						default:
-							temp.setDone(rd.read(1) == 1);
+							temp.setDone(rd.read(STATUS_BYTES) == DONE_INDEX);
 							break;
 						}
-						if (typeOfTask == 1) {
+						if (typeOfTask == DEADLINE_TYPE_OF_TASK) {
 							temp.setEndTimeAsStartTime();
 						}
 					}
@@ -707,13 +825,13 @@ public class EzDataManage {
 		} 
 		catch (IOException e)
 		{
-			EzBinaryWriter write = new EzBinaryWriter("external.ezt");
+			EzBinaryWriter write = new EzBinaryWriter(EXTERNAL_FILENAME);
 		}
 		
 	}
 }
 
-	// End of segment: C:\Users\uSER\Documents\CS2103 Project\src\EzDataManage.java
+	// End of segment: C:\Users\Galaxy\Documents\CS2103T\src\EzDataManage.java
 
 
 
